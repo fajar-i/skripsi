@@ -1,0 +1,375 @@
+{
+  "description": "Instrumen Tes Kemampuan Berpikir Logis (TOLT) Terkontekstualisasi Jaringan Komputer TKJ (Bentuk A dan Bentuk B Paralel Tersilang)",
+  "scoring_guide": {
+    "scale": "Polikotomis (0, 1, 2)",
+    "rules": {
+      "2": "Pilihan opsi jawaban benar DAN alasan penalaran logis benar",
+      "1": "Pilihan opsi jawaban benar TETAPI alasan penalaran salah atau tidak tepat",
+      "0": "Pilihan opsi jawaban salah"
+    }
+  },
+  "form_a": [
+    {
+      "id": "TOLT_A_CV_01",
+      "dimension": "CONTROLLING_VARIABLES",
+      "prompt": "Seorang teknisi jaringan ingin menguji apakah antena eksternal dengan gain 9 dBi dapat meningkatkan jangkauan sinyal di area laboratorium terbuka dibanding antena bawaan 3 dBi. Variabel manakah yang harus dijaga konstan selama pengujian agar kesimpulan yang diambil valid?",
+      "options": {
+        "A": "Daya transmisi Access Point (Tx Power), posisi letak AP, dan orientasi sudut antena.",
+        "B": "Tipe perangkat klien penerima, jarak pengujian, dan merek antena eksternal.",
+        "C": "Kanal frekuensi yang digunakan dan jumlah pengguna yang melakukan streaming video.",
+        "D": "Tingkat sensitivitas penerima klien dan perubahan cuaca luar ruangan."
+      },
+      "correct_option": "A",
+      "reasoning_options": {
+        "1": "Karena variabel bebas yang diuji adalah gain antena, maka seluruh parameter pemancar lain (daya Tx, lokasi, orientasi) dan lingkungan uji wajib dikendalikan tetap.",
+        "2": "Karena antena dengan dBi tinggi selalu otomatis melipatgandakan jangkauan sinyal tanpa terpengaruh parameter lainnya.",
+        "3": "Karena jarak pengujian harus bervariasi secara bebas bersamaan dengan penggantian daya pancar Access Point."
+      },
+      "correct_reasoning": "1"
+    },
+    {
+      "id": "TOLT_A_CV_02",
+      "dimension": "CONTROLLING_VARIABLES",
+      "prompt": "Dalam eksperimen perbandingan redaman sinyal Wi-Fi 5 GHz terhadap dua partisi dinding (partisi gypsum vs kaca tebal), variabel manakah yang harus diubah (variabel manipulasi) sementara variabel lainnya dikontrol?",
+      "options": {
+        "A": "Jarak antara Access Point ke dinding.",
+        "B": "Jenis material partisi penghalang.",
+        "C": "Frekuensi kerja Access Point.",
+        "D": "Daya pancar pemancar Wi-Fi."
+      },
+      "correct_option": "B",
+      "reasoning_options": {
+        "1": "Karena dinding kaca selalu memantulkan gelombang sedangkan gypsum selalu menyerapnya secara sempurna.",
+        "2": "Untuk mengisolasi efek daya serap material, hanya jenis partisi yang boleh diganti, sedangkan ketebalan, jarak, frekuensi, dan daya pancar wajib konstan.",
+        "3": "Karena frekuensi 5 GHz lebih mudah menembus dinding jika daya pancar diubah-ubah bersamaan."
+      },
+      "correct_reasoning": "2"
+    },
+    {
+      "id": "TOLT_A_PR_01",
+      "dimension": "PROPORTIONAL_REASONING",
+      "prompt": "Sebuah Access Point nirkabel beroperasi pada lebar kanal 20 MHz dan menghasilkan throughput riil rata-rata 60 Mbps. Jika lebar kanal dinaikkan menjadi 40 MHz pada kondisi modulasi dan rasio sinyal terhadap derau (SNR) yang setara, berapakah estimasi throughput baru yang diharapkan?",
+      "options": {
+        "A": "Mencapai 240 Mbps (meningkat empat kali lipat).",
+        "B": "Tetap 60 Mbps karena frekuensi dasarnya tidak berubah.",
+        "C": "Mendekati 120 Mbps (meningkat sebanding secara proporsional).",
+        "D": "Turun menjadi 30 Mbps karena adanya pelebaran spektrum frekuensi."
+      },
+      "correct_option": "C",
+      "reasoning_options": {
+        "1": "Kecepatan selalu berbanding kuadrat terhadap lebar frekuensi saluran radio.",
+        "2": "Lebar kanal yang lebih besar otomatis membagi kecepatan data menjadi dua kali lebih lambat pada masing-masing subcarrier.",
+        "3": "Kapasitas saluran nirkabel (Teorema Shannon-Hartley) berbanding lurus secara proporsional dengan lebar pita (bandwidth) saluran saat SNR konstan."
+      },
+      "correct_reasoning": "3"
+    },
+    {
+      "id": "TOLT_A_PR_02",
+      "dimension": "PROPORTIONAL_REASONING",
+      "prompt": "Berdasarkan prinsip Free Space Path Loss (FSPL), pelemahan daya sinyal berbanding terbalik dengan kuadrat jarak. Jika seorang siswa bergerak menjauhi Access Point dari jarak 5 meter ke jarak 10 meter (2 kali lipat jarak awal), bagaimanakah kerapatan daya sinyal yang diterima antena ponselnya?",
+      "options": {
+        "A": "Tetap sama karena ponsel memiliki sirkuit Automatic Gain Control.",
+        "B": "Berkurang menjadi 1/2 (setengah) dari daya awal.",
+        "C": "Berkurang menjadi 1/8 (seperdelapan) dari daya awal.",
+        "D": "Berkurang menjadi 1/4 (seperempat) dari daya awal."
+      },
+      "correct_option": "D",
+      "reasoning_options": {
+        "1": "Sesuai hukum kuadrat terbalik (inverse-square law), melipatgandakan jarak (r -> 2r) menyebabkan kerapatan daya sinyal turun menjadi 1/(2^2) = 1/4 dari nilai semula.",
+        "2": "Penurunan sinyal selalu sebanding linier dengan bertambahnya jarak meter per meter.",
+        "3": "Gelombang elektromagnetik di udara terbuka tidak mengalami pelemahan jika tidak ada penghalang fisik."
+      },
+      "correct_reasoning": "1"
+    },
+    {
+      "id": "TOLT_A_CB_01",
+      "dimension": "COMBINATORIAL_REASONING",
+      "prompt": "Pada pita frekuensi 2.4 GHz standar Indonesia/ETSI, terdapat 13 kanal yang tersedia. Berapa banyakkah kombinasi kelompok 3 kanal yang benar-benar tidak saling bertumpuk (non-overlapping) yang dapat dibentuk dari kanal 1 hingga 13?",
+      "options": {
+        "A": "Hanya 1 kombinasi standar utama (kanal 1, 6, dan 11).",
+        "B": "Terdapat setidaknya 3 susunan kombinasi non-overlapping independen (misal 1-6-11, 2-7-12, atau 3-8-13).",
+        "C": "Terdapat 13 kombinasi karena setiap kanal bebas dipasangkan.",
+        "D": "Tidak ada kombinasi yang memungkinkan karena pita 2.4 GHz seluruhnya saling bertumpuk."
+      },
+      "correct_option": "B",
+      "reasoning_options": {
+        "1": "Perangkat keras Access Point pabrikan hanya dapat diprogram pada kanal bernomor ganjil saja.",
+        "2": "Syarat non-overlapping membutuhkan jarak pisah frekuensi minimal 25 MHz (selisih 5 nomor kanal), sehingga pola triplet (k, k+5, k+10) dapat dibentuk untuk k=1, 2, dan 3.",
+        "3": "Seluruh kanal pada 2.4 GHz dapat digunakan bersamaan tanpa interferensi asalkan SSID berbeda."
+      },
+      "correct_reasoning": "2"
+    },
+    {
+      "id": "TOLT_A_CB_02",
+      "dimension": "COMBINATORIAL_REASONING",
+      "prompt": "Seorang teknisi memiliki 3 unit Access Point dan 4 port saklar VLAN yang berbeda (VLAN 10, 20, 30, 40). Jika masing-masing AP harus dihubungkan ke salah satu VLAN dan tidak boleh ada dua AP pada VLAN yang sama, berapa banyak kemungkinan pemetaan konfigurasi yang dapat dibuat?",
+      "options": {
+        "A": "7 kemungkinan kombinasi pemetaan (4 + 3).",
+        "B": "12 kemungkinan kombinasi pemetaan (4 x 3).",
+        "C": "24 kemungkinan kombinasi pemetaan (4 x 3 x 2).",
+        "D": "64 kemungkinan kombinasi pemetaan (4^3)."
+      },
+      "correct_option": "C",
+      "reasoning_options": {
+        "1": "Jumlah konfigurasi diperoleh dari perkalian langsung jumlah AP dengan jumlah port saklar.",
+        "2": "Karena setiap AP hanya dapat memilih antara port ganjil atau port genap pada saklar.",
+        "3": "Merupakan permutasi 3 elemen dari 4 pilihan tanpa pengulangan: P(4,3) = 4! / (4-3)! = 24 cara penempatan."
+      },
+      "correct_reasoning": "3"
+    },
+    {
+      "id": "TOLT_A_PB_01",
+      "dimension": "PROBABILISTIC_REASONING",
+      "prompt": "Pada jaringan nirkabel CSMA/CA, jika 17 siswa di Zona B secara acak mengirimkan respons kuis pada interval waktu yang sama dalam satu kanal yang sama, bagaimanakah kecenderungan peluang terjadinya tabrakan frame data (collision probability)?",
+      "options": {
+        "A": "Peluang tabrakan menurun karena setiap ponsel mengatur delay transmisi secara sinkron.",
+        "B": "Peluang tabrakan tetap konstan 0% karena Access Point menggunakan switch internal.",
+        "C": "Peluang tabrakan selalu tepat 50% untuk setiap frame yang dipancarkan.",
+        "D": "Peluang tabrakan meningkat secara eksponensial seiring bertambahnya jumlah transmisi simultan."
+      },
+      "correct_option": "D",
+      "reasoning_options": {
+        "1": "Media nirkabel adalah shared-medium setengah-dupleks; peluang minimal dua perangkat memilih slot backoff yang sama meningkat drastis saat jumlah stasiun aktif bertambah.",
+        "2": "Protokol TCP/IP menjamin tidak pernah ada paket data yang saling bertabrakan di udara bebas.",
+        "3": "Setiap ponsel pintar secara otomatis mendeteksi frekuensi lain tanpa perlu mekanisme backoff."
+      },
+      "correct_reasoning": "1"
+    },
+    {
+      "id": "TOLT_A_PB_02",
+      "dimension": "PROBABILISTIC_REASONING",
+      "prompt": "Klien nirkabel bergerak berada di area irisan dua AP dengan selisih margin sinyal hanya 1 dBm di sekitar ambang batas roaming. Jika nilai hysteresis disetel 0 dB, apa akibat probabilistik yang paling mungkin terjadi?",
+      "options": {
+        "A": "Terjadi fenomena ping-pong handover (klien berpindah-pindah AP terus-menerus akibat fluktuasi acak sinyal).",
+        "B": "Klien akan terkunci secara permanen pada AP pertama tanpa pernah roaming.",
+        "C": "Throughput data klien akan berlipat ganda karena terhubung ke dua AP sekaligus.",
+        "D": "Sinyal radio kedua AP akan saling meniadakan menjadi 0 dBm."
+      },
+      "correct_option": "A",
+      "reasoning_options": {
+        "1": "Klien selalu memilih AP dengan nomor seri paling baru secara acak.",
+        "2": "Tanpa margin hysteresis untuk meredam fluktuasi acak noise udara, sedikit variasi acak sinyal sesaat akan memicu perpindahan asosiasi bolak-balik yang tidak efisien.",
+        "3": "Proses roaming hanya dipicu oleh waktu jam, bukan oleh kekuatan sinyal radio."
+      },
+      "correct_reasoning": "2"
+    },
+    {
+      "id": "TOLT_A_CR_01",
+      "dimension": "CORRELATIONAL_REASONING",
+      "prompt": "Dari hasil pemantauan 34 siswa, diperoleh data: siswa yang berada pada area dengan RSSI -82 dBm memiliki rata-rata RTT 180 ms dan packet loss 12%, sedangkan siswa pada RSSI -55 dBm memiliki RTT 15 ms dan packet loss 0%. Kesimpulan korelasional manakah yang paling valid?",
+      "options": {
+        "A": "Nilai RTT sama sekali tidak dipengaruhi oleh kualitas sinyal nirkabel.",
+        "B": "Terdapat korelasi negatif yang kuat antara kekuatan sinyal (dBm) dengan latensi (RTT) dan tingkat kehilangan paket.",
+        "C": "Packet loss merupakan satu-satunya faktor yang menyebabkan pelemahan sinyal nirkabel.",
+        "D": "Semakin negatif nilai dBm, kecepatan transmisi fisik modulasi akan meningkat."
+      },
+      "correct_option": "B",
+      "reasoning_options": {
+        "1": "Korelasi tersebut terjadi murni karena kebetulan dan tidak memiliki dasar teknis telekomunikasi.",
+        "2": "Nilai dBm yang semakin negatif menunjukkan energi sinyal yang semakin berlimpah.",
+        "3": "Sinyal yang semakin lemah (dBm makin negatif) berkorelasi dengan penurunan skema modulasi (MCS) dan peningkatan retransmisi paket data, yang meningkatkan RTT dan packet loss."
+      },
+      "correct_reasoning": "3"
+    },
+    {
+      "id": "TOLT_A_CR_02",
+      "dimension": "CORRELATIONAL_REASONING",
+      "prompt": "Data log laboratorium menunjukkan bahwa setiap kali perangkat microwave oven di ruang sebelah dinyalakan, nilai noise floor pada kanal 6 naik dari -95 dBm menjadi -70 dBm, diikuti penurunan Signal-to-Noise Ratio (SNR) dari 35 dB menjadi 10 dB dan penurunan kecepatan unduh. Hubungan apakah yang terbukti dari fenomena ini?",
+      "options": {
+        "A": "Kenaikan daya derau lingkungan berkorelasi terbalik dengan nilai SNR dan kapasitas transmisi efektif saluran.",
+        "B": "Microwave menyerap seluruh paket data Wi-Fi sehingga tidak ada paket yang tersisa.",
+        "C": "Nilai noise floor tidak berhubungan dengan kapasitas saluran nirkabel.",
+        "D": "Access Point sengaja menurunkan daya pancar saat microwave dinyalakan."
+      },
+      "correct_option": "A",
+      "reasoning_options": {
+        "1": "SNR dihitung dari daya sinyal dikurangi daya derau (Signal - Noise); saat derau naik, SNR turun drastis sehingga adaptor radio terpaksa beralih ke modulasi yang lebih rendah dan lambat.",
+        "2": "Derau frekuensi radio hanya memengaruhi kabel tembaga, bukan gelombang nirkabel.",
+        "3": "Microwave memancarkan gelombang inframerah yang mengaburkan pandangan Access Point."
+      },
+      "correct_reasoning": "1"
+    }
+  ],
+  "form_b": [
+    {
+      "id": "TOLT_B_CV_01",
+      "dimension": "CONTROLLING_VARIABLES",
+      "prompt": "Seorang teknisi ingin membandingkan kestabilan koneksi antara standar Wi-Fi 802.11n (2.4 GHz) dan 802.11ac (5 GHz) di laboratorium. Parameter manakah yang harus dikontrol agar pengujian berlangsung adil (*fair test*)?",
+      "options": {
+        "A": "Panjang kabel listrik yang menyuplai daya ke Access Point dan suhu ruangan di luar gedung.",
+        "B": "Posisi perangkat klien penguji, penghalang fisik, volume lalu lintas jaringan pengganggu, dan beban aplikasi.",
+        "C": "Warna casing antena dan sistem operasi yang digunakan di smartphone siswa.",
+        "D": "Jumlah Access Point yang dimatikan di gedung sebelah."
+      },
+      "correct_option": "B",
+      "reasoning_options": {
+        "1": "Karena protokol 802.11ac selalu menang dalam segala kondisi tanpa perlu pengontrolan variabel lingkungan.",
+        "2": "Karena variabel bebasnya adalah standar protokol frekuensi, maka kondisi lingkungan propagasi, jarak, halangan, dan interferensi latar belakang wajib dijaga seragam.",
+        "3": "Pengujian jaringan nirkabel tidak memerlukan kontrol variabel karena sifat udara yang bebas."
+      },
+      "correct_reasoning": "2"
+    },
+    {
+      "id": "TOLT_B_CV_02",
+      "dimension": "CONTROLLING_VARIABLES",
+      "prompt": "Dalam menguji efektivitas penambahan kabel grounding terhadap penurunan noise pada saklar jaringan, langkah eksperimen manakah yang menunjukkan penerapan kontrol variabel yang benar?",
+      "options": {
+        "A": "Mengukur tingkat noise pada saklar yang sama sebelum dan sesudah pemasangan grounding, pada kondisi beban trafik dan catu daya yang sama.",
+        "B": "Membandingkan saklar bermerek A dengan grounding terhadap saklar bermerek B tanpa grounding pada beban berbeda.",
+        "C": "Mengukur saklar di ruang ber-AC lalu membandingkannya dengan saklar di tiang luar ruangan.",
+        "D": "Mengganti seluruh kabel UTP menjadi kabel fiber optik bersamaan dengan pemasangan kawat grounding."
+      },
+      "correct_option": "A",
+      "reasoning_options": {
+        "1": "Mempertahankan unit perangkat, beban trafik, dan sumber daya yang identik memastikan bahwa perubahan noise murni diakibatkan oleh sistem pembumian (grounding).",
+        "2": "Mengganti merek perangkat sekaligus memberikan perbandingan yang lebih variatif.",
+        "3": "Sistem pembumian tidak berpengaruh terhadap sinyal listrik bolak-balik."
+      },
+      "correct_reasoning": "1"
+    },
+    {
+      "id": "TOLT_B_PR_01",
+      "dimension": "PROPORTIONAL_REASONING",
+      "prompt": "Sebuah jaringan kabel UTP Cat 6 mentransmisikan data sebesar 10 Gigabyte dalam waktu 80 detik. Jika kapasitas jaringan ditingkatkan secara proporsional sebesar 4 kali lipat, berapa lama waktu yang dibutuhkan untuk mengirim data berukuran sama?",
+      "options": {
+        "A": "80 detik (waktu transfer tidak dipengaruhi kapasitas bandwidth).",
+        "B": "320 detik (meningkat empat kali lipat).",
+        "C": "40 detik (berkurang setengahnya).",
+        "D": "20 detik (berkurang menjadi seperempat waktu semula)."
+      },
+      "correct_option": "D",
+      "reasoning_options": {
+        "1": "Ukuran data 10 GB selalu konstan sehingga waktu tempuh elektron di kabel tidak pernah berubah.",
+        "2": "Kapasitas yang lebih besar membutuhkan proses inisialisasi yang empat kali lebih lama.",
+        "3": "Waktu transfer data berbanding terbalik secara proporsional terhadap kapasitas bandwidth (t = Ukuran Data / Bandwidth); kapasitas naik 4x membuat waktu turun 1/4x."
+      },
+      "correct_reasoning": "3"
+    },
+    {
+      "id": "TOLT_B_PR_02",
+      "dimension": "PROPORTIONAL_REASONING",
+      "prompt": "Jika pelemahan sinyal kabel tembaga bertambah 3 dB setiap panjang 100 meter, berapakah perkiraan total pelemahan sinyal jika bentangan kabel diperpanjang secara proporsional menjadi 300 meter?",
+      "options": {
+        "A": "27 dB (pangkat tiga dari pelemahan awal).",
+        "B": "6 dB (dua kali lipat dari pelemahan 100 meter).",
+        "C": "9 dB (tiga kali lipat dari pelemahan 100 meter).",
+        "D": "3 dB (pelemahan kabel bersifat konstan berapapun panjangnya)."
+      },
+      "correct_option": "C",
+      "reasoning_options": {
+        "1": "Sinyal radio di dalam kabel tembaga mengalami penguatan otomatis setiap melewati 100 meter.",
+        "2": "Redaman per satuan panjang kabel (dB/m) bersifat linier-proporsional terhadap panjang fisik bentangan konduktor.",
+        "3": "Skala desibel (dB) tidak dapat dijumlahkan secara proporsional terhadap panjang kabel."
+      },
+      "correct_reasoning": "2"
+    },
+    {
+      "id": "TOLT_B_CB_01",
+      "dimension": "COMBINATORIAL_REASONING",
+      "prompt": "Di laboratorium terdapat 3 segmen jaringan kabel yang masing-masing harus dihubungkan ke 1 dari 2 antarmuka router gateway yang tersedia. Berapa banyak kombinasi pemetaan segmen ke antarmuka router yang mungkin dibentuk?",
+      "options": {
+        "A": "8 kemungkinan konfigurasi (2^3).",
+        "B": "6 kemungkinan konfigurasi (3 x 2).",
+        "C": "5 kemungkinan konfigurasi (3 + 2).",
+        "D": "9 kemungkinan konfigurasi (3^2)."
+      },
+      "correct_option": "A",
+      "reasoning_options": {
+        "1": "Setiap segmen (dari total 3 segmen) memiliki 2 opsi pilihan antarmuka secara independen, sehingga total kombinasi adalah 2 x 2 x 2 = 2^3 = 8.",
+        "2": "Kombinasi diperoleh hanya dari perkalian sederhana jumlah segmen dengan jumlah router.",
+        "3": "Antarmuka router tidak dapat menerima lebih dari satu segmen jaringan secara bersamaan."
+      },
+      "correct_reasoning": "1"
+    },
+    {
+      "id": "TOLT_B_CB_02",
+      "dimension": "COMBINATORIAL_REASONING",
+      "prompt": "Seorang administrator jaringan ingin membuat kunci sandi WPA2 beranggotakan 4 digit yang hanya menggunakan angka genap (2, 4, 6, 8) tanpa angka yang berulang. Berapa banyak variasi sandi unik yang dapat disusun?",
+      "options": {
+        "A": "16 variasi sandi (4 x 4).",
+        "B": "24 variasi sandi (4! = 4 x 3 x 2 x 1).",
+        "C": "256 variasi sandi (4^4).",
+        "D": "12 variasi sandi (4 x 3)."
+      },
+      "correct_option": "B",
+      "reasoning_options": {
+        "1": "Sandi WPA2 tidak mendukung kombinasi angka tanpa menyertakan huruf kapital.",
+        "2": "Angka genap selalu dapat dipertukarkan tanpa mengubah nilai hash sandi.",
+        "3": "Menyusun 4 angka berbeda dari 4 pilihan tanpa pengulangan adalah masalah permutasi n! = 4 x 3 x 2 x 1 = 24 variasi."
+      },
+      "correct_reasoning": "3"
+    },
+    {
+      "id": "TOLT_B_PB_01",
+      "dimension": "PROBABILISTIC_REASONING",
+      "prompt": "Dua stasiun kerja nirkabel (Klien X dan Klien Y) berada di posisi saling terhalang dinding lemari besi (hidden node problem) sehingga tidak dapat saling mendengar sinyal. Jika keduanya hendak mengirim data ke AP yang sama, bagaimanakah peluang terjadinya tabrakan paket dibanding kondisi normal tanpa halangan?",
+      "options": {
+        "A": "Peluang tabrakan tetap sama persis seperti saat kedua stasiun saling bertatapan langsung.",
+        "B": "Peluang tabrakan menjadi 0% karena dinding memblokir tabrakan sinyal di udara.",
+        "C": "Peluang tabrakan meningkat drastis karena kedua klien mengira kanal kosong pada saat yang bersamaan.",
+        "D": "Peluang tabrakan berkurang karena energi gelombang terserap oleh lemari besi."
+      },
+      "correct_option": "C",
+      "reasoning_options": {
+        "1": "Access Point memiliki kemampuan memisahkan dua sinyal yang tiba pada frekuensi dan waktu yang sama persis.",
+        "2": "Mekanisme Carrier Sense (CSMA) gagal mendeteksi stasiun tersembunyi; akibatnya kedua pemancar mentransmisikan data simultan ke AP penerima dan merusak frame di titik terima.",
+        "3": "Hidden node problem hanya memengaruhi jaringan kabel coaxial lama."
+      },
+      "correct_reasoning": "2"
+    },
+    {
+      "id": "TOLT_B_PB_02",
+      "dimension": "PROBABILISTIC_REASONING",
+      "prompt": "Dalam pengujian pengiriman 1.000 paket ping ICMP pada kanal nirkabel berinterferensi tinggi, tercatat 80 paket hilang (loss). Jika seorang teknisi mengirimkan 1 paket baru secara acak pada kondisi lingkungan yang sama, berapa probabilitas empiris paket tersebut berhasil diterima (sukses)?",
+      "options": {
+        "A": "1,00 (atau 100%).",
+        "B": "0,08 (atau 8%).",
+        "C": "0,50 (atau 50%).",
+        "D": "0,92 (atau 92%)."
+      },
+      "correct_option": "D",
+      "reasoning_options": {
+        "1": "Peluang sukses dihitung dari komplemen peluang gagal: P(sukses) = 1 - P(gagal) = 1 - (80/1000) = 1 - 0,08 = 0,92.",
+        "2": "Peluang sukses dihitung langsung dari jumlah paket yang hilang dibagi total paket.",
+        "3": "Setiap paket baru selalu memiliki peluang acak 50-50 terlepas dari data masa lalu."
+      },
+      "correct_reasoning": "1"
+    },
+    {
+      "id": "TOLT_B_CR_01",
+      "dimension": "CORRELATIONAL_REASONING",
+      "prompt": "Grafik pemantauan menunjukkan bahwa setiap kali jumlah klien aktif pada satu AP meningkat dari 5 stasiun menjadi 30 stasiun, waktu tunggu antrean rata-rata (channel utilization) meningkat dari 15% ke 85% dan throughput per klien turun dari 20 Mbps ke 2 Mbps. Korelasi apakah yang ditunjukkan grafik tersebut?",
+      "options": {
+        "A": "Terdapat korelasi positif antara jumlah stasiun aktif dengan kepadatan saluran, dan korelasi negatif terhadap throughput per pengguna.",
+        "B": "Jumlah pengguna berkorelasi positif dengan kecepatan transmisi data masing-masing pengguna.",
+        "C": "Kepadatan saluran tidak memiliki hubungan sebab-akibat dengan penurunan kecepatan internet.",
+        "D": "Throughput pengguna selalu berbanding lurus dengan beban antrean saluran radio."
+      },
+      "correct_option": "A",
+      "reasoning_options": {
+        "1": "Fenomena tersebut terjadi karena kuota internet sekolah habis pada saat pengguna mencapai 30 stasiun.",
+        "2": "Access Point menambah antena virtual setiap kali klien baru bergabung di jaringan.",
+        "3": "Pertambahan stasiun pada media bersama setengah-dupleks memicu persaingan slot waktu (contention overhead) yang tinggi, menaikkan utilisasi media namun menurunkan alokasi throughput efektif individu."
+      },
+      "correct_reasoning": "3"
+    },
+    {
+      "id": "TOLT_B_CR_02",
+      "dimension": "CORRELATIONAL_REASONING",
+      "prompt": "Hasil uji kabel UTP menunjukkan bahwa semakin rapat lilitan pasangan kawat (twist rate per inch), tingkat crosstalk (Near-End Crosstalk / NEXT) antar pasangan kawat semakin rendah dan Signal-to-Noise Ratio (SNR) semakin tinggi. Pernyataan korelasional manakah yang tepat?",
+      "options": {
+        "A": "Crosstalk hanya dipengaruhi oleh panjang kabel, bukan oleh kerapatan lilitan fisik kawat.",
+        "B": "Kerapatan lilitan kawat menyebabkan sinyal listrik melambat secara signifikan.",
+        "C": "Kerapatan lilitan kawat berkorelasi negatif dengan nilai interferensi crosstalk antar pasangan kabel.",
+        "D": "Nilai NEXT yang tinggi menandakan kualitas kabel yang semakin prima."
+      },
+      "correct_option": "C",
+      "reasoning_options": {
+        "1": "Lilitan kabel hanya berfungsi agar kawat tembaga tidak mudah patah saat ditarik.",
+        "2": "Lilitan kawat yang rapat dan bervariasi antar pasangan saling meniadakan medan elektromagnetik liar (induksi timbal balik), sehingga menurunkan crosstalk dan meningkatkan SNR.",
+        "3": "Kabel Cat 6 memiliki crosstalk yang tinggi karena kawatnya dibuat lebih tebal."
+      },
+      "correct_reasoning": "2"
+    }
+  ]
+}

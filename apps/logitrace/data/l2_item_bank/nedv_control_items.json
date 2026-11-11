@@ -1,0 +1,94 @@
+{
+  "description": "Butir Kontrol Non-Equivalent Dependent Variable (NEDV) untuk Pengujian Validitas Internal (Threat to Internal Validity C2). Materi tidak diajarkan pada 4 sesi intervensi nirkabel LogiTrace.",
+  "target_tujuan_pembelajaran": {
+    "TP_2_3": "2.3 Menerapkan instalasi dan konfigurasi layanan Voice over IP (VoIP) - 2 Butir",
+    "TP_2_4_2_5": "2.4 Menerapkan instalasi jaringan fiber optik & 2.5 Memahami perbaikan jaringan fiber optik - 4 Butir"
+  },
+  "hypothesis": "Nilai N-Gain pada 6 butir kontrol NEDV ini secara statistik terbukti tidak mengalami peningkatan signifikan (p > 0.05), mengonfirmasi keterisolasian dampak intervensi adaptif LogiTrace.",
+  "items": [
+    {
+      "id": "NEDV_VOIP_01",
+      "curriculum_element": "TP 2.3 - Layanan Voice over IP",
+      "topic": "Protokol Pensinyalan dan Aliran Media Suara",
+      "prompt": "Dalam arsitektur komunikasi Voice over IP (VoIP), protokol yang bertugas menangani pembentukan panggilan (call setup), modifikasi sesi, dan pemutusan hubungan panggilan telepon adalah...",
+      "options": {
+        "A": "Session Initiation Protocol (SIP)",
+        "B": "Real-time Transport Protocol (RTP)",
+        "C": "Dynamic Host Configuration Protocol (DHCP)",
+        "D": "Simple Network Management Protocol (SNMP)"
+      },
+      "correct_answer": "A",
+      "explanation": "SIP (Session Initiation Protocol) adalah protokol pensinyalan (signaling) layer aplikasi yang berfungsi membangun, memodifikasi, dan mengakhiri sesi multimedia VoIP. Sedangkan pengiriman paket payload suara aktual ditangani oleh RTP."
+    },
+    {
+      "id": "NEDV_VOIP_02",
+      "curriculum_element": "TP 2.3 - Layanan Voice over IP",
+      "topic": "Codec Suara dan Kualitas Layanan (QoS VoIP)",
+      "prompt": "Sebuah kantor cabang memiliki kapasitas bandwidth internet yang terbatas namun harus melayani 20 panggilan suara VoIP simultan. Codec kompresi audio manakah yang paling efisien menghemat bandwidth dengan bitrate sekitar 8 kbps per kanal?",
+      "options": {
+        "A": "G.711u",
+        "B": "G.729",
+        "C": "G.711a",
+        "D": "PCM Tanpa Kompresi"
+      },
+      "correct_answer": "B",
+      "explanation": "Codec G.729 menggunakan kompresi CS-ACELP yang hanya membutuhkan bandwidth ~8 kbps per panggilan (sangat hemat bandwidth), sedangkan codec G.711 membutuhkan bandwidth standar 64 kbps tanpa kompresi."
+    },
+    {
+      "id": "NEDV_FO_01",
+      "curriculum_element": "TP 2.4 - Instalasi Fiber Optik",
+      "topic": "Karakteristik Kabel Single-Mode vs Multi-Mode",
+      "prompt": "Untuk instalasi transmisi data antarkampus dengan jarak jangkauan lebih dari 15 kilometer tanpa repeater optik, jenis kabel fiber optik yang paling tepat digunakan adalah...",
+      "options": {
+        "A": "Multi-Mode Fiber (MMF) dengan diameter inti 62.5 mikrometer.",
+        "B": "Multi-Mode Fiber (MMF) dengan diameter inti 50 mikrometer.",
+        "C": "Single-Mode Fiber (SMF) dengan diameter inti sekitar 9 mikrometer.",
+        "D": "Kabel serat plastik (POF) dengan diameter 1 milimeter."
+      },
+      "correct_answer": "C",
+      "explanation": "Single-Mode Fiber (SMF) memiliki ukuran inti sangat kecil (±9 um) sehingga cahaya hanya merambat dalam satu mode cahaya lurus, menghilangkan dispersi modal (modal dispersion) dan memungkinkan jangkauan hingga puluhan kilometer."
+    },
+    {
+      "id": "NEDV_FO_02",
+      "curriculum_element": "TP 2.4 - Instalasi Fiber Optik",
+      "topic": "Alat Kerja Penyambungan Serat Kaca",
+      "prompt": "Alat kerja presisi yang berfungsi meleburkan dan menyambungkan dua ujung inti kaca serat optik menggunakan loncatan bunga api listrik tegangan tinggi adalah...",
+      "options": {
+        "A": "Miller Fiber Stripper",
+        "B": "Fiber Cleaver",
+        "C": "Optical Power Meter (OPM)",
+        "D": "Fusion Splicer"
+      },
+      "correct_answer": "D",
+      "explanation": "Fusion Splicer adalah alat peleburan inti kaca dengan elektroda panas otomatis. Miller stripper bertugas mengupas jaket kabel, cleaver memotong kaca rata 90 derajat, dan OPM mengukur daya redaman."
+    },
+    {
+      "id": "NEDV_FO_03",
+      "curriculum_element": "TP 2.5 - Perawatan dan Perbaikan Fiber Optik",
+      "topic": "Analisis Redaman Tekukan (Bending Loss)",
+      "prompt": "Saat teknisi merapikan kabel patch cord fiber optik di dalam Optical Distribution Cabinet (ODC), nilai redaman tiba-tiba melonjak dari 0.2 dB menjadi 4.5 dB. Penyebab fisik yang paling sering memicu lonjakan redaman seketika tersebut adalah...",
+      "options": {
+        "A": "Panjang kabel patch cord yang terlalu pendek di dalam rak.",
+        "B": "Terjadinya tekukan kabel yang melampaui batas radius lengkung minimum (macro-bending).",
+        "C": "Konektor SC/UPC mengalami perubahan warna casing pelindung.",
+        "D": "Suhu ruangan kabinet turun sebesar dua derajat Celsius."
+      },
+      "correct_answer": "B",
+      "explanation": "Macro-bending terjadi ketika kabel ditekuk melebihi batas radius tekuk minimumnya, sehingga sudut datang cahaya melampaui sudut kritis pantulan internal total (Total Internal Reflection), menyebabkan sebagian cahaya bocor keluar dari inti kabel."
+    },
+    {
+      "id": "NEDV_FO_04",
+      "curriculum_element": "TP 2.5 - Perawatan dan Perbaikan Fiber Optik",
+      "topic": "Pelacakan Kerusakan Jalur Kabel dengan OTDR",
+      "prompt": "Sebuah kabel serat optik bawah tanah sepanjang 8 km mengalami putus total (link down). Alat ukur reflektometri optik yang digunakan untuk menentukan jarak kilometer persis lokasi kabel yang putus adalah...",
+      "options": {
+        "A": "Optical Light Source (OLS)",
+        "B": "Visual Fault Locator (VFL / Laser Pen Merah)",
+        "C": "Optical Time-Domain Reflectometer (OTDR)",
+        "D": "Digital Earth Resistance Tester"
+      },
+      "correct_answer": "C",
+      "explanation": "OTDR (Optical Time-Domain Reflectometer) mengukur pantulan hamburan balik (Rayleigh backscattering) dan pantulan Fresnel dari pulsa laser untuk memetakan grafik redaman serta mendeteksi jarak kilometer titik putus atau sambungan buruk secara akurat."
+    }
+  ]
+}

@@ -1,0 +1,1576 @@
+--- PAGE 1 ---
+ORIGINAL RESEARCH
+published: 03 June 2022
+doi: 10.3389/frai.2022.921476
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 1 June 2022 | Volume 5 | Article 921476
+Edited by:
+Christos Troussas,
+University of West Attica, Greece
+Reviewed by:
+Nasheen Nur,
+Florida Institute of Technology,
+United States
+Ani Grubiši ´c,
+University of Split, Croatia
+*Correspondence:
+Roger Nkambou
+nkambou.roger@uqam.ca
+Specialty section:
+This article was submitted to
+AI for Human Learning and Behavior
+Change,
+a section of the journal
+Frontiers in Artiﬁcial Intelligence
+Received: 15 April 2022
+Accepted: 13 May 2022
+Published: 03 June 2022
+Citation:
+Tato A and Nkambou R (2022)
+Infusing Expert Knowledge Into a
+Deep Neural Network Using Attention
+Mechanism for Personalized Learning
+Environments.
+Front. Artif. Intell. 5:921476.
+doi: 10.3389/frai.2022.921476
+Infusing Expert Knowledge Into a
+Deep Neural Network Using
+Attention Mechanism for
+Personalized Learning Environments
+Ange Tato and Roger Nkambou *
+Artiﬁcial Intelligence Research Center, Department of Compu ter Science, Université du Québec à Montréal, Montreal, QC,
+Canada
+Machine learning models are biased toward data seen during t he training steps. The
+models will tend to give good results in classes where there a re many examples and poor
+results in those with few examples. This problem generally o ccurs when the classes to
+predict are imbalanced and this is frequent in educational d ata where for example, there
+are skills that are very difﬁcult or very easy to master. Ther e will be less data on students
+that correctly answered questions related to difﬁcult skil ls and who incorrectly answered
+those related to skills easy to master. In this paper, we tack led this problem by proposing
+a hybrid architecture combining Deep Neural Network archit ectures— especially Long
+Short-T erm Memory (LSTM) and Convolutional Neural Network s (CNN)—with expert
+knowledge for user modeling. The proposed solution uses attention mechanism to infuse
+expert knowledge into the Deep Neural Network. It has been te sted in two contexts:
+knowledge tracing in an intelligent tutoring system (ITS) called Logic-Muse and prediction
+of socio-moral reasoning in a serious game called MorALERT . The proposed solution
+is compared to state-of-the-art machine learning solution s and experiments show that
+the resulting model can accurately predict the current stud ent’ s knowledge state (in
+Logic-Muse) and thus enable an accurate personalization of the learning process. Other
+experiments show that the model can also be used to predict th e level of socio-moral
+reasoning skills (in MorALERT). Our ﬁndings suggest the nee d for hybrid neural networks
+that integrate prior expert knowledge (especially when it i s necessary to compensate
+for the strong dependency—of deep learning methods—on data si ze or the possible
+unbalanced datasets). Many domains can beneﬁt from such an a pproach to building
+models that allow generalization even when there are small t raining data.
+Keywords: user modeling, deep learning, attention, socio-mo ral reasoning skill, logical reasoning skill, expert
+knowledge, hybrid neural networks
+1. INTRODUCTION
+Personalization (or adaptation) is a fundamental function when building adaptive learning systems.
+One of its advantages is to address a diverse audience (
+Birk et al., 2015). Adaptation has been widely
+considered in the ﬁeld of AIED ( Artiﬁcial Intelligence In Education ) where one of the goals is to
+make intelligent tutoring systems (ITS) more eﬀective. The a daptation of content and interactions
+
+--- PAGE 2 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+based on a dynamic model of the learner remains one of the
+main issues addressed in this ﬁeld (
+Woolf, 2010 ). Learning
+performance can be enhanced immensely by identifying
+the characteristics of students and adapting contents and
+presentation to better suit their needs (
+Tseng et al., 2008 ).
+Many techniques have been proposed to identify learners’
+characteristics during interactions with systems. Those
+techniques include Bayesian Knowledge Tracing (BKT),
+Deep Knowledge Tracing (DKT), or simply the use of neural
+networks for user modeling. The user (learner/student) mod el is
+an abstract description of the user in an environment (
+Bakkes
+et al., 2012 ). User modeling plays an important role in adaptive
+systems such as ITSs, serious games, MOOCs (Massive Open
+Online Courses), and even the applications and tools that
+surround us in our daily lives, such as social networks and ce ll
+phones. It is important to develop a solution that is able to mod el
+the user accurately from certain observations and thus be ab le
+to predict her/his needs, her/his behavior, etc. User modelin g
+can include Knowledge Tracing which is considered the most
+popular approach for modeling learners. It aims at modeling
+how students’ knowledge evolves during learning (
+Corbett and
+Anderson, 1994 ). The student’s knowledge is modeled as a
+latent variable and is updated based on her/his performances o n
+given tasks. It can be formalized as follows: given interact ions
+x1, . . ., xt of a learner on a particular learning task, how will
+she/he behave at t + 1? The goal being to estimate the probability
+p(xt+ 1|x1, . . . , xt).
+Deep learning is an approach that has been successfully
+applied in many domains including images recognition (He et al.,
+2016), Natural Language Processing ( Collobert and Weston,
+2008) and more recently in education for knowledge tracing.
+Among the diﬀerent deep learning architectures that exist, t he
+one that ﬁts well for knowledge tracing is the LSTM (Long Shor t
+Term Memory) as it can capture the sequential aspect of data
+useful for prediction. Hence, DKT (
+Piech et al., 2015 ) uses a
+LSTM to predict student performance based on the pattern of
+their responses sequentially over time. DKT traces knowledg e
+at both the skill and the problem (item) levels and observes th e
+correctness of each answer. At any time step, the input layer
+of the DKT is the student’s performance on a single problem
+related to the skill that she or he is currently working on. In
+other words, the skill associated with and the correctness o f the
+learner’s performance on each item are used to predict how well
+she/he will perform on the next item (
+Zhang et al., 2017b). Rather
+than constructing a separate model for each skill as BKT does,
+DKT models all skills jointly (
+Piech et al., 2015; Khajah et al.,
+2016). It has been shown that DKT can robustly predict whether
+or not a student will solve a particular problem correctly give n
+the accuracy of historic solutions (Wang et al., 2017; Zhang et al.,
+2017b).
+However, they are biased toward the data they have
+seen before (it is a data-driven approach). Therefore, the
+generalization capability of a deep learning model depends on
+the training data. For problems (or skills) that are diﬃcult t o
+master which means the rare occurrence of correct answers,
+the model will be unable to accurately predict the student’s
+knowledge. In the same vein, for skills that are easy to maste r
+which means the rare occurrence of incorrect answers, the
+model will also fail to accurately predict the student’s knowl edge.
+This problem is known in deep learning as the class imbalance
+problem (
+Huang et al., 2016 ) where there are fewer occurrences
+of data for a certain class (e.g., correct answers on skill diﬃ cult
+to master), which results in sub-optimal performance. A wrong
+user modeling can signiﬁcantly aﬀect the personalization process.
+In this paper, we propose to leverage this problem by enhancing
+deep learning models with expert knowledge added using the
+attention mechanism (
+Xu et al., 2015).
+The main contribution of this work is to show how an
+original hybrid deep neural architecture infused with a prio ri
+expert knowledge through attention mechanism improves its
+generalization ability. The resulting architecture has prov en its
+eﬀectiveness for learner modeling and personalization in two
+educational software.
+2. RELATED WORK
+2.1. Machine Learning and Deep
+Learning/AI Approaches for User Modeling
+The use of machine learning and deep learning algorithms for
+user modeling purposes has attracted much attention in the
+past. In general, the growth in the volume of available data and
+the improvement of machine learning approaches are behind
+the recent boom of research in this domain. In data-driven
+approaches, researchers use machine learning and deep learni ng
+techniques to develop models to predict users’ intentions and
+behaviors and extract user classes or behavioral groups from
+the interaction data collected in the system. Each user is thu s
+assigned one or more classes of reactions and behaviors base d
+on her/his actions. The most used algorithms in this context
+are generally K-means (
+Zakrzewska, 2008; Drachen et al., 2016;
+Troussas et al., 2020), deep neural networks (Demuth et al., 2014;
+Piech et al., 2015; Zhang et al., 2017a; Domladovac, 2021; Moon
+et al., 2021
+), naive Bayesian networks ( Stern et al., 1999; Pardos
+and Heﬀernan, 2010 ), and SVMs (Support Vector Machine)
+(Hearst et al., 1998; Muyuan et al., 2004 ).
+Missura and Gärtner (2009) developed a model to dynamically
+adapt the diﬃculty of a game based on the clusters extracted
+from the game data. They used the K-means algorithm to create
+clusters of users, each cluster representing a certain type of
+player. The adaptation model implemented here was implicit
+and controlling: each cluster corresponds to a certain level of
+diﬃculty. They used the SVM algorithm and a regression model
+in a prediction model to predict users’ behavior, including actions
+taken, decisions made, and the cluster they might belong to.
+Once this cluster was determined, the diﬃculty was modiﬁed
+accordingly during the game.
+Ha et al. (2011) proposed a model
+of the player representing the goals he is trying to reach. To do
+so, they developed a framework based on the use of the Logical
+Markov Random Field (an undirected probabilistic graphical
+model with structures determined by ﬁrst-order logic formu las)
+for goal recognition. Goal recognition is the task of inferr ing
+users’ intended goals from observed sequences of actions. It
+was used in Crystal island (
+Rowe et al., 2009 ), a game-based
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 2 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 3 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+learning environment where learners’ goals are inferred th rough
+their responses to questions that the system asked narrative ly.
+Y annakakis and Hallam (2009) proposed a real-time adaptation
+model whose objective was to optimize user satisfaction. An
+artiﬁcial neural network and a parameter selection algorith m
+were applied to data from a survey (responses to questionnaires
+administered before and during the use of the system) and fro m
+the activity log (score, average response time, etc.), to gen erate
+a prediction model of user satisfaction.
+Drachen et al. (2012)
+proposed a grouping of diﬀerent observable behaviors in the
+system. The goal was to obtain classes of behaviors to model t he
+users. They use data mining algorithms including K-Average s
+and Simplex Volume Maximization (SIVM). Similarly,
+Gow
+et al. (2012) proposed a user model built from a semi-automatic
+and unsupervised learning approach combined with multi-class
+Linear Discriminant Analysis (LDA) (
+McLachlan, 2004) applied
+to the logs. Dass et al. (2021) have used the random Forest model
+to predict the dropout of students from a MOOC course given a
+set of features engineered from student daily learning progr ess.
+The emergence of big data and machine learning techniques
+have opened up several possibilities for more accurate modelin g
+of users especially in Educational Data Mining (EDM) domain.
+Bayesian and deep learning techniques are well-suited to
+the situation. They have allowed notable results in the ﬁeld
+of behavioral modeling, particularly in knowledge tracing.
+Some authors have used Bayesian networks for modeling the
+knowledge acquisition process (
+Tato et al., 2017a; Kantharaju
+et al., 2018; Zhang and Y ao, 2018 ). Several other authors have
+recently focused on knowledge tracing using deep learning
+architectures including recurrent neural networks (RNNs) a nd
+long and short-term memories (LSTMs) (
+Piech et al., 2015; Wang
+et al., 2017; Zhang et al., 2017b; Montero et al., 2018; Song et al.,
+2021; Xing et al., 2021 ) and other have focused on user modeling
+using the same techniques with some improvements ( Yu et al.,
+2019; Nur, 2021; Yuan et al., 2021). It is worth noting that the use
+of Bayesian networks can be seen as a hybrid approach since the
+networks can be designed manually by domain experts (
+Conati
+et al., 1997; Horvitz et al., 1998; Rowe and Lester, 2010 ) or
+designed (architecture and probability tables) automatically from
+the data using machine learning approaches ( Friedman et al.,
+1999; Tsamardinos et al., 2006).
+Although data-driven methods hold great promise for
+automatically extracting relevant features, they can also extract
+meaningless information ( Demuth et al., 2014 ). For example,
+these methods can extract irrelevant relationships such as a
+relationship between age and character choice in a game, sin ce
+both pieces of information will tend to be repeated if multiple
+players of the same age often choose the same character.
+Classiﬁcation, prediction, and clustering of behaviors in t oday’s
+adaptive systems are becoming increasingly challenging due t o
+the volume, high dimensionality, and multi-modality of dat a
+(
+Drachen et al., 2016 ). Also, the fundamental techniques used
+for learning in neural networks are not necessarily adapted f or
+user modeling in EDM and do not take into account a priori
+and a posteriori knowledge. Therefore, it is necessary to rel y on
+hybrid techniques able to take the best of both data-driven a nd
+theory-driven approaches.
+2.2. Hybrid Neural Networks
+Approaches using neural networks are called data-driven
+techniques since the training and the extracted model depend
+only on the training data. Their performance is highly depende nt
+on the quantity and quality of the data. In general, the use of
+fully data-driven approaches requires the acquisition of a hug e
+amount of data, which is not always practical or realistic for
+economic reasons or because of the complexity of the process
+involved. There are several domains where there is few train ing
+data but where a priori and/or a posteriori knowledge are
+available. This is particularly the case in the ﬁelds of educat ion
+and the humanities. How can a purely data-driven but eﬃcient
+architecture beneﬁt from this knowledge often acquired ove r
+years of research? Such solutions combining data-driven an d
+theory-driven approaches are considered hybrid. Other works
+have focused on hybrid neural networks but in terms of the
+combination of multiple neural architectures (
+Chen and Zhang,
+2021; Sharma et al., 2021; Y an et al., 2021).
+Towell and Shavlik (1994) deﬁned hybrid learning techniques
+as “methods that use theoretical knowledge of a domain and a s et
+of examples to develop a method for accurately classifying unseen
+examples during training.” A hybrid learning approach should
+learn more eﬃciently compared to approaches that use only
+one of the two main sources of information (data and theory).
+There is very little research on the combination of a priori/a
+posteriori knowledge and deep learning architectures. Towe ll et
+al. (which to our knowledge is one of the ﬁrst research work to be
+interested in this question) have proposed a hybrid system cal led
+KBANN (Knowledge-Based Artiﬁcial Neural Networks). They
+map expert knowledge, represented in propositional logic, into
+neural networks and then reﬁne this reformulated knowledge
+using back-propagation.
+Coro et al. (2013) combined neural
+networks with simulated expert knowledge. The simulated expert
+was used to generate some examples, which were then added to
+the training set of their neural network model.
+Zappone et al.
+(2018) recently did the same by combining expert knowledge
+and artiﬁcial neural networks (ANNs) to optimize wireless
+communication networks. They ﬁrst obtained a training set
+from the expert knowledge and then trained the ANN on
+this generated training set. Finally, the pre-trained archi tecture
+was reﬁned through a new training phase based on real
+measured data.
+In educational domain, a priori and a posteriori knowledge
+are usually available and are used to build adaptive learning
+systems such as ITS (Intelligent Tutoring Systems). In other
+domains, knowledge may be available through books or alread y-
+built models, such as rule-based models. We believe that
+this knowledge, sometimes acquired during decades of inten se
+research, cannot simply be ignored. Thus, we propose an
+approach that uses the attention mechanism (
+Xu et al., 2015 )
+and capitalizes on the availability of these a priori and a
+posteriori data to reduce the amount of empirical data needed
+as well as the complexity of deep learning architectures. To
+the best of our knowledge, no research proposes to combine
+a priori and a posteriori knowledge with neural architectures
+using the attention mechanism. Moreover, no research in the
+educational domain, especially in user modeling, has addresse d
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 3 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 4 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+this issue despite the availability of knowledge. We show tha t
+the combination of knowledge-based and data-based methods
+using the attention mechanism is an appropriate solution
+for the design of hybrid deep neural networks with better
+generalization capability.
+2.2.1. A Priori and a Posteriori Knowledge
+Sometimes a priori and a posteriori knowledge may be available ,
+but it is not always suﬃciently precise or is in a form that is
+not always easy to exploit. Nevertheless, even imprecise mode ls
+can provide useful information that should not be discarded
+(
+Zappone et al., 2018 ).
+In philosophy, a priori knowledge is deﬁned as knowledge not
+gained through experience in contrast to a posteriori knowled ge
+(Greenberg, 2010 ). In a priori and a posteriori knowledge, we
+include knowledge from experts. Expert knowledge represents
+the skills demonstrated by experts in a particular domain. In t he
+educational domain, both a priori and a posteriori knowledge
+are generally available. For example, in
+Tato et al. (2017a), expert
+knowledge was used via a Bayesian network, designed entirely
+by domain experts to predict learners’ logical reasoning skil ls.
+This knowledge is available in most cases in the form of writt en
+material such as books, experimental results, etc.
+Our goal is to combine a priori and a posteriori knowledge
+with data-only techniques. We assume that the quality of the
+expert knowledge must be good in order for the proposed
+solution to be eﬀective. We will have to make this knowledge
+interpretable and usable by a machine. A well-known approach
+is to build a rule-based system (
+Fisher et al., 1990; Cordón
+et al., 2001 ). For example, V an Melle (1978) used knowledge
+from experts to develop the MYCIN expert system. However,
+it can be diﬃcult and tedious to operationalize expertise into
+rules. This is a task that typically requires the interventio n of
+cognitive engineers. Also, these expertises are mostly buri ed in a
+written representation. What we propose is to use pre-designed
+models (e.g., rule-based systems, Bayesian networks, etc. ) as is
+when available, or to use standard natural language processi ng
+and information retrieval techniques for knowledge extrac tion
+from text.
+2.2.2. Attention Mechanism
+The attention mechanism allows a neural network to focus
+in part on a subset of information. Attention-based recurren t
+networks have been successfully applied to a wide variety of
+tasks: machine translation (
+Bahdanau et al., 2014; Liu and Chen,
+2022), handwriting synthesis ( Graves, 2013; Bhunia et al., 2021 ),
+speech recognition (Chorowski et al., 2015). Attention is a weight
+vector that allows neural networks to “intelligently” selec t the
+information contained in the input that is deemed important
+for decision making. The attention mechanism looks like a ba sic
+auto-encoder (see Figure 11).
+The principle is to connect a context vector between the
+encoder (in blue) and the decoder (in red). The context vecto r
+takes as input the outputs of all input cells to compute the
+probability distribution of the source elements for each out put
+1shorturl.at/gpxK6
+that the decoder wants to generate. This mechanism is simila r to
+human attention, whose goal is to focus on a portion of current
+information that is deemed important for future decision-
+making. The context vector is constructed as follows: for a ﬁx ed
+target element (which represents a word in the Figure 1), a ﬁrst
+loop is made on all the outputs of the hidden layers (states) of
+the encoders to compare the target and source states to genera te
+scores for each state in the encoders. Then, the function softmax
+is used to normalize all the scores, which generates the probability
+distribution conditioned on the target states. Finally, we ights
+are introduced to facilitate the learning of the context vect or.
+Mathematically, here is how the attention vector is computed :
+αt,s = exp(score(ht,
+hs))
+∑S
+s′= 1 exp(score(ht,
+hs′))
+ct =
+∑
+s
+αt,s · hs
+at = tanh(Wc[ct; ht])
+(1)
+The variable ht represents the output of the decoder at time t,
+ct is the context vector and at is the attention vector. Here, the
+score is denoted as a content-based function. It evaluates how
+well each encoded input ( overlinehs) matches the current output
+ht of the decoder. The scores are normalized using the function
+softmax (αt,s). This score can be computed in diﬀerent ways,
+among others by using the product: score(ht, hs) = h⊺
+t ·
+hs (Luong
+et al., 2015). Finally, the variable ct is the context vector.
+3. METHODOLOGY
+The internal architecture of neural networks makes it diﬃcu lt
+to incorporate domain knowledge into the learning process (
+Lu
+et al., 1996 ). Our solution consists in forcing the model to pay
+attention to what the a priori and a posteriori knowledge think
+of the current input x. It thus aims to infuse the expert’s ﬁnal
+prediction into the system, rather than how this knowledge is
+processed by the expert. Since the attention mechanism (
+Xu et al.,
+2015) is a memory access mechanism as presented above, it is
+a perfect ﬁt in this context where we want the model to have
+access to existing knowledge during learning. In other word s,
+the neural network will “consult” this knowledge before maki ng
+the ﬁnal decision. The importance that the neural model will
+give to what this knowledge predicts as output is computed
+using attention weights ( Wa and Wc, see Figure 2). As the
+network learns, it will know how much importance it will give
+to each of the predictions coming from the knowledge based on
+the trials/errors it will have committed. Wa corresponds to the
+weights calculating the importance of each feature learned b y
+the neural architecture ( yt) compared to each feature extracted
+from the knowledge. Wc represents the weights measuring the
+importance of the predictions made from the knowledge ( via the
+context vector) and the learned features ( yt) for the estimation
+of the ﬁnal prediction vector (see Figure 2). Thus, the model
+will focus on what the expert says, including a priori and a
+posteriori knowledge, before making a decision. By merging th e
+expert knowledge with the neural architecture using the attention
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 4 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 5 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+FIGURE 1 | Attention mechanism. Example of translation from English ( I am a student ) to French ( je suis un étudiant ).
+mechanism, the model iteratively processes the knowledge by
+selecting the relevant content at each step. In the attention al
+mechanism presented by
+Luong et al. (2015), speciﬁcally the
+global attentional model, the attentional vector is calculated from
+the target hidden state ht and the input hidden state. Instead of
+the input hidden state hs as presented above, we will have the
+data from the expert knowledge that will be used to compute the
+context vector Ct which we will call the expert-side context vector
+(see Figure 2 in
+Luong et al., 2015). Thus, given the hidden stateyt
+which is the ﬁnal prediction of the neural model, and the expert-
+side context vector ce
+t , we use a concatenation layer to combine
+the information from the two vectors to produce the attention al
+hidden state at as follows:
+at = tanh(Wc[ce
+t ; yt]) (2)
+The attentional vector at together with the prediction made from
+the knowledge e and the hidden state yt (the prediction) of the
+neural model are then sent to a dense layer to produce the
+expected result y′
+t. The expert-side context vector is computed
+as follows:
+score(ek, yt) = ek · yt · Wa + b
+αt,k = exp(score(ek, yt))
+∑s
+j= 1 exp(score(ej, yt))
+ce
+t =
+∑
+k
+αt,k · e
+(3)
+Where 1 ≤ k ≤ s, e is the prediction made from the a priori
+and a posteriori knowledge, yt is the current prediction made by
+the neural architecture and s is the size of the predicted vector
+(the number of classes to predict). The variable e represents a
+vector of length equal to the size of the vector to be predicted
+where each entry represents the probability that the entry belongs
+to each of the classes according to the expert’s knowledge. Th e
+variable ek represents of size 1 and Wa,Wc,Ws,Ws,yt,e, at are of
+size s. The score as mentioned above is a content-based vector
+that computes the correlation (alignment score) between the
+expert knowledge and the latent features learned by the neural
+architecture. This parameter deﬁnes how expert knowledge and
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 5 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 6 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+FIGURE 2 | Global attentional hybrid model.
+latent features learned from the data are aligned. The model
+assigns a score αt,k to the pair of features at position t and the
+expert knowledge ( ek, yt), based on their correspondence. The
+set of αt,k are weights deﬁning how much each feature of the
+data from the expert should be considered for each output (ﬁnal
+prediction). Figure 2 shows in detail this global process.
+Figure 2 presents the attention mechanism applied to a priori
+knowledge. The operating principle is simple and intuitive:
+• In the ﬁrst step, the input data x is processed by the expert,
+i.e., the membership of x to one of the classes to be predicted
+is evaluated from the a priori and a posteriori knowledge.
+The same data x is also processed by the neural architecture
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 6 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 7 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+in parallel. In the Figure 2, we have taken the example of an
+LSTM but it can be replaced by a CNN or a simple DNN.
+• What we call “A priori knowledge” in the Figure 2 can be
+replaced by any process simulating the expert’s functioning or
+any process simulating a priori and a posteriori knowledge. It
+can be a rule-based engine or a Bayesian network for example.
+The output of the a priori knowledge is a vector representing
+a probability distribution where each of the inputs is the
+probability that the data x belongs to each of the classes to
+predict. For example, if we want to predict that an image is
+either a cat or a dog, then the knowledge output is a vector
+of size two whose ﬁrst value represents the probability that
+the image belongs to the cat class and the second is the
+probability that the image belongs to the dog class. In our
+proposed architecture, we have assumed that the size of the
+expert’s output vector is equal to the output vector of the ﬁnal
+prediction. However, it can be of diﬀerent sizes.
+• We have considered only the output of the last cell ( yt) of
+the LSTM, but one could also concatenate all hidden states
+(h0, ..., ht) for the calculation of the context vector.
+• Once the expert vector ( e) and yt are estimated, the
+architecture determines the expert context vector (called ce).
+This vector represents the relevant information (features)
+extracted from the combination of the expert knowledge and
+the information extracted by the neural architecture. It is
+computed according to the formula presented above.
+• Once the expert context vector is estimated, the attention
+vector ( a) is computed from the concatenation of the expert
+context vector and yt (see computation formula above).
+• For the estimation of the ﬁnal prediction vector y′
+t, there are
+several possible solutions. The ﬁrst one (which is presented i n
+the Figure 2) would be to concatenate the expert vector (e), the
+data learned by the neural architecture ( yt), and the attention
+vector at and then pass the vector obtained into an activation
+function to compute the ﬁnal vector. Other solutions would
+consist in, not including one or both vectors e and yt in the
+concatenation.
+We have presented our approach using an LSTM as an example,
+but in the case of a CNN, the yt would represent the ﬁnal
+output of the network that has been ﬂattened. The proposed
+hybrid model will allow taking into account the a priori and a
+posteriori knowledge of the experts for the modeling of the users.
+One of the uses of such a model is knowledge tracing or skill
+prediction, which we will present in the next sections dedicat ed
+to the application of our solution in real cases.
+4. EXPERIMENTS
+Our goal is to create an accurate user model or a good model for
+the prediction of skills, in order to improve personalization i n
+adaptive learning systems.
+4.1. Logic-Muse
+Logic-Muse is a web-based Intelligent Tutoring System (ITS)
+that helps learners improve logical reasoning skills. Logic- Muse
+includes a learning environment which uses various meta-
+structures to provide reasoning activities on various conte nts
+(
+Nkambou et al., 2015 ). The expert model implements logical
+reasoning skills and knowledge as well as related reasoning
+mechanisms (syntactic and semantic rules of the given logic al
+system). The model of both valid and invalid reasoning rules is
+encoded as a set of production rules. In addition, the semanti c
+memory of the target logic (the logic behind the reasoning) i s
+implemented through a formal OWL ontology and connected
+to the inference rules. The ﬁrst version of Logic-Muse focuses
+on propositional logic. Logic-Muse learner model goal is to
+represent, update and predict the learner state of knowledge
+based on her/his interaction with the system. It has multiple
+aspects including the cognitive part that essentially represents the
+state of the learner’s knowledge (mastery of the reasoning s kills
+in each of the six reasoning situations that have been identi ﬁed
+thanks to the experts). The cognitive state is generated from the
+learner behavior during his interactions with the system, t hat is,
+it is inferred by the system from the information available. It is
+supported by a bayesian network (
+Tato et al., 2017a ) based on
+domain knowledge, where inﬂuence relationships between nodes
+(reasoning skills) as well as prior probabilities are provided by
+the experts. Some nodes are directly connected to the reasoni ng
+activities (items). The skills involved in the BN are those pu t
+forward by the mental models theory to reason in conformity t o
+the logical rules. These skills include the inhibition of ex ceptions
+to the premises, the generation of counterexamples to the
+conclusion and the ability to manage all the relevant models for
+familiar, contrary to fact (counterfactual) and abstract s ituations
+(
+Markovits, 2013 ). There are 16 skills directly observable that
+are linked to the exercises (see Table 1) and 12 latent skills. 48
+exercises on logical reasoning were used in this study.
+For this ﬁrst system, the goal is to train and test the DKT
+model enhanced with our attentional expert knowledge for
+knowledge tracing. DKT is a LSTM which take sequences of
+exercise-performance (et, pt) pairs presented one trial at a time.
+The model then predict the knowledge state, based on the current
+hidden state. The hidden layer of the LSTM represents the
+latent encoding of knowledge state, based on the current inpu t
+and previous latent encoding of knowledge state. It represent s
+the latent knowledge state of student resulted from his past
+learning trajectory.
+4.1.1. Bayesian Network as Attention in DKT
+Bayesian Network (BN) is a graphical model used to model
+processes under uncertainty by representing the relationshi p
+between variables in terms of a probability distribution (
+Russell
+and Norvig, 2016 ). BN allows inferring the probability of
+mastering a skill from a speciﬁc response pattern ( Nkambou
+et al., 2010 ). The structure and the parameter or probability
+distributions are provided by experts or learned using algorithms
+such as Expectation-Maximization. It has been successfully used
+to model knowledge state of learners ( Martin and V anLehn,
+1995; Nguyen and Do, 2009; Tato et al., 2016 ) or learner aﬀect
+(Sabourin et al., 2011 ). There are many contexts where a lot of
+data or expert knowledge (e.g., medicine, Flores et al., 2011 ) is
+available to build BN. How the DKT can beneﬁt from that? In
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 7 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 8 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+TABLE 1 | Distribution of responses over skills.
+Skills Skill description N Average Standard dev
+MppFd Modus ponendo ponens with few disabling conditions 29 4 0.9456 0.16078
+MppMd Modus ponendo ponens with many disabling conditions 2 94 0.898 0.23726
+MppCcf Modus ponendo ponens at the counterfactual level 294 0.907 0.2394
+MppA Modus ponendo ponens at the abstract level 294 0.9615 0.16066
+MttFd Modus tollendo tollens with few disabling conditions 294 0.8435 0.26646
+MttMd Modus tollendo tollens with many disabling condition s 294 0.7925 0.29985
+MttCcf Modus tollendo tollens at the counterfactual level 2 94 0.7494 0.33326
+MttA Modus tollendo tollens at the abstract level 294 0.8401 0.28974
+AcMa Afﬁrmation of the consequent with many alternatives 294 0.424 0.38072
+AcFa Afﬁrmation of the consequent with few alternatives 294 0.3039 0.3652
+AcCcf Afﬁrmation of the consequent at the counterfactual lev el 294 0.3345 0.40801
+AcA Afﬁrmation of the consequent at the abstract level 294 0.2823 0.41038
+DaMa Denial of the antecedent with many alternatives 294 0.407 0.37389
+DaFa Denial of the antecedent with few alternatives 294 0.3027 0.35081
+DaCcf Denial of the antecedent at the counterfactual level 2 94 0.381 0.40662
+DaA Denial of the antecedent at the abstract level 294 0.305 0.42077
+Skills difﬁcult to master (Average < 0.4) and skills easy to master (Average > 0.9) are in bold.
+contexts where expert knowledge is available, we wanted to ta ke
+advantage of that. We also articulate that, as expert knowled ge is
+not biased toward rare data, the model could beneﬁt from that
+when making predictions.
+In Logic-Muse BN, there are 16 nodes directly observable
+(representing skills linked to exercises) and 12 latent node s
+representing knowledge that are a combination of observable
+skills. At each time t, the BN predicts the probability of mastering
+each of the 16 skills for the current student based on its responses
+to past exercises. The output of the prediction represents a
+vector of 16 entries which is the vector e (expert knowledge in
+Figure 2) in the attentional hybrid model. By integrating the
+expert knowledge (here a BN) in the DKT using the attention,
+the model iteratively processes the a priori knowledge by selecting
+relevant content at every step.
+4.1.2. Dataset
+There is a total of 294 participants who participated in this ﬁrst
+study. They all completed the 48 logical reasoning exercises . In
+our dataset, each line of data represents each participant (a to tal
+of 294 data and a sequence length of 48). The exercises were
+encoded using skills that are directly observable, which me ans
+that the questions related to the same skill are encoded with the
+same Id (1–16). The skills with few data are determined by a
+comparison of the average of correct answers obtained for eac h
+skill. In Table 1, we averaged all the answers on each skill. The
+skills diﬃcult to master are those with the lowest average va lue
+and the skills easy to master are those with the highest avera ge.
+Since the LSTM only accepts a ﬁxed length of vectors as the input,
+we used one-hot encoding to convert student performance into a
+ﬁxed length of vectors whose all elements are 0 except for a single
+1. The single 1 in the vector indicates two things: which skil l was
+answered and if the skill was answered correctly.
+4.1.3. Results
+To assess our proposed solution, we ran 2 models: the DKT and
+the DKT with a priori knowledge (DKT+BN). We used 20% of
+the data for testing and 15% for validation. The BN alone gave
+69% of global accuracy. The result is evaluated using the F1score
+on each skill (treated as 2 classes—correct and incorrect answers)
+being predicted and the overall accuracy. The models were
+evaluated in 20 diﬀerent experiments (the same experiment was
+repeated 20 times, this is to ensure that there is no randomnes s
+in the presented results) and the ﬁnal results were averaged. In all
+our experiments, we set λ1 and λ2 = 0.10. Our implementation
+of the DKT+BN model in Tensorﬂow using Keras backend was
+inspired by the implementation2 done by
+Khajah et al. (2016) Our
+code is also available on GitHub 3 for further research.
+The results are shown in Tables 2, 3 and in Figure 3. As
+expected, the new DKT enhanced with BN outperforms the state-
+of-the-art model for predicting skills with few data. For ski lls
+that are easy to master (e.g., MPP type skills), all the models
+always predict that students will give correct answers (the F1score
+of incorrect answers is 0 for DKT and almost 0 for the other
+model). This is because, on the 294 data, we have for example
+only 6 incorrect answers for the MPP_FFD skill. We tested the
+models with high values for λ2 and we get values of f1score equal
+to around 0.6 for correct answers and around 0.7 for incorrect
+answers. This result may be satisfactory in other contexts b ut
+in the context of logical reasoning where it is established t hat
+the MPP type skills are always well-mastered, 0.6 as an f1score
+for correctly predicting a correct answer is not acceptable. Th at
+is why we kept λ2 =0.10. However, the solution stays valid for
+data where the ratio r = number of correct answers/ number of
+2https://github.com/mmkhajah/dkt
+3https://github.com/angetato/Deep-Knowledge-Tracing-On-Sk ills-With-
+Limited-Data
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 8 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 9 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+TABLE 2 | The DKT and the DKT+BN on skills that are difﬁcult to master.
+F1score AcMa DaMa AcFa DaFa
+DKT 0.74 0.09 0.72 0.0 0.79 0.0 0.79 0.0
+DKT+BN 0.70 0.64 0.78 0.43 0.86 0.74 0.80 0.47
+F1score AcCcf DaCcf AcA DaA Accuracy
+DKT 0.79 0.0 0.73 0.0 0.80 0.0 0.79 0.0 0.74
+DKT+BN 0.87 0.80 0.82 0.72 0.83 0.58 0.88 0.80 0.82
+We repeated the experiments 20 times. The last column is the overall ac curacy of the
+model. For each skill, the ﬁrst column corresponds to the value of the f1score for predicting
+that the skill was incorrectly answered and the second column to the v alue of the f1score
+for predicting that the skill was correctly answered. The best ratio for e ach skill is in bold.
+TABLE 3 | The DKT and the DKT+BN on Skills that are easy to master.
+F1score MppFd MppMd MttFd MttMd
+DKT 0.0 0.97 0.0 0.94 0.0 0.91 0.0 0.90
+DKT+BN 0.0 0.95 0.0 0.97 0.0 0.89 0.19 0.88
+F1score MppCcf MttCcf MppA MttA
+DKT 0.0 0.96 0.0 0.87 0.0 0.96 0.0 0.90
+DKT+BN 0.0 0.97 0.12 0.85 0.0 0.99 0.1 0.89
+We repeated the experiments 20 times.
+questions answered or r = number of incorrect answers/ number
+of questions answered on a skill is not too small (as in this ca se)
+and is less than 0.5. For skills that are diﬃcult to master, there is a
+huge diﬀerence between the DKT and our proposed model. DKT
+is unable to track correct answers on skills diﬃcult to master. This
+behavior cannot be accepted as the knowledge tracing of students
+that perform well on those skills will fail. Thus it is importan t to
+make sure that the ﬁnal model is accurate for all the skills. O n
+skills with few samples, we can notice that the DKT + BN still
+behaves better than DKT.
+During our experiments, we noticed that predictions are
+not sometimes consistent with reality as other works have
+also highlighted (
+Yeung and Yeung, 2018 ). The model fails to
+reconstruct the observed input. As a result, even when a stude nt
+performs well on a skill, the prediction of that skill’s master y level
+decreases instead, and vice versa. Also, the predicted performance
+across time steps is not consistent. As seen in Figure 3—DKT ,
+when a student gives correct answers to a skill k, the DKT does
+not sometimes update the current state of knowledge on that
+skill (the skill stays low or is updated very slowly). The probl em
+can be addressed by adding regularization terms to the loss
+function of the original DKT as suggested by
+Yeung and Yeung
+(2018). It can also be partially solved when adding the apriori
+knowledge as we noticed during our experiments ( Figure 3—
+DKT+BN). However, we stay conﬁdent in the fact that if the
+apriori knowledge is more accurate (which is not our case as th e
+accuracy of the BN is 0.65) we will get better results.
+4.2. MorALERT
+4.2.1. Context
+Socio-Moral Reasoning (SMR) is a socio-cognitive construct
+essential for decision-making, as well as social interactio n
+adaptation. It is commonly deﬁned as “how individuals think
+about moral emotions and conventions that govern social
+interactions in their everyday lives” (
+Beauchamp et al., 2013 ).
+Being able to predict and diagnose one’s socio-moral reasonin g
+skill level (or ability) is a key step for quantifying peoples’
+social functioning and can be used to identify those at risk fo r
+maladaptive social behavior. This diagnosis could help orient
+people toward appropriate services or provide adequate support
+to improve this skill’s development. The Socio-Moral Reasoning
+Aptitude Level (SoMoral) (
+Dooley et al., 2010) task is a computer-
+measured walkthrough in which children and adolescents are
+presented with visual social dilemmas from everyday life. Th ey
+are then asked to verbalize how they would react in this situation,
+justifying their answer. The participants’ answers are record ed
+verbatim in transcripts that are subsequently scored manual ly
+by experts using a moral-maturity coding scheme inspired by
+the Kohlberg’s theory of moral development (
+Kohlberg, 1984 ).
+Verbatims are short or long text containing at least one sent ence.
+Each socio-moral reasoning rating was well-documented by
+experts using annotated data. The goal was to put together thes e
+two kinds of data to build an accurate model for the automatic
+prediction of reasoning skill levels. Using annotated data o nly
+would not give us good results in this context. Therefore we
+propose a hybrid model that combines expert knowledge with
+DNN (Deep Neural Networks) architectures (especially CNN and
+LSTM) using the attentional mechanism (
+Xu et al., 2015 ) for
+predicting the level of SMR skill of an individual based on his
+justiﬁcations when solving socio-moral dilemmas. The developed
+solution extends the learner/player model in a serious game called
+LesDilemmes (
+Tato et al., 2017b).
+4.2.2. MorALERT: A Serious Game for Improving
+Socio-Moral Reasoning Skills
+The proposed hybrid model has been tested for the automated
+scoring mechanism in a serious video game called MorALERT
+(previously called LesDilemmes) (
+Tato et al., 2017b). MorALERT
+is a ﬁrst-person serious game aiming to assess and train
+the player on social reasoning skills. MorALERT is a virtual
+learning environment oﬀering an emotionally, socially, and
+cognitively rich interactive context. Players face diﬀerent socio-
+moral dilemmas within a 3D environment (see Figure 4) in
+which they have to make decisions and are asked to provide oral
+justiﬁcations for their choices. They can also ask the opinion s
+of virtual friends (Non-Player Characters) in the game. At t he
+beginning of the game, each Non-Player Character (NPC) is
+assigned an SMR maturity level. The NPCs’ opinions are then
+selected from previously recorded transcripts corresponding t o
+the diﬀerent moral maturity levels according to the coding
+scheme (SoMoral,
+Beauchamp et al., 2013 ). The learner (player)
+model implemented in the learning environment includes thre e
+key dimensions: the aﬀective state, the cognitive proﬁle, and , the
+socio-moral reasoning proﬁle. Therefore, socio-moral reas oning
+skill is part of the player model implemented in the game. As
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 9 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 10 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+FIGURE 3 | Heatmaps illustrating the prediction with the 2 models on th e same student. DKT is unable to make accurate predictions on skills with little data,
+especially skills that are difﬁcult to master. The label in th e vertical dimension refers to the input fed into the models a t each time step. The color of the heatmap
+indicates the predicted probability that the student will c orrectly answer a question related to a skill in the next time step. The darker the color, the higher the
+probability. Here, the student gave 2 out of 3 correct answer s on AC_FMA and we see that the DKT+BN is able to track down that information compared to the DKT .
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 10 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 11 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+FIGURE 4 | MorALERT serious game.
+stated in Birk et al. (2015), a learner/player model that can
+accurately represent the learner longitudinally in a game le ads
+to eﬃcient adaptation, which in turn helps increase the player’ s
+satisfaction and motivation. To this end, it is important to e nsure
+the eﬀectiveness of the learner/player model before deploying
+the system for real uses. One goal in MorALERT was to build
+an eﬀective model of the socio-moral facet of the learner/playe r.
+Deﬁning an individual’s socio-moral reasoning level neces sitates
+an examination of the verbal justiﬁcations he provided when
+solving the dilemmas. This involves the implementation of a
+model that automatically measures and predicts this data dur ing
+the game. We possessed a dataset of verbatim coming from
+the SoMoral experimentation already annotated by experts and
+a description (a paragraph with key concepts) associated with
+each diﬀerent level (or class) of maturity. The experiment in t his
+second context aims to implement our solution so that we can
+accurately assess the socio-moral reasoning skill level of a player
+based on his verbatim.
+4.2.3. Socio-Moral Reasoning Skill Levels
+The original SoMoral task includes ﬁve diﬀerent levels of soci o-
+moral reasoning skill (
+Beauchamp et al., 2013): (1) Authoritarian-
+based consequences, (2) Egocentric exchanges, (3) Interper sonal
+Focus, (4) Societal Regulation, and (5) Societal Evaluation .
+Transition levels (i.e., 1.5, 2.5, 3.5, 4.5) are used to acco unt for
+verbatim that provides elements of two diﬀerent reasoning stages
+and show a sequential progression from one stage to another.
+Occasionally, a verbatim is assigned to two diﬀerent closed l evels
+(with a maximum deviation of 1) when two independent experts
+annotate the data for inter-reliability purposes.
+A ﬁrst convolutional neural network has been proposed, to
+automatically detect the player’s socio-moral reasoning le vel.
+Despite the high accuracy reported (92%) (
+Tato et al., 2017b), the
+model was not able to predict when a person has a socio-moral
+reasoning level of 2, 3, or 5. All the predictions were either l evel
+1 or 3 due to an unbalanced dataset. Our new model addresses
+this issue in order to ensure the accuracy of the learner mode l for
+better support of the learning process in the serious game.
+4.2.4. Hybrid Architecture for Socio-Moral Reasoning
+Skill Prediction
+4.2.4.1. Expert Knowledge
+In our context, where we only have access to description (in
+textual form) of each of the levels (see Figure 5,
+Chiasson
+et al., 2017 ), we employed two diﬀerent techniques related to IR
+(Information Retrieval) and NLP (Natural Language Processing):
+the Word Movers’ Distance to compare the meaning of texts,
+n-grams, and stemming to test whether verbatim contain thos e
+speciﬁc elements extracted for each level. We explain each of t he
+techniques in further details in the following section.
+4.2.4.2. Word Mover’s Distance
+Word Mover’s Distance (WMD) (
+Kusner et al., 2015 ) is a
+machine learning technique that allows submitting a query a nd
+returning the most relevant documents. It is used to assess
+the “distance” between two documents in a meaningful way,
+even when they have no words in common. The assumption is
+that similar words should be linked to similar vectors. Inste ad
+of using Euclidean Distance and other bag-of-words based
+distance measurement, they proposed to use word2vec vector
+embeddings of words to calculate similarities. It has been s hown
+to outperform many of the state-of-the-art methods in k-near est
+neighbors classiﬁcation by normalizing Bag-of-Words and Word
+Embeddings to calculate the distance between documents.
+We used the WMD method to build the ﬁrst part of the expert
+knowledge content that will be combined with the DNN. Each
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 11 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 12 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+FIGURE 5 | Brief description of SoMoral coding and examples ( Chiasson et al., 2017 ).
+description of each socio-moral reasoning skill level as wel l as
+each verbatim is considered as a document. We transformed each
+document to their word2vec representation using pre-trained
+word2vec models for French. 4,5 The vectors have then been
+normalized so that they could all have equal length. We calculated
+the similarity between each verbatim and each description (5
+descriptions) using gensim Wmd-Similarity tool. 6 For each
+verbatim this calculation provided us with a vector of length
+5 where each entry is the similarity between the verbatim and
+the description of the corresponding socio-moral reasoning s kill
+level. The values range between 0 and 1.
+4.2.4.3. Bi-gram and Stemming
+N-gram is a contiguous sequence of n items from a given sample
+of text or speech. We extracted n-grams (uni and bi grams) from
+the textual description of levels, which gave us a list of n-gram for
+each reasoning level. We also generated a list of synonyms of all
+keywords (extracted manually) included in the descriptions . For
+each verbatim, we counted the number of times each n-gram of
+each level appeared within the text.
+Stemming is the process of reducing inﬂected (or sometimes
+derived) words to their word stem, base or root form. We applied
+this technique to all the words in the synonyms list generated and
+for each word in verbatim. Also, for each verbatim, we counte d
+the number of times each synonym of each level appeared within
+4http://fauconnier.github.io/
+5http://wacky.sslmit.unibo.it/doku.php?id=corpora
+6https://tedboy.github.io/nlps/generated/generated/gensim.similarities.
+WmdSimilarity.html
+the text. The sum of the vectors generated by this process and
+the previous one (n-grams) gave us, for each verbatim, a vector
+of size 5 where each entry represents the number of n-grams and
+synonyms of each level found in the verbatim. We ﬁnally applied
+the softmax function to the resulting vector which was added to
+the one generated by the WMD method.
+4.2.5. Experiments
+In order to empirically evaluate the proposed solution in
+this second context, we investigated six diﬀerent models: a
+CNN (cnn-only), an LSTM (lstm-only), a CNN where expert
+knowledge was concatenated to the features learned (cnn-
+expert), an LSTM where expert knowledge was concatenated to
+the features learned (lstm-expert) and ﬁnally the cnn-expert -
+att (a CNN where expert knowledge was concatenated to the
+features learned + knowledge-based attention) and lstm-ex pert-
+att (a LSTM where expert knowledge was concatenated to the
+features learned + knowledge-based attention). We used the same
+parameter initialization for all the models. Adam (
+Kingma and
+Ba, 2014 ) was used as the optimizer with a learning rate set to
+0.001. The algorithms were implemented using Keras 7 and the
+experiments were done using the built-in Keras models, making
+only small edits to the default settings.
+4.2.5.1. Data Pre-processing
+The dataset consists of a benchmark of 731 verbatim (written
+in French) manually annotated by experts. Verbatims are not
+equally distributed between classes (unbalancing data). Table 4
+7https://keras.io/
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 12 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 13 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+TABLE 4 | Distribution of verbatims between classes.
+Class Frequency Class Frequency
+1 232 1.5 11
+2 76 2.5 29
+3 207 3.5 31
+4 40 4.5 3
+5 49
+shows the distribution of data where for example the classes 4
+and 5 have a small number of verbatims than others (1,2 and 3).
+In fact, level 5 being the highest level of maturity, it is rare to come
+across people of this level. This means that some of those class es
+have very few examples to learn from. On the 731 verbatims,
+there were 53 of them that were classiﬁed as 0, which means
+that the verbatim does not represent one of the socio-moral
+reasoning skill levels. We do not consider these cases in ourstudy,
+which reduces our corpus to 678 verbatims. We also limited our
+prediction problem to 5 levels of socio-moral reasoning skill s: 1,
+2, 3, 4, and 5. The verbatims belonging to intermediary level s 1.5,
+2.5, 3.5, and 4.5 were added to verbatims belonging to levels 2, 3,
+4, and 5, respectively.
+4.2.5.2. Deal With Unbalanced Data
+As shown in Table 4, the dataset is unbalanced. The ﬁrst models
+we built were biased toward classes that had more samples.
+Therefore, we applied some techniques that aimed to balance th e
+dataset. The ﬁrst technique we had chosen is the penalization
+of models (cost-sensitive models,
+Shi et al., 2015 ). It works as
+follows: we penalize the classiﬁcation by imposing an additio nal
+cost on the models for making classiﬁcation mistakes on the
+minority class during training. The penalties can bias the mo del
+to pay more attention to the minority classes. However, this
+technique was unsuccessful because the results were no bett er
+than when using the original dataset. In fact, the generated
+solutions were able to classify instances from the minority
+classes correctly, but less capable of classifying instance from
+the majority classes. The second technique we used aimed at r e-
+sampling the dataset (
+Ghosh et al., 2017 ). With this technique,
+the models were insured to not be biased toward one class. The
+dataset was re-sampled by using the oversampling technique,
+which consists in randomly duplicating samples from classes with
+few examples, in order to match the number of samples of other
+classes. This second technique did not work as well. Instead of
+playing with the data, we found a solution based on training
+multiple models that are specialized in the prediction of speciﬁ c
+socio-moral levels. We used ensemble methods to combine
+results from those models and produce the ﬁnal prediction.
+Ensemble methods (
+Dietterich, 2000) are techniques that create
+multiple models and then combine them to produce improved
+results. Voting and averaging are two of the easiest ensembl e
+methods. They are both easy to understand and implement.
+Voting strategy was selected, as it is well-suited for class iﬁcation
+problems. The architecture of the ﬁnal model is presented in
+Figure 6. In Figure 6, each sub model is specialized for the
+FIGURE 6 | Final model for predicting socio-moral reasoning skill lev els.
+prediction of levels speciﬁed between parenthesis. Each model i s
+either LSTM or CNN combined with expert knowledge and the
+attentional vector.
+4.2.5.3. Proposed Models
+Figure 7 shows the proposed architectures. The models take as
+input the verbatims that have been pre-processed (tokenizatio n,
+text to sequence, etc.) and vectored. The vectors are then pas sed
+to the embedding layer. In Figure 7 (left), the embedding vectors
+are passed to the LSTM layer (note that we have only considered
+the output of the last cell). The expert knowledge and the
+output of the LSTM are then passed to the expert knowledge-
+based attention. The attentional vector is merged with the e xpert
+knowledge and the output of the LSTM. The concatenation is
+passed to the last layer for the prediction. This process is the same
+for the CNN (see Figure 7, right), except that the knowledge-
+based attention layer takes as input the expert knowledge and t he
+result of the pooling operation applied to the output of the CNN.
+To evaluate the added value of this knowledge-based attenti on,
+we have considered two similar models (cnn-expert, lstm-expert)
+to those shown in ﬁgures. However, those models do not have the
+knowledge-based attention layer. They are used as a comparison
+with the proposed solutions.
+4.2.5.4. Results
+All the models have been trained on 80% (with 20% as
+validation data) of the data and tested on the remaining 20%. A
+standard measure for classiﬁcation/prediction performance is the
+accuracy. However, for datasets with unbalanced distribution like
+ours, this measure can be illusory and not very informative onthe
+errors being committed by the classiﬁer. Instead of considerin g
+only the accuracy, we have considered the recall, the precision
+and the F1 score (or F-measure which takes in consideration
+both the precision and the recall) for all classes and for each
+of the classes separately. Thus, we will be able to evaluate th e
+performance of the models on the prediction of classes with
+small samples.
+The results are shown inTable 5 and in Figures 8, 9. As we can
+see, models that take into account expert knowledge perform well
+for the prediction of classes with few samples compared to other s
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 13 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 14 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+FIGURE 7 | The proposed hybrid architecture using LSTM (left) or CNN (right) for the prediction of socio-moral reasoning level.
+TABLE 5 | Overall precision, recall, f1score, and accuracy of all the models.
+Models Precision Recall f1-score Accuracy
+Expert-only 0.47 0.40 0.38 0.40
+cnn-only 0.58 0.53 0.49 0.53
+lstm-only 0.42 0.43 0.42 0.43
+cnn-expert 0.62 0.62 0.62 0.62
+lstm-expert 0.54 0.53 0.51 0.53
+cnn-expert-att 0.67 0.65 0.63 0.65
+lstm-expert-att 0.59 0.60 0.58 0.60
+Final model 0.72 0.75 0.73 0.75
+with no expert knowledge (f1score for classes 2, 4, and 5). Thi s is
+due to the fact that experts do not need data to make decisions
+because their decisions are based on their own knowledge. Th is
+suggests that, incorporating expert knowledge to neural mode ls
+improves the classiﬁcation even when the dataset is unbalanc ed.
+Also, even if there is not a huge amount of training data, the
+models are still able to generalize well on unseen data. Overall, the
+CNN based models perform well than the LSTM based models
+because it has been shown that the latter is a solution that ha s a
+better generalization power when there is a lot of available d ata.
+4.2.6. Discussions
+The computed a priori expert knowledge, alone, gave 40% of
+accuracy on all the dataset, which is not good. However, when
+directly merged with the features learned by the DNNs, the
+results are better than without that concatenation. Merging the
+expert knowledge with the features learned by the models is
+nonetheless not suﬃcient as it is comparable to adding a bias.
+Expert knowledge should be considered as an input that can make
+change to features learned depending on whether these featur es
+are important for the ﬁnal prediction. As seen in the results, th e
+knowledge-based attention layer helps improve the prediction ,
+which suggests that using the attentional mechanism is suit able
+for the targeted task. Here are two advantages of incorporati ng
+expert knowledge to DNN: (1) Models are able to generalize well
+even with a limited amount of data; (2) Models are able to make
+accurate prediction on unbalanced dataset.
+4.2.6.1. Real Life Socio-Moral Reasoning Classiﬁcation
+Diﬀerent experts tend to associate to the same verbatim:
+diﬀerent—but close—classes. Taking into consideration thateven
+experts can make errors, we retrained our model by considering
+a margin error of 1 for the 5-class problem. For example, if the
+model predicts that the class of the verbatim v is 4 and that the
+real class is 5, then it is considered as a correct classiﬁcatio n. The
+results taking into account errors margins showed a noticea ble
+improvement. We gained more than 5% on the overall f1score.
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 14 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 15 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+FIGURE 8 | Precision of all the models for each level.
+FIGURE 9 | F1-score of all the models for each level.
+4.2.6.2. Personalization in MorALERT
+The ﬁnal model (using CNN as it gave best results) was integrated
+in the game that is currently in experimentation. The predicti on
+was done in real time. We recorded audio justiﬁcation of the
+learner before transforming it to text using Google speech to
+text API. 8 The text was then fed into the model, outputting
+the predicted socio-moral reasoning skill level. The predict ed
+8https://cloud.google.com/speech-to-text/
+socio-moral reasoning skill level was thereafter used to update the
+current player model and to adapt the serious game accordingly .
+To introduce a form of feedback and scoring inside the game,
+we added a simulated social feedback showing the number of
+“likes” and “friends” depending on the player responses. When
+players’ socio-moral reasoning maturity level increased, pl ayers
+gained “likes”, and when they made positive evaluations of the
+opinions of NPC with a higher level of maturity than their own,
+they gained “friends”. Their evaluation of the opinions of NP C
+with lower levels of SMR maturity had no eﬀect on the number
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 15 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 16 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+of likes or number of friends. For the 10 players we have alread y
+experimented, the model was able to correctly predict the soci o-
+moral reasoning skill levels based on the comparison with human
+experts’ prediction. Furthermore, the assessment of the game
+suggests that the players appreciated it in terms of immersion,
+playability and impression of having learned something. Resul ts
+also show that the game encourages the development of higher
+levels of SMR skill from pre-test compared to the game, but also
+from pre-test compared to post test. In fact, results during the
+post-test appear to be lower than during the game, which might
+be related to the higher level of perceived immersion and also
+because of the social simulation associated with the NPC and
+their opinions and also the social feedback interface.
+5. CONCLUSION
+In this paper, we proposed a simple, eﬀective, and intuitive
+technique to improve deep learning architecture on user
+modeling for personalization purposes. It consists of
+incorporating expert knowledge (when available) using the
+attention mechanism, to neural network architectures. The
+solution was tested in two learning environments: Logic-Mus e
+and MorALERT.
+In Logic-Muse, the experiments consisted in tracing the
+logical skills of students using the hybrid model. At the same
+time, we introduced a new way of using the attention mechanism,
+to allow neural networks to take into account expert knowledg e
+(when available) in their training and decision process. We tested
+the solution on a dataset that is unbalanced. The results sho wed
+that the DKT is unable to accurately track skills with little data,
+compare to the DKT+BN.
+During the experiments, we noticed that, for skills that are
+very easy to master, all the 2 models were unable to track incorrect
+answers, due to the fact that the ratio r = incorrect answers/total
+of questions answered was very low. Even with a penalty, we
+were not able to signiﬁcantly improve the DKT model. However,
+in this paper, we have set the regularization parameters λ1 and
+λ2 with a ﬁxed value but for future work, we will do a grid
+search to ﬁnd the best values. We will do further experiments
+on the integration of expert knowledge into neural network
+architectures. We also plan to test our techniques on a larger and
+or public dataset.
+The proposed model has also been tested in MorALERT ,
+a serious game adaptive learning environment for assessing
+and optimizing SMR in adolescence. In MorALERT , our model
+accurately predicts the socio-moral reasoning skill level b ased
+on textual verbatim and a priori expert knowledge. This makes
+it possible to propose an adapted (personalized) order for
+the dilemma sequencing in the game. The ﬁndings from a
+recent experiment of MorALERT (
+Zarglayoun et al., 2022 ) show
+promise in terms of its potential for assessing and improving
+socio-moral reasoning maturity.
+Thanks to its hybrid nature, the proposed model is also
+intended to help experts in the annotation of verbatims.
+Results are very promising for the ﬁeld. Contrary to the
+state-of-the-art techniques in text classiﬁcation, the sol ution
+we proposed achieves the best results in our context. This is
+mainly due to the deep structures that can learn useful featur es
+from data and also the a priori knowledge that can leverage
+unbalanced data.
+The idea of using attention to incorporate expert knowledge
+to NN can be used in other domains such as text classiﬁcation
+or in medicine where there is a lot of expert knowledge availab le.
+For example, we could think of a classiﬁer using a neural network
+combined with a rule-based system, as the expert knowledge.
+DATA AVAILABILITY STATEMENT
+The raw data supporting the conclusions of this article will be
+made available by the authors, without undue reservation.
+AUTHOR CONTRIBUTIONS
+AT and RN contributed to conception and design of the study
+and wrote the sections of the manuscript. AT implemented
+the systems (Logic-Muse and MorALERT) and the models,
+organized the datasets used for the experiments, performed
+the analysis of the results, and wrote the ﬁrst draft of the
+manuscript. All authors contributed to manuscript revision,read,
+and approved the submitted version.
+FUNDING
+This research was supported by grants from Natural Sciences and
+Engineering Research Council of Canada (NSERC), Discovery
+Grant Awarded to RN. This research was also supported by grants
+from Fonds de Recherche du Québec Société et Culture (FRQSC)
+awarded to RN and his colleagues (Research Team).
+ACKNOWLEDGMENTS
+We would like to thank Miriam Beauchamp, Aude Dufresne,
+Serge Robert, Janie Brisson, and Juliette Laurendeau for their help
+in this work. The content of this manuscript has been presented
+in part at the Tenth AAAI Symposium on Educational Advances
+in Artiﬁcial Intelligence (
+Tato et al., 2020).
+REFERENCES
+Bahdanau, D., Cho, K., and Bengio, Y. (2014). Neural machine tra nslation
+by jointly learning to align and translate. arXiv preprint arXiv:1409.0473 .
+doi: 10.48550/arXiv.1409.0473
+Bakkes, S. C., Spronck, P. H., and van Lankveld, G. (2012). Player
+behavioural modelling for video games. Entertain. Comput . 3, 71–79.
+doi: 10.1016/j.entcom.2011.12.001
+Beauchamp, M., Dooley, J. J., and Anderson, V. (2013). A preliminary
+investigation of moral reasoning and empathy after traumatic brain i njury
+in adolescents. Brain Injury 27, 896–902. doi: 10.3109/02699052.2013.
+775486
+Bhunia, A. K., Khan, S., Cholakkal, H., Anwer, R. M., Khan, F. S.,
+and Shah, M. (2021). “Handwriting transformers, ” in Proceedings of
+the IEEE/CVF International Conference on Computer Vision , 1086–1094.
+doi: 10.1109/ICCV48922.2021.00112
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 16 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 17 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+Birk, M. V., Toker, D., Mandryk, R. L., and Conati, C. (2015). “M odeling
+motivation in a social network game using player-centric traits and personality
+traits, ” in International Conference on User Modeling, Adaptation, and
+Personalization (Cham: Springer), 18–30. doi: 10.1007/978-3-319-20267-9_2
+Chen, H., and Zhang, Z. (2021). Hybrid neural network based on
+novel audio feature for vehicle type identiﬁcation. Sci. Rep . 11, 1–10.
+doi: 10.1038/s41598-021-87399-1
+Chiasson, V., Vera-Estay, E., Lalonde, G., Dooley, J., and Beau champ,
+M. (2017). Assessing social cognition: age-related changes i n moral
+reasoning in childhood and adolescence. Clin. Neuropsychol . 31, 515–530.
+doi: 10.1080/13854046.2016.1268650
+Chorowski, J. K., Bahdanau, D., Serdyuk, D., Cho, K., and Bengi o, Y. (2015).
+“Attention-based models for speech recognition, ” in Advances in Neural
+Information Processing Systems eds Cortes, C., Lawrence, N., Lee, D., Sugiyama,
+M., and Garnett, R (Curran Associates, Inc.) 28, 577–585.
+Collobert, R., and Weston, J. (2008). “A uniﬁed architecture for natural language
+processing: deep neural networks with multitask learning, ” in Proceedings of
+the 25th International Conference on Machine Learning (New York, NY: ACM),
+160–167. doi: 10.1145/1390156.1390177
+Conati, C., Gertner, A. S., V anLehn, K., and Druzdzel, M. J. (199 7). “On-line
+student modeling for coached problem solving using bayesian netwo rks, ” in
+User Modeling eds Jameson, H., Paris, C., and Tasso, C. (Springer), 231–242.
+doi: 10.1007/978-3-7091-2670-7_24
+Corbett, A. T., and Anderson, J. R. (1994). Knowledge tracing: modeling the
+acquisition of procedural knowledge. User Model User Adapt. Interact . 4,
+253–278. doi: 10.1007/BF01099821
+Cordón, O., Herrera, F., and Villar, P. (2001). Generating the knowled ge base of
+a fuzzy rule-based system by the genetic learning of the data base . IEEE Trans.
+Fuzzy Syst. 9, 667–674. doi: 10.1109/91.940977
+Coro, G., Pagano, P., and Ellenbroek, A. (2013). Combining simulate d
+expert knowledge with neural networks to produce ecological
+niche models for latimeria chalumnae. Ecol. Modell . 268, 55–63.
+doi: 10.1016/j.ecolmodel.2013.08.005
+Dass, S., Gary, K., and Cunningham, J. (2021). Predicting stude nt dropout in
+self-paced mooc course using random forest model. Information 12, 476.
+doi: 10.3390/info12110476
+Demuth, H. B., Beale, M. H., De Jess, O., and Hagan, M. T. 1(2014).Neural Network
+Design. Stillwater, OK: Martin Hagan.
+Dietterich, T. G. (2000). “Ensemble methods in machine learning, ” in International
+Workshop on Multiple Classiﬁer Systems (Berlin; Heidelberg: Springer), 1–15.
+doi: 10.1007/3-540-45014-9_1
+Domladovac, M. (2021). “Comparison of neural network with gradient
+boosted trees, random forest, logistic regression and SVM in predict ing
+student achievement, ” in 2021 44th International Convention on Information,
+Communication and Electronic Technology (MIPRO) (Opatija: IEEE), 211–216.
+doi: 10.23919/MIPRO52101.2021.9596684
+Dooley, J. J., Beauchamp, M., and Anderson, V. A. (2010). The meas urement
+of sociomoral reasoning in adolescents with traumatic brain injury: a
+pilot investigation. Brain Impairment 11, 152–161. doi: 10.1375/brim.11.
+2.152
+Drachen, A., Green, J., Gray, C., Harik, E., Lu, P., Sifa, R., et al. (2016). “Guns and
+guardians: comparative cluster analysis and behavioral proﬁling in de stiny, ”
+in 2016 IEEE Conference on Computational Intelligence and Games (C IG)
+(Santorini: IEEE), 1–8. doi: 10.1109/CIG.2016.7860423
+Drachen, A., Sifa, R., Bauckhage, C., and Thurau, C. (2012). “G uns, swords and
+data: clustering of player behavior in computer games in the wild, ” in2012 IEEE
+Conference on Computational Intelligence and Games (CIG) (Granada: IEEE),
+163–170. doi: 10.1109/CIG.2012.6374152
+Fisher, J. L., Hinds, S. C., and D’Amato, D. P. (1990). “A rule-bas ed system for
+document image segmentation, ” in 10th International Conference on Pattern
+Recognition (Atlantic City, NJ: IEEE), 567–572. doi: 10.1109/ICPR.1990 .
+118166
+Flores, M. J., Nicholson, A. E., Brunskill, A., Korb, K. B., and Masc aro,
+S. (2011). Incorporating expert knowledge when learning Bayesian
+network structure: a medical case study. Artif. Intell. Med . 53, 181–204.
+doi: 10.1016/j.artmed.2011.08.004
+Friedman, N., Nachman, I., and Peér, D. (1999). “Learning bayesi an network
+structure from massive datasets: the “sparse candidate” algorithm, ” in
+Proceedings of the Fifteenth Conference on Uncertainty in Art iﬁcial Intelligence
+(San Francisco, CA: Morgan Kaufmann Publishers Inc.), 206–215 .
+Ghosh, S., Baranowski, E. S., van Veen, R., de Vries, G.-J., Bie hl, M., Arlt,
+W., et al. (2017). “Comparison of strategies to learn from imbalanced
+classes for computer aided diagnosis of inborn steroidogenic dis orders, ” in
+Proc. of the European Symposium on Artiﬁcial Neural Networks (Bruges).
+doi: 10.1530/endoabs.49.OC1.3
+Gow, J., Baumgarten, R., Cairns, P., Colton, S., and Miller, P. (2012). Unsupervised
+modeling of player style with LDA. IEEE Trans. Comput. Intell. AI Games 4,
+152–166. doi: 10.1109/TCIAIG.2012.2213600
+Graves, A. (2013). Generating sequences with recurrent neural net works. arXiv
+preprint arXiv:1308.0850. doi: 10.48550/arXiv.1308.0850
+Greenberg, R. (2010). Kant’s Theory of a Priori Knowledge . University Park, PA:
+Penn State University Press.
+Ha, E. Y., Rowe, J. P., Mott, B. W., and Lester, J. C. (2011). “G oal recognition
+with Markov logic networks for player-adaptive games, ” in Seventh Artiﬁcial
+Intelligence and Interactive Digital Entertainment Confer ence (Stanford, CA:
+AAAI).
+He, K., Zhang, X., Ren, S., and Sun, J. (2016). “Deep residual learn ing for image
+recognition, ” in Proceedings of the IEEE Conference on Computer Vision and
+Pattern Recognition (Las Vegas, NV: IEEE), 770–778. doi: 10.1109/CVPR.20
+16.90
+Hearst, M. A., Dumais, S. T., Osuna, E., Platt, J., and Scholkopf, B . (1998). Support
+vector machines. IEEE Intell. Syst. Appl. 13, 18–28. doi: 10.1109/5254.708428
+Horvitz, E., Breese, J., Heckerman, D., Hovel, D., and Rommelse, K. (199 8). “The
+lumiere project: Bayesian user modeling for inferring the goals and nee ds of
+software users, ” in Proceedings of the Fourteenth Conference on Uncertainty in
+Artiﬁcial Intelligence (San Francisco, CA: Morgan Kaufmann Publishers Inc.),
+256–265.
+Huang, C., Li, Y., Change Loy, C., and Tang, X. (2016).1 “Learnin g deep
+representation for imbalanced classiﬁcation, ” in Proceedings of the IEEE
+Conference on Computer Vision and Pattern Recognition(Las Vegas, NV: IEEE),
+5375–5384. doi: 10.1109/CVPR.2016.580
+Kantharaju, P., Alderfer, K., Zhu, J., Char, B., Smith, B., and O ntanón, S.
+(2018). “Tracing player knowledge in a parallel programming educational
+game, ” inFourteenth Artiﬁcial Intelligence and Interactive Digital Entertainment
+Conference (Publisher: AAAI Press).
+Khajah, M., Lindsey, R. V., and Mozer, M. C. (2016). How deep is
+knowledge tracing? arXiv preprint arXiv:1604.02416. doi: 10.48550/arXiv.1604.
+02416
+Kingma, D. P., and Ba, J. (2014). Adam: a method for stochastic optimization. arXiv
+preprint arXiv:1412.6980. doi: 10.48550/arXiv.1412.6980
+Kohlberg, L. (1984). Essays on Moral Development: The Psychology of Moral
+Development. Vol. 2. Cambridge: Harper & Row.
+Kusner, M., Sun, Y., Kolkin, N., and Weinberger, K. (2015). “F rom word
+embeddings to document distances, ” in International Conference on Machine
+Learning eds Bach, F., and Blei, D. (Lille: JMLR.org), 957–966.
+Liu, H.-I., and Chen, W.-L. (2022). X-transformer: a machine transla tion
+model enhanced by the self-attention mechanism. Appl. Sci . 12, 4502.
+doi: 10.3390/app12094502
+Lu, H., Setiono, R., and Liu, H. (1996). Eﬀective data mining usi ng neural
+networks. IEEE Trans. Knowledge Data Eng . 8, 957–961. doi: 10.1109/69.
+553163
+Luong, M.-T., Pham, H., and Manning, C. D. (2015). Eﬀective approa ches to
+attention-based neural machine translation. arXiv preprint arXiv:1508.04025 .
+doi: 10.18653/v1/D15-1166
+Markovits, H. (2013). “How to develop a logical reasoner: a hierarch ical model
+of information use in conditional reasoning, ” in The Developmental Psychology
+of Reasoning and Decision-Making ed Markovits, H. (Hove: Psychology Press),
+148–164. doi: 10.4324/9781315856568
+Martin, J., and V anLehn, K. (1995). Student assessment using B ayesian
+NETs. Int. J. Hum. Comput. Stud . 42, 575–591. doi: 10.1006/ijhc.19
+95.1025
+McLachlan, G. (2004). Discriminant Analysis and Statistical Pattern Recognition ,
+Vol. 544. New York, NY: John Wiley & Sons.
+Missura, O., and Gärtner, T. (2009). “Player modeling for intellige nt diﬃculty
+adjustment, ” in International Conference on Discovery Science (Berlin:
+Springer), 197–211. doi: 10.1007/978-3-642-04747-3_17
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 17 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 18 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+Montero, S., Arora, A., Kelly, S., Milne, B., and Mozer, M. (2018). “ Does deep
+knowledge tracing model interactions among skills?” in 11th International
+Conference on Educational Data Mining, EDM 2018 (Buﬀalo, NY).
+Moon, K., Kim, J., and Lee, J. (2021). Early prediction model of stud ent
+performance based on deep neural network using massive LMS log data. J.
+Korea Contents Assoc. 21, 1–10. doi: 10.1016/j.compedu.2020.104108
+Muyuan, W., Naiyao, Z., and Hancheng, Z. (2004). “User-adapt ive music
+emotion recognition, ” in Proceedings 7th International Conference on Signal
+Processing, 2004 (Beijing: IEEE), 1352–1355. doi: 10.1109/ICOSP.2004.
+1441576
+Nguyen, L., and Do, P. (2009). “Combination of Bayesian netwo rk and overlay
+model in user modeling, ” in International Conference on Computational
+Science (Baton Rouge, LA: Springer), 5–14. doi: 10.1007/978-3-642-01 9
+73-9_2
+Nkambou, R., Brisson, J., Kenfack, C., Robert, S., Kissok, P., a nd Tato, A. (2015).
+“Towards an intelligent tutoring system for logical reasoning in mu ltiple
+contexts, ” in Design for Teaching and Learning in a Networked World eds
+Conole, G., Klobuar, T., Rensing, C., Konert, J., and Lavoue, E. (Berlin;
+Heidelberg: Springer-Verlag), 460–466. doi: 10.1007/978-3-319-24258-3_40
+Nkambou, R., Mizoguchi, R., and Bourdeau, J. (2010). Advances in
+Intelligent Tutoring Systems , Vol. 308. Springer Science & Business Media.
+doi: 10.1007/978-3-642-14363-2
+Nur, N. (2021). Developing temporal machine learning approaches to suppor t
+modeling, explaining, and sensemaking of academic success and risk of
+undergraduate students (Ph.D. thesis). The University of North Carolina at
+Charlotte, Charlotte, NC, United States.
+Pardos, Z. A., and Heﬀernan, N. T. (2010). “Modeling individualiz ation
+in a Bayesian networks implementation of knowledge tracing, ” in
+International Conference on User Modeling, Adaptation, and Personalization
+(Big Island, HI: Springer-Verlag, Berlin Heidelberg), 255–266.
+doi: 10.1007/978-3-642-13470-8_24
+Piech, C., Bassen, J., Huang, J., Ganguli, S., Sahami, M., Guiba s, L. J., et al.
+(2015). “Deep knowledge tracing, ” inAdvances in Neural Information Processing
+Systems eds Cortes, C., Lawrence, N., Lee, D., Sugiyama, M., and Garnett, R.
+(Curran Associates, Inc.), 505–513.
+Rowe, J., Mott, B., McQuiggan, S., Robison, J., Lee, S., and L ester, J. (2009).
+“Crystal island: a narrative-centered learning environment for eigh th grade
+microbiology, ” in Workshop on Intelligent Educational Games at the 14th
+International Conference on Artiﬁcial Intelligence in Educ ation (Brighton),
+11–20.
+Rowe, J. P., and Lester, J. C. (2010). “Modeling user knowledge with dynamic
+Bayesian networks in interactive narrative environments, ” in Sixth Artiﬁcial
+Intelligence and Interactive Digital Entertainment Confer ence (Palo Alto, CA:
+AAAI), 57–62.
+Russell, S. J., and Norvig, P. (2016). Artiﬁcial Intelligence: A Modern Approach .
+Harlow: Pearson Education Limited.
+Sabourin, J., Mott, B., and Lester, J. C. (2011). “Modeling learn er aﬀect
+with theoretically grounded dynamic Bayesian networks, ” in International
+Conference on Aﬀective Computing and Intelligent Interactio n (Memphis, TN:
+Springer), 286–295. doi: 10.1007/978-3-642-24600-5_32
+Sharma, G., Parashar, A., and Joshi, A. M. (2021). Dephnn: a novel hybrid neural
+network for electroencephalogram (EEG)-based screening of depressi on.
+Biomed. Signal Process. Control 66, 102393. doi: 10.1016/j.bspc.2020.
+102393
+Shi, D., Guan, J., and Zurada, J. (2015). “Cost-sensitive learn ing for imbalanced
+bad debt datasets in healthcare industry, ” in 2015 Asia-Paciﬁc Conference on
+Computer Aided System Engineering (Quito: IEEE), 30–35.
+Song, X., Li, J., Tang, Y., Zhao, T., Chen, Y., and Guan, Z. (202 1). JKT: a joint
+graph convolutional network based deep knowledge tracing. Inform. Sci . 580,
+510–523. doi: 10.1016/j.ins.2021.08.100
+Stern, M., Beck, J., and Woolf, B. P. (1999). Naive Bayes Classiﬁers for
+User Modeling . Center for Knowledge Communication, Computer Science
+Department, University of Massachusetts.
+Tato, A., Nkambou, R., Brisson, J., Kenfack, C., Robert, S., and Kissok, P. (2016).
+“A Bayesian network for the cognitive diagnosis of deductive reasoning, ”
+in European Conference on Technology Enhanced Learning (Lyon: Springer),
+627–631. doi: 10.1007/978-3-319-45153-4_78
+Tato, A., Nkambou, R., Brisson, J., and Robert, S. (2017a). “Pred icting learner’s
+deductive reasoning skills using a bayesian network, ” in International
+Conference on Artiﬁcial Intelligence in Education (Wuhan: Springer), 381–392.
+doi: 10.1007/978-3-319-61425-0_32
+Tato, A., Nkambou, R., and Dufresne, A. (2020). “Using ai techn iques in
+a serious game for socio-moral reasoning development, ” in The Thirty-
+Fourth AAAI Conference on Artiﬁcial Intelligence, AAAI 2020, The Thirty-
+Second Innovative Applications of Artiﬁcial Intelligence Conference, IAAI
+2020 (New York, NY: AAAI Press), 13477–13484. doi: 10.1609/aaai.v 34i
+09.7066
+Tato, A. A. N., Nkambou, R., Dufresne, A., and Beauchamp, M. H. (201 7b).
+“Convolutional neural network for automatic detection of socio moral
+reasoning level, ” in EDM (Worcester, MA: International Educational Data
+Mining Society).
+Towell, G. G., and Shavlik, J. W. (1994). Knowledge-based artiﬁci al neural
+networks. Artif. Intell. 70, 119–165. doi: 10.1016/0004-3702(94)90105-8
+Troussas, C., Krouska, A., and Virvou, M. (2020). “Using a multi mo dule
+model for learning analytics to predict learners’ cognitive states a nd provide
+tailored learning pathways and assessment, ” in Machine Learning Paradigms
+eds Virvou, M., Alepis, E., Tsihrintzis, G., and Jain, L. (Cham: S pringer), 9–22.
+doi: 10.1007/978-3-030-13743-4_2
+Tsamardinos, I., Brown, L. E., and Aliferis, C. F. (2006). The max-mi n hill-
+climbing bayesian network structure learning algorithm. Mach. Learn . 65,
+31–78. doi: 10.1007/s10994-006-6889-7
+Tseng, J. C., Chu, H.-C., Hwang, G.-J., and Tsai, C.-C. (2008). Development of
+an adaptive learning system with two sources of personalization i nformation.
+Comput. Educ. 51, 776–786. doi: 10.1016/j.compedu.2007.08.002
+V an Melle, W. (1978). Mycin: a knowledge-based consultation progra m
+for infectious disease diagnosis. Int. J. Man Mach. Stud . 10, 313–322.
+doi: 10.1016/S0020-7373(78)80049-2
+Wang, L., Sy, A., Liu, L., and Piech, C. (2017). “Deep knowledg e tracing
+on programming exercises, ” in Proceedings of the Fourth 2017 ACM
+Conference on Learning@ Scale (New York, NY: ACM), 201–204.
+doi: 10.1145/3051457.3053985
+Woolf, B. P. (2010). Building Intelligent Interactive Tutors: Student-Center ed
+Strategies for Revolutionizing e-Learning. Burlington, MA: Morgan Kaufmann.
+Xing, W., Li, C., Chen, G., Huang, X., Chao, J., Massicotte, J., e t al.
+(2021). Automatic assessment of students’ engineering design performance
+using a bayesian network model. J. Educ. Comput. Res . 59, 230–256.
+doi: 10.1177/0735633120960422
+Xu, K., Ba, J., Kiros, R., Cho, K., Courville, A., Salakhudinov, R. , et al.
+(2015). “Show, attend and tell: neural image caption generation wi th visual
+attention, ” inInternational Conference on Machine Learning (Lille: JMLR.org),
+2048–2057.
+Y an, J., Liu, J., Yu, Y., and Xu, H. (2021). Water quality prediction in the luan river
+based on 1-DRCNN and bigru hybrid neural network model. Water 13, 1273.
+doi: 10.3390/w13091273
+Y annakakis, G. N., and Hallam, J. (2009). Real-time game adaptation for
+optimizing player satisfaction. IEEE Trans. Comput. Intell. AI Games 1,
+121–133. doi: 10.1109/TCIAIG.2009.2024533
+Yeung, C.-K., and Yeung, D.-Y. (2018). Addressing two problems in deep
+knowledge tracing via prediction-consistent regularization. arXiv preprint
+arXiv:1806.02180. doi: 10.1145/3231644.3231647
+Yu, Z., Lian, J., Mahmoody, A., Liu, G., and Xie, X. (2019). “Adaptive user modeling
+with long and short-term preferences for personalized recommendation, ” in
+IJCAI (Macao: IJCAI), 4213–4219. doi: 10.24963/ijcai.2019/585
+Yuan, F., Zhang, G., Karatzoglou, A., Jose, J., Kong, B., and Li , Y. (2021). “One
+person, one model, one world: learning continual user representation w ithout
+forgetting, ” inProceedings of the 44th International ACM SIGIR Conference on
+Research and Development in Information Retrieval (New York, NY), 696–705.
+doi: 10.1145/3404835.3462884
+Zakrzewska, D. (2008). “Cluster analysis for users’ modeling in i ntelligent e-
+learning systems, ” in International Conference on Industrial, Engineering and
+Other Applications of Applied Intelligent Systems (Berlin: Springer), 209–214.
+doi: 10.1007/978-3-540-69052-8_22
+Zappone, A., Di Renzo, M., Debbah, M., Lam, T. T., and Qian, X. (201 8).
+Model-aided wireless artiﬁcial intelligence: embedding expert know ledge in
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 18 June 2022 | Volume 5 | Article 921476
+
+--- PAGE 19 ---
+T ato and Nkambou Hybrid Neural Network for Personalization
+deep neural networks towards wireless systems optimization. arXiv preprint
+arXiv:1808.01672. doi: 10.1109/MVT.2019.2921627
+Zarglayoun, H., Laurendeau-Martin, J., Tato, A., Vera-Estay, E. , Blondin, A.,
+Lamy-Brunelle, A., et al. (2022). Assessing and optimising socio-mo ral
+reasoning skills: ﬁndings from the moralert serious video game. Front. Psychol.
+12, 767596. doi: 10.3389/fpsyg.2021.767596
+Zhang, J., Shi, X., King, I., and Yeung, D.-Y. (2017a). “Dynami c key-value
+memory networks for knowledge tracing, ” in Proceedings of the 26th
+International Conference on World Wide Web (Geneva: International World
+Wide Web Conferences Steering Committee), 765–774. doi: 10.114 5/3038912.
+3052580
+Zhang, K., and Y ao, Y. (2018). A three learning states bayesian k nowledge
+tracing model. Knowl. Based Syst . 148, 189–201. doi: 10.1016/j.knosys.2018.
+03.001
+Zhang, L., Xiong, X., Zhao, S., Botelho, A., and Heﬀernan, N. T. (20 17b).
+“Incorporating rich features into deep knowledge tracing, ” in Proceedings of
+the Fourth (2017) ACM Conference on Learning@ Scale (New York, NY: ACM),
+169–172. doi: 10.1145/3051457.3053976
+Conﬂict of Interest: The authors declare that the research was conducted in the
+absence of any commercial or ﬁnancial relationships that could be c onstrued as a
+potential conﬂict of interest.
+Publisher’s Note: All claims expressed in this article are solely those of the authors
+and do not necessarily represent those of their aﬃliated organizat ions, or those of
+the publisher, the editors and the reviewers. Any product that may b e evaluated in
+this article, or claim that may be made by its manufacturer, is not gua ranteed or
+endorsed by the publisher.
+Copyright © 2022 T ato and Nkambou. This is an open-access article distributed
+under the terms of the Creative Commons Attribution License (CC BY). The
+use, distribution or reproduction in other forums is permitt ed, provided the
+original author(s) and the copyright owner(s) are credited a nd that the original
+publication in this journal is cited, in accordance with acc epted academic practice.
+No use, distribution or reproduction is permitted which doe s not comply with these
+terms.
+Frontiers in Artiﬁcial Intelligence | www.frontiersin.org 19 June 2022 | Volume 5 | Article 921476

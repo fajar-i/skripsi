@@ -1,0 +1,759 @@
+--- PAGE 1 ---
+Design and Implementation of an AI-Enhanced Heuristic
+Learning System in a Virtual Realm
+Xiaozhu Wang
+The Open University of China
+China
+wangxzh@ouchn.edu.cn
+Shengzhuo Liu
+College of Computer Science and
+Mathematics, Fujian University of
+Technology
+China
+liu-sz09@fjut.edu.cn
+Paul Adams
+Department of Media,
+Communication and Journalism,
+California State University, Fresno
+USA
+drpaul16@gmail.com
+Abstract
+This paper explores how artificial intelligence (AI) and Virtual Re-
+ality (VR) technology can be integrated with heuristic learning
+methods in a virtual realm. Heuristic learning emphasizes the
+promotion of deeper understanding and internalization of knowl-
+edge through discovery, problem-solving, and practice. This paper
+outlines AI-enhanced heuristic learning strategies, highlighting
+how AI integration enables customized learning paths, immersive
+simulation environments, intelligent feedback and evaluation, aux-
+iliary functions, and data-driven insights. The designed system
+structure includes modules for data collection, feature engineering,
+model training and deployment, knowledge base creation, and user
+interface. Examples of intelligent learning companions demon-
+strate the practical application of AI-assisted tools in providing
+real-time heuristic guidance and personalized support in animation
+design courses. Through experimental comparative analysis, it is
+concluded that combining heuristic methods with AI-supported
+environments can enhance the learning experience of students, pro-
+viding valuable insights for future courses in terms of participation,
+efficiency, customization, and knowledge internalization.
+CCS Concepts
+• Applied computing; • Education; • E-learning;
+Keywords
+Heuristic learning, Artificial intelligence, Adaptive learning, Con-
+versational agents, Knowledge tracing
+ACM Reference Format:
+Xiaozhu Wang, Shengzhuo Liu, and Paul Adams. 2024. Design and Im-
+plementation of an AI-Enhanced Heuristic Learning System in a Virtual
+Realm. In 2024 8th International Conference on Digital Technology in Educa-
+tion (ICDTE) (ICDTE 2024), August 07–09, 2024, Berlin, Germany. ACM, New
+York, NY, USA, 9 pages. https://doi.org/10.1145/3696230.3696231
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for components of this work owned by others than the
+author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or
+republish, to post on servers or to redistribute to lists, requires prior specific permission
+and/or a fee. Request permissions from permissions@acm.org.
+ICDTE 2024, August 07–09, 2024, Berlin, Germany
+© 2024 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+ACM ISBN 979-8-4007-1757-4/24/08
+https://doi.org/10.1145/3696230.3696231
+1 INTRODUCTION
+Heuristic learning, derived from the Greek word heuriskein, mean-
+ing ”to discover, ” is an educational approach that encourages learn-
+ers to actively engage in problem-solving and exploration. Un-
+like traditional rote memorization techniques, heuristic learning
+emphasizes critical thinking, experimentation, and a real-world
+application of knowledge. By encouraging learners to actively
+seek solutions rather than passively receive information, heuristic
+learning fosters deeper comprehension and long-term retention of
+concepts. The benefits of heuristic learning are manifold. Firstly,
+it promotes a deeper understanding of subject matter by encour-
+aging learners to actively engage with the material and apply it
+in practical contexts. Secondly, it cultivates critical thinking and
+problem-solving skills, essential competencies in an increasingly
+complex and dynamic world. Finally, heuristic learning encourages
+a growth mindset, instilling in learners the confidence to tackle
+challenges and learn from failures.
+The integration of AI and VR technologies holds immense po-
+tential for enhancing heuristic learning experiences. AI algorithms
+can analyze vast amounts of learner data to personalize instruction,
+providing tailored guidance and feedback to individual students
+based on their unique learning styles and preferences. VR technol-
+ogy, on the other hand, creates immersive learning environments
+that simulate real-world scenarios, enabling learners to apply theo-
+retical knowledge in practical contexts. By combining AI’s adaptive
+capabilities with VR’s immersive environments, educators can cre-
+ate highly personalized and engaging learning experiences that
+cater to the individual needs and preferences of each learner. More-
+over, AI-powered virtual tutors can provide real-time feedback and
+support, facilitating self-directed learning and exploration. This
+synergy between AI and VR technologies has the potential to rev-
+olutionize education, making learning more accessible, engaging,
+and effective than ever before.
+2 LITERATURE REVIEW
+In recent years, there has been a significant surge of interest in
+leveraging artificial intelligence (AI) and heuristics to facilitate
+adaptive and personalized learning experiences within virtual envi-
+ronments. This paper presents a comprehensive synthesis of key
+research conducted over the past five years, focusing on the most
+recent advancements related to the design and implementation of
+AI-powered heuristic learning systems in virtual realms.
+The review covers various domains of research, starting with in-
+telligent tutoring systems (ITS), which rely on AI to deliver tailored
+instruction autonomously. Mousavinasab et al. (2021) highlighted
+255
+
+--- PAGE 2 ---
+ICDTE 2024, August 07–09, 2024, Berlin, Germany Xiaozhu Wang et al.
+the increasing integration of AI techniques in intelligent tutoring
+systems across disciplines to provide adaptive learning, but advo-
+cated for more mobile-based systems to further enable personalized
+education [1]. Intelligent tutoring systems integrating AI, as demon-
+strated by Hazem A. Alrakhawi et al. (2023), have increasingly been
+utilized in education. These systems offered adaptive and person-
+alized learning experiences across various disciplines, ultimately
+resulting in enhanced student outcomes [ 2]. Erümit and Çetin
+(2020) proposed a design framework for adaptive intelligent tutor-
+ing systems, emphasizing the importance of tailored approaches
+in education technology [ 3]. Additionally, D’Mello and Graesser
+(2023) explored how intelligent tutoring systems achieve learning
+gains comparable to human tutors, highlighting their transforma-
+tive potential in the field of education [ 4]. Adaptive e-learning
+frameworks represented another significant area of exploration,
+with researchers proposing models that integrate learning analytics
+and AI to modify virtual learning based on learner needs. Smaili et
+al. (2021) explored the concept of sustainable e-learning systems
+through an adaptive learning approach, emphasizing the impor-
+tance of adaptability in promoting long-term viability in online
+education [5]. Kaouni et al. (2023) presented a design for an adap-
+tive e-learning model driven by artificial intelligence, aiming to
+enhance the efficacy of online teaching methods [ 6]. Kumar et al.
+(2020) proposed a heuristic evaluation framework for assessing the
+quality of mobile learning applications, providing valuable insights
+for improving user experience in mobile learning environments
+[7]. Heuristics, commonly referred to as ”rules of thumb, ” have
+augmented AI guidance quality in virtual learning environments.
+Alvarez et al. (2016) delved into cyber education, advocating for
+a blend of pedagogical and heuristic learning approaches. They
+emphasized the importance of incorporating technology into educa-
+tion to enhance learning outcomes [ 8]. In contrast, Jin et al. (2021)
+focused on providing design heuristics specifically tailored for ar-
+tificial intelligence (AI) applications. Their work aimed to inspire
+UX designers in generating innovative AI-powered ideas, thereby
+improving user experience in AI-driven systems [ 9]. Meanwhile,
+Mozer et al. (2019) explored the integration of artificial intelligence
+(AI) in human instruction [ 10]. Their research underscored AI’s
+potential to augment traditional teaching methods and suggests its
+role in optimizing educational processes for improved learning effi-
+cacy. Conversational agents leveraging natural language processing
+have emerged as intuitive AI guidance tools in virtual environments.
+These studies collectively explored the utilization of Artificial Intelli-
+gence (AI) in remote learning and teaching. Atif et al. (2021) delved
+into AI-enabled remote learning and teaching through Pedagogi-
+cal Conversational Agents and Learning Analytics [ 11]. Paschoal
+et al. (2020) systematically identified pedagogical conversational
+agents, laying the groundwork for their effective integration into
+educational settings [12]. Meanwhile, Mekni (2021) presented an
+AI-based virtual assistant utilizing conversational agents, aiming to
+enhance learning experiences and support remote education [ 13].
+Together, these works underscore the potential of AI in revolutioniz-
+ing online education through innovative technological applications.
+Furthermore, numerous studies have explored the applications of
+AI and virtual environments in animated education across various
+domains. These studies collectively explore various aspects of in-
+tegrating technology into virtual learning environments (VLEs).
+Hantoobi et al. (2021) presented a systematic review focusing on
+the integration of knowledge management in VLEs, emphasizing
+the importance of efficient information management in enhancing
+learning experiences [ 14]. Skalka and Drlik (2022) proposed an AI-
+based educational model utilizing active learning strategies within
+VLEs, aiming to enhance student engagement and performance
+[15]. Together, these studies underscore the growing importance of
+AI in transforming and optimizing virtual learning environments
+for effective knowledge dissemination and acquisition.
+After conducting a thorough literature review, several key hy-
+potheses and research questions have been identified to guide the
+experimental study. These inquiries aim to shed light on the ef-
+fectiveness of AI-enhanced heuristic learning environments and
+the role of smart conversational agents in facilitating personalized
+learning experiences. To synthesize these elements and outline the
+approach:
+Hypothesis 1: AI-enhanced heuristic learning environments im-
+prove student engagement and motivation compared to traditional
+learning methods.
+Research Question 1 : How does the integration of AI technolo-
+gies in virtual learning environments affect student engagement
+and motivation levels?
+Hypothesis 2: Smart conversational agents provide personal-
+ized learning experiences that cater to individual student needs and
+preferences.
+Research Question 2 : To what extent do smart conversational
+agents adapt to the learning pace and preferences of individual
+students?
+Hypothesis 3: The timing and manner of intervention by smart
+conversational agents influence student learning outcomes.
+Research Question 3 : What is the optimal timing and approach
+for smart conversational agents to intervene in the learning process
+without being intrusive?
+The study aims to address key hypotheses and research ques-
+tions regarding the effectiveness of AI-enhanced heuristic learning
+environments. Specifically, the investigation will delve into how
+these environments impact student engagement, motivation, and
+personalized learning experiences. To answer these questions, spe-
+cialized systems and experimental designs tailored to each inquiry
+will be utilized, providing empirical evidence on the efficacy of AI
+technologies in education.
+3 AN AI-ENHANCED HEURISTIC LEARNING
+APPROACH
+Heuristic learning methodology represents a dynamic approach
+to education, emphasizing problem-solving, discovery, and self-
+directed learning. By engaging learners in hands-on experiences
+and encouraging exploration, heuristic learning fosters deeper un-
+derstanding and retention of knowledge. In recent years, the in-
+tegration of artificial intelligence (AI) and virtual reality (VR) en-
+vironments has opened new possibilities for enhancing heuristic
+learning in innovative ways.
+256
+
+--- PAGE 3 ---
+Design and Implementation of an AI-Enhanced Heuristic Learning System in a Virtual Realm ICDTE 2024, August 07–09, 2024, Berlin, Germany
+Figure 1: The Iterative Process of Heuristic Learning
+3.1 Core principles of heuristic learning
+Heuristic learning operates on several foundational principles and
+techniques designed to foster active engagement and critical think-
+ing among learners. Figure 1 illustrates the iterative process of
+heuristic learning, characterized by cycles of exploration, exper-
+imentation, reflection, and refinement. This iterative model en-
+courages learners to actively explore concepts through hands-on
+activities, promoting deeper understanding and retention.
+In heuristic learning, learners embrace a problem-solving mind-
+set, seeking solutions through trial and error rather than passive
+instruction. This approach cultivates deeper comprehension as
+learners confront real-world challenges and apply critical thinking
+skills to devise innovative solutions. Furthermore, heuristic learn-
+ing emphasizes self-directed inquiry, empowering learners to take
+ownership of their educational journey and pursue areas of interest
+autonomously.
+3.2 Significance of integrating AI and VR in
+educational design
+The integration of AI and VR technologies holds profound signif-
+icance for educational design, particularly in enriching heuristic
+learning experiences. AI-powered adaptive learning systems can
+analyze learner behavior and preferences to customize educational
+content and activities, enhancing the efficacy of heuristic learning
+experiences [16]. VR technology allows learners to immerse them-
+selves in tailored environments, facilitating experiential learning
+and skill development. The profound implications and benefits
+of combining AI and VR technologies in educational settings are
+explored in the paper.
+• Personalized Learning Experiences: AI and VR integra-
+tion allows for tailored learning experiences, adjusting con-
+tent, pacing, and instructional strategies based on individual
+student data. This personalized approach fosters greater
+engagement and academic success.
+• Immersive and Interactive Learning Environments: VR
+technology offers immersive experiences, simulating real-
+world scenarios for active engagement. AI integration en-
+hances interaction, providing real-time feedback and guid-
+ance to enhance comprehension and retention.
+• Enhanced Collaboration and Social Learning: AI and
+VR enable collaborative learning in virtual environments,
+promoting teamwork and knowledge sharing. These spaces
+develop essential communication and collaboration skills for
+the modern workforce.
+• Data-Driven Decision-Making for Educators: AI an-
+alytics from VR environments offer insights into student
+behaviors and performance. Educators can personalize in-
+struction and implement interventions based on empirical
+evidence, refining educational approaches continuously.
+• Accessibility and Inclusivity: AI and VR accommodate
+diverse learning needs, with features like speech recognition
+improving accessibility for students with disabilities. VR
+simulations cater to various learning modalities, ensuring
+equitable access to educational opportunities.
+4 AN AI-ENHANCED HEURISTIC LEARNING
+SYSTEM
+After exploring the AI-enhanced heuristic learning approach, it
+becomes evident that an AI-enhanced virtual learning system is
+crucial in modern education. It utilizes artificial intelligence tech-
+nology to personalize learning experiences, adapts to individual
+student needs, provides real-time feedback, and enhances overall
+engagement. This innovative approach revolutionizes traditional
+learning methods, making education more dynamic, efficient, and
+accessible to students worldwide.
+4.1 An AI-Enhanced heuristic learning scenario
+AI plays a pivotal role in augmenting heuristic learning experiences
+by providing personalized guidance, facilitating adaptive learning
+pathways, and enhancing instructional support. Figure 2 illustrates
+an AI-Enhanced Heuristic Learning Scenario and shows how AI
+algorithms analyze learner data to deliver personalized recommen-
+dations, adaptive feedback, and tailored learning experiences. Ad-
+ditionally, AI-driven conversational agents offer intuitive guidance
+and support, furnishing learners with personalized explanations
+and feedback.
+In this scenario, we envision an AI-enhanced virtual learning en-
+vironment designed to facilitate personalized and adaptive learning
+experiences for students across diverse educational domains. The
+scenario illustrates how advanced AI technologies can be integrated
+into virtual learning platforms to optimize learning outcomes and
+foster student engagement.
+1. Data Analytics and Insights: The AI system leverages
+advanced data analytics capabilities to derive actionable in-
+sights from learner interactions and behaviors. These in-
+sights inform instructional design, curriculum development,
+and pedagogical strategies, enabling educators to refine and
+optimize the learning experience over time.
+2. AI-Enhanced Adaptive Learning: At the core of the inte-
+gration, AI algorithms analyze learner data, including pref-
+erences, behavior, and performance metrics. These analyses
+enable the system to dynamically adapt the learning experi-
+ence to suit individual learner needs and preferences.
+257
+
+--- PAGE 4 ---
+ICDTE 2024, August 07–09, 2024, Berlin, Germany Xiaozhu Wang et al.
+Figure 2: An AI-Enhanced Heuristic Learning Scenario
+3. Personalized Learning Pathways: Through the integra-
+tion of AI, the virtual learning platform generates person-
+alized learning pathways tailored to each student’s goals,
+interests, and academic strengths. These pathways leverage
+machine learning algorithms to recommend relevant courses,
+resources, and activities aligned with students’ educational
+objectives. For instance, a student interested in computer
+science may receive recommendations for coding tutorials,
+virtual labs, and online courses in software development.
+4. Interactive Conversational Agents: Integrated conver-
+sational agents powered by AI engage learners in interac-
+tive dialogue, offering personalized explanations, answering
+queries, and providing contextualized assistance. These con-
+versational agents enhance learner engagement, promote
+deeper understanding, and facilitate seamless interaction
+within the learning environment.
+5. Adaptive Assessment and Feedback: AI algorithms en-
+able adaptive assessment tools that dynamically adjust the
+difficulty and format of quizzes, tests, and assignments based
+on students’ skill levels and performance. Additionally, AI-
+driven feedback mechanisms provide timely and personal-
+ized feedback to students, highlighting strengths, addressing
+misconceptions, and suggesting strategies for improvement.
+This feedback loop promotes metacognitive awareness and
+self-regulated learning among students.
+Overall, Through the integration of AI, educators can create dy-
+namic and responsive learning environments that empower learn-
+ers to achieve their full potential and acquire deep, meaningful
+knowledge and skills. Moreover, AI-powered analytics tools track
+learner progress, pinpoint areas of strength and weakness, and offer
+targeted interventions to bolster learning outcomes.
+4.2 An AI-Enhanced Heuristic Learning System
+Structure
+The promise of AI and VR in education stems from their potential
+to create highly adaptive, experiential learning environments. To
+realize this potential, the system structure must enable dynamic
+personalization and interactivity. At the core, an AI engine lever-
+ages data on learners’ knowledge, skills, interests and progress
+to continually tailor content and activities. This engine relies on
+components for collecting learner data, extracting insights, and
+training models to refine recommendations over time. Seamless
+integration of this AI-powered personalization engine with immer-
+sive VR environments can enable learners to actively engage with
+educational content in new ways, supporting critical thinking and
+improved outcomes. The system structure must tightly connect
+the AI modules with VR front-ends to deliver this next-generation
+learning experience, as shown in Figure 3.
+The AI-enhanced virtual learning system comprises essential
+modules, each facilitating efficient learning experiences. The Data
+Acquisition Module gathers data from various sources, while the
+Data Preprocessing Module ensures its cleanliness and transforma-
+tion. The Feature Engineering Module extracts relevant features
+and scales them appropriately. The Model Training Module opti-
+mizes AI models, and the Model Deployment Module seamlessly
+deploys them into the production environment. The Knowledge
+Base stores expert insights and model training records for ongo-
+ing improvement. The User Interface enables intuitive interaction
+and smooth navigation. The system operates through well-defined
+steps: data acquisition from diverse sources, meticulous preprocess-
+ing, feature engineering for model performance, rigorous model
+training, and deployment for personalized learning experiences.
+Continuous updates to the knowledge base ensure accuracy, while
+the user interface facilitates seamless interaction and feedback sub-
+mission. Through these steps, the system empowers educators and
+learners in dynamic virtual learning experiences.
+258
+
+--- PAGE 5 ---
+Design and Implementation of an AI-Enhanced Heuristic Learning System in a Virtual Realm ICDTE 2024, August 07–09, 2024, Berlin, Germany
+Figure 3: AI-enhanced heuristic learning system structure
+5 SMART LEARNING PARTNER
+5.1 Overview of the Smart Learning Partner
+The Smart Learning Partner [ 17] represents an innovative appli-
+cation of AI-enhanced heuristic learning systems in virtual envi-
+ronments, serving as an intelligent agent within virtual learning
+environments. The Smart Learning Partner functions as an intel-
+ligent agent embedded within virtual environments, tasked with
+assisting students in heuristic learning. Here is an example of how
+the Smart Learning Partner could facilitate heuristic learning in the
+Animation Character Design course. Sarah is learning about walk
+cycles in her animation design class. As she attempts to animate
+a basic walk cycle, she struggles with making the movement look
+natural. The Smart Learning Partner detects Sarah’s frustration
+and says: “I notice you seem stuck on making this walk cycle look
+natural. Think back to the bounce and timing principles we learned
+earlier – how could applying those help make the movement less
+rigid?” This prompts Sarah to reflect on her prior learning. She
+realizes she needs to add more up-and-down movement to mimic
+the bounce of steps. She also varies the timing of steps to look
+less robotic. The Smart Learning Partner provides an affirming
+response: “Nice refinement on the walk cycle – the bounce and
+timing adjustments helped make it look much more natural. Re-
+member you can always reference those core animation principles
+if you get stuck. ” By directing Sarah’s attention and prompting her
+to apply prior knowledge, the Smart Learning Partner facilitates
+heuristic learning to help her overcome challenges in the animation
+process, as shown in Figure 4.
+By leveraging advanced AI algorithms, the Smart Learning Part-
+ner analyzes student interactions and performance, offering tailored
+guidance and support to facilitate the learning process. Acting as
+a virtual mentor, it aims to enhance student comprehension and
+mastery of various concepts through personalized assistance and
+feedback.
+Core functions of the Smart Learning Partner include:
+1. Provide real-time evaluation and heuristic suggestions:
+One of the primary functions of the Smart Learning Partner
+is to offer real-time evaluation and heuristic suggestions to
+students. By continuously monitoring student progress and
+interactions, it identifies areas of improvement and provides
+timely feedback based on heuristic principles. This facilitates
+adaptive learning strategies and helps students refine their
+problem-solving skills.
+2. Support personalized learning: One of the primary func-
+tions of the Smart Learning Partner is to offer real-time evalu-
+ation and heuristic suggestions to students. By continuously
+monitoring student progress and interactions, it identifies
+areas of improvement and provides timely feedback based
+on heuristic principles. This facilitates adaptive learning
+strategies and helps students refine their problem-solving
+skills.
+3. Stimulate learning interest and creativity: Beyond aca-
+demic assistance, the Smart Learning Partner seeks to stim-
+ulate student interest and creativity. By incorporating inter-
+active learning activities, challenging tasks, and stimulating
+259
+
+--- PAGE 6 ---
+ICDTE 2024, August 07–09, 2024, Berlin, Germany Xiaozhu Wang et al.
+Figure 4: The Smart Learning Partner
+Table 1: Key points of support in different sections
+Section Provided by the Smart Learning
+Partner
+Points
+At the Beginning of the Course Guidance ■ Structural features of characters: proportional relationships
+between different body parts
+■ Common character actions: standing, walking, running,
+jumping, etc.
+■ Characteristic expressions of characters: happiness, anger,
+sadness, joy, surprise, fear, etc.
+When Students Submit Their Work
+in Progress
+Evaluation Criteria ■ Overall structure of the model: completeness and logical
+coherence
+■ Gestures, expressions, and actions: alignment with intended
+emotional expression and narrative context
+Personalized Learning Guidance Guidance, Assessment and
+Encouragement
+■ For students with weaker foundations: detailed explanations
+and examples
+■ For students with stronger proficiency: challenging tasks to
+enhance skills and creativity
+content, it fosters a dynamic learning environment that en-
+courages curiosity, exploration, and innovation. Through
+engaging learning experiences, it aims to inspire students to
+actively participate in their educational journey and develop
+a passion for learning.
+5.2 Application Case: Animation Character
+Design Course
+5.2.1 Learning Scenario. In the learning scenario of the Animation
+Character Design course, tailored for beginners, students engage
+in the creation of action figures within a virtual environment. The
+primary objectives of this course are twofold: to equip students
+with a comprehensive understanding of the fundamental principles
+and techniques involved in action figure design and to nurture their
+ability to conceive imaginative and expressive character designs.
+Throughout the course, students immerse themselves in the intri-
+cacies of action figure creation, exploring various aspects such as
+structural composition, gestures, expressions, and movements. Un-
+der the guidance of the Smart Learning Partner, an intelligent agent
+integrated into the virtual environment, students receive personal-
+ized assistance tailored to the specific requirements of the course.
+At the outset of the design process, the Smart Learning Partner pro-
+vides essential guidelines based on the course curriculum and the
+given task, ensuring that students grasp the foundational concepts
+and objectives. As students’ progress through the activity, they
+have the opportunity to submit their work-in-progress to the Smart
+Learning Partner for real-time evaluation and feedback. Leveraging
+the functionality of the system, the Smart Learning Partner assesses
+the submitted designs, offering heuristic suggestions and insights
+aimed at guiding students towards further refinement and creativ-
+ity in their creations. Through this iterative process of creation,
+evaluation, and guidance, students are empowered to enhance their
+skills and produce action figure designs that exhibit both technical
+proficiency and artistic expression.
+5.2.2 Support Provided by the Smart Learning Partner. By offering
+structured guidance and personalized support in the course, the
+Smart Learning Partner enhances the learning journey, enabling
+students to develop their creativity and proficiency in animation
+260
+
+--- PAGE 7 ---
+Design and Implementation of an AI-Enhanced Heuristic Learning System in a Virtual Realm ICDTE 2024, August 07–09, 2024, Berlin, Germany
+Table 2: Comparative result analysis
+Evaluation Criteria Experimental Group Control Group
+Structure Reasonable and complete Average
+Gestures Logical Not smooth enough
+Expressions Vivid and expressive Lacks expression
+Actions Smooth and natural Not lively enough
+Creativity High Average
+Completeness High Average
+Overall Performance Outstanding Ordinary
+character design. Table 1 shows the key points of support in differ-
+ent sections.
+1. At the Beginning of the Course
+At the outset of the Animation Character Design course, the
+Smart Learning Partner provides essential guidance to students,
+covering various aspects of character design. This guidance is
+structured and comprehensive, addressing key elements such as
+structural features, gestures, expressions, and actions. For instance,
+in activities like ”Drawing a Cow, ” the Smart Learning Partner offers
+specific guidance tailored to meet the task’s requirements. This
+guidance includes details on the proportional relationship between
+different body parts, common actions associated with characters,
+and characteristic expressions typically exhibited by them.
+2. When Students Submit Their Work in Progress
+As students’ progress through the course and submit their work
+for evaluation, the Smart Learning Partner offers real-time feedback
+and constructive suggestions for improvement. The evaluation cri-
+teria are meticulous, covering multiple dimensions of character
+design. This includes assessing the overall structure of the model
+for completeness and logical coherence. Additionally, the Smart
+Learning Partner evaluates the gestures, expressions, and actions
+depicted in the design, ensuring they align with the intended emo-
+tional expression and narrative context.
+3. Personalized Learning Guidance
+Recognizing the varied learning requirements and skill sets
+among students, the Smart Learning Partner is adept at delivering
+customized guidance that aligns with each learner’s unique profile.
+By offering detailed explanations and examples, it assists those
+with foundational gaps in character design to grasp concepts effec-
+tively. Conversely, it challenges students with advanced proficiency
+through engaging tasks, fostering continuous skill development and
+nurturing creativity. Through such personalized support, the Smart
+Learning Partner optimizes the learning journey for all students,
+ensuring comprehensive skill enhancement and growth.
+5.2.3 Experiment and Analysis. In the experiment, students were
+given an assignment: to create a joyful running cow image based on
+the provided static image (a), while using image (b) as the standard
+reference answer, as depicted in Figure 5. In this task, students
+received assistance and guidance from the Smart Learning Partner.
+The teacher evaluated the creative process and overall effect of the
+two groups of students.
+The experimental group consisted of 52 students using the Smart
+Learning Partner, while the control group comprised another 110
+Figure 5: Assignment
+students who did not use the Smart Learning Partner. The eval-
+uation mainly included two aspects: assessment of the creative
+process and assessment of the overall effect. In the assessment
+of the creative process, the teacher focused on the performance
+in structure, gestures, expressions, and actions. At the same time,
+the teacher also conducted a comprehensive evaluation of the cre-
+ativity, completeness, and overall performance of the students’
+works. Upon evaluating the performance across various criteria, it
+became apparent that the experimental group, which utilized the
+AI-enhanced learning approach, demonstrated significantly supe-
+rior outcomes compared to the control group, as shown in Table
+2.
+With the comparison results summarized in Table 2, the analysis
+proceeded to a more detailed interpretation of these findings.
+1. Structure: The experimental group’s structures were
+deemed reasonable and complete, suggesting a clear under-
+standing of foundational concepts and effective application
+of learned principles. In contrast, the control group’s struc-
+tures were rated as average, indicating potential challenges
+in translating conceptual knowledge into practical applica-
+tion.
+2. Gestures: Members of the experimental group effectively
+conveyed logical gestures, reflecting a nuanced understand-
+ing of gesture dynamics. In contrast, the control group’s
+gestures were critiqued for lacking smoothness, potentially
+indicating difficulties in translating conceptual ideas into
+physical representation.
+3. Expressions: The experimental group exhibited vivid and
+expressive facial expressions, enhancing the overall narrative
+261
+
+--- PAGE 8 ---
+ICDTE 2024, August 07–09, 2024, Berlin, Germany Xiaozhu Wang et al.
+and engagement. Conversely, the control group’s expres-
+sions were noted to be deficient in expression, potentially
+limiting the impact of their work on the viewer.
+4. Actions: The experimental group’s actions were deemed
+smooth and natural, indicating a high level of proficiency
+in animation techniques. In contrast, the control group’s
+actions were perceived as not lively enough, suggesting pos-
+sible challenges in animating lifelike movements.
+5. Creativity: Members of the experimental group demon-
+strated higher levels of creativity, incorporating innovative
+elements and original ideas into their work. This willingness
+to explore unconventional approaches suggests a capacity
+for divergent thinking and creative problem-solving.
+6. Completeness: The experimental group’s creations were
+characterized by thoroughness and attention to detail, re-
+sulting in comprehensive and well-developed final products.
+Conversely, the control group’s creations appeared less pol-
+ished and refined, potentially indicating gaps in planning
+and execution.
+7. Overall Performance: Collectively, the experimental
+group’s work surpassed expectations, showcasing a blend of
+technical proficiency, creative flair, and attention to detail.
+In contrast, the control group’s performance was assessed
+as ordinary, highlighting the disparities between the two
+groups.
+The disparities underscore the efficacy of the experimental in-
+tervention, indicating that the application of the Smart Learning
+Partner has a positive impact on students’ creative process and
+overall effect. This further demonstrates that the Smart Learning
+Partner, as an effective learning tool, can be promoted for use in
+other educational settings. The AI-enhanced learning approach
+not only facilitates skill development but also fosters creativity
+and expression, offering students a more enriching and immersive
+learning experience.
+6 PEDAGOGICAL IMPLICATIONS
+With the continuous development and application of artificial intel-
+ligence (AI) technology, the field of education has undergone a rev-
+olutionary transformation. AI-enhanced learning scenarios align
+with the pedagogical goals of online education and demonstrate
+numerous advantages compared to traditional learning methods.
+6.1 Alignment of AI-Enhanced Learning with
+Online Pedagogy
+The integration of AI into learning scenarios offers personalized
+experiences tailored to individual student needs, aligning closely
+with pedagogical objectives in online education. Real-time analy-
+sis of student data allows AI systems to adapt content, pace, and
+feedback, fostering greater engagement and motivation among
+learners. Additionally, AI promotes active engagement and deep
+understanding through interactive and immersive learning envi-
+ronments, enhancing critical thinking and problem-solving skills.
+Moreover, AI integration promotes inclusivity and accessibility by
+accommodating diverse learning styles and abilities.
+6.2 Contrasts with Traditional Methods
+Compared to traditional methods, AI-enhanced learning provides
+personalized pathways and dynamic content, surpassing the lim-
+itations of static materials and delayed assessments. Traditional
+methods often follow a one-size-fits-all approach and rely on static
+instructional materials, lacking the interactive and adaptive fea-
+tures of AI-enhanced learning. Additionally, AI-powered assess-
+ment tools offer real-time feedback, addressing misconceptions or
+gaps in understanding immediately.
+6.3 Future Educational Practices
+The integration of AI in education will continue to evolve, offering
+increasingly personalized experiences and breaking down barriers
+to access. Collaboration and knowledge sharing among students
+will be enhanced, promoting social interaction and engagement in
+virtual environments. AI-enabled platforms have the potential to
+democratize education by providing equal access to high-quality
+resources for learners worldwide. As AI technologies advance, ed-
+ucators must adapt their practices to leverage these transformative
+technologies effectively for the benefit of all learners.
+7 CONCLUSIONS
+This paper explores the integration of artificial intelligence (AI) and
+Virtual Reality (VR) technology with heuristic learning methods
+in education. Heuristic learning focuses on deep understanding
+through discovery, problem-solving, and practice. AI technology
+enhances this process by offering customized learning paths, im-
+mersive simulations, intelligent feedback, and data-driven insights.
+A comprehensive system is designed, including modules for data
+collection, model training, and user interface, supporting educators
+in understanding students’ needs and progress. The Smart Learning
+Partner in Animation Character Design course demonstrates the
+practical effectiveness of AI-enhanced tools in providing real-time
+guidance and personalized support. Experimental results confirm
+the positive impact of intelligent learning companions on student
+outcomes, supporting the broader application of AI in education. In
+conclusion, this research provides valuable insights for innovation
+in education. With the increasing acceptance of AI technology,
+the adoption of AI-based educational tools is expected to surge,
+enriching student learning experiences and advancing education.
+Acknowledgments
+This research was funded by the Beijing Municipal Education Com-
+mission (Grant No: SM202110011005). We are grateful to the Key
+Laboratory of Digital Media Art in Beijing for generously provid-
+ing us with the necessary experimental facilities. Additionally, we
+would like to express our sincere appreciation to the ”Innovative
+Team of Animation Art Design” for its invaluable technical support.
+References
+[1] Elham Mousavinasab, Nahid Zarifsanaiey, Sharareh R. Niakan Kalhori, Mahnaz
+Rakhshan, Leila Keikha, and Marjan Ghazi Saeedi. Intelligent tutoring systems:
+a systematic review of characteristics, applications, and evaluation methods.
+Interactive Learning Environments, 29(1):142–163, 2021.
+[2] Hazem A Alrakhawi, Nurullizam Jamiat, and Samy S Abu-Naser. Intelligent
+tutoring systems in education: A systematic review of usage, tools, effects
+and evaluation. Journal of Theoretical and Applied Information Technology,
+101(4):1205–1226, 2023.
+262
+
+--- PAGE 9 ---
+Design and Implementation of an AI-Enhanced Heuristic Learning System in a Virtual Realm ICDTE 2024, August 07–09, 2024, Berlin, Germany
+[3] Ali Kürşat Erümit and İsmail Çetin. Design framework of adaptive intelligent
+tutoring systems. Education and Information Technologies, 25(5):4477 – 4500,
+2020.
+[4] Sidney K D’Mello and Art Graesser. Intelligent tutoring systems: How computers
+achieve learning gains that rival human tutors. In Handbook of Educational
+Psychology, pages 603–629. Routledge, 2023.
+[5] El Miloud Smaili, Soukaina Sraidi, Salma Azzouzi, and My El Hassan Charaf.
+Towards sustainable e-learning systems using an adaptive learning approach.
+In Emerging Trends in ICT for Sustainable Development: The Proceedings of
+NICE2020 International Conference, pages 365–372. Springer, 2021.
+[6] Mouna Kaouni, Fatima Lakrami, and Ouidad Labouidya. The design of an adaptive
+e-learning model based on artificial intelligence for enhancing online teaching.
+International Journal of Emerging Technologies in Learning (Online), 18(6):202,
+2023.
+[7] Bimal Aklesh Kumar, Munil Shiva Goundar, and Sailesh Saras Chand. A frame-
+work for heuristic evaluation of mobile learning applications. Education and
+Information Technologies, 25:3189–3204, 2020.
+[8] Isabel Borges Alvarez, Nuno S Alves Silva, and Luisa Sampaio Correia. Cyber
+education: towards a pedagogical and heuristic learning. Acm Sigcas Computers
+and Society, 45(3):185–192, 2016.
+[9] Xiaoneng Jin, Mark Evans, Hua Dong, and Anqi Yao. Design heuristics for
+artificial intelligence: inspirational design stimuli for supporting ux designers in
+generating ai-powered ideas. In Extended Abstracts of the 2021 CHI Conference
+on Human Factors in Computing Systems, pages 1–8, 2021.
+[10] Michael C Mozer, Melody Wiseheart, and Timothy P Novikoff. Artificial intelli-
+gence to support human instruction. Proceedings of the National Academy of
+Sciences, 116(10):3953–3955, 2019.
+[11] Amara Atif, Meena Jha, Deborah Richards, and Ayse A Bilgin. Artificial intelli-
+gence (ai)-enabled remote learning and teaching using pedagogical conversational
+agents and learning analytics. In Intelligent systems and learning data analytics
+in online education, pages 3–29. Elsevier, 2021.
+[12] Leo Natan Paschoal, Aliane Loureiro Krassmann, Felipe Becker Nunes, Myke
+Morais de Oliveira, Magda Bercht, Ellen Francine Barbosa, and Simone do Rocio
+Senger de Souza. A systematic identification of pedagogical conversational agents.
+In 2020 IEEE Frontiers in Education Conference (FIE), pages 1–9. IEEE, 2020.
+[13] Mehdi Mekni. An artificial intelligence based virtual assistant using conversa-
+tional agents. Journal of Software Engineering and Applications, 14(9):455–473,
+2021.
+[14] Sendeyah Hantoobi, Ahlam Wahdan, Said A Salloum, and Khaled Shaalan. Integra-
+tion of knowledge management in a virtual learning environment: A systematic
+review. Recent advances in technology acceptance models and theories, pages
+247–272, 2021.
+[15] Jan Skalka and Martin Drlik. Proposal of artificial intelligence educational model
+using active learning in a virtual learning environment. E-learning in the Trans-
+formation of Education in Digital Society, 14:15–25, 2022.
+[16] Marianus Dabingaya. Analyzing the effectiveness of AI-powered adaptive learn-
+ing platforms in mathematics education. Interdisciplinary Journal Papier Human
+Review, 3(1):1–7, 2022.
+[17] Haider Th Salim Alrikabi, Nabaa Ali Jasim, Ban Hassan Majeed, Ahmed Zkear
+Abass, and Ibtihal Razaq Niama ALRubee. Smart learning based on moodle e-
+learning platform and digital skills for university students. International Journal
+of Recent Contributions from Engineering, Science & IT (iJES), 10(01):109–120,
+2022.
+263

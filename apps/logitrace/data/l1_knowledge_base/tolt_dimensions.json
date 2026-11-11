@@ -1,0 +1,27 @@
+[
+  {
+    "id": "CONTROLLING_VARIABLES",
+    "name": "Controlling Variables (Pengendalian Variabel)",
+    "description": "Kemampuan mengisolasi dan mengontrol variabel independen serta dependen dalam diagnosis masalah teknis jaringan (misal: menguji pengaruh jarak AP secara independen dari konfigurasi daya transmisi)."
+  },
+  {
+    "id": "PROPORTIONAL_REASONING",
+    "name": "Proportional Reasoning (Penalaran Proporsional)",
+    "description": "Kemampuan memahami hubungan perbandingan dan skala pada throughput data, pelemahan sinyal terhadap jarak, dan alokasi kapasitas pita frekuensi."
+  },
+  {
+    "id": "COMBINATORIAL_REASONING",
+    "name": "Combinatorial Reasoning (Penalaran Kombinatorial)",
+    "description": "Kemampuan menganalisis berbagai kombinasi konfigurasi kanal non-overlapping, kombinasi subnet mask, dan jalur topologi jaringan."
+  },
+  {
+    "id": "PROBABILISTIC_REASONING",
+    "name": "Probabilistic Reasoning (Penalaran Probabilistik)",
+    "description": "Kemampuan memperhitungkan peluang tabrakan paket (collision) pada media bersama, fluktuasi interferensi acak, dan probabilitas kegagalan roaming."
+  },
+  {
+    "id": "CORRELATIONAL_REASONING",
+    "name": "Correlational Reasoning (Penalaran Korelasional)",
+    "description": "Kemampuan menarik kesimpulan hubungan sebab-akibat atau korelasi antara penurunan nilai RSSI (-dBm) dengan peningkatan Round-Trip Time (RTT) dan Packet Loss."
+  }
+]

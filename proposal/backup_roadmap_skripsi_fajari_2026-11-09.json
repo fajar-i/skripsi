@@ -1,0 +1,382 @@
+{
+  "phases": [
+    {
+      "id": "p0",
+      "name": "Fase 0: Persiapan Seminar Proposal (Sempro)",
+      "desc": "Target terdekat untuk mengamankan persetujuan dosen dan kelolosan judul baru",
+      "tasks": [
+        {
+          "id": "t0_1",
+          "title": "Tinjau Berkas Word Proposal Skripsi Final",
+          "desc": "Buka proposal_skripsi_bab_1_2_3.docx dan pastikan tata letak, margin (4-3-3-3), dan penomoran halaman sudah rapi.",
+          "priority": "high",
+          "dueDate": "2026-11-10",
+          "completed": true,
+          "notes": "Sudah dikonversi ke DOCX dengan standar UPI (Times New Roman 12pt, spasi 1.5, tabel & persamaan rapi)."
+        },
+        {
+          "id": "t0_2",
+          "title": "Konsultasikan Pembaruan Judul ke Dosen Pembimbing",
+          "desc": "Tegaskan bahwa metode proposal lama tetap dipertahankan utuh dan didukung bukti empiris SLR 21 artikel Scopus.",
+          "priority": "high",
+          "dueDate": "2026-11-13",
+          "completed": false,
+          "notes": "Judul resmi: Pengembangan Web Evaluasi Formatif Adaptif Berbasis Knowledge Tracing dan Retrieval-Augmented Generation (LogiTrace) dalam Pembelajaran Station Rotation untuk Meningkatkan Logical Thinking Siswa SMK."
+        },
+        {
+          "id": "t0_3",
+          "title": "Susun Slide Presentasi Seminar Proposal (12–15 Slide)",
+          "desc": "Fokus pada Hook (kendala lab SMK rasio 1:2), pergeseran paradigma konten kurikulum RAG-KT, sintaks Single-Room Station Rotation, dan kontrol bias via NEDV & dosis-respons.",
+          "priority": "high",
+          "dueDate": "2026-11-17",
+          "completed": false,
+          "notes": "Sertakan visualisasi zonasi lab (Zona A PC 1:1, Zona B Smartphone + Guru Bergerak) dan diagram alur E1–E6."
+        },
+        {
+          "id": "t0_4",
+          "title": "Simulasi Tanya Jawab Penguji Berbasis Dokumen Master",
+          "desc": "Pelajari pertahanan metodologis: alasan RAG-KT tanpa-latih untuk 34 siswa, mitigasi bias perancu C2, penskoran polikotomis 0-2, dan Repeated Measures ANOVA (RM-ANOVA).",
+          "priority": "medium",
+          "dueDate": "2026-11-19",
+          "completed": false,
+          "notes": "Kuasai argumentasi sferisitas Mauchly, uji Friedman, dan pencegahan Accepting the Null Fallacy."
+        },
+        {
+          "id": "t0_5",
+          "title": "Pelaksanaan Seminar Proposal & Revisi Berita Acara",
+          "desc": "Menempuh ujian seminar proposal dan mencatat seluruh masukan dewan penguji.",
+          "priority": "high",
+          "dueDate": "2026-11-23",
+          "completed": false,
+          "notes": "Siapkan draf berita acara dan lembar persetujuan perbaikan sempro."
+        }
+      ]
+    },
+    {
+      "id": "p1",
+      "name": "Fase 1: Ekstraksi Kurikulum Resmi & Basis Pengetahuan L1",
+      "desc": "Menyusun fondasi kurikulum resmi BSKAP 033/H/KR/2022 Fase F TKJ dan relasi graf dependensi prasyarat (DAG)",
+      "tasks": [
+        {
+          "id": "t1_1",
+          "title": "Sinkronisasi Dokumen CP, ATP & Modul Ajar TKJ",
+          "desc": "Verifikasi keselarasan teks Capaian Pembelajaran elemen Teknologi Jaringan Kabel dan Nirkabel dengan modul ajar guru mitra di SMKN 4 Bandung.",
+          "priority": "high",
+          "dueDate": "2026-11-25",
+          "completed": true,
+          "notes": "Teks resmi CP dan TP 2.1 s.d 2.5 telah berhasil diintegrasikan ke Bab 2.7 proposal skripsi."
+        },
+        {
+          "id": "t1_2",
+          "title": "Petakan Materi Target (TP 2.1 & 2.2) Menjadi 12 Knowledge Components (KC)",
+          "desc": "Dekomposisi materi instalasi, perawatan, dan troubleshooting nirkabel ke dalam 12 KC atomik (WLAN_STANDARDS s.d. ICMP_TROUBLE_RTO).",
+          "priority": "high",
+          "dueDate": "2026-11-28",
+          "completed": false,
+          "notes": "Setiap KC memuat definisi, prasyarat, indikator, miskonsepsi teknis, contoh soal, dan relasi dimensi TOLT."
+        },
+        {
+          "id": "t1_3",
+          "title": "Rancang Graf Ketergantungan Prasyarat (DAG)",
+          "desc": "Susun struktur dependensi hirarki konsep dari standar nirkabel, kanal frekuensi, propagasi sinyal, hingga troubleshooting ICMP dalam format JSON.",
+          "priority": "medium",
+          "dueDate": "2026-11-30",
+          "completed": false,
+          "notes": "Prasyarat menentukan aktivasi adaptive item selection (ambang batas penguasaan m >= 0.60)."
+        },
+        {
+          "id": "t1_4",
+          "title": "Tulis 24 Contoh Pengerjaan Terstandar (Worked-Examples)",
+          "desc": "Siapkan basis data solusi langkah-demi-langkah (1 kasus benar + 1 analisis miskonsepsi per KC) sebagai rujukan retrieval agen RAG.",
+          "priority": "low",
+          "dueDate": "2026-12-05",
+          "completed": false,
+          "notes": "Menjadi grounding bagi agen T2 dalam menghasilkan bantuan Sokratik Guiding, Not Solving."
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "name": "Fase 2: Bank Butir Soal Adaptif & Instrumen Tes TOLT-NEDV",
+      "desc": "Penyusunan butir soal kuis adaptif AIG dan instrumen penalaran logis bergradasi polikotomis",
+      "tasks": [
+        {
+          "id": "t2_1",
+          "title": "Pembangkitan AIG & Kurasi Mandiri 180 Butir Kuis Adaptif",
+          "desc": "Bangkitkan draf 180 butir soal kuis adaptif berbantuan LLM lokal berbasis dokumen L1, lalu kurasi intensif mandiri (Human-in-the-Loop) sebelum expert judgment.",
+          "priority": "high",
+          "dueDate": "2026-12-08",
+          "completed": false,
+          "notes": "Target: minimal 5 butir per KC per tingkat kesulitan (mudah, sedang, sulit) + 6 butir kalibrasi terstandar."
+        },
+        {
+          "id": "t2_2",
+          "title": "Susun Instrumen Tes Paralel TOLT-Jaringan (Bentuk A & Bentuk B)",
+          "desc": "10 butir soal two-tier pilihan ganda beralasan (5 dimensi TOLT, 2 butir/dimensi) dengan rubrik penskoran polikotomis 3 tingkat (Skor 0, 1, 2).",
+          "priority": "high",
+          "dueDate": "2026-12-12",
+          "completed": false,
+          "notes": "Skor total target: 0–20 poin (0–4 per dimensi). Bentuk A untuk Pretest dan Bentuk B untuk Posttest secara counterbalanced."
+        },
+        {
+          "id": "t2_3",
+          "title": "Susun 6 Butir Soal Kontrol NEDV (TP 2.3 Layanan VoIP & TP 2.4-2.5 Fiber Optik)",
+          "desc": "Materi kurikulum resmi yang sama namun sengaja tidak diajarkan selama 4 sesi nirkabel untuk kontrol validitas internal (bias kematangan & efek tes).",
+          "priority": "high",
+          "dueDate": "2026-12-15",
+          "completed": false,
+          "notes": "2 butir TP 2.3 VoIP + 4 butir TP 2.4/2.5 Fiber Optik. Target keberhasilan: skor tidak meningkat signifikan (p > 0,05)."
+        },
+        {
+          "id": "t2_4",
+          "title": "Verifikasi Bank Soal & Rubrik Penskoran Bersama Guru Mitra",
+          "desc": "Review kelayakan bahasa, kunci jawaban, dan distraktor bersama guru senior sebelum diserahkan ke panel ahli.",
+          "priority": "medium",
+          "dueDate": "2026-12-20",
+          "completed": false,
+          "notes": "Pastikan distraktor berfungsi menjebak miskonsepsi umum yang terdaftar di basis pengetahuan."
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "name": "Fase 3: Pengembangan Sistem Web LogiTrace (RAG-KT)",
+      "desc": "Rekayasa perangkat lunak antarmuka responsif, mesin runtime deterministik, dan agen RAG",
+      "tasks": [
+        {
+          "id": "t3_1",
+          "title": "Bangun Antarmuka Siswa Mobile-First Responsif (Zona B)",
+          "desc": "Rancang UI peramban smartphone yang ringan dan bersih untuk pengerjaan kuis adaptif di Zona B (Device-Purpose Split) via jaringan intranet.",
+          "priority": "high",
+          "dueDate": "2026-12-18",
+          "completed": false,
+          "notes": "Mendukung rendering matematika, diagram jaringan, dan interaksi petunjuk Sokratik bertahap."
+        },
+        {
+          "id": "t3_2",
+          "title": "Implementasi Mesin Runtime Deterministik L3 (< 1 ms)",
+          "desc": "Koding model peluang logistik p_hat, aturan pembaruan penguasaan berbobot kesulitan (alpha_d, gamma_d, beta, h), peluruhan memori Ebbinghaus, dan seleksi ZPD (0,60–0,85).",
+          "priority": "high",
+          "dueDate": "2026-12-24",
+          "completed": false,
+          "notes": "Parameter apriori (alpha=0.30, gamma=0.25, beta=0.40) disiapkan untuk dikalibrasi pada minggu ke-7."
+        },
+        {
+          "id": "t3_3",
+          "title": "Integrasi Modul Klien Aman (SecureLLMClient Multi-Provider) & Guardrail",
+          "desc": "Integrasikan SecureLLMClient (Groq/DeepSeek/Ollama) dengan Pre-Flight Zero-PII Sanitizer, anti-leakage guard, dan graceful fallback instan (< 50 ms) ke bank petunjuk statis.",
+          "priority": "high",
+          "dueDate": "2026-12-28",
+          "completed": false,
+          "notes": "Pemicu T1 (Auto-labeling butir baru) dan T2 (Bantuan Sokratik Level 1–3, maks 60 kata) dengan latensi < 0,8s."
+        },
+        {
+          "id": "t3_4",
+          "title": "Bangun Dasbor Ambient Guru dengan Kartu Prioritas Top-3 Stuck Students",
+          "desc": "Dasbor pemantauan real-time via WebSocket yang menampilkan kartu prioritas 3 siswa paling membutuhkan bantuan seketika agar tidak membebani guru (no teacher overload).",
+          "priority": "high",
+          "dueDate": "2027-01-05",
+          "completed": false,
+          "notes": "Memandu bimbingan privat guru bergerak (roving teacher) di Zona B tanpa stigma remedial."
+        }
+      ]
+    },
+    {
+      "id": "p4",
+      "name": "Fase 4: Paket Validasi Pakar (Ahli Media, Materi & Soal)",
+      "desc": "Uji validitas isi dan konstruk media serta materi oleh panel dosen dan praktisi senior",
+      "tasks": [
+        {
+          "id": "t4_1",
+          "title": "Siapkan Prototipe Web LogiTrace Berisi 180 Butir Terlabeli",
+          "desc": "Jalankan sistem web lokal lengkap dengan 12 KC, bank soal, dan fitur simulasi kuis adaptif.",
+          "priority": "high",
+          "dueDate": "2027-01-08",
+          "completed": false,
+          "notes": "Sertakan akun uji coba untuk dosen ahli media dan dosen ahli materi."
+        },
+        {
+          "id": "t4_2",
+          "title": "Cetak Lembar Validasi Ahli Media (LORI 2.0) & Ahli Materi (Aiken's V)",
+          "desc": "Gunakan instrumen baku Skala Likert 4 poin (Lampiran 1 dan 2) untuk menghindari bias kecenderungan memusat.",
+          "priority": "high",
+          "dueDate": "2027-01-10",
+          "completed": false,
+          "notes": "Evaluasi mencakup 9 dimensi LORI 2.0, dekomposisi 12 KC, keterkaitan TOLT, dan kesahihan pedagogis."
+        },
+        {
+          "id": "t4_3",
+          "title": "Pelaksanaan Expert Judgment & Analisis Kesepakatan (Cohen's Kappa & ICC)",
+          "desc": "Hitung koefisien kesepakatan Cohen's Kappa (kappa >= 0.60) untuk pelabelan L2 (Jalur E1) dan ICC(2,1) >= 0.70 untuk mutu petunjuk T2 (Jalur E2); lakukan perbaikan hingga status Sangat Layak.",
+          "priority": "high",
+          "dueDate": "2027-01-15",
+          "completed": false,
+          "notes": "Melibatkan dosen ahli pendidikan ilmu komputer / RPL, dosen kurikulum jaringan, dan guru TKJ senior."
+        }
+      ]
+    },
+    {
+      "id": "p5",
+      "name": "Fase 5: Uji Coba Terbatas, Kalibrasi Parameter & Pembekuan Sistem",
+      "desc": "Uji kelompok kecil pada 9–12 siswa non-sampel untuk kalibrasi empiris parameter heuristik L3",
+      "tasks": [
+        {
+          "id": "t5_1",
+          "title": "Uji Coba Kelompok Kecil (9–12 Siswa Non-Sampel, 2 Sesi)",
+          "desc": "Simulasikan pembelajaran station rotation satu ruangan untuk menguji ketahanan server CPU lokal, stabilitas koneksi AP intranet, dan alur rotasi.",
+          "priority": "high",
+          "dueDate": "2027-01-20",
+          "completed": false,
+          "notes": "Himpun 400–600 data interaksi awal untuk evaluasi stabilitas latensi p50/p95."
+        },
+        {
+          "id": "t5_2",
+          "title": "Analisis Empiris Butir Tes (CTT) & Kalibrasi Parameter Heuristik L3",
+          "desc": "Hitung daya pembeda (DP >= 0.30), tingkat kesukaran sedang, reliabilitas Cronbach's Alpha (alpha >= 0.70), serta kalibrasi empiris nilai baseline parameter L3 (alpha_0, gamma_0, beta, theta_d).",
+          "priority": "high",
+          "dueDate": "2027-01-24",
+          "completed": false,
+          "notes": "Menyesuaikan laju pembaruan penguasaan agar tidak terlalu sensitif atau terlalu lembam."
+        },
+        {
+          "id": "t5_3",
+          "title": "Pembekuan Kode Sistem LogiTrace v1.0 Final & Skema Append-Only",
+          "desc": "Kunci versi model LLM lokal, freeze prompt, aktifkan flag append-only database (disable SQL UPDATE/DELETE pada tabel interactions), dan siapkan backup UPS.",
+          "priority": "high",
+          "dueDate": "2027-01-28",
+          "completed": false,
+          "notes": "Menjamin orisinalitas audit trail dan mencegah bias instrumen saat implementasi lapangan."
+        }
+      ]
+    },
+    {
+      "id": "p6",
+      "name": "Fase 6: Implementasi Lapangan Single-Room Station Rotation (SMKN 4 Bandung)",
+      "desc": "Eksperimen 4 pertemuan (@ 90 menit) pada sensus 34 siswa kelas XI TKJ 1 dengan Device-Purpose Split",
+      "tasks": [
+        {
+          "id": "t6_1",
+          "title": "Sesi 1: Pre-test Paralel, Kalibrasi Cold-Start & Standar Topologi WLAN (TP 2.1)",
+          "desc": "Pelaksanaan Pre-test (10 butir TOLT + 6 butir NEDV), pengerjaan 6 butir kalibrasi cold-start di LogiTrace, dan rotasi Zona A (Praktik Lab PC 1:1) vs Zona B (LogiTrace di HP + Guru Bergerak).",
+          "priority": "high",
+          "dueDate": "2027-02-03",
+          "completed": false,
+          "notes": "Pemisahan kelompok A (17 siswa) dan kelompok B (17 siswa) dengan bel rotasi 35 menit (zero transit loss)."
+        },
+        {
+          "id": "t6_2",
+          "title": "Sesi 2: Station Rotation Materi Keamanan & Autentikasi WLAN (TP 2.1 & 2.2)",
+          "desc": "Konfigurasi SSID, enkripsi WPA2/WPA3, isolasi variabel klien, dan monitoring dasbor kartu prioritas Top-3 Stuck Students.",
+          "priority": "high",
+          "dueDate": "2027-02-10",
+          "completed": false,
+          "notes": "Fokus dimensi penalaran Controlling Variables; catat log Treatment Fidelity Index."
+        },
+        {
+          "id": "t6_3",
+          "title": "Sesi 3: Station Rotation Materi Propagasi Sinyal, Redaman & Roaming (TP 2.1 & 2.2)",
+          "desc": "Praktikum redaman material dinding, kalkulasi RSSI, dan analisis probabilitas roaming threshold pada pita peluang ZPD (0,60–0,85).",
+          "priority": "high",
+          "dueDate": "2027-02-17",
+          "completed": false,
+          "notes": "Fokus dimensi penalaran Proportional Reasoning dan Probabilistic Reasoning."
+        },
+        {
+          "id": "t6_4",
+          "title": "Sesi 4: Troubleshooting ICMP (TP 2.2), Post-test Paralel & Angket SUS",
+          "desc": "Mendiagnosis anomali galat DHU vs RTO (Correlational Reasoning), pelaksanaan Post-test paralel tersilang (10 TOLT + 6 NEDV), pengisian kuesioner SUS 10 butir, dan wawancara 3 guru.",
+          "priority": "high",
+          "dueDate": "2027-02-24",
+          "completed": false,
+          "notes": "Target perolehan data log: ~80 butir/siswa (total ~2.720 transaksi interaksi append-only)."
+        }
+      ]
+    },
+    {
+      "id": "p7",
+      "name": "Fase 7: Analisis Data Statistik & Pengujian Enam Jalur (E1–E6)",
+      "desc": "Pengolahan bukti empiris komprehensif menjawab seluruh hipotesis dan evaluasi sistem",
+      "tasks": [
+        {
+          "id": "t7_1",
+          "title": "Hitung Capaian Normalized Gain (N-Gain) & Paired t-Test (Jalur E6)",
+          "desc": "Uji signifikansi peningkatan penalaran logis sebelum dan sesudah intervensi (Paired t-Test / Wilcoxon, alpha=0.05), kategorisasi gain Hake, dan ukuran efek berpasangan Cohen's d_z.",
+          "priority": "high",
+          "dueDate": "2027-03-02",
+          "completed": false,
+          "notes": "Target: N-Gain >= 0.30 (kategori minimal sedang) dengan d_z signifikan."
+        },
+        {
+          "id": "t7_2",
+          "title": "Uji One-Way Repeated Measures ANOVA (RM-ANOVA) Profil 5 Dimensi TOLT (Jalur E6)",
+          "desc": "Uji perbedaan peningkatan antar-dimensi pada 34 siswa yang sama (within-subjects), evaluasi sferisitas Mauchly (koreksi Greenhouse-Geisser/Huynh-Feldt atau Friedman), serta diagram radar d_z.",
+          "priority": "high",
+          "dueDate": "2027-03-05",
+          "completed": false,
+          "notes": "Mencegah Accepting the Null Fallacy; memetakan keseimbangan atau disparitas penalaran formal."
+        },
+        {
+          "id": "t7_3",
+          "title": "Analisis Hubungan Dosis-Respons LogiTrace (Jalur E6)",
+          "desc": "Uji korelasi (Pearson/Spearman) antara intensitas interaksi digital (frekuensi petunjuk h, estimasi penguasaan akhir m, volume latihan) dengan perolehan N-Gain siswa.",
+          "priority": "high",
+          "dueDate": "2027-03-08",
+          "completed": false,
+          "notes": "Korelasi positif signifikan (r >= 0.35, p < 0.05) membuktikan kontribusi nilai tambah software adaptif terpisah dari efek lab 1:1."
+        },
+        {
+          "id": "t7_4",
+          "title": "Verifikasi Kontrol NEDV (TP 2.3 VoIP & TP 2.4/2.5 Fiber Optik) (Jalur E6)",
+          "desc": "Uji beda berpasangan skor pre-post pada 6 butir kontrol NEDV. Nilai p > 0,05 (tidak meningkat signifikan) membuktikan peningkatan target murni akibat intervensi, bukan efek kematangan/tes.",
+          "priority": "high",
+          "dueDate": "2027-03-10",
+          "completed": false,
+          "notes": "Menjamin keterisolasian efek perlakuan dan keabsahan kausalitas ilmiah."
+        },
+        {
+          "id": "t7_5",
+          "title": "Evaluasi Prediktif Pasca-Kalibrasi (E3), Reliabilitas (E4), & Kepraktisan SUS (E5)",
+          "desc": "Komparasi akurasi prediksi butir 7–20 vs 3 baseline tanpa-latih (Uji McNemar p < 0.05 & Brier Score), uji konsistensi 3 run LLM lokal (>= 95%), serta kalkulasi rata-rata skor SUS (target >= 68).",
+          "priority": "medium",
+          "dueDate": "2027-03-15",
+          "completed": false,
+          "notes": "Lengkapi pelaporan latensi teknis p50/p95, rasio fallback statis (< 2%), dan biaya operasional (Rp 0)."
+        }
+      ]
+    },
+    {
+      "id": "p8",
+      "name": "Fase 8: Finalisasi Skripsi & Pendaftaran Sidang Munaqasyah",
+      "desc": "Penulisan Bab IV dan Bab V menuju kelulusan Sarjana Pendidikan (S.Pd.)",
+      "tasks": [
+        {
+          "id": "t8_1",
+          "title": "Penulisan Lengkap Bab IV (Hasil Penelitian dan Pembahasan)",
+          "desc": "Sajikan temuan sistematis menjawab 4 rumusan masalah (R&D, kelayakan, akurasi prediksi pasca-kalibrasi, dampak belajar & dosis-respons) dan konfrontasikan dengan temuan SLR 21 artikel Scopus.",
+          "priority": "high",
+          "dueDate": "2027-03-20",
+          "completed": false,
+          "notes": "Sertakan visualisasi radar chart ukuran efek TOLT, kurva penguasaan longitudinal, dan matriks konfusi."
+        },
+        {
+          "id": "t8_2",
+          "title": "Penulisan Bab V (Kesimpulan, Implikasi, Keterbatasan, & Rekomendasi)",
+          "desc": "Sintesis kesimpulan, implikasi pedagogis di SMK, pengakuan jujur 7 keterbatasan metodologis, dan rekomendasi bagi riset AIEd lanjutan.",
+          "priority": "high",
+          "dueDate": "2027-03-26",
+          "completed": false,
+          "notes": "Tegaskan transferabilitas bersyarat bagi SMK dengan kendala rasio lab serupa."
+        },
+        {
+          "id": "t8_3",
+          "title": "Bimbingan Draf Lengkap & Persetujuan Sidang Munaqasyah",
+          "desc": "Revisi menyeluruh bersama dosen pembimbing dan pengurusan administrasi pendaftaran sidang skripsi.",
+          "priority": "high",
+          "dueDate": "2027-04-05",
+          "completed": false,
+          "notes": "Gelar Sarjana Pendidikan (S.Pd.) Pendidikan Ilmu Komputer FPMIPA UPI."
+        }
+      ]
+    }
+  ]
+}

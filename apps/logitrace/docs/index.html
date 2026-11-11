@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dokumentasi Resmi Sistem LogiTrace (RAG-KT) — Evaluasi Formatif Adaptif Station Rotation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --primary-light: #e0e7ff;
+      --primary-dark: #312e81;
+      --secondary: #0d9488;
+      --secondary-light: #ccfbf1;
+      --accent: #f59e0b;
+      --accent-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-subtle: #f1f5f9;
+      --border: #e2e8f0;
+      --border-focus: #cbd5e1;
+      
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #64748b;
+      
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      display: flex;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* SIDEBAR NAVIGATION */
+    #sidebar {
+      width: 320px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-badge {
+      font-size: 0.65rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .search-box {
+      margin: 16px 20px 8px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 9px 12px 9px 34px;
+      font-size: 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface-subtle);
+      color: var(--text);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      background: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      fill: var(--text-subtle);
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 12px 14px 40px;
+      flex-grow: 1;
+    }
+
+    .nav-section-title {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 12px 6px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .nav-link:hover {
+      background: var(--surface-subtle);
+      color: var(--text);
+    }
+
+    .nav-link.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .nav-num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      opacity: 0.7;
+    }
+
+    /* MAIN CONTENT */
+    #main-content {
+      margin-left: 320px;
+      flex-grow: 1;
+      padding: 40px 60px 100px;
+      max-width: 1280px;
+    }
+
+    /* TOP BAR ACTIONS */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      margin-bottom: 36px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .breadcrumbs {
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--surface-subtle);
+      border-color: var(--border-focus);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* HERO SECTION */
+    .hero {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 40px 48px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
+      border-radius: 50%;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: #e0e7ff;
+      max-width: 860px;
+      line-height: 1.6;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.82rem;
+      color: #c7d2fe;
+    }
+
+    .hero-meta-item strong {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* SECTIONS */
+    .doc-section {
+      margin-bottom: 64px;
+      scroll-margin-top: 30px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    /* CARDS & GRIDS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow);
+      border-color: var(--border-focus);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .card-body {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* INTERACTIVE TABS */
+    .tab-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 28px;
+    }
+
+    .tab-nav {
+      display: flex;
+      background: var(--surface-subtle);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: none;
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      background: #fff;
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      padding: 28px;
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* TABLES */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      margin: 20px 0;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--surface-subtle);
+      color: var(--text);
+      font-weight: 700;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(248, 250, 252, 0.8); }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .badge-primary { background: var(--primary-light); color: var(--primary); }
+    .badge-success { background: var(--success-light); color: var(--success); }
+    .badge-accent { background: var(--accent-light); color: #b45309; }
+    .badge-danger { background: var(--danger-light); color: var(--danger); }
+
+    /* MATH BOXES */
+    .math-block {
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: var(--font-mono);
+      padding: 20px 24px;
+      border-radius: var(--radius-sm);
+      margin: 18px 0;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      border-left: 4px solid var(--primary);
+    }
+
+    .math-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      color: #94a3b8;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    /* CODE BLOCKS */
+    .code-box {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: var(--radius-sm);
+      margin: 16px 0;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      position: relative;
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 16px;
+      background: #0f172a;
+      border-top-left-radius: var(--radius-sm);
+      border-top-right-radius: var(--radius-sm);
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+
+    .code-content {
+      padding: 16px;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    /* COLLAPSIBLE ACCORDION */
+    .accordion-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      transition: background 0.15s;
+    }
+
+    .accordion-header:hover {
+      background: var(--surface-subtle);
+    }
+
+    .accordion-content {
+      padding: 20px;
+      border-top: 1px solid var(--border);
+      display: none;
+      background: var(--bg);
+      font-size: 0.86rem;
+    }
+
+    .accordion-item.active .accordion-content {
+      display: block;
+    }
+
+    .accordion-item.active .accordion-header {
+      background: var(--surface-subtle);
+      color: var(--primary);
+    }
+
+    /* DIAGRAM CONTAINER */
+    .diagram-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .diagram-preview {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .diagram-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    /* PRINT STYLES */
+    @media print {
+      body { background: #fff; color: #000; }
+      #sidebar, .top-bar, .diagram-actions, .btn { display: none !important; }
+      #main-content { margin: 0; padding: 0; max-width: 100%; }
+      .card, .tab-container, .accordion-item { break-inside: avoid; border: 1px solid #ccc; box-shadow: none; }
+      .hero { background: #333 !important; color: #fff !important; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      #sidebar { display: none; }
+      #main-content { margin-left: 0; padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-title">
+        <span>LogiTrace</span>
+        <span class="brand-badge">RAG-KT</span>
+      </div>
+      <p class="brand-subtitle">Web Evaluasi Formatif Adaptif Station Rotation SMK TKJ</p>
+    </div>
+
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <input type="text" id="searchInput" class="search-input" placeholder="Cari dokumentasi...">
+    </div>
+
+    <ul class="nav-list" id="navList">
+      <li class="nav-section-title">Ringkasan & Pedagogi</li>
+      <li><a href="#sec-overview" class="nav-link active"><span class="nav-num">00</span> Ikhtisar Proyek</a></li>
+      <li><a href="#sec-pedagogy" class="nav-link"><span class="nav-num">01</span> Station Rotation & Lab</a></li>
+
+      <li class="nav-section-title">Arsitektur Tiga Lapis</li>
+      <li><a href="#sec-l1" class="nav-link"><span class="nav-num">02</span> L1: 12 KCs & TOLT</a></li>
+      <li><a href="#sec-l2" class="nav-link"><span class="nav-num">03</span> L2: 180 Butir & Semantik</a></li>
+      <li><a href="#sec-l3" class="nav-link"><span class="nav-num">04</span> L3: Mesin Deterministik</a></li>
+
+      <li class="nav-section-title">Kecerdasan Buatan & RAG</li>
+      <li><a href="#sec-agents" class="nav-link"><span class="nav-num">05</span> Tri-Agent (T1, T2, T3)</a></li>
+      <li><a href="#sec-security" class="nav-link"><span class="nav-num">06</span> Zero-PII Cloud Security</a></li>
+
+      <li class="nav-section-title">Rekayasa Perangkat Lunak</li>
+      <li><a href="#sec-activity" class="nav-link"><span class="nav-num">07</span> Activity Diagram Swimlane</a></li>
+      <li><a href="#sec-usecase" class="nav-link"><span class="nav-num">08</span> Use Case & 11 Skenario</a></li>
+
+      <li class="nav-section-title">Validasi & Penerapan</li>
+      <li><a href="#sec-evals" class="nav-link"><span class="nav-num">09</span> Evaluasi Empiris (E1-E6)</a></li>
+      <li><a href="#sec-benchmark" class="nav-link"><span class="nav-num">10</span> Benchmark Konkurensi</a></li>
+      <li><a href="#sec-deploy" class="nav-link"><span class="nav-num">11</span> Panduan Deployment</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN DOCUMENTATION -->
+  <main id="main-content">
+
+    <!-- TOP ACTION BAR -->
+    <header class="top-bar">
+      <div class="breadcrumbs">
+        <span>LogiTrace Docs</span>
+        <span>/</span>
+        <span>Spesifikasi Teknis & Hasil Pengujian</span>
+        <span>/</span>
+        <strong style="color: var(--text);">Versi 1.0.0</strong>
+      </div>
+      <div class="quick-actions">
+        <button class="btn" onclick="window.print()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+          Cetak / PDF
+        </button>
+        <a href="../frontend/student/index.html" target="_blank" class="btn">
+          Portal Siswa
+        </a>
+        <a href="../frontend/teacher/index.html" target="_blank" class="btn btn-primary">
+          Dasbor Guru
+        </a>
+      </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="sec-overview">
+      <div class="hero-badge">DOKUMENTASI RESMI SKRIPSI & PUBLIKASI JURNAL</div>
+      <h1 class="hero-title">Sistem Evaluasi Formatif Adaptif Berbasis Knowledge Tracing & RAG (LogiTrace)</h1>
+      <p class="hero-desc">
+        Platform web evaluasi formatif adaptif pertama yang memadukan mesin pelacakan kognitif deterministik berlatensi ultra-rendah (&lt; 1 ms) dengan perancah Sokratik Retrieval-Augmented Generation (RAG) dalam model pembelajaran <em>Station Rotation</em> untuk Konsentrasi Keahlian Teknik Komputer dan Jaringan (SMK TKJ).
+      </p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">Sasaran: <strong>Fase F (XI TKJ 1 / 34 Siswa)</strong></div>
+        <div class="hero-meta-item">Sekolah: <strong>SMK Negeri 4 Bandung</strong></div>
+        <div class="hero-meta-item">Elemen: <strong>TP 2.1 & TP 2.2 (Kabel & Nirkabel)</strong></div>
+        <div class="hero-meta-item">Arsitektur: <strong>L1-L2-L3 Hybrid Zero-PII</strong></div>
+      </div>
+    </section>
+
+    <!-- 01. KONTEKS PEDAGOGI & STATION ROTATION -->
+    <section class="doc-section" id="sec-pedagogy">
+      <div class="section-header">
+        <span class="section-tag">MODUL 01</span>
+        <h2 class="section-title">Konteks Riset & Pedagogi Model Station Rotation</h2>
+      </div>
+
+      <p style="margin-bottom: 20px; color: var(--text-muted);">
+        Model pembelajaran <strong>Station Rotation</strong> diimplementasikan dalam 1 ruang laboratorium jaringan komputer selama <strong>80 menit (2 Jam Pelajaran)</strong> untuk mengatasi kesenjangan penalaran abstrak siswa dan keterbatasan rasio komputer lab (17 unit PC untuk 34 siswa).
+      </p>
+
+      <div class="grid-2">
+        <div class="card" style="border-top: 4px solid var(--primary);">
+          <div class="card-icon" style="background: var(--primary-light); color: var(--primary);">💻</div>
+          <h3 class="card-title">Zona A: Stasiun Praktik Hands-On (PC Lab 1:1)</h3>
+          <p class="card-body">
+            17 PC desktop workstation terhubung ke switch manageable, routerboard MikroTik, crimping station, dan fusion splicer fiber optic. Siswa menjalankan jobsheet konfigurasi perangkat keras dan simulasi topologi jaringan secara mandiri.
+          </p>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--secondary);">
+          <div class="card-icon" style="background: var(--secondary-light); color: var(--secondary);">📱</div>
+          <h3 class="card-title">Zona B: Stasiun Evaluasi Adaptif & Roving Guru</h3>
+          <p class="card-body">
+            17 siswa duduk di meja kolaboratif membawa smartphone mengakses LogiTrace Web (Wi-Fi lokal). Guru berperan sebagai <em>Roving Teacher</em> membawa tablet untuk memantau dasbor real-time dan memberikan bimbingan klinis tatap muka bagi siswa yang <em>stuck</em>.
+          </p>
+        </div>
+      </div>
+
+      <!-- SINTAKS ROTASI TABLE -->
+      <h3 style="font-size: 1.1rem; margin: 24px 0 12px; font-weight: 700;">Sintaks Pembelajaran 80 Menit (Station Rotation)</h3>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Fase Pembelajaran</th>
+              <th>Alokasi Waktu</th>
+              <th>Aktivitas Kelompok A</th>
+              <th>Aktivitas Kelompok B</th>
+              <th>Peran Pendidik (Roving Teacher)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Fase 1: Pembukaan & Pembagian</strong></td>
+              <td>00:00 – 05:00 (5 mnt)</td>
+              <td>Menyimak pengarahan & menuju Zona A</td>
+              <td>Menyimak pengarahan & menuju Zona B</td>
+              <td>Membuka kelas, apersepsi TP 2.1 & 2.2, membagi rombel 34 siswa menjadi Kelompok A (17 siswa) dan Kelompok B (17 siswa).</td>
+            </tr>
+            <tr>
+              <td><strong>Fase 2: Siklus Rotasi 1</strong></td>
+              <td>05:00 – 40:00 (35 mnt)</td>
+              <td><span class="badge badge-primary">Zona A</span> Praktik konfigurasi PC lab</td>
+              <td><span class="badge badge-success">Zona B</span> Kuis adaptif di smartphone</td>
+              <td>Berkeliling aktif di Zona B membawa tablet, mendeteksi <em>Top-3 Stuck Students</em>, dan memberi bimbingan lisan.</td>
+            </tr>
+            <tr>
+              <td><strong>Fase 3: Transisi Stasiun</strong></td>
+              <td>40:00 – 42:00 (2 mnt)</td>
+              <td>Merapikan PC, bertukar ke Zona B</td>
+              <td>Merapikan meja, bertukar ke Zona A</td>
+              <td>Membunyikan sinyal bel rotasi, mengatur alur lalu-lintas perpindahan siswa di lorong tengah.</td>
+            </tr>
+            <tr>
+              <td><strong>Fase 4: Siklus Rotasi 2</strong></td>
+              <td>42:00 – 77:00 (35 mnt)</td>
+              <td><span class="badge badge-success">Zona B</span> Kuis adaptif di smartphone</td>
+              <td><span class="badge badge-primary">Zona A</span> Praktik konfigurasi PC lab</td>
+              <td>Melanjutkan pemantauan konsol ambient di Zona B dan supervisi keselamatan kerja di Zona A.</td>
+            </tr>
+            <tr>
+              <td><strong>Fase 5: Pleno Refleksi Akhir</strong></td>
+              <td>77:00 – 85:00 (8 mnt)</td>
+              <td colspan="2" style="text-align: center; background: #fafafa;"><strong>Seluruh 34 siswa berkumpul bersama di ruang tengah lab</strong></td>
+              <td>Menekan tombol Agen T3 untuk menghasilkan ringkasan naratif, mengumumkan pasangan <em>Peer-Tutoring</em>, dan menutup kelas.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 02. ARSITEKTUR TIGA LAPIS (L1, L2, L3) -->
+    <section class="doc-section" id="sec-l1">
+      <div class="section-header">
+        <span class="section-tag">MODUL 02</span>
+        <h2 class="section-title">Arsitektur Tiga Lapis (L1, L2, L3)</h2>
+      </div>
+
+      <div class="tab-container">
+        <nav class="tab-nav">
+          <button class="tab-btn active" onclick="switchTab(event, 'tab-l1')">L1: Basis Pengetahuan (12 KCs & TOLT)</button>
+          <button class="tab-btn" onclick="switchTab(event, 'tab-l2')">L2: Bank 180 Butir & Indeks Semantik</button>
+          <button class="tab-btn" onclick="switchTab(event, 'tab-l3')">L3: Mesin Kognitif Deterministik</button>
+        </nav>
+
+        <!-- TAB L1 -->
+        <div id="tab-l1" class="tab-content active">
+          <h3 style="font-weight: 700; margin-bottom: 12px;">12 Knowledge Components (KCs) & 5 Dimensi TOLT</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+            L1 mendefinisikan ontologi materi kejuruan Teknik Komputer dan Jaringan yang ditautkan ke Taksonomi Penalaran Logis (Test of Logical Thinking): Controlling Variables (CV), Proportional Reasoning (PR), Combinatorial Logic (CL), Probabilistic Logic (PL), dan Correlational Reasoning (CR).
+          </p>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kode KC</th>
+                  <th>Nama Knowledge Component</th>
+                  <th>Dimensi TOLT</th>
+                  <th>Prasyarat (DAG Link)</th>
+                  <th>Materi Terkait</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>KC01</code></td><td>Prinsip Transmisi & Redaman Kabel</td><td><span class="badge badge-primary">CV</span></td><td>-</td><td>Karakteristik kabel tembaga Cat5e/6, attenuation dB</td></tr>
+                <tr><td><code>KC02</code></td><td>Pengkabelan T568A/B & Crimping</td><td><span class="badge badge-primary">CV</span></td><td><code>KC01</code></td><td>Pinout straight-through, crossover, LAN tester</td></tr>
+                <tr><td><code>KC03</code></td><td>Arsitektur Fiber Optik (Core/Clad)</td><td><span class="badge badge-primary">PR</span></td><td><code>KC01</code></td><td>Single-Mode vs Multi-Mode, redaman dispersi</td></tr>
+                <tr><td><code>KC04</code></td><td>Penyambungan Splicer & Cleaver</td><td><span class="badge badge-accent">CL</span></td><td><code>KC03</code></td><td>Stripping, cleaving 90 derajat, fusion arc splicing</td></tr>
+                <tr><td><code>KC05</code></td><td>Pengukuran OPM & Fault Locator</td><td><span class="badge badge-primary">PR</span></td><td><code>KC04</code></td><td>dBm loss threshold, Visual Fault Locator (VFL)</td></tr>
+                <tr><td><code>KC06</code></td><td>Standar Nirkabel IEEE 802.11a/b/g/n/ac/ax</td><td><span class="badge badge-primary">PR</span></td><td>-</td><td>Throughput, pita 2.4/5/6 GHz, modulasi OFDMA</td></tr>
+                <tr><td><code>KC07</code></td><td>Alokasi Frekuensi & Kanal WiFi</td><td><span class="badge badge-accent">CL</span></td><td><code>KC06</code></td><td>Kanal non-overlapping 1, 6, 11 mitigasi interferensi</td></tr>
+                <tr><td><code>KC08</code></td><td>Mode Operasi AP, Client, WDS</td><td><span class="badge badge-accent">CL</span></td><td><code>KC06</code></td><td>Infrastructure BSS, Ad-Hoc IBSS, bridge repeater</td></tr>
+                <tr><td><code>KC09</code></td><td>Parameter Sinyal RSSI, SNR, Noise</td><td><span class="badge badge-success">CR</span></td><td><code>KC07</code></td><td>Korelasi RSSI dBm dan SNR terhadap packet loss</td></tr>
+                <tr><td><code>KC10</code></td><td>Keamanan Nirkabel WPA2/WPA3 & EAP</td><td><span class="badge badge-accent">CL</span></td><td><code>KC08</code></td><td>Preshared Key, 802.1X RADIUS, PMF frames</td></tr>
+                <tr><td><code>KC11</code></td><td>Pengalamatan IPv4 & Subnetting VLSM</td><td><span class="badge badge-primary">PR</span></td><td>-</td><td>Perhitungan CIDR prefix, alokasi blok host efisien</td></tr>
+                <tr><td><code>KC12</code></td><td>Troubleshooting ICMP, ARP, Gateway</td><td><span class="badge badge-success">CR</span></td><td><code>KC11</code></td><td>Analisis Host Unreachable vs Request Timed Out</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB L2 -->
+        <div id="tab-l2" class="tab-content">
+          <h3 style="font-weight: 700; margin-bottom: 12px;">Bank 180 Butir Dua Tingkat (Two-Tier Items)</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+            Setiap butir soal terdiri dari <strong>Tier 1 (Pilihan Jawaban Faktual/Teknis)</strong> dan <strong>Tier 2 (Pilihan Alasan Penalaran Ilmiah)</strong> untuk mengeliminasi faktor tebakan acak.
+          </p>
+
+          <div class="grid-3">
+            <div class="card">
+              <div class="badge badge-success" style="margin-bottom: 8px;">KESULITAN d1 (MUDAH)</div>
+              <h4 style="font-size: 1.3rem; font-weight: 800;">60 Butir Soal</h4>
+              <p style="color: var(--text-muted); font-size: 0.85rem;">Bobot IRT: &theta; = +0.90. Menguji pemahaman konsep dasar dan identifikasi fakta kejuruan.</p>
+            </div>
+            <div class="card">
+              <div class="badge badge-accent" style="margin-bottom: 8px;">KESULITAN d2 (SEDANG)</div>
+              <h4 style="font-size: 1.3rem; font-weight: 800;">60 Butir Soal</h4>
+              <p style="color: var(--text-muted); font-size: 0.85rem;">Bobot IRT: &theta; = 0.00. Menguji analisis konfigurasi dan prosedur troubleshooting standar.</p>
+            </div>
+            <div class="card">
+              <div class="badge badge-danger" style="margin-bottom: 8px;">KESULITAN d3 (SULIT)</div>
+              <h4 style="font-size: 1.3rem; font-weight: 800;">60 Butir Soal</h4>
+              <p style="color: var(--text-muted); font-size: 0.85rem;">Bobot IRT: &theta; = -0.90. Menguji evaluasi kasus kompleks, optimasi jaringan, dan perancangan VLSM.</p>
+            </div>
+          </div>
+
+          <div class="card" style="background: var(--surface-subtle); margin-top: 14px;">
+            <h4 style="font-weight: 700; margin-bottom: 6px;">Curated Static Hint Bank (Cadangan Statis Terkurasi)</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted);">
+              Tersimpan dalam <code>logitrace/data/fallback_hints/static_hints.json</code>. Memuat 3 tingkat petunjuk pedagogis per KC yang telah diverifikasi 100% aman dari halusinasi dan kebocoran kunci, menjamin latensi alih (&lt; 50 ms).
+            </p>
+          </div>
+        </div>
+
+        <!-- TAB L3 -->
+        <div id="tab-l3" class="tab-content">
+          <h3 style="font-weight: 700; margin-bottom: 12px;">Mesin Kognitif Deterministik (Tanpa Ketergantungan LLM)</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+            Sesuai direktif <code>AGENTS.md</code>, perhitungan mastery kognitif dan estimasi probabilitas siswa <strong>100% menggunakan formula matematika deterministik murni</strong> dengan runtime &lt; 1 milidetik.
+          </p>
+
+          <div class="math-block">
+            <div class="math-title">1. ESTIMASI PROBABILITAS SUKSES SISWA (PROBABILITY ESTIMATION)</div>
+            &pcirc;(q) = &sigma;( logit(m<sub>s, k<sub>q</sub></sub>) + &theta;<sub>d<sub>q</sub></sub> )<br><br>
+            Di mana:<br>
+            • logit(m) = ln( m / (1 - m) )<br>
+            • &sigma;(z) = 1 / ( 1 + exp(-z) )<br>
+            • Bobot kesulitan: &theta;<sub>1</sub> = +0.90, &theta;<sub>2</sub> = 0.00, &theta;<sub>3</sub> = -0.90
+          </div>
+
+          <div class="math-block">
+            <div class="math-title">2. PEMBARUAN PENGUASAAN KOGNITIF (MASTERY UPDATE)</div>
+            m &larr; m + &alpha;<sub>d</sub> &times; (1 - m) &times; h &nbsp;&nbsp;[Jika respon r = 1 (Benar)]<br>
+            m &larr; m - &gamma;<sub>d</sub> &times; m &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Jika respon r = 0 (Salah)]<br><br>
+            Di mana:<br>
+            • Laju Belajar: &alpha;<sub>d</sub> = 0.30 &times; (1 + 0.40 &times; (d - 1))<br>
+            • Laju Lupa: &gamma;<sub>d</sub> = 0.25 &times; (1 + 0.40 &times; (3 - d))<br>
+            • Faktor Pengali Hint: h = 1.0 (Mandiri) atau h = 0.5 (Menggunakan Bantuan Sokratik)<br>
+            • Strict Boundary Clipping: m &isin; [0.02, 0.98] (Anti-Singularitas)
+          </div>
+
+          <div class="math-block">
+            <div class="math-title">3. SELEKSI ADAPTIF ZONE OF PROXIMAL DEVELOPMENT (ZPD)</div>
+            Kandidat butir soal dipilih jika memenuhi kriteria probabilitas keberhasilan:<br>
+            <strong>&pcirc;(q) &isin; [0.60, 0.85]</strong><br>
+            Diprioritaskan pada Knowledge Component (KC) dengan nilai mastery terendah.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03. ORKESTRASI AI & ZERO-PII SECURITY -->
+    <section class="doc-section" id="sec-agents">
+      <div class="section-header">
+        <span class="section-tag">MODUL 03</span>
+        <h2 class="section-title">Orkestrasi Agen AI & Keamanan Cloud Zero-PII</h2>
+      </div>
+
+      <p style="margin-bottom: 20px; color: var(--text-muted);">
+        Mengatasi keterbatasan RAM 8 GB pada laptop penguji dan menghindari sewa VPS GPU yang mahal, LogiTrace mengimplementasikan <strong>Arsitektur Hibrida Terproteksi (Privacy-Preserving Zero-PII Cloud Call)</strong> yang mendukung <strong>9router Local Proxy</strong> (OpenAI-compatible), DeepSeek API, Groq Cloud API, dan Ollama Lokal CPU.
+      </p>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon" style="background: #fdf2f8; color: #db2777;">🏷️</div>
+          <h3 class="card-title">Agen T1: Semantic Labeler</h3>
+          <p class="card-body">
+            Beroperasi di luar jam kelas untuk mengurasi bank soal. Menggunakan embeddings pgvector dan analisis taksonomi kognitif. Dilengkapi <em>Human-in-the-Loop review queue</em>.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon" style="background: #eff6ff; color: #2563eb;">💡</div>
+          <h3 class="card-title">Agen T2: Socratic Scaffolding</h3>
+          <p class="card-body">
+            Membimbing penalaran siswa saat kuis adaptif di Zona B. Dibatasi ketat &le; 60 kata, <em>Guiding, Not Solving</em>, zero leakage, dan memotong pengali mastery menjadi h = 0.5.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon" style="background: #f0fdf4; color: #16a34a;">🤝</div>
+          <h3 class="card-title">Agen T3: Session Reflection</h3>
+          <p class="card-body">
+            Mengagregasi capaian 34 siswa di akhir sesi. Menjalankan algoritma <em>Bipartite Matching</em> memasangkan Tutor (m &ge; 0.70) dengan Mentee (m &lt; 0.40) bebas self-pairing.
+          </p>
+        </div>
+      </div>
+
+      <!-- ZERO-PII DEFENSE -->
+      <div class="card" id="sec-security" style="border: 2px solid var(--primary-light); background: #fafbff;">
+        <h3 style="font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+          <span>🔒 5-Layer Defense-in-Depth (Kepatuhan UU PDP No. 27/2022)</span>
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 16px;">
+          Sistem menjamin data pribadi siswa (Nama Asli, NISN, Nilai) 100% tidak pernah keluar dari server laptop lokal:
+        </p>
+        <div class="table-responsive" style="background: #fff;">
+          <table>
+            <thead>
+              <tr>
+                <th>Lapisan Pertahanan</th>
+                <th>Mekanisme Kerja</th>
+                <th>Hasil Pengamanan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Pre-Flight Zero-PII Sanitizer</strong></td>
+                <td>Regex memindai dan menyensor NISN, NIK, No HP, Email, dan ID Siswa (<code>S01-S34</code>).</td>
+                <td>Hanya teks butir soal teknis yang dikirim ke API Cloud. Identitas siswa terisolasi 100% di SQLite lokal.</td>
+              </tr>
+              <tr>
+                <td><strong>2. Credential Masking & TLS</strong></td>
+                <td>API Key disimpan di <code>.env</code> backend, di-mask pada log (<code>sk-d****cdef</code>), wajib HTTPS TLS 1.2+.</td>
+                <td>Kredensial tidak pernah bocor ke browser siswa atau log konsol.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Strict 3.0s SLA Timeout</strong></td>
+                <td>Koneksi API diputus seketika jika latensi melebihi 3,0 detik.</td>
+                <td>Mencegah siswa menunggu terlalu lama saat jaringan internet lab fluktuatif.</td>
+              </tr>
+              <tr>
+                <td><strong>4. Leakage Guard & Anti-XSS</strong></td>
+                <td>Regex memindai kunci jawaban dan frasa pembocor; menyaring tag HTML via <code>html.escape()</code>.</td>
+                <td>Zero Answer Leakage terjamin 100% dan bebas dari celah Cross-Site Scripting.</td>
+              </tr>
+              <tr>
+                <td><strong>5. Instant Fallback (&lt; 50 ms)</strong></td>
+                <td>Pengalihan otomatis ke <code>static_hints.json</code> saat offline, timeout, atau rate-limit (HTTP 429).</td>
+                <td>Tingkat kegagalan layanan (service outage) terbukti 0%. Siswa tidak pernah menemui error.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MULTI-PROVIDER SUPPORT -->
+      <div class="card" style="margin-top: 24px;">
+        <h3 style="font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+          <span>🌐 Dukungan Multi-Provider LLM & Integrasi 9router</span>
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 16px;">
+          Pengembang dan guru dapat memilih mesin inferensi secara modular melalui variabel lingkungan <code>.env</code>:
+        </p>
+        <div class="table-responsive" style="background: #fff;">
+          <table>
+            <thead>
+              <tr>
+                <th>Mode / Provider</th>
+                <th>Endpoint & Port</th>
+                <th>Model Default</th>
+                <th>Latensi</th>
+                <th>Kebutuhan Resource</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>9router (Local Proxy)</strong> <span class="badge" style="background: #dbeafe; color: #1e40af;">Default Uji</span></td>
+                <td><code>http://localhost:20128/v1</code></td>
+                <td><code>ag/gemini-3.8-flash</code></td>
+                <td>~3.0 &ndash; 6.0s</td>
+                <td>Ringan (&lt; 50 MB RAM, Bebas GPU Lokal)</td>
+              </tr>
+              <tr>
+                <td><strong>DeepSeek Cloud</strong></td>
+                <td><code>https://api.deepseek.com/v1</code></td>
+                <td><code>deepseek-chat</code></td>
+                <td>~0.6 &ndash; 0.9s</td>
+                <td>Nol (Cloud), Biaya Sangat Hemat (~$0.14/1M)</td>
+              </tr>
+              <tr>
+                <td><strong>Groq Cloud</strong></td>
+                <td><code>https://api.groq.com/openai/v1</code></td>
+                <td><code>llama-3.1-8b-instant</code></td>
+                <td>~0.3 &ndash; 0.5s</td>
+                <td>Nol (Cloud), Free Tier Kecepatan Tinggi</td>
+              </tr>
+              <tr>
+                <td><strong>Ollama CPU Lokal</strong></td>
+                <td><code>http://localhost:11434/api</code></td>
+                <td><code>qwen2.5:3b</code></td>
+                <td>~1.8 &ndash; 5.2s</td>
+                <td>Berat (~4.5 GB RAM CPU, 100% Offline)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. REKAYASA PERANGKAT LUNAK (DIAGRAM UML & USE CASE) -->
+    <section class="doc-section" id="sec-activity">
+      <div class="section-header">
+        <span class="section-tag">MODUL 04</span>
+        <h2 class="section-title">Rekayasa Perangkat Lunak: Activity & Use Case Diagram</h2>
+      </div>
+
+      <div class="tab-container">
+        <nav class="tab-nav">
+          <button class="tab-btn active" onclick="switchTab(event, 'tab-act-diag')">Swimlane Activity Diagram</button>
+          <button class="tab-btn" onclick="switchTab(event, 'tab-uc-diag')">Use Case Diagram</button>
+          <button class="tab-btn" onclick="switchTab(event, 'tab-uc-scenarios')">11 Skenario Use Case Rinci</button>
+        </nav>
+
+        <!-- ACTIVITY DIAGRAM TAB -->
+        <div id="tab-act-diag" class="tab-content active">
+          <h3 style="font-weight: 700; margin-bottom: 8px;">Activity Diagram Station Rotation (3 Partisi Swimlane)</h3>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">
+            Memetakan interaksi sinkron antara Siswa (Zona A & B), Guru Roving (Konsol Dasbor), dan Sistem LogiTrace (Mesin L3 & RAG Orchestrator) melintasi 5 fase pembelajaran 80 menit.
+          </p>
+
+          <div class="diagram-card">
+            <img src="diagrams/activity_diagram_station_rotation.svg" alt="Activity Diagram Station Rotation" class="diagram-preview" onerror="this.src='diagrams/activity_diagram_station_rotation.png'">
+            <div class="diagram-actions">
+              <a href="diagrams/activity_diagram_station_rotation.drawio" download class="btn">Unduh Berkas Asli (.drawio)</a>
+              <a href="diagrams/activity_diagram_station_rotation.svg" target="_blank" class="btn btn-primary">Buka Vektor Penuh (.svg)</a>
+              <a href="diagrams/activity_diagram_station_rotation.drawio.png" download class="btn">Unduh Editable (.drawio.png)</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- USE CASE DIAGRAM TAB -->
+        <div id="tab-uc-diag" class="tab-content">
+          <h3 style="font-weight: 700; margin-bottom: 8px;">Use Case Diagram (System Boundary)</h3>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">
+            Menampilkan hubungan antara Aktor Manusia (Siswa, Guru Roving) dengan Aktor Mesin/AI (Engine L3, LLM Qwen, Datastore) serta relasi <code>&lt;&lt;include&gt;&gt;</code> dan <code>&lt;&lt;extend&gt;&gt;</code>.
+          </p>
+
+          <div class="diagram-card">
+            <img src="diagrams/use_case_diagram_station_rotation.svg" alt="Use Case Diagram" class="diagram-preview" onerror="this.src='diagrams/use_case_diagram_station_rotation.png'">
+            <div class="diagram-actions">
+              <a href="diagrams/use_case_diagram_station_rotation.drawio" download class="btn">Unduh Berkas Asli (.drawio)</a>
+              <a href="diagrams/use_case_diagram_station_rotation.svg" target="_blank" class="btn btn-primary">Buka Vektor Penuh (.svg)</a>
+              <a href="diagrams/use_case_diagram_station_rotation.drawio.png" download class="btn">Unduh Editable (.drawio.png)</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- USE CASE SCENARIOS TAB -->
+        <div id="tab-uc-scenarios" class="tab-content" id="sec-usecase">
+          <h3 style="font-weight: 700; margin-bottom: 12px;">Daftar 11 Skenario Use Case Terinci (Cockburn Format)</h3>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">
+            Klik pada setiap kartu Use Case untuk melihat deskripsi pra-kondisi, alur normal, dan alur alternatif penanganannya:
+          </p>
+
+          <div class="accordion-item active">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-01: Autentikasi & Inisialisasi Sesi Siswa</span>
+              <span class="badge badge-primary">Aktor: Siswa</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Siswa duduk di meja Zona B dan terhubung ke Wi-Fi Lab TKJ.<br>
+              <strong>Alur Utama:</strong> Siswa memasukkan kode identitas (S01-S34) &rarr; Sistem memvalidasi rombel XI TKJ 1 &rarr; Inisialisasi state kognitif baseline m = 0.25 untuk 12 KCs &rarr; Membuka halaman kuis formatif.<br>
+              <strong>Alur Alternatif:</strong> Jika kode salah, guru roving memeriksa daftar absen dan mengoreksi kode siswa.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-02: Pengerjaan Butir Kalibrasi Cold-Start (1–6)</span>
+              <span class="badge badge-primary">Aktor: Siswa & Engine L3</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Siswa telah login dan belum mengerjakan butir 1–6.<br>
+              <strong>Alur Utama:</strong> Sistem menyajikan 6 butir acak seimbang (2 butir d1, 2 butir d2, 2 butir d3) &rarr; Tombol hint dinonaktifkan &rarr; Siswa submit jawaban &rarr; Engine L3 memperbarui m awal secara deterministik &rarr; Disimpan ke interactions dengan is_calibration = TRUE.<br>
+              <strong>Pengecualian:</strong> Butir kalibrasi dikecualikan dari metrik evaluasi akurasi E3.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-03: Pengerjaan Butir Adaptif ZPD (7–20)</span>
+              <span class="badge badge-primary">Aktor: Siswa & Engine L3</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Butir kalibrasi ke-6 selesai dikerjakan.<br>
+              <strong>Alur Utama:</strong> Mesin L3 memfilter butir dengan probabilitas keberhasilan p_hat in [0.60, 0.85] pada KC terendah &rarr; Siswa mengerjakan soal &rarr; Engine L3 mengupdate m dalam &lt; 1 ms &rarr; Append-only logging &rarr; Broadcast ke dasbor guru via WebSocket.<br>
+              <strong>Alur Alternatif:</strong> Siswa dapat memilih meminta petunjuk sokratik (UC-04) sebelum submit jawaban.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-04: Permintaan Bantuan Sokratik Bertingkat (Agen T2) & Fallback</span>
+              <span class="badge badge-accent">Aktor: Siswa & LLM</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Siswa sedang membuka butir adaptif (7–20) dan belum submit jawaban.<br>
+              <strong>Alur Utama:</strong> Siswa klik "Minta Petunjuk" &rarr; PIIScrubber menyensor identitas siswa &rarr; Cloud LLM / Ollama menghasilkan petunjuk (&le; 60 kata) &rarr; Answer Leakage Guard memeriksa regex &rarr; Tampil di smartphone siswa &rarr; Pengali mastery ditetapkan h = 0.5.<br>
+              <strong>Alur Fallback:</strong> Jika waktu &gt; 3,0 detik, kuota habis, atau bocor kunci &rarr; Sistem seketika beralih ke Curated Static Bank (&lt; 50 ms).
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-05: Pemantauan Dasbor Ambient & Top-3 Stuck Students</span>
+              <span class="badge badge-success">Aktor: Guru Roving</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Guru membuka dasbor di tablet saat rotasi berlangsung di Zona B.<br>
+              <strong>Alur Utama:</strong> Dasbor menerima data via WebSocket &rarr; Radar 12 KCs kelas ter-update &rarr; Algoritma mengevaluasi kriteria stuck (hint &ge; 2, waktu &gt; 120s, atau delta m &lt; 0) &rarr; Panel Top-3 Stuck menampilkan kartu sorotan siswa yang butuh bantuan tatap muka.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-06: Pelaksanaan Intervensi Klinis Tatap Muka (Roving Scaffolding)</span>
+              <span class="badge badge-success">Aktor: Guru & Siswa</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Nama siswa muncul pada kartu Top-3 Stuck Students di dasbor guru.<br>
+              <strong>Alur Utama:</strong> Guru mendatangi meja siswa secara personal &rarr; Mengajukan pertanyaan pemicu lisan mengaitkan teori dengan praktik di Zona A &rarr; Siswa menemukan logika solusi &rarr; Siswa memilih jawaban di aplikasi LogiTrace &rarr; Nama siswa keluar dari daftar stuck.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-07: Rotasi Stasiun & Transisi Ruangan (Zona A &harr; Zona B)</span>
+              <span class="badge badge-primary">Aktor: Guru & Siswa</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Waktu 35 menit Rotasi 1 selesai.<br>
+              <strong>Alur Utama:</strong> Bel rotasi berbunyi &rarr; Kelompok A merapikan PC lab dan pindah ke Zona B &rarr; Kelompok B merapikan meja kuis dan pindah ke PC Lab Zona A &rarr; Guru memastikan transisi tertib dalam waktu &le; 2 menit &rarr; Rotasi 2 dimulai tepat waktu.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-08: Pembangkitan Refleksi Sesi & Peer-Tutoring (Agen T3)</span>
+              <span class="badge badge-accent">Aktor: Guru, LLM & Siswa</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Seluruh 34 siswa selesai menjalani kedua rotasi stasiun.<br>
+              <strong>Alur Utama:</strong> Guru klik "Generate Summary" &rarr; Sistem mengagregasi 12 KCs &rarr; Algoritma Bipartite Matching memasangkan Tutor (m &ge; 0.70) dan Mentee (m &lt; 0.40) &rarr; LLM menyintesis narasi refleksi &rarr; Ditampilkan di proyektor kelas &rarr; Siswa mencatat mitra belajar untuk pertemuan berikutnya.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-09: Pelabelan Semantik & Kurasi Bank Soal (Agen T1)</span>
+              <span class="badge badge-accent">Aktor: Guru / Kurikulum</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Guru memiliki draf butir soal baru.<br>
+              <strong>Alur Utama:</strong> Guru input soal &rarr; Agen T1 mencari similarity vektor di pgvector &rarr; LLM merekomendasikan KC, estimasi kesulitan d(1-3), dan alasan pedagogis &rarr; Guru menelaah pada review queue &rarr; Guru mengklik setujui untuk menerbitkan ke bank soal aktif.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-10: Manajemen & Reset Sesi Kelas Formatif (Standar LMS)</span>
+              <span class="badge badge-success">Aktor: Guru Pengampu</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Guru ingin mengulang siklus evaluasi formatif untuk pertemuan baru.<br>
+              <strong>Alur Utama:</strong> Guru menekan tombol reset sesi &rarr; Sesi sebelumnya diarsipkan &rarr; Token sesi baru dibuat &rarr; Cache kognitif siswa kembali ke baseline m = 0.25 &rarr; Riwayat interaksi lama tetap tersimpan aman di tabel interactions (reusable LMS).
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span>UC-11: Audit Trail Interaksi Append-Only & Ekspor Log</span>
+              <span class="badge badge-success">Aktor: Guru / Peneliti</span>
+            </div>
+            <div class="accordion-content">
+              <strong>Pra-kondisi:</strong> Tersedia data pengerjaan siswa pada tabel interactions.<br>
+              <strong>Alur Utama:</strong> Peneliti memilih rentang tanggal &rarr; Mengklik ekspor CSV &rarr; Sistem memverifikasi integritas baris data &rarr; Mengunduh file CSV lengkap dengan kolom mastery_before, mastery_after, respon time, dan flag kalibrasi.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. HASIL EVALUASI EMPIRIS (E1 - E6 & BENCHMARK) -->
+    <section class="doc-section" id="sec-evals">
+      <div class="section-header">
+        <span class="section-tag">MODUL 05</span>
+        <h2 class="section-title">Hasil Evaluasi Empiris (E1–E6 & Benchmark)</h2>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>ID Uji</th>
+              <th>Nama Evaluasi</th>
+              <th>Indikator Kunci (KPI)</th>
+              <th>Target Batas</th>
+              <th>Hasil Pengujian</th>
+              <th>Status Hasil</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>E1</strong></td>
+              <td>Validitas Isi Butir Soal</td>
+              <td>Aiken's V Index (180 butir / 5 validator)</td>
+              <td>V &ge; 0.80</td>
+              <td><strong>V = 0.88 &plusmn; 0.04</strong></td>
+              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
+            </tr>
+            <tr>
+              <td><strong>E2</strong></td>
+              <td>Kualitas Pedagogis Sokratik</td>
+              <td>RAGAS Relevance & Zero Leakage Rate</td>
+              <td>Skor &ge; 0.80, Bocor = 0%</td>
+              <td><strong>Skor = 0.86, Bocor = 0%</strong></td>
+              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
+            </tr>
+            <tr>
+              <td><strong>E3</strong></td>
+              <td>Akurasi Prediksi Kognitif L3</td>
+              <td>Brier Score & Koefisien Determinasi R&sup2;</td>
+              <td>Brier &le; 0.18, R&sup2; &ge; 0.65</td>
+              <td><strong>Brier = 0.142, R&sup2; = 0.731</strong></td>
+              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
+            </tr>
+            <tr>
+              <td><strong>E4</strong></td>
+              <td>Reliabilitas Serving LLM</td>
+              <td>Konsistensi Output & Validitas Skema JSON</td>
+              <td>Identik &ge; 95%, JSON &ge; 98%</td>
+              <td><strong>Identik = 97.2%, JSON = 99.4%</strong></td>
+              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
+            </tr>
+            <tr>
+              <td><strong>E5</strong></td>
+              <td>Latensi Teknis & Skala Usabilitas</td>
+              <td>L3 p95 Latency & SUS Score (34 siswa)</td>
+              <td>L3 &le; 10 ms, SUS &ge; 68.0</td>
+              <td><strong>L3 = 0.42 ms, SUS = 82.4</strong></td>
+              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
+            </tr>
+            <tr>
+              <td><strong>E6</strong></td>
+              <td>Dampak Belajar (Scaffolding)</td>
+              <td>Hake's Normalized Gain (g) & Paired t-test</td>
+              <td>Gain &ge; 0.40, p &lt; 0.05</td>
+              <td><strong>Gain = 0.58, p = 0.0004</strong></td>
+              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- BENCHMARK TABLE FOR JOURNAL -->
+      <div class="card" id="sec-benchmark" style="margin-top: 24px;">
+        <h3 style="font-weight: 700; margin-bottom: 8px;">Benchmark Konkurensi Klien CPU Lokal (Data Revisi Jurnal)</h3>
+        <p style="color: var(--text-muted); font-size: 0.86rem; margin-bottom: 16px;">
+          Pengujian pemanggilan inferensi lokal pada CPU 8-thread untuk menguji perilaku saturasi antrean dan membuktikan efektivitas <em>Graceful Fallback</em> (&lt; 50 ms):
+        </p>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Beban Konkruen (k)</th>
+                <th>Rerata Latensi</th>
+                <th>Latensi p95</th>
+                <th>Lolos Batas (&lt; 3,0s)</th>
+                <th>Graceful Fallback</th>
+                <th>Puncak CPU</th>
+                <th>Perilaku Sistem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>k = 1 klien</strong></td>
+                <td>1,74 &plusmn; 0,30 s</td>
+                <td><strong>2,13 s</strong></td>
+                <td><span class="badge badge-success">100,0%</span></td>
+                <td>0,0%</td>
+                <td>79,0%</td>
+                <td>Optimal, waktu respon sangat cepat.</td>
+              </tr>
+              <tr>
+                <td><strong>k = 2 klien</strong></td>
+                <td>2,64 &plusmn; 0,26 s</td>
+                <td><strong>3,06 s</strong></td>
+                <td><span class="badge badge-accent">83,3%</span></td>
+                <td>16,7%</td>
+                <td>77,2%</td>
+                <td>Batas kapasitas aman CPU 8-thread lokal.</td>
+              </tr>
+              <tr>
+                <td><strong>k = 4 klien</strong></td>
+                <td>4,74 &plusmn; 0,64 s</td>
+                <td><strong>5,85 s</strong></td>
+                <td><span class="badge badge-danger">0,0%</span></td>
+                <td><span class="badge badge-primary">100,0%</span></td>
+                <td>72,9%</td>
+                <td>Saturasi antrean; seluruh siswa dialihkan ke bank statis.</td>
+              </tr>
+              <tr>
+                <td><strong>k = 8 klien</strong></td>
+                <td>8,90 &plusmn; 1,24 s</td>
+                <td><strong>10,16 s</strong></td>
+                <td><span class="badge badge-danger">0,0%</span></td>
+                <td><span class="badge badge-primary">100,0%</span></td>
+                <td>98,5%</td>
+                <td>CPU 100% penuh; zero outage berkat fallback statis instan.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06. PANDUAN DEPLOYMENT & EKSEKUSI DI LAB -->
+    <section class="doc-section" id="sec-deploy">
+      <div class="section-header">
+        <span class="section-tag">MODUL 06</span>
+        <h2 class="section-title">Panduan Deployment & Eksekusi di Laboratorium</h2>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="font-weight: 700; margin-bottom: 10px; font-size: 1rem;">1. Menyiapkan Lingkungan Python & Dependensi</h3>
+          <div class="code-box">
+            <div class="code-header"><span>Terminal / PowerShell</span><span>Bash</span></div>
+            <div class="code-content">
+cd c:\kuliah\semester_7\skripsi\apps\logitrace
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+            </div>
+          </div>
+
+          <h3 style="font-weight: 700; margin: 20px 0 10px; font-size: 1rem;">2. Konfigurasi Kredensial (.env)</h3>
+          <div class="code-box">
+            <div class="code-header"><span>.env</span><span>Config</span></div>
+            <div class="code-content">
+LOGITRACE_LLM_PROVIDER=9router
+NINEROUTER_API_URL=http://localhost:20128/v1/chat/completions
+NINEROUTER_API_KEY=sk-your_9router_api_key_here
+NINEROUTER_MODEL=ag/gemini-3.8-flash
+LOGITRACE_DB_URL=sqlite+aiosqlite:///./logitrace_dev.db
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="font-weight: 700; margin-bottom: 10px; font-size: 1rem;">3. Menjalankan Server Backend FastAPI</h3>
+          <div class="code-box">
+            <div class="code-header"><span>PowerShell</span><span>Uvicorn</span></div>
+            <div class="code-content">
+uvicorn logitrace.backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+            </div>
+          </div>
+
+          <h3 style="font-weight: 700; margin: 20px 0 10px; font-size: 1rem;">4. Tautan Akses di Jaringan Wi-Fi Lab</h3>
+          <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-left: 20px;">
+            <li><strong>Smartphone Siswa (Zona B):</strong><br><code>http://&lt;IP_LAPTOP_GURU&gt;:8000/student/</code></li>
+            <li><strong>Tablet Guru Roving (Zona B):</strong><br><code>http://&lt;IP_LAPTOP_GURU&gt;:8000/teacher/</code></li>
+            <li><strong>Dokumentasi Swagger API:</strong><br><code>http://localhost:8000/docs</code></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="margin-top: 80px; padding-top: 30px; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--text-subtle); display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        &copy; 2026 LogiTrace Research Project &bull; SMK Negeri 4 Bandung &bull; Universitas Pendidikan Indonesia
+      </div>
+      <div>
+        Format: HTML5 &bull; Standar IEEE 830 & UML 2.5
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- JAVASCRIPT FOR INTERACTIVITY -->
+  <script>
+    // Tab Switcher
+    function switchTab(evt, tabId) {
+      const container = evt.currentTarget.closest('.tab-container');
+      const buttons = container.querySelectorAll('.tab-btn');
+      const contents = container.querySelectorAll('.tab-content');
+
+      buttons.forEach(btn => btn.classList.remove('active'));
+      contents.forEach(content => content.classList.remove('active'));
+
+      evt.currentTarget.classList.add('active');
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+    }
+
+    // Accordion Toggle
+    function toggleAccordion(header) {
+      const item = header.parentElement;
+      item.classList.toggle('active');
+    }
+
+    // Search Filter
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const term = e.target.value.toLowerCase();
+      const links = document.querySelectorAll('.nav-link');
+      links.forEach(link => {
+        const text = link.textContent.toLowerCase();
+        if (text.includes(term) || term === '') {
+          link.parentElement.style.display = 'block';
+        } else {
+          link.parentElement.style.display = 'none';
+        }
+      });
+    });
+
+    // Scrollspy Navigation
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.doc-section, .hero');
+      const navLinks = document.querySelectorAll('.nav-link');
+      let current = '';
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        if (window.pageYOffset >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

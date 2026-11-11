@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "duolingo": {
+      "source": "the-gabri/design-skills",
+      "sourceType": "github",
+      "skillPath": "skills/duolingo/SKILL.md",
+      "computedHash": "fd42f32a34699717b69bb57a373a0d7fb7cd32bc7228a16f872b3491eb16fcc1"
+    }
+  }
+}

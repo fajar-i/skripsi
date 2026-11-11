@@ -1,0 +1,838 @@
+--- PAGE 1 ---
+Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing , pages 14384–14396
+December 6-10, 2023 ©2023 Association for Computational Linguistics
+14384
+
+--- PAGE 2 ---
+mitigate these issues, a natural solution is distilling
+the knowledge from LLMs (i.e. teacher models)
+into smaller, more efficient models (i.e. student
+models). The majority of prior research has em-
+phasized using the "explanation" component of the
+CoT approach as the distilled knowledge ( Ho et al.,
+2022; Li et al., 2022a; Shridhar et al., 2022b; Magis-
+ter et al. , 2022). Nonetheless, these methodologies
+exhibit certain limitations. Firstly, small student
+models may struggle to understand CoT explana-
+tions, potentially impeding their learning efficacy.
+Evidence from (Wei et al., 2022b,a) indicates that
+only exceptionally large language models possess
+the capability to perform CoT during reasoning.
+As a result, many student models ( Ho et al., 2022;
+Li et al. , 2022a; Magister et al. , 2022) trained on
+explanations do not attain satisfactory accuracy in
+MWP-solving tasks. Secondly, those distillation
+processes lack feedback from the student model to
+the LLM teacher, and thus, neglect to consider the
+knowledge acquisition state of the student.
+In this paper, we also concentrate on harness-
+ing the strengths of LLMs to coach smaller, more
+efficient MWP solvers, but introduce a novel
+method for addressing the limitations of previ-
+ous approaches: Customized Exercise for MAth
+Learning (CEMAL). We reframe the problem by
+shifting our focus from providing explanations for
+existing exercises (i.e., training set) to identifying
+the student model’s learning needs and generat-
+ing new exercises tailored to them. Our CEMAL
+methodology offers a new perspective on knowl-
+edge distillation with LLMs by focusing on cus-
+tomized exercise generation, based on the student
+models’ current learning state. This enables more
+effective and adaptive learning, addressing limita-
+tions in prior approaches that rely heavily on gen-
+erating more high-quality explanations to existing
+datasets. This approach offers several advantages:
+(1) it does not impose CoT ability requirements on
+small models, allowing them to learn more effec-
+tively, (2) it takes into account the learning status
+of the student model during training.
+In fact, our approach CEMAL seamlessly aligns
+with two fundamental tasks in educational sci-
+ence: knowledge tracing and personalized learn-
+ing. Knowledge tracing pertains to monitoring and
+modeling a student’s evolving knowledge state over
+time (Corbett and Anderson, 1994; Abdelrahman
+et al., 2023). This process enables the identifica-
+tion of a learner’s strengths and weaknesses, usu-
+ally by exercises, thereby facilitating the genera-
+tion of tailored educational experiences. Person-
+alized learning is also of vital importance (
+Hattie
+and Timperley, 2007; Grant and Basye , 2014). Be-
+ing cognizant of the student model’s learning sta-
+tus ensures the optimally designed exercises are
+generated to address the model’s specific weak-
+nesses. By monitoring the learning progress, our
+proposed method can dynamically adapt to the stu-
+dent model’s evolving knowledge state, fostering
+more effective learning outcomes. In our method,
+we integrate knowledge tracing and learning status
+into the distillation process to establish a robust
+connection between the LLM teacher and the stu-
+dent model, yielding a more interactive and cus-
+tomized learning experience. Consequently, this ap-
+proach substantially enhances the student model’s
+problem-solving capabilities. As illustrated in Fig-
+ure 1, our knowledge distillation approach achieves
+competitive accuracy on the SV AMP dataset, but
+employs significantly fewer parameters compared
+to state-of-the-art LLMs, such as GPT-3+CoT and
+PaLM+CoT with few-shot prompting ( Wei et al.,
+2022b).
+Our contribution can be summarized as follows:
+• We propose a novel method named CEMAL
+that utilizes LLMs to generate additional data
+in the form of targeted practice problems, ad-
+dressing the student model’s weak areas.
+• Our approach is evaluated on multiple MWP
+datasets, including both in-distribution (ID)
+and out-of-distribution (OOD) tests ( Koncel-
+Kedziorski et al., 2016; Miao et al. , 2020; Pa-
+tel et al. , 2021). We show that our method
+is significantly effective in improving student
+models under the OOD setting.
+• The experimental results demonstrate that our
+method achieves state-of-the-art accuracy, sig-
+nificantly outperforming fine-tuned baselines.
+Notably, the student model trained with our
+method even surpasses LLMs with few-shot
+CoT prompting, despite having significantly
+fewer parameters.
+2 Related Work
+2.1 Math Word Problem Solving
+After many years of research on rule-based algo-
+rithms ( Hosseini et al. , 2014; Mitra and Baral ,
+2016) and semantic parsing methods ( Shi et al. ,
+14385
+
+--- PAGE 3 ---
+2015; Huang et al. , 2017), deep learning has
+become the predominant technique for solving
+MWPs, thanks to its superior performance and
+better generalization ability. Deep neural solver
+(DNS) (
+Wang et al., 2017) was among the first to
+apply Seq2Seq models with RNN encoder and de-
+coder for MWP solving, and subsequent research
+has mainly explored different structures of RNN-
+to-RNN solvers (
+Wang et al. , 2018; Liu et al. ,
+2019a; Xie and Sun , 2019; Li et al. , 2019; Zhang
+et al., 2020; Liu et al. , 2021). More recently, pre-
+trained language models such as BERT ( Devlin
+et al., 2019) and RoBERTa (Liu et al. , 2019b) have
+demonstrated remarkable language understanding
+abilities, leading researchers to replace MWP en-
+coders with these models ( Li et al., 2022b; Huang
+et al. , 2021; Shen et al. , 2021; Patel et al. , 2021;
+Liang et al. , 2022a), resulting in significant accu-
+racy improvements. Recently, LLMs have shown
+great success in MWP solving, with much superior
+accuracy compared to fine-tuned baselines, simply
+by being provided with a few CoT examples of
+the problem-solving processes. Interestingly, re-
+searchers also found that LLMs can reason with
+zero-shot prompts such as "Let’s think step by step"
+(Kojima et al., 2022). Currently, numerous studies
+have been conducted to improve the performance
+of LLMs, including recent works by (
+Wang et al.,
+2023; Chen et al. , 2022; Zhou et al. , 2023; Diao
+et al., 2023; Liang et al., 2023).
+In this paper, we leverage the great success of
+LLMs to facilitate the training of the student solver.
+Our approach utilizes an efficient fine-tuned solver
+as its backbone and yields even superior perfor-
+mance to LLMs, further pushing the limit of deep
+learning methods in MWP solving.
+2.2 Large Language Models for Knowledge
+Distillation and Data Generation
+In recent years, there has been a surge of interest in
+knowledge distillation from LLMs to smaller mod-
+els. Due to the unavailability of model structure for
+LLMs, their application is often limited to prompt
+design and subsequent data generation. There-
+fore, data generation has become an integral part
+of knowledge distillation in the context of LLMs.
+Several studies have investigated the potential of
+LLMs in knowledge distillation and data genera-
+tion. For instance, PromDA (
+Wang et al. , 2022)
+applies prompt-based data augmentation to low-
+resource natural language understanding tasks, and
+AugESC (Zheng et al., 2022) leverages the GPT-J
+(Wang and Komatsuzaki, 2021) model and utilizes
+publicly available dialog posts to trigger conversa-
+tions on various topics. Then, West et al. (2022) em-
+ploys a generalized LLM to create common sense
+knowledge graphs, while W ANLI (Liu et al. , 2022)
+combines LLM-generated examples with human
+evaluation to establish diverse natural language in-
+ference datasets. Additionally, ZeroGen ( Y e et al.,
+2022b) proposes a zero-shot learning approach by
+generating datasets using pre-trained LLMs, Pro-
+Gen (Y e et al., 2022a) uses the quality of generated
+samples as feedback to LLMs to improve the data
+generation, and Shao et al. (2023) feeds chain-of-
+thought demonstrations to LLMs and targets gener-
+ating more exemplars for in-context learning.
+In the domain of MWP solving, several stud-
+ies have also been conducted with the objective
+of distilling the reasoning capability of LLMs into
+smaller solvers by employing chain-of-thought ex-
+planations. ( Ho et al., 2022) introduces Fine-tune-
+CoT, which uses LLMs to generate reasoning step
+instances, subsequently facilitating the fine-tuning
+of smaller models. ( Li et al. , 2022a) explores three
+explanation generation strategies and incorporates
+them into a multi-task learning framework tailored
+for compact models. ( Magister et al. , 2022) as-
+sesses the efficacy of chain-of-thought explanations
+in the training of a small model across three dis-
+parate tasks, namely arithmetic reasoning, com-
+monsense reasoning, and symbolic reasoning. Fur-
+thermore, (Shridhar et al. , 2022b) presents Decom-
+positional Distillation, an approach that segments
+the problem into subproblems to enhance smaller
+models’ performance.
+In contrast to these existing works, our proposed
+knowledge distillation approach in MWP solving
+is unique in that it does not focus on the chain-of-
+thought explanation and it takes into account the
+learning status of the student model and generates
+exercises that tailor to the specific weaknesses of
+the student. Our approach bridges the gap between
+knowledge distillation and data augmentation in
+the context of math word problem solvers, allowing
+student models to improve their problem-solving
+capabilities more effectively.
+3 Approach
+3.1 Problem Definition
+Our objective is to train a student Math Word Prob-
+lem (MWP) solver with the assistance of large lan-
+14386
+
+--- PAGE 4 ---
+14387
+
+--- PAGE 5 ---
+RoBERTa-base, and RoBERTa-large ( Liu et al. ,
+2019b) to demonstrate the backbone-agnostic na-
+ture of our approach.
+3.4 Exercise Generation
+Our method generates targeted exercises and their
+answers based on a given source problem-answer
+pair (W and A), which is similar to data augmen-
+tation. Following a previous paper on analogical
+reasoning (
+Liang et al. , 2022b), the generation of
+exercise targets to reach two kinds of analogies to
+W and A - problem analogy and solution analogy -
+that help models better understand MWPs.
+For problem analogy, we generate problems with
+similar problem descriptions but different solutions.
+Our method perturbs not only questions but also
+considers the context, and we prompt LLMs with
+few-shot examples to generate MWP variants. In
+contrast to previous studies that used human anno-
+tators ( Patel et al. , 2021; Y ang et al., 2022), our
+approach is automated and scalable. For solution
+analogy, we generate problems with different key-
+words in the problem description but a similar solu-
+tion to the source MWP . Interestingly, we find that
+LLMs can achieve this generation in a zero-shot
+manner by simply prompting them to generate prob-
+lems similar to the source problem. Our prompt
+design is located in the appendix.
+This exercise generation is deployed at two dif-
+ferent steps in our proposed training framework.
+First, we generate an exercise book by augmenting
+the entire training set (lines 4-6 in Alg. 1), which
+serves as a validation set to identify the weaknesses
+of the student solver. We do not directly use the
+training set to validate the student solver because
+we want a more diverse validation set to compre-
+hensively evaluate the student model. Additionally,
+the solver may memorize the MWPs in the training
+set instead of fully understanding them, as previous
+research has found that slightly perturbed training
+MWPs can cause a solver to fail ( Liang and Zhang ,
+2021). Therefore, validation on the exercise book,
+which contains many variants of the training set,
+provides a more robust evaluation.
+Secondly, after identifying the problems that the
+student solver cannot solve from the exercise book,
+we use them as the source to generate customized
+exercises and add them to the previous training set
+(lines 12-16 in Alg.1). In this way, the training set
+grows progressively and covers more knowledge,
+leading to a stronger student MWP solver.
+The exercise problems generated by LLMs may
+be of low quality, in a wrong format, or repetitive
+(a case study including correct and incorrect exam-
+ples is presented in Section 4.7). To alleviate the
+impact of these low-quality exercise problems, we
+filter out about 30% of problems with the wrong
+formats during the generation process by checking
+whether the generated problem is repetitive and the
+generated answer is a valid mathematical equation.
+3.5 Targeted vs. Random Generation
+The generation of targeted exercises to address
+MWPs that the student model has previously failed
+to solve significantly improves the model’s capacity
+to process problem and answer analogies. To eval-
+uate the efficacy of this approach, it is insightful
+to consider a baseline generation strategy, namely
+random generation (referenced in lines 17-18 of
+Alg. 1). We introduce a probability threshold λ
+to control the employment of generation strategy
+when augmenting the training set (lines 13-18 in
+Alg. 1). λ =0 favors random generation, whereas λ
+=1 mandates the utilization of targeted generation.
+A detailed analysis on the impact of λ can be found
+in Section 4.4.
+4 Experiments
+4.1 Datasets
+MA WPS The MAWPS dataset ( Koncel-
+Kedziorski et al. , 2016) is an aggregation of
+2,373 English Math Word Problems (MWPs)
+from various sources, including AddSub (
+Hos-
+seini et al. , 2014), SingleOp ( Roy et al. , 2015),
+MultiArith ( Roy and Roth , 2015), SingleEq
+(Koncel-Kedziorski et al. , 2015), and SimulEq
+(Kushman et al. , 2014). We employ a 5-fold
+cross-validation for the evaluation on this dataset.
+ASDiv-a ASDiv (Miao et al., 2020) is an English
+MWP dataset designed to exhibit a more diverse
+range of language patterns and problem types, com-
+prising 2,305 MWPs. In accordance with prior
+studies (Patel et al., 2021; Lan et al. , 2022), we se-
+lect the arithmetic subset, ASDiv-a, which contains
+1,218 MWPs and utilizes a 5-fold cross-validation
+method for evaluation.
+SV AMP The SV AMP dataset is a test-only
+dataset (Patel et al., 2021), consisting of 1,000 En-
+glish MWPs generated by introducing challeng-
+ing variations to existing problems. We adopt the
+two evaluation settings proposed in ( Patel et al. ,
+14388
+
+--- PAGE 6 ---
+MAWPS (ID) ASDiv-a (ID) SV AMP (ID) SV AMP (OOD)
+Prior best (Fine-tuning) 92. 0/ 121M a 82. 2/ 144M b 65. 0/ 144M b 47. 3/ 121M a
+Prior best (Knowledge Distillation) 94 . 5 / 11. 3Bc − − 20. 7/ 6. 7Bd
+Few-shot CoT ( Wei et al., 2022b) 93. 3/ 540B 93 . 1 / 175B∗ 79. 0/ 540B 79. 0/ 540B
+Without
+CEMAL
+LSTM (20M) 82. 6 71. 4 45. 0 30. 8
+Base (144M) 88. 5 81. 2 69. 2 41. 0
+Large (377M) 90. 4 87. 6 78. 5 49. 5
+CEMAL
+(Our Solvers)
+LSTM (20M) 92. 0 86. 9 67. 1 53. 4
+Base (144M) 93. 9 90. 9 81 . 5 68. 6
+Large (377M) 94. 7 93. 3 85. 4 76 . 4
+Table 1: We compare the accuracy and number of parameters on 4 benchmarks in the format of (accuracy/number
+of parameters). Prior best baselines are the following. a: ( Jie et al. , 2022), b: ( Patel et al. , 2021), c: ( Magister
+et al. , 2022), d: ( Ho et al. , 2022). On each dataset, the best performance is bolded and the second best is in
+italics. ∗: This accuracy is calculated on the ASDiv-a subset out of ASDiv based on the results in https://
+github.com/jasonwei20/chain-of-thought-prompting . ID denotes the in-distribution test and OOD denotes
+the out-of-distribution test.
+2021). The first setting employs a 5-fold cross-
+validation approach on the 1,000 MWPs, incorpo-
+rating MAWPS ( Koncel-Kedziorski et al. , 2016)
+and ASDiv-a ( Miao et al. , 2020) as additional
+training data for each fold. In the second setting,
+MAWPS and ASDiv-a serve as the training set,
+while SV AMP is used as the testing set.
+Evaluation Setting We categorize the evalua-
+tions on MAWPS, ASDiv-a, and the first setting
+on SV AMP as in-distribution (ID) tests, as they all
+involve 5-fold cross-validation on a specific dataset.
+Conversely, the second setting on SV AMP is con-
+sidered an out-of-distribution (OOD) test, given
+that the training and testing sets originate from dis-
+tinct sources.
+4.2 Implementation
+The backbone of our pre-trained encoder is a
+RoBERTa model ( Liu et al. , 2019b). For LLM,
+we use the ChatGPT gpt-3.5-turbo API to perform
+problem generation. To encourage a more diverse
+generation, we set the temperature to 1.25. All the
+experiments in this paper can be conducted with a
+cost lower than 100 dollars on OpenAI API calls.
+For evaluation, we use the accuracy of answer value
+as our evaluation metric following all the baselines.
+Since the answer value can be calculated from dif-
+ferent equations, it is more reasonable to check
+if the value is correct, rather than checking the
+element-wise equivalence of a generated equation
+and the corresponding ground truth equation.
+We conducted all experiments using an NVIDIA
+RTX A6000 graphics card, implemented in Python
+using the PyTorch framework. The training was
+performed for 50 epochs with a batch size of 16, us-
+ing the AdamW (
+Kingma and Ba, 2015; Loshchilov
+and Hutter, 2018) optimizer with an initial learn-
+ing rate of 8e-6 for the pre-trained model part (i.e.
+RoBERTa) and 5e-4 for the GTS decoder, which
+was halved every 20 epochs. The weight decay
+during training was set to 0.01, and a dropout rate
+of 0.25 was applied to the decoder to prevent over-
+fitting. The training set will be augmented during
+epoch 10 and epoch 20, i.e., lines 8-18 in Alg. 1
+will only be executed at epoch 10 and 20. m and n
+in Section 3.2 are set to 20 and 4, respectively, with
+the aim of pushing the limit of small math word
+problem solver accuracies and achieving higher per-
+formance. This is orthogonal to the contribution of
+this paper because our proposed customized gener-
+ation strategy and exercise book are demonstrated
+to be effective in Sections 4.4 and 4.5. Although we
+understand that further increasing the occurrences
+of validation and augmentation will further boost
+our accuracy, we limit their magnitude for better
+efficiency and lower cost on API calls. During val-
+idation, we generate 2 zero-shot and 2 few-shot
+similar problems for each source problem in the
+exercise book, therefore k = 4 in Alg. 1.
+4.3 Comparison with Baselines
+In order to demonstrate the effectiveness of our
+knowledge distillation approach, we compare our
+method with several strong baselines, including the
+14389
+
+--- PAGE 7 ---
+Dataset Backbone In-Distribution
+Random Half Target
+ASDiv-a
+GTS 77.5 77.8 79.0
+RoBERTa-base 84.3 85.2 84.6
+RoBERTa-large 90.1 90.3 90.6
+MAWPS
+GTS 89.2 88.9 89.3
+RoBERTa-base 90.3 90.3 91.0
+RoBERTa-large 91.4 92.3 92.8
+SV AMP
+GTS 47.7 49.6 50.3
+RoBERTa-base 72.1 72.8 73.3
+RoBERTa-large 80.8 79.9 80.9
+Dataset Backbone Out-of-Distribution
+Random Half Target
+SV AMP
+GTS 33.6 36.3 38.2
+RoBERTa-base 50.1 50.8 55.3
+RoBERTa-large 62.9 63.1 65.0
+Table 2: Results of different problem generation strate-
+gies on three datasets under in-distribution and out-of-
+distribution (OOD) testing. Boldface indicates the best
+result among the three strategies.
+best fine-tuned baseline, the best LLM-enhanced
+knowledge distillation baseline, and few-shot chain-
+of-thought (CoT) prompting ( Wei et al. , 2022b),
+using the MAWPS, ASDiv-a, and SV AMP datasets.
+The results presented in Table 1 show that our
+approach outperforms all the baselines on the
+MAWPS and ASDiv-a datasets, achieving 94.7%
+and 93.3% solving accuracy, respectively. For
+the SV AMP dataset, our approach outperforms the
+best LLM-enhanced knowledge distillation base-
+line, achieving 85.4% accuracy on the SV AMP
+(ID) dataset, which is a significant improvement
+over the prior best accuracy of 65.0% achieved by
+fine-tuning. On the SV AMP (OOD) dataset, our
+approach achieves a solving accuracy of 76.4%,
+which is lower than CoT-based LLMs, but much
+higher than the fine-tuned baselines. We also show
+the original performance of backbone solvers with-
+out any additional exercises. To obtain best per-
+formance in Table
+1, our solvers use about 20x
+more MWPs than the original training set to train.
+Overall, our results indicate that our knowledge dis-
+tillation approach achieves superior performance
+with much fewer parameters than the prior state-of-
+the-art LLMs, and outperforms the best fine-tuning
+and knowledge distillation baselines on all datasets.
+Training set
+as exercise book
+Same size
+as training set n = 2 n = 4
+Base 54.6 59.8 60.4 65.2
+Large 64.7 69.8 70.2 72.7
+Table 3: Performance comparison of using training set
+and different sizes of exercise book for validation on
+SV AMP dataset.
+4.4 Analysis on Generation Strategy
+The performance of student solvers can be signif-
+icantly impacted by the generation strategies em-
+ployed to create the exercise problems. In this anal-
+ysis, we explore the effectiveness of three different
+generation strategies: random, half, and target (us-
+ing threshold values of λ = 0, 0. 5, 1, respectively)
+on three datasets, in both in-distribution and out-
+of-distribution settings. Our goal is to identify the
+best strategy for maximizing the student model’s
+performance. We remove the initial augmentation
+(setting m = 0 ) and lower the number of genera-
+tions in this analysis to improve the efficiency of
+the experiments. Therefore, the results presented in
+Table 2 differ from our best results in Table 1. Our
+analysis reveals that the targeted generation strat-
+egy mostly outperforms the other two strategies.
+This suggests that our proposed targeted generation
+is an effective approach for identifying the weak
+areas of student solvers and improving them in a
+customized way.
+Moreover, we can clearly see that the improve-
+ment is more noticeable in the OOD scenario. A
+possible reason for this could be that in the ID situ-
+ation, where the training and testing sets have some
+shared knowledge components, using random gen-
+eration for the source problems in the training set
+also helps to enhance the performance on the test-
+ing set. On the other side, in the OOD scenario,
+where there’s a large gap between the training and
+testing sets, our approach of creating tailored ex-
+ercises specifically targets the weak points of the
+student model, leading to a more effective boost in
+its accuracy.
+4.5 Analysis on Exercise Book
+We conducted an experiment to demonstrate the
+effectiveness of our proposed exercise book by re-
+placing the original training set with the exercise
+book and changing the size
+m. As illustrated in
+Table 3, the performance of generating a same-size
+exercise book is significantly better than that of us-
+14390
+
+--- PAGE 8 ---
+14391
+
+--- PAGE 9 ---
+4.7 Case Study
+In Table 4, we present several example problems
+generated by our method, comprising both high-
+quality and problematic outputs. The first case
+demonstrates the LLM’s ability to produce a math-
+ematically equivalent problem using distinct key-
+words. The second successful instance yields a sub-
+problem derived from the source problem, which
+has been proven to facilitate a better understand-
+ing of mathematical word problems for models
+(Shridhar et al., 2022a). However, not all generated
+problems are ideal. As illustrated in the third exam-
+ple, our method occasionally generates MWPs with
+incorrect formatting, rendering them unsuitable for
+training our solver. As a result, we filter out such
+outputs to maintain the quality and accuracy of our
+training data, by checking if the generated answer
+is a valid mathematical equation.
+5 Conclusion
+In this work, we present a novel approach CEMAL
+to use large language models to facilitate knowl-
+edge distillation in math word problem solving.
+Our method first generates an exercise book to eval-
+uate student models and then provides additional
+training exercises that are customized to the learn-
+ing needs of the student model, thereby improving
+the student solver’s ability to solve MWP . Our ex-
+tensive experimental results demonstrate that our
+proposed approach outperforms all fine-tuned and
+knowledge distillation baselines on all datasets,
+while achieving competitive performance against
+LLMs with significantly fewer parameters. Addi-
+tionally, we explore different selection generation
+strategies, revealing that our proposed customized
+generation strategy is the most effective method,
+especially in the in-distribution setting. In our fu-
+ture work, we aim to extend this approach to other
+NLP tasks to evaluate its generalization capability.
+Limitations
+Firstly, our approach necessitates meticulous
+prompt design to generate exercises, which in-
+evitably entails human intervention. This aspect
+could introduce potential bias or variability and
+may not scale efficiently.
+Secondly, we have not explicitly addressed the
+quality and correctness of the generated problems.
+Codes and data are available at https://github.com/
+Zhenwen-NLP/CEMAL.
+Our current filtering process only eliminates prob-
+lems with incorrect formatting. Thus, there exists a
+significant opportunity for enhancing the effective-
+ness of our approach by incorporating mechanisms
+for evaluating and ensuring the quality and correct-
+ness of the generated exercises.
+References
+Ghodai Abdelrahman, Qing Wang, and Bernardo Nunes.
+2023. Knowledge tracing: A survey. ACM Comput-
+ing Surveys, 55(11):1±37.
+Tom Brown, Benjamin Mann, Nick Ryder, Melanie
+Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind
+Neelakantan, Pranav Shyam, Girish Sastry, Amanda
+Askell, et al. 2020. Language models are few-shot
+learners. NeruIPS, 33:1877±1901.
+Wenhu Chen, Xueguang Ma, Xinyi Wang, and
+William W Cohen. 2022. Program of thoughts
+prompting: Disentangling computation from reason-
+ing for numerical reasoning tasks. arXiv preprint
+arXiv:2211.12588.
+Aakanksha Chowdhery, Sharan Narang, Jacob Devlin,
+Maarten Bosma, Gaurav Mishra, Adam Roberts,
+Paul Barham, Hyung Won Chung, Charles Sutton,
+Sebastian Gehrmann, et al. 2022. Palm: Scaling
+language modeling with pathways. arXiv preprint
+arXiv:2204.02311.
+Albert T Corbett and John R Anderson. 1994. Knowl-
+edge tracing: Modeling the acquisition of procedural
+knowledge. User modeling and user-adapted inter-
+action, 4:253±278.
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and
+Kristina Toutanova. 2019. Bert: Pre-training of deep
+bidirectional transformers for language understand-
+ing. In NAACL, pages 4171±4186.
+Shizhe Diao, Pengcheng Wang, Y ong Lin, and Tong
+Zhang. 2023. Active prompting with chain-of-
+thought for large language models. arXiv preprint
+arXiv:2302.12246.
+Charles R Fletcher. 1985. Understanding and solving
+arithmetic word problems: A computer simulation.
+Behavior Research Methods, Instruments, & Comput-
+ers, 17(5):565±571.
+Peggy Grant and Dale Basye. 2014. Personalized learn-
+ing: A guide for engaging students with technology .
+International Society for Technology in Education.
+John Hattie and Helen Timperley. 2007. The power of
+feedback. Review of educational research, 77(1):81±
+112.
+Mary Hegarty, Richard E Mayer, and Christopher A
+Monk. 1995. Comprehension of arithmetic word
+problems: A comparison of successful and unsuc-
+cessful problem solvers. Journal of educational psy-
+chology, 87(1):18.
+14392
+
+--- PAGE 10 ---
+Namgyu Ho, Laura Schmid, and Se-Y oung Y un. 2022.
+Large language models are reasoning teachers. arXiv
+preprint arXiv:2212.10071.
+Sepp Hochreiter and Jürgen Schmidhuber. 1997. Long
+short-term memory. Neural computation, 9(8):1735±
+1780.
+Mohammad Javad Hosseini, Hannaneh Hajishirzi, Oren
+Etzioni, and Nate Kushman. 2014. Learning to solve
+arithmetic word problems with verb categorization.
+In EMNLP, pages 523±533.
+Danqing Huang, Shuming Shi, Chin-Y ew Lin, and Jian
+Yin. 2017. Learning fine-grained expressions to solve
+math word problems. In EMNLP, pages 805±814.
+Shifeng Huang, Jiawei Wang, Jiao Xu, Da Cao, and
+Ming Y ang. 2021. Recall and learn: A memory-
+augmented solver for math word problems. In Find-
+ings of EMNLP, pages 786±796.
+Zhanming Jie, Jierui Li, and Wei Lu. 2022. Learning
+to reason deductively: Math word problem solving
+as complex relation extraction. In ACL, pages 5944±
+5955.
+Diederik P Kingma and Jimmy Ba. 2015. Adam: A
+method for stochastic optimization. ICLR.
+Kenneth R Koedinger and Mitchell J Nathan. 2004. The
+real story behind story problems: Effects of represen-
+tations on quantitative reasoning. The journal of the
+learning sciences, 13(2):129±164.
+Takeshi Kojima, Shixiang Shane Gu, Machel Reid, Y u-
+taka Matsuo, and Y usuke Iwasawa. 2022. Large lan-
+guage models are zero-shot reasoners. NeurIPS.
+Rik Koncel-Kedziorski, Hannaneh Hajishirzi, Ashish
+Sabharwal, Oren Etzioni, and Siena Dumas Ang.
+2015. Parsing algebraic word problems into equa-
+tions. TACL, 3:585±597.
+Rik Koncel-Kedziorski, Subhro Roy, Aida Amini, Nate
+Kushman, and Hannaneh Hajishirzi. 2016. Mawps:
+A math word problem repository. In NAACL, pages
+1152±1157.
+Nate Kushman, Y oav Artzi, Luke Zettlemoyer, and
+Regina Barzilay. 2014. Learning to automatically
+solve algebra word problems. In ACL, pages 271±
+281.
+Yihuai Lan, Lei Wang, Qiyuan Zhang, Y unshi Lan,
+Bing Tian Dai, Y an Wang, Dongxiang Zhang, and Ee-
+Peng Lim. 2022. Mwptoolkit: An open-source frame-
+work for deep learning-based math word problem
+solvers. In AAAI, volume 36, pages 13188±13190.
+Jierui Li, Lei Wang, Jipeng Zhang, Y an Wang, Bing Tian
+Dai, and Dongxiang Zhang. 2019. Modeling intra-
+relation in math word problems with different func-
+tional multi-head attentions. In ACL, pages 6162±
+6167.
+Shiyang Li, Jianshu Chen, Y elong Shen, Zhiyu Chen,
+Xinlu Zhang, Zekun Li, Hong Wang, Jing Qian,
+Baolin Peng, Yi Mao, et al. 2022a. Explanations
+from large language models make small reasoners
+better. arXiv preprint arXiv:2210.06726.
+Zhongli Li, Wenxuan Zhang, Chao Y an, Qingyu Zhou,
+Chao Li, Hongzhi Liu, and Y unbo Cao. 2022b. Seek-
+ing patterns, not just memorizing procedures: Con-
+trastive learning for solving math word problems.
+Findings of ACL.
+Zhenwen Liang, Dian Y u, Xiaoman Pan, Wenlin Y ao,
+Qingkai Zeng, Xiangliang Zhang, and Dong Y u.
+2023. Mint: Boosting generalization in mathematical
+reasoning via multi-view fine-tuning. arXiv preprint
+arXiv:2307.07951.
+Zhenwen Liang, Jipeng Zhang, Lei Wang, Wei Qin,
+Y unshi Lan, Jie Shao, and Xiangliang Zhang. 2022a.
+Mwp-bert: Numeracy-augmented pre-training for
+math word problem solving. In NAACL, pages 997±
+1009.
+Zhenwen Liang, Jipeng Zhang, and Xiangliang Zhang.
+2022b. Analogical math word problems solving with
+enhanced problem-solution association. EMNLP.
+Zhenwen Liang and Xiangliang Zhang. 2021. Solving
+math word problems with teacher supervision. In
+IJCAI, pages 3522±3528.
+Alisa Liu, Swabha Swayamdipta, Noah A Smith, and
+Y ejin Choi. 2022. Wanli: Worker and ai collabora-
+tion for natural language inference dataset creation.
+Findings of EMNLP.
+Qianying Liu, Wenyu Guan, Sujian Li, Fei Cheng,
+Daisuke Kawahara, and Sadao Kurohashi. 2021.
+Roda: reverse operation based data augmentation
+for solving math word problems. IEEE/ACM Trans-
+actions on Audio, Speech, and Language Processing ,
+30:1±11.
+Qianying Liu, Wenyv Guan, Sujian Li, and Daisuke
+Kawahara. 2019a. Tree-structured decoding for solv-
+ing math word problems. In EMNLP, pages 2370±
+2379.
+Yinhan Liu, Myle Ott, Naman Goyal, Jingfei Du, Man-
+dar Joshi, Danqi Chen, Omer Levy, Mike Lewis,
+Luke Zettlemoyer, and V eselin Stoyanov. 2019b.
+Roberta: A robustly optimized bert pretraining ap-
+proach. arXiv preprint arXiv:1907.11692.
+Ilya Loshchilov and Frank Hutter. 2018. Decoupled
+weight decay regularization. In ICLR.
+Lucie Charlotte Magister, Jonathan Mallinson, Jakub
+Adamek, Eric Malmi, and Aliaksei Severyn. 2022.
+Teaching small language models to reason. arXiv
+preprint arXiv:2212.08410.
+Shen-Y un Miao, Chao-Chun Liang, and Keh-Yih Su.
+2020. A diverse corpus for evaluating and developing
+english math word problem solvers. In ACL, pages
+975±984.
+14393
+
+--- PAGE 11 ---
+Arindam Mitra and Chitta Baral. 2016. Learning to
+use formulas to solve simple arithmetic problems. In
+ACL, pages 2144±2153.
+Anirban Mukherjee and Utpal Garain. 2008. A review
+of methods for automatic understanding of natural
+language mathematical problems. Artificial Intelli-
+gence Review, 29:93±122.
+Arkil Patel, Satwik Bhattamishra, and Navin Goyal.
+2021. Are nlp models really able to solve simple
+math word problems? In NAACL, pages 2080±2094.
+Subhro Roy and Dan Roth. 2015. Solving general arith-
+metic word problems. In EMNLP, pages 1743±1752.
+Subhro Roy, Tim Vieira, and Dan Roth. 2015. Rea-
+soning about quantities in natural language. TACL,
+3:1±13.
+Zhihong Shao, Y eyun Gong, Y elong Shen, Min-
+lie Huang, Nan Duan, and Weizhu Chen. 2023.
+Synthetic prompting: Generating chain-of-thought
+demonstrations for large language models. arXiv
+preprint arXiv:2302.00618.
+Jianhao Shen, Yichun Yin, Lin Li, Lifeng Shang, Xin
+Jiang, Ming Zhang, and Qun Liu. 2021. Generate &
+rank: A multi-task framework for math word prob-
+lems. In Findings of EMNLP, pages 2269±2279.
+Shuming Shi, Y uehui Wang, Chin-Y ew Lin, Xiaojiang
+Liu, and Y ong Rui. 2015. Automatically solving
+number word problems by semantic parsing and rea-
+soning. In EMNLP, pages 1132±1142.
+Kumar Shridhar, Jakub Macina, Mennatallah El-Assady,
+Tanmay Sinha, Manu Kapur, and Mrinmaya Sachan.
+2022a. Automatic generation of socratic subques-
+tions for teaching math word problems. In EMNLP.
+Kumar Shridhar, Alessandro Stolfo, and Mrinmaya
+Sachan. 2022b. Distilling multi-step reasoning capa-
+bilities of large language models into smaller mod-
+els via semantic decompositions. arXiv preprint
+arXiv:2212.00193.
+Ben Wang and Aran Komatsuzaki. 2021. Gpt-
+j-6b: A 6 billion parameter autoregressive lan-
+guage model
+. https://github.com/kingoflolz/
+mesh-transformer-jax .
+Lei Wang, Y an Wang, Deng Cai, Dongxiang Zhang,
+and Xiaojiang Liu. 2018. Translating a math word
+problem to a expression tree. In EMNLP, pages 1064±
+1069.
+Xuezhi Wang, Jason Wei, Dale Schuurmans, Quoc Le,
+Ed Chi, and Denny Zhou. 2023. Self-consistency im-
+proves chain of thought reasoning in language mod-
+els. ICLR.
+Y an Wang, Xiaojiang Liu, and Shuming Shi. 2017.
+Deep neural solver for math word problems. In
+EMNLP, pages 845±854.
+Y ufei Wang, Can Xu, Qingfeng Sun, Huang Hu,
+Chongyang Tao, Xiubo Geng, and Daxin Jiang. 2022.
+Promda: Prompt-based data augmentation for low-
+resource nlu tasks. In ACL, pages 4242±4255.
+Jason Wei, Yi Tay, Rishi Bommasani, Colin Raffel,
+Barret Zoph, Sebastian Borgeaud, Dani Y ogatama,
+Maarten Bosma, Denny Zhou, Donald Metzler, et al.
+2022a. Emergent abilities of large language models.
+Transactions on Machine Learning Research.
+Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten
+Bosma, Ed Chi, Quoc Le, and Denny Zhou. 2022b.
+Chain of thought prompting elicits reasoning in large
+language models. NeurIPS.
+Peter West, Chandra Bhagavatula, Jack Hessel, Jena
+Hwang, Liwei Jiang, Ronan Le Bras, Ximing Lu,
+Sean Welleck, and Y ejin Choi. 2022. Symbolic
+knowledge distillation: from general language mod-
+els to commonsense models. In NAACL, pages 4602±
+4625.
+Zhipeng Xie and Shichao Sun. 2019. A goal-driven
+tree-structured neural model for math word problems.
+In IJCAI, pages 5299±5305.
+Zhicheng Y ang, Jinghui Qin, Jiaqi Chen, and Xiao-
+dan Liang. 2022. Unbiased math word problems
+benchmark for mitigating solving bias. Findings of
+NAACL.
+Jiacheng Y e, Jiahui Gao, Jiangtao Feng, Zhiyong Wu,
+Tao Y u, and Lingpeng Kong. 2022a. Progen: Pro-
+gressive zero-shot dataset generation via in-context
+feedback. Findings of EMNLP.
+Jiacheng Y e, Jiahui Gao, Qintong Li, Hang Xu, Jiangtao
+Feng, Zhiyong Wu, Tao Y u, and Lingpeng Kong.
+2022b. Zerogen: Efficient zero-shot learning via
+dataset generation. EMNLP.
+Jipeng Zhang, Lei Wang, Roy Ka-Wei Lee, Yi Bin, Y an
+Wang, Jie Shao, and Ee-Peng Lim. 2020. Graph-to-
+tree learning for solving math word problems. In
+ACL, pages 3928±3937.
+Chujie Zheng, Sahand Sabour, Jiaxin Wen, and
+Minlie Huang. 2022. Augesc: Large-scale data
+augmentation for emotional support conversation
+with pre-trained language models. arXiv preprint
+arXiv:2202.13047.
+Denny Zhou, Nathanael Schärli, Le Hou, Jason Wei,
+Nathan Scales, Xuezhi Wang, Dale Schuurmans,
+Olivier Bousquet, Quoc Le, and Ed Chi. 2023. Least-
+to-most prompting enables complex reasoning in
+large language models. ICLR.
+14394
+
+--- PAGE 12 ---
+14395
+
+--- PAGE 13 ---
+14396

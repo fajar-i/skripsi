@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="Activity-Station-Rotation">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1440" pageHeight="3520" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lane_siswa" value="Siswa (Kelompok A &amp; Kelompok B / 34 Siswa)" style="swimlane;startSize=40;fillColor=#e1f5fe;strokeColor=#0288d1;fontStyle=1;fontSize=13;fontColor=#01579b;align=center;horizontal=1;collapsible=0;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="440" height="3460" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_guru" value="Guru Pengampu (Roving Teacher / Fasilitator)" style="swimlane;startSize=40;fillColor=#fff8e1;strokeColor=#ffa000;fontStyle=1;fontSize=13;fontColor=#ff6f00;align=center;horizontal=1;collapsible=0;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="500" y="40" width="440" height="3460" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_sys" value="Sistem LogiTrace (Mesin L3 &amp; RAG Orchestrator)" style="swimlane;startSize=40;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=13;fontColor=#4a148c;align=center;horizontal=1;collapsible=0;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="960" y="40" width="440" height="3460" as="geometry" />
+        </mxCell>
+        <mxCell id="b1" value="FASE 1: PEMBUKAAN, APERSEPSI &amp; PEMBAGIAN ZONA (00:00 - 05:00 WIB / 5 Menit)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="1360" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="act_start" value="Mulai Pembelajaran&#xa;(TP 2.1 &amp; TP 2.2)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="630" y="130" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="act_g_open" value="Membuka kelas, salam, apersepsi,&#xa;dan menjelaskan skenario Station Rotation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="590" y="190" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_g_split" value="Membagi rombel XI TKJ 1 (34 siswa):&#xa;- Kelompok A (17 siswa) -&gt; Zona A&#xa;- Kelompok B (17 siswa) -&gt; Zona B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="590" y="260" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_prep" value="Mendengarkan pengarahan dan&#xa;bergerak menuju zona yang ditentukan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="130" y="260" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b2" value="FASE 2: SIKLUS ROTASI 1 (05:00 - 40:00 WIB / 35 Menit) — KEL. A (ZONA A) &amp; KEL. B (ZONA B)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="40" y="330" width="1360" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_zona_a1" value="KELOMPOK A (Zona A - Lab PC 1:1):&#xa;Menjalankan Jobsheet Praktik Konfigurasi&#xa;Jaringan Kabel &amp; Nirkabel (MikroTik/Cisco)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="380" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_zona_b1" value="KELOMPOK B (Zona B - Meja Kuis):&#xa;Buka Smartphone, akses LogiTrace Web,&#xa;dan lakukan login akun siswa" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="270" y="380" width="190" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_auth" value="Autentikasi akun, muat state kognitif:&#xa;m_{s,k} = 0.25 (baseline 12 KCs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="380" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_coldstart" value="Sajikan 6 Butir Kalibrasi Acak Seimbang&#xa;(d1, d2, d3 across KCs)&#xa;Flag: is_calibration = TRUE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="460" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_coldstart" value="Siswa mengerjakan 6 butir kalibrasi&#xa;tanpa bantuan petunjuk (cold-start baseline)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="270" y="460" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_eval_cold" value="Evaluasi respon r in {0,1},&#xa;kalkulasi m awal tiap KC,&#xa;insert append-only interactions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="550" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_calc_zpd" value="Hitung estimasi probabilitas sukses:&#xa;p_hat(q) = sigmoid(logit(m) + theta_d)&#xa;Filter kandidat butir: p_hat in [0.60, 0.85]&#xa;Prioritaskan KC terendah" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="640" width="250" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_serve_zpd" value="Kirim butir adaptif terpilih ke client smartphone siswa" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="740" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_read_item" value="Siswa membaca soal adaptif ZPD&#xa;dan menganalisis opsi jawaban" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="140" y="740" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_s_hint" value="Butuh Petunjuk&#xa;Sokratik?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="190" y="820" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_req_hint" value="Klik 'Minta Petunjuk'&#xa;(Trigger Agen T2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="320" y="895" width="140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_t2_rag" value="Agen T2: Retrieve konteks KB dari pgvector,&#xa;generate prompt sokratik ke LLM Lokal&#xa;(Qwen2.5-3B, max 60 kata, guiding not solving)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="885" width="260" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_sys_guard" value="Lolos Leakage Guard&#xa;&amp; Latency &lt;= 3.0s?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="975" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_hint_ok" value="Sajikan T2 Socratic Hint ke siswa&#xa;(Set pengali mastery h = 0.5)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="980" y="1065" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_hint_fb" value="Fallback instan (&lt;50ms) ke Static Curated Hint Bank&#xa;(Set pengali mastery h = 0.5)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#e53935;fontSize=10;fontColor=#b71c1c;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="1065" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_view_hint" value="Membaca petunjuk scaffolding dan menganalisis ulang soal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="230" y="1140" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_submit" value="Memilih opsi dan submit jawaban" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1210" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_update_m" value="Mesin L3 Deterministic Update (&lt;1 ms):&#xa;- Jika r=1: m = m + alpha_d * (1-m) * h&#xa;- Jika r=0: m = m - gamma_d * m&#xa;Strict clipping: m in [0.02, 0.98]&#xa;Append-only log interactions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="1200" width="260" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_ws_push" value="WebSocket broadcast update metrik&#xa;ke Dasbor Ambient Guru real-time" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="1300" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="act_g_ambient" value="Dasbor Ambient Guru update real-time:&#xa;Radar 12 KCs kelas &amp; Top-3 Stuck Students" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="580" y="1300" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_g_stuck" value="Deteksi Siswa Stuck?&#xa;(Hint &gt;= 2 / Waktu &gt; 120s&#xa;/ Delta m &lt; 0)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="625" y="1370" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="act_g_intervene" value="Intervensi Klinis Tatap Muka:&#xa;Guru mendatangi meja siswa, memberikan&#xa;scaffolding lisan (guiding, not solving)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="580" y="1475" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_receive_scaff" value="Siswa menerima bimbingan guru dan&#xa;memperbaiki penalaran teknis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1480" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_g_roving_cont" value="Guru terus berkeliling mengawasi&#xa;Zona A (praktik) dan Zona B (kuis)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="580" y="1560" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_sys_done" value="Butir adaptif ke-20&#xa;sudah selesai?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="1465" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_eval_done" value="Menyelesaikan 20 butir soal,&#xa;melihat profil penguasaan pribadi (Rotasi 1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1560" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b3" value="FASE 3: TRANSISI PERGANTIAN STASIUN (40:00 - 42:00 WIB / 2 Menit)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1640" width="1360" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="act_g_bell" value="Guru membunyikan lonceng sinyal rotasi&#xa;(Timer 35 menit Rotasi 1 berakhir)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="590" y="1690" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_rotate" value="TRANSISI ROTASI STASIUN:&#xa;- Kelompok A: Rapikan PC Lab, bergerak ke meja Zona B&#xa;- Kelompok B: Rapikan meja, bergerak ke PC Lab Zona A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="110" y="1685" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b4" value="FASE 4: SIKLUS ROTASI 2 (42:00 - 77:00 WIB / 35 Menit) — KEL. B (ZONA A) &amp; KEL. A (ZONA B)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1770" width="1360" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_zona_a2" value="KELOMPOK B (Zona A - Lab PC 1:1):&#xa;Praktik konfigurasi jaringan kabel &amp; nirkabel&#xa;(mengikuti alur jobsheet)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1820" width="200" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_zona_b2" value="KELOMPOK A (Zona B - Meja Kuis):&#xa;Evaluasi Formatif Adaptif LogiTrace&#xa;(Cold-start 6 butir -&gt; ZPD Adaptive 14 butir)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="270" y="1820" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="act_g_roving2" value="Guru melanjutkan pemantauan roving,&#xa;inspeksi dasbor ambient, dan&#xa;intervensi scaffolding terarah" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="590" y="1820" width="240" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_cycle2" value="LogiTrace memproses interaksi Kelompok A,&#xa;update mastery L3, dan deteksi stuck" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="1820" width="240" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_all_done" value="Seluruh siswa (34 siswa XI TKJ 1)&#xa;telah menuntaskan 20 butir evaluasi formatif" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="1915" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b5" value="FASE 5: SESI PLENO REFLEKSI &amp; REKOMENDASI PEER-TUTORING (77:00 - 85:00 WIB / 8 Menit)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1990" width="1360" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_gather" value="Seluruh siswa (34 siswa) berkumpul kembali&#xa;di ruang tengah untuk sesi pleno kelas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="2040" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_g_req_t3" value="Guru menekan tombol 'Generate Summary&#xa;&amp; Peer Tutoring' di Dasbor Ambient" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="590" y="2040" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_t3_engine" value="Agen T3 mengeksekusi analisis akhir sesi:&#xa;1. Agregasi data 34 siswa pada 12 KCs&#xa;2. Algoritma Bipartite Matching Peer-Tutoring:&#xa;   Tutor (m &gt;= 0.70) &lt;-&gt; Mentee (m &lt; 0.40)&#xa;3. Prompting LLM Qwen2.5-3B untuk narasi refleksi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="2030" width="270" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sys_t3_show" value="Kirim narasi refleksi kelas &amp; matriks rekomendasi&#xa;pasangan tutor sebaya ke Dasbor Guru" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="2140" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_g_review_t3" value="Guru memaparkan temuan miskonsepsi kelas,&#xa;ulasan KCs terlemah, dan mengumumkan&#xa;pasangan tutor sebaya tindak lanjut" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="580" y="2135" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s_reflect" value="Siswa menyimak refleksi bersama,&#xa;menerima pasangan peer-tutoring,&#xa;dan mencatat target penguatan kompetensi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="2225" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_g_close" value="Guru memberikan apresiasi, motivasi,&#xa;dan menutup pembelajaran dengan doa" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="590" y="2225" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_end" value="Selesai Pembelajaran&#xa;Station Rotation" style="ellipse;shape=doubleEllipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="630" y="2315" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_500" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" edge="1" parent="1" source="act_start" target="act_g_open">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_501" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" edge="1" parent="1" source="act_g_open" target="act_g_split">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_502" value="Instruksi Pembagian Zona" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="act_g_split" target="act_s_prep">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_503" value="Kel. A (Zona A)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.25;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_s_prep" target="act_s_zona_a1">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_504" value="Kel. B (Zona B)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.75;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_s_prep" target="act_s_zona_b1">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_505" value="Request Auth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="act_s_zona_b1" target="act_sys_auth">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_506" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" edge="1" parent="1" source="act_sys_auth" target="act_sys_coldstart">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_507" value="Sajikan Butir 1-6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="act_sys_coldstart" target="act_s_coldstart">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_508" value="Submit Jawaban Kalibrasi" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="act_s_coldstart" target="act_sys_eval_cold">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_509" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" edge="1" parent="1" source="act_sys_eval_cold" target="act_sys_calc_zpd">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_510" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" edge="1" parent="1" source="act_sys_calc_zpd" target="act_sys_serve_zpd">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_511" value="Butir Adaptif ZPD" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="act_sys_serve_zpd" target="act_s_read_item">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_512" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" edge="1" parent="1" source="act_s_read_item" target="dec_s_hint">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_513" value="Ya" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="dec_s_hint" target="act_s_req_hint">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_514" value="Kueri Konteks &amp; Prompt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="act_s_req_hint" target="act_sys_t2_rag">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_515" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" edge="1" parent="1" source="act_sys_t2_rag" target="dec_sys_guard">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_516" value="Lolos Guard&#xa;(&lt;=3s)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="dec_sys_guard" target="act_sys_hint_ok">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_517" value="Bocor / Timeout&#xa;(&gt;3s)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="dec_sys_guard" target="act_sys_hint_fb">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_518" value="Petunjuk Sokratik" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.25;" edge="1" parent="1" source="act_sys_hint_ok" target="act_s_view_hint">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="900" y="1090" />
+              <mxPoint x="450" y="1150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_519" value="Static Hint" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=1;entryY=0.75;" edge="1" parent="1" source="act_sys_hint_fb" target="act_s_view_hint">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1290" y="1170" />
+              <mxPoint x="450" y="1170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_520" value="Lanjut Menjawab" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.75;entryY=0;" edge="1" parent="1" source="act_s_view_hint" target="act_s_submit">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_521" value="Tidak (Langsung Jawab)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.25;entryY=0;" edge="1" parent="1" source="dec_s_hint" target="act_s_submit">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_522" value="Submit Pilihan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="act_s_submit" target="act_sys_update_m">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_523" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" edge="1" parent="1" source="act_sys_update_m" target="act_sys_ws_push">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_524" value="WebSocket Push" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="act_sys_ws_push" target="act_g_ambient">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_525" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" edge="1" parent="1" source="act_g_ambient" target="dec_g_stuck">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_526" value="Ya (Stuck)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="dec_g_stuck" target="act_g_intervene">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_527" value="Tatap Muka" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="act_g_intervene" target="act_s_receive_scaff">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_528" value="Selesai Bimbingan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="act_s_receive_scaff" target="act_s_read_item">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="90" y="1505" />
+              <mxPoint x="90" y="765" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_529" value="Tidak" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="dec_g_stuck" target="act_g_roving_cont">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="1410" />
+              <mxPoint x="850" y="1582" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_530" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_sys_ws_push" target="dec_sys_done">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_531" value="Belum (N &lt; 20)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="dec_sys_done" target="act_sys_calc_zpd">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1330" y="1500" />
+              <mxPoint x="1330" y="675" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_532" value="Ya (N = 20)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="dec_sys_done" target="act_s_eval_done">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_533" value="35 Mnt Selesai" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_g_roving_cont" target="act_g_bell">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_534" value="Bel Rotasi" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="act_g_bell" target="act_s_rotate">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_535" value="Kel. B ke Zona A" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.25;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_s_rotate" target="act_s_zona_a2">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_536" value="Kel. A ke Zona B" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.75;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_s_rotate" target="act_s_zona_b2">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_537" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_g_bell" target="act_g_roving2">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_538" value="Interaksi Kuis Kel. A" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="act_s_zona_b2" target="act_sys_cycle2">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_539" value="Selesai Rotasi 2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.25;entryY=0;" edge="1" parent="1" source="act_s_zona_a2" target="act_s_all_done">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="1940" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_540" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.75;entryY=0;" edge="1" parent="1" source="act_s_zona_b2" target="act_s_all_done">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_541" value="Kumpul Pleno" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_s_all_done" target="act_s_gather">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_542" value="Trigger Sesi Selesai" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_g_roving2" target="act_g_req_t3">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_543" value="Generate Request" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="act_g_req_t3" target="act_sys_t3_engine">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_544" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" edge="1" parent="1" source="act_sys_t3_engine" target="act_sys_t3_show">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_545" value="Kirim Laporan T3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="act_sys_t3_show" target="act_g_review_t3">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_546" value="Pemaparan Refleksi" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="act_g_review_t3" target="act_s_reflect">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_547" value="Tindak Lanjut &amp; Penutupan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_g_review_t3" target="act_g_close">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_548" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="act_g_close" target="act_end">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

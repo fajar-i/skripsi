@@ -1,0 +1,112 @@
+LOGBOOK & PANDUAN OBSERVASI MANDIRI PENELITI
+(Dokumen Pegangan Pribadi Peneliti — Tidak Perlu Diberikan ke Guru/Siswa)
+Fungsi Dokumen Ini: Berisi panduan pengamatan mandiri di lab, 4 pertanyaan obrolan santai dengan guru, tabel rekapitulasi data hasil Google Form siswa (mencakup 5 spektrum kejuruan TJKT & 5 dimensi TOLT), serta draf paragraf Bab I yang siap disalin. Cukup bawa dokumen ini di catatan HP/laptop atau dicetak untuk Anda isi sendiri saat berada di sekolah.
+DATA IDENTITAS KUNJUNGAN SEKOLAH
+Nama Sekolah / SMK Mitra		:  SMKN 4 Bandung
+Alamat / Lokasi Sekolah                  :	Jl. Kliningan No. 6, Turangga, Kecamatan Lengkong, Kota Bandung, Jawa Barat 40264
+Hari / Tanggal Pengamatan            :	12 Oktober 2026
+Waktu / Jam Kunjungan	            :  Pukul 14.00 s.d. 15.00 WIB
+Nama Guru Kejuruan		: Yofi Fikri Islami Anshary, S.Pd.
+Kelas yang Diamati                           : Kelas XI TKJ 1 ( lebih banyak yang remed berdasarkan tes formatif sementara )
+Materi yang Sedang Dipelajari	: teknologi jaringan kabel dan nirkabel
+Jumlah Siswa Hadir di Lab		: 39 Siswa (L: 35/ P: 4)
+BAGIAN 1: OBSERVASI MANDIRI FISIK LAB & INTERAKSI SISWA (BELUM)
+(Amati sendiri saat Anda duduk di lab tanpa perlu bertanya ke siapa-siapa)
+A. Inventaris Komputer & Perhitungan Rasio
+	Jumlah Komputer (PC) di Ruang Lab: 
+	Total PC di meja lab: ________ Unit
+	Jumlah PC yang berfungsi normal/menyala: ________ Unit
+	Jumlah PC yang rusak/mati: ________ Unit
+	Kalkulasi Rasio Komputer terhadap Siswa:
+\text{Rasio\ PC}=\frac{\text{Jumlah\ Siswa\ Hadir}}{\text{Jumlah\ PC\ Berfungsi}}=\frac{\ldots \ldots \ldots }{\ldots \ldots \ldots }\approx 1\text{\ PC\ untuk\ }\ldots \ldots \ldots \text{\ Siswa}
+	1 PC : 1 Siswa (Mandiri)
+	1 PC : 2 Siswa (Berpasangan)
+	1 PC : 3+ Siswa (Berkelompok)
+B. Pengamatan Dinamika Kerja Berpasangan (Dominant-Passive Pair)
+Amati beberapa pasang meja siswa yang duduk bersama:
+	Terjadi Dominasi Nyata: Hanya 1 siswa yang aktif mengoperasikan keyboard/mouse, pasangannya cenderung pasif, hanya melihat, mengobrol, atau bermain HP.
+	Bekerja Bergantian: Siswa saling bertukar peran secara aktif.
+	Catatan Khusus Peneliti: 
+________________________________________
+C. Respon Siswa Ketika Praktikum Eror / Tidak Terhubung
+Amati reaksi siswa saat terjadi kegagalan konfigurasi:
+	Siswa langsung menoleh ke meja teman lain untuk menyalin (copy-paste) setelan IP/rute.
+	Siswa mengubah setelan IP secara acak/menebak-nebak tanpa analisis sistematis.
+	Siswa memanggil guru sebelum mencoba memeriksa sendiri.
+	Siswa menelusuri pesan galat dan memeriksa kabel/tabel konfigurasi secara mandiri.
+	Catatan Khusus Peneliti: 
+________________________________________
+D. Ekosistem Smartphone Siswa
+	Mayoritas siswa membawa smartphone pribadi ke sekolah.
+	Sinyal operator seluler di dalam area kelas/lab: [ ] Lancar [ ] Cukup [ ] Lemah/Sulit Sinyal
+________________________________________
+BAGIAN 2: PANDUAN OBROLAN SANTAI DENGAN GURU (10–15 MENIT)
+(Ajukan 4 pertanyaan inti ini secara santai dan mengalir saat berbincang dengan guru mapel)
+1. Materi Tersulit yang Sering Menjadi Kendala Siswa:
+	Pertanyaan: “Pak/Bu, selama mengajarkan materi perencanaan jaringan & konfigurasi dari dasar kelas X sampai masuk kelas XI ini, materi apa yang anak-anak paling sering macet atau gagal paham?”
+	Catatan Jawaban Guru: 
+Mungkin di Host hardening
+(Ceklis topik yang disebut guru: [ ] Logika Perhitungan Biner/IP, [ ] Alur Perutean/Next-Hop, [ ] Troubleshooting ICMP, [ ] Perangkat Fisik/Alat Ukur, [ ] Perintah Dasar CLI)
+2. Daya Nalar Logis vs Hafalan Prosedural:
+	Pertanyaan: “Kalau pas praktikum konfigurasi atau troubleshooting, anak-anak biasanya kalau eror bisa menelusuri secara runut atau cenderung bingung dan nebak-nebak, Pak/Bu?”
+	Catatan Jawaban Guru: 
+Disuruh coba sendiri dulu baru kalau masih tidak bisa baru di bantu
+________________________________________
+(Inti temuan: Apakah guru mengonfirmasi bahwa siswa cenderung menghafal langkah teknis daripada memahami logika sebab-akibat?)
+#3. Dampak Rasio Lab dan Penilaian Individu:
+	Pertanyaan: “Di lab sini biasanya 1 anak pegang 1 PC atau harus berdua ya, Pak? Kalau berdua, biasanya bagaimana pembagiannya dan kendalanya apa bagi penilaian individu?”
+	Catatan Jawaban Guru: 
+1 pc berdua dibagikan secara acak. Penilaian kadang kelompok kadang sendiri sendiri
+________________________________________
+(Inti temuan: Apakah guru merasa kesulitan mengambil nilai objektif pemahaman per individu saat siswa duduk berpasangan?)
+#4. Pelaksanaan Evaluasi Formatif & Umpan Balik:
+	Pertanyaan: “Selama ini kalau kuis formatif harian bentuknya seperti apa ya Pak? Apakah sempat memetakan kelemahan tiap anak secara bertahap, atau waktunya terbatas?”
+	Catatan Jawaban Guru: 
+Sampe sebelum UTS ada formatif, teoritik kuis, lkpd, praktikum. Akhir semester ada uas sumatif teori. Ada uji kompetensi dari pemerintah untuk kelas 3 saja.
+Penliaian formatif biasanya buat liat umpan balik dari peserta didik. Kalau ada siswa yang gabisa, dikasih treatment khusus. Kalau sumatif itu untuk akhir saja. Kalau teori kuis buat formatif. Kalau praktikum pakai scaffolding gaboleh maju kalau belum selesai. Soal formatif kebanyakan disusun bapak. Disamain semua, perlakuan khusus ada di pematerian dan remedial saja. Tergantung kemampuan
+________________________________________
+(Inti temuan: Apakah evaluasi masih bersifat seragam/statis dan guru terkendala waktu untuk mendiagnosis kelemahan tiap siswa?)
+________________________________________
+BAGIAN 3: REKAPITULASI DATA HASIL GOOGLE FORM SISWA
+(Pindahkan angka ringkasan dari tab Summary/Spreadsheet Google Form Anda ke tabel ini)
+	Jumlah Total Siswa Responden (N): ________ Siswa
+A. Data Fasilitas & Kebiasaan Belajar
+No	Indikator Kuantitatif Temuan	Jumlah Siswa	Persentase (%)	Makna Bukti untuk Bab I Skripsi
+1	Siswa Berbagi PC di Lab (1 PC : 2 Siswa)	…	… %	Fakta keterbatasan sarana lab komputer.
+2	Siswa Mengaku Pasif / Teman yang Mendominasi	…	… %	Bukti fenomena dominant-passive pair.
+3	Siswa Memiliki Smartphone Pribadi	…	… %	Bukti kelayakan media asesmen mobile.
+4	Siswa Bingung/Ncontek Teman saat Eror	…	… %	Bukti kebiasaan berpikir prosedural mekanis.
+5	Siswa Merasa Kuis Selama Ini Seragam	…	… %	Bukti evaluasi formatif saat ini masih statis.
+B. Pemetaan Spektrum Kesulitan Materi TJKT (Pertanyaan No. 8)
+Pilihan Aspek Kompetensi TJKT	Jumlah Pemilih	Persentase (%)	Ranking
+Logika Perhitungan & Bilangan Jaringan (Biner, IP, Subnet)	…	… %	…
+Prinsip Alur Pengiriman Data & Perutean (Gateway, Rute)	…	… %	…
+Pelacakan Gangguan (Troubleshooting) Jaringan	…	… %	…
+Media & Perangkat Fisik Jaringan (Kabel UTP/FO, Alat Ukur)	…	… %	…
+Sistem Operasi & Konfigurasi Dasar Perangkat (CLI, OS)	…	… %	…
+#C. Performa Riil 5 Dimensi TOLT (Tobin & Capie, 1981)
+Kasus Soal	Dimensi TOLT yang Diukur	Jumlah Siswa Gagal	Persentase Kegagalan (%)	Makna Bukti Kognitif
+Kasus 1	Controlling Variables
+(Isolasi Masalah Internal vs Eksternal)	…	… %	Siswa berspekulasi tanpa mengontrol variabel secara sekuensial.
+Kasus 2	Proportional Reasoning
+(Efisiensi Prefix Subnet vs Jumlah Host)	…	… %	Siswa tidak memahami perbandingan rasio kapasitas host.
+Kasus 3	Combinatorial Reasoning
+(Urutan Partisi Ruang Non-Overlapping)	…	… %	Siswa gagal menyusun kombinasi alokasi yang sistematis.
+Kasus 4	Probabilistic Reasoning
+(Probabilitas Keputusan Rute Router)	…	… %	Siswa berasumsi subjektif, bukan berbasis aturan probabilitas mesin.
+Kasus 5	Correlational Reasoning
+(Korelasi Sebab-Akibat Pesan Galat ICMP)	…	… %	Siswa menyamaratakan semua jenis galat jaringan.
+________________________________________
+#📝 TEMPLATE PARAGRAF LATAR BELAKANG BAB I (TINGGAL SALIN DATA INI)
+Setelah tabel di atas terisi, Anda tinggal menyalin teks ini ke Latar Belakang Masalah (Bab I) proposal skripsi Anda:
+"Berdasarkan studi pendahuluan yang dilaksanakan pada tanggal [Isi Tanggal] di [Isi Nama SMK] pada siswa kelas XI Konsentrasi Keahlian TKJ dengan melibatkan [N] siswa dan guru mata pelajaran kejuruan, ditemukan sejumlah permasalahan empiris mendasar dalam pembelajaran dan evaluasi:
+Pertama, dari aspek sarana prasarana, hasil observasi menunjukkan rasio ketersediaan komputer laboratorium adalah 1 unit PC digunakan bersama oleh [2] orang siswa. Keterbatasan ini memicu fenomena pasangan dominan-pasif, di mana data angket mengungkap sebanyak [... %] siswa mengaku lebih banyak menjadi pengamat pasif saat praktikum berlangsung karena perangkat didominasi oleh rekan sebangku.
+Kedua, pemetaan kesulitan materi kejuruan menunjukkan bahwa aspek yang paling membingungkan bagi siswa berada pada ranah logika abstrak, yakni [Sebutkan aspek nomor 1, misal: Logika Perhitungan Bilangan Jaringan (... %)] dan [Sebutkan aspek nomor 2, misal: Prinsip Alur Perutean Data (... %)], jauh melampaui kesulitan pada aspek media fisik maupun alat ukur.
+Ketiga, dari aspek kognitif, tes diagnostik berbasis kerangka kerja Test of Logical Thinking (TOLT Tobin & Capie, 1981) menunjukkan defisit penalaran logis formal yang nyata pada kelima dimensinya. Sebanyak [... %] siswa gagal pada dimensi controlling variables dalam mengisolasi variabel gangguan, [... %] siswa gagal pada dimensi proportional reasoning dalam memperhitungkan efisiensi alokasi subnet, [... %] siswa gagal pada dimensi combinatorial reasoning dalam menyusun partisi ruang non-overlapping, [... %] siswa gagal pada dimensi probabilistic reasoning dalam menganalisis pemilihan jalur data, serta [... %] siswa gagal pada dimensi correlational reasoning dalam mengidentifikasi korelasi pesan galat troubleshooting.
+Keempat, hasil wawancara dengan guru kejuruan mengonfirmasi bahwa evaluasi formatif harian selama ini masih bersifat seragam dan konvensional, sehingga pendidik mengalami keterbatasan waktu untuk memetakan lintasan pemahaman dan mendiagnosis miskonsepsi masing-masing siswa secara individual…"
+________________________________________
+Dokumen ini menjadi bukti otentik kegiatan studi pendahuluan peneliti.
+ 
+Bisa lagi pertengahan november. 
+Materinya jadinya nirkabel saja
+Wlan extender ubiquity gak bahas konfigurasi detil, hanya nirkabel bisa nyambung. Baru setup password usid mode access point teori nirkabel mulai dari sejarah, kriteria, kategori, topologi nirkabel adhoc (peer to peer) dan infrastruktur (1 jaringan pakai beberapa perangkat) icmp peer to peer (challenge)

@@ -1,0 +1,1065 @@
+--- PAGE 1 ---
+Contents lists available at ScienceDirect
+Expert Systems With Applications
+journal homepage: www.elsevier.com/locate/eswa
+Aﬀect is key: Enhancing knowledge tracing with hypergraph-based 
+aﬀective state modeling
+Changqin Huang a,b, Xi Cheng b, Yi Wang
+ c,∗, Huicheng Zeng d, Xiaodi Huang
+ e, 
+Qionghao Huang b
+a College of Education, Zhejiang University, Hangzhou, 310058, Zhejiang, China
+b Zhejiang Key Laboratory of Intelligent Education Technology and Application, Zhejiang Normal University, Jinhua, 321004, Zhejiang, China
+c Department of Mathematics, City University of Hong Kong, 999077, Hong Kong, China
+d Shanghai University of Finance and Economics Zhejiang College, Jinhua, 321000, Zhejiang, China
+e School of Computing, Mathematics and Engineering, Charles Sturt University, Albury, 2640, New South Wales, Australia
+a r t i c l e  i n f o
+Keywords:
+Knowledge tracing
+Hypergraph neural network
+Aﬀective state
+ a b s t r a c t
+Contemporary knowledge tracing models have made substantial progress in modeling cognitive learning pat-
+terns, yet their predominant focus on performance metrics overlooks the profound inﬂuence of aﬀective states 
+on educational processes. Aﬀective factors critically shape students’ attentional engagement, concept assimila-
+tion, and problem-solving consistency – dynamics that existing cognitive-centric frameworks often fail to cap-
+ture. We propose the Aﬀective Hypergraph Knowledge Tracing (AHGKT) framework, which incorporates aﬀective 
+intelligence into knowledge tracing through a dual-layer hypergraph architecture. The exercise layer establishes 
+high-order relationships among questions and knowledge concepts, while the aﬀection layer tracks aﬀective pat-
+terns throughout learning sessions. A novel hypergraph convolution operator synergistically fuses these cognitive 
+and aﬀective signals, enabling simultaneous modeling of concept mastery and aﬀective impacts through hier-
+archical graph propagation. Extensive experiments on three real-world datasets demonstrate the superiority of 
+AHGKT, achieving statistically signiﬁcant accuracy improvements of up to 5% over state-of-the-art baselines. The 
+framework’s eﬀectiveness is further validated through ablation studies quantifying the complementary beneﬁts 
+of hypergraph modeling and aﬀective feature integration. By modeling aﬀection as a quantiﬁable predictor of 
+learning outcomes and introducing hypergraph neural networks into the educational domain, this work oﬀers 
+a promising methodological contribution toward aﬀect-aware intelligent tutoring systems. Our ﬁndings provide 
+practical insights and design principles for developing educational AI that better captures the interplay between 
+cognitive and aﬀective dimensions in learning.
+1.  Introduction
+With the development of educational data mining, Knowledge Trac-
+ing has become a key direction in intelligent education research. It aims 
+to assess students’ knowledge mastery and predict their learning per-
+formance (Abdelrahman et al., 2023; Tomasevic et al., 2020). Accurate 
+modeling of students’ knowledge states not only enhances learning eﬀec-
+tiveness but also supports intelligent services such as student proﬁling 
+(Zong et al., 2020)and personalized resource recommendation (Wang 
+et al., 2021).
+The evolution of KT methods has seen signiﬁcant advancements. 
+Early classical models, such as the Bayesian Knowledge Tracing (BKT) 
+(Corbett & Anderson, 1994), predict students’ knowledge mastery us-
+∗ Corresponding author.
+ E-mail addresses: cqhuang@zju.edu.cn (C. Huang), chengxi@zjnu.edu.cn (X. Cheng), ywan72@cityu.edu.hk (Y. Wang), Z2015003@shufe-zj.edu.cn (H. Zeng), 
+xhuang@csu.edu.au (X. Huang), qhhuang@zjnu.edu.cn (Q. Huang).
+ing hidden variables and probabilistic updates. BKT relies on ﬁxed prior 
+parameters, making it less adaptable to diverse and complex learning be-
+haviors. With the development of deep learning (Graves, 2013; Graves 
+et al., 2013) , new breakthroughs have emerged in the KT domain. Deep 
+Knowledge Tracing (DKT) (Piech et al., 2015) leverages Recurrent Neu-
+ral Networks (RNNs) (Lipton et al., 2015) and Long Short Term Mem-
+ory (LSTM) (Hochreiter & Schmidhuber, 1997) to model students’ learn-
+ing sequences, achieving improved performance by continuously updat-
+ing knowledge states. DKT primarily focuses on temporal relationships, 
+lacking the capacity to fully explore complex connections between exer-
+cises. The Self-Attentive Knowledge Tracing (SAKT) (Pandey & Karypis, 
+2019) model assigns weights to exercises using scaled dot-product at-
+tention and multi-head attention mechanisms (Vaswani et al., 2017), 
+https://doi.org/10.1016/j.eswa.2026.133323
+Received 31 March 2025; Received in revised form 9 June 2026; Accepted 13 June 2026
+Expert Systems With Applications 331 (2026) 133323 
+Available online 18 June 2026 
+0957-4174/© 2026 Elsevier Ltd. All rights are reserved, including those for text and data mining, AI training, and similar technologies. 
+
+--- PAGE 2 ---
+C. Huang et al.
+Fig. 1. (a) Correlation statistics between concentration and learning outcomes 
+on the ASSIST2017 dataset. (b) Students exhibit diﬀerent aﬀective states across 
+various exercises.
+capturing the varying impacts of exercises on knowledge state predic-
+tion. It lacks suﬃcient  exploration of the potential relationships between 
+questions. The Graph-based Knowledge Tracing (GKT) (Nakagawa et al., 
+2019) method represents students’ response records as nodes in a graph 
+and employs Graph Convolutional Networks (GCNs) (Kipf & Welling, 
+2016) to propagate information among nodes, enabling precise model-
+ing of complex relationships between knowledge points.
+Although existing KT models perform well, they cannot model the 
+mapping of learners’ complex inner states (such as unstable emotional 
+factors) to the answer results (Mehta, 2022), thus limiting the ability 
+of models to achieve more accurate predictions. As shown in Fig. 1(a), 
+statistical analysis on the ASSIST2017 dataset reveals that higher con-
+centration levels correlate with greater precision. However, most models 
+focus primarily on exercises and response outcomes, failing to eﬀectively 
+capture the potential interactions between students’ aﬀective states and 
+exercises.
+Fig. 1(b) illustrates the variation in concepts and aﬀective states 
+across exercises 𝑞1 to 𝑞5. Although both 𝑞2 and 𝑞3 involve concepts 𝑐2
+and 𝑐3, they correspond to diﬀerent aﬀective states, which may result 
+from diﬀerences in problem diﬃculty  or format. In 𝑞3, students exhibit a 
+higher level of concentration, leading to a correct response, whereas in 
+𝑞2, a lower level of concentration results in an incorrect answer. More-
+over, both 𝑞4 and 𝑞5 involve concept 𝑐4 and are associated with high 
+levels of confusion, ultimately leading to incorrect responses. These ob-
+servations indicate that aﬀective states are closely associated with the 
+underlying knowledge concepts. The variations in aﬀective states in-
+duced by diﬀerent exercises and concepts can signiﬁcantly inﬂuence stu-
+dent learning performance. Consequently, this presents two signiﬁcant 
+challenges for constructing aﬀective knowledge tracing models, specif-
+ically: (1) how to accurately represent aﬀective states, and (2) how to 
+characterize the complex interplay between aﬀective states and under-
+lying knowledge concepts.
+To address these challenges, we construct an exercise-aﬀection hier-
+archical hypergraph and propose an aﬀect-aware hypergraph convolu-
+tion mechanism to explicitly capture high-order relationships among ex-
+ercises involving the same concept (e.g., 𝑞2, 𝑞3, and 𝑞5 for 𝑐3). This novel 
+method, named Aﬀective Hypergraph Knowledge Tracing (AHGKT), in-
+tegrates aﬀective states and exercise-concept interactions to enhance 
+the representation of student knowledge states. AHGKT also reveals the 
+inﬂuence of aﬀective ﬂuctuations on learning behaviors, supporting per-
+sonalized learning and real-time intervention strategies. The key contri-
+butions of this work are summarized as follows.
+• We incorporate aﬀective factors into the knowledge tracing frame-
+work, enhancing the precision and adaptability of knowledge state 
+representation by integrating intrinsic factors such as individual stu-
+dent diﬀerences and problem diﬃculty.
+• We propose an aﬀect-aware hypergraph convolution mechanism, 
+which integrates representations from the exercise and aﬀection lay-
+ers in a hierarchical hypergraph to capture complex high-order inter-
+actions among exercises, knowledge concepts, and aﬀective states.
+• To handle both supervised and unsupervised scenarios, we introduce 
+specialized optimization strategies, enabling the model to learn the 
+inﬂuence of aﬀective states on learning behaviors even in the ab-
+sence of labeled aﬀective data.
+• Experimental results on multiple datasets demonstrate that our 
+model outperforms traditional methods in terms of both accuracy 
+and stability.
+The remainder of this paper is organized as follows. Section 2 reviews 
+related work on knowledge tracking and aﬀective analysis. Section 3 
+introduces the deﬁnitions and notations related to this paper. Section 4 
+presents the proposed AHGKT framework. Section 5 provides the ex-
+perimental results along with detailed analysis. Section 6 concludes the 
+paper.
+2.  Related work
+In this section, we review the work related to knowledge tracing.
+2.1.  Knowledge tracing
+Traditional knowledge tracing models, such as BKT (Corbett & An-
+derson, 1994), use Hidden Markov Models (Baker et al., 2008) to dynam-
+ically track students’ knowledge states. Several important extensions of 
+BKT include personalized BKT, which introduces individual parameters 
+to capture student-speciﬁc diﬀerences (Lee & Brunskill, 2012; Yudelson 
+et al., 2013). For instance, Pardos and Heﬀernan (Pardos & Heﬀernan, 
+2010) focused on heuristically personalizing the prior knowledge proba-
+bility 𝑝 for each student across diﬀerent skills. Additionally, Käser et al. 
+(2017) proposed using a Dynamic Bayesian Network to jointly model 
+multiple skills and the dependencies between them, aiming to capture 
+hierarchical relationships among skills within a single model.
+A pioneering deep learning approach in knowledge tracing is the 
+DKT model (Piech et al., 2015) , which leverages RNNs (Lipton et al., 
+2015) to predict the probability of a student answering a question cor-
+rectly at each time step. Some extended DKT models improve perfor-
+mance by incorporating problem features like problem ID (Sonkar et al., 
+2020) and known diﬃculty  (Shen et al., 2022), or student-related factors 
+such as response rate and practice time (Xiong et al., 2016). DKT+ (Ye-
+ung & Yeung, 2018) reﬁnes the loss function of the original DKT model 
+by incorporating two additional regularization terms. DKVMN (Zhang 
+et al., 2017) employed a combination of static key matrices and dy-
+namic value matrices, further enhancing DKT’s ability to track the state 
+of each concept over time. XKT (Huang et al., 2024b) model integrates 
+multidimensional item response theory into knowledge tracing, simu-
+lating students’ selective perception and knowledge memory processes 
+to enhance interpretability. THKT (Sun et al., 2024) dynamically tracks 
+Expert Systems With Applications 331 (2026) 133323 
+2 
+
+--- PAGE 3 ---
+C. Huang et al.
+students’ target hierarchies and assesses their problem-solving abilities 
+within these hierarchies. Huang et al. (2024a) incorporates causal self-
+attention and gate mechanisms to improve the consistency of students’ 
+knowledge state representations.
+In the task of knowledge tracing, the introduction of attention mech-
+anisms addresses the limitation of traditional models that treat all exer-
+cises equally. Attention mechanisms can identify the importance of dif-
+ferent exercises when predicting the target question and weight various 
+interactions accordingly, thereby improving prediction accuracy. SAKT 
+(Pandey & Karypis, 2019) is the ﬁrst model to introduce self-attention 
+mechanisms into knowledge tracing. It uses the scaled dot-product at-
+tention mechanism and multiple attention heads to learn the importance 
+of diﬀerent exercises during prediction. AKT (Ghosh et al., 2020) in-
+troduces a mechanism called "monotonic attention," which allows the 
+attention weights to decay exponentially over time, reﬂecting the tem-
+poral relevance of student interactions. SAINT (Choi et al., 2020) further 
+extends the Transformer architecture by separating question embed-
+dings and student response embeddings, and incorporates time-related 
+features, such as response time, to reﬁne the attention weights and cap-
+ture the temporal impact on the learning process.
+However, most of these methods consider diﬀerent exercises, elapsed 
+time and other factors, while ignoring the importance of students’ emo-
+tional state to the prediction results. By introducing emotional factors 
+into the attention mechanism, the model can adjust the attention to dif-
+ferent exercises and thus improve the prediction accuracy.
+2.2.  Graph-based knowledge tracing
+Compared to traditional knowledge tracing methods, graph-based 
+models excel at capturing the complex relationships between students, 
+problems, and skills, enabling more comprehensive learning state pre-
+dictions. The GKT (Nakagawa et al., 2019) model represents knowledge 
+components (KCs) and their dependencies as a graph structure, trans-
+forming the knowledge tracing task into a time-series node-level classi-
+ﬁcation problem. The PEBG (Liu et al., 2020) model employs a bipartite 
+graph to embed problems and skills, integrating exercise diﬃculty  in-
+formation during training to enhance prediction accuracy. SGKT (Wu 
+et al., 2022) employs gated graph neural networks to capture students’ 
+knowledge states from session graphs and utilizes GNN (Scarselli et al., 
+2008) to derive embeddings for exercises and skills in the relationship 
+graph.
+To further alleviate representation sparsity, Bi-CLKT (Song et al., 
+2022) introduced contrastive learning on question-KC and KC-KC graphs 
+to produce question embeddings enhanced with structural information 
+from both questions and KCs. More recently, TCL4KT (Sun et al., 2023) 
+introduced a weighted heterogeneous graph-based contrastive learning 
+framework to enhance question representation learning for knowledge 
+tracing. Beyond pairwise graph modeling, the DGEKT (Cui et al., 2024) 
+model leverages a conceptual association hypergraph (Chen et al., 2020; 
+Feng et al., 2019) to model related knowledge concepts within learning 
+interactions, eﬀectively capturing higher-order relationships among ex-
+ercise concepts.
+However, most existing graph-based KT models primarily focus on 
+structural representation learning and neglect the dynamic role of learn-
+ers’ emotional states during the learning process. By introducing an af-
+fective attention mechanism into the hypergraph framework, emotional 
+states can be propagated among skill-related exercises through hyper-
+graph convolution, enabling precise tracking of students’ personalized 
+knowledge states.
+2.3.  Aﬀective eﬀects
+Craig et al. (2004) investigated the emotional changes experienced 
+by college students while learning the basics of computers. Utilizing ob-
+servational methods and a self-designed scale analysis, it was found that 
+confusion and ﬂuency during the learning process are signiﬁcantly pos-
+itively correlated with learning outcomes, whereas boredom exhibits 
+a signiﬁcant negative correlation. Pedro et al. (2013) employed a lo-
+gistic regression model to analyze data from the ASSISTment system, 
+demonstrating that lower levels of boredom, higher levels of confusion, 
+and reduced instances of careless errors are signiﬁcantly associated with 
+an increased probability of college admission. Pardos et al. (2013) ex-
+amined the distribution of emotional states among students with diﬀer-
+ent learning outcomes, ﬁnding that successful students typically demon-
+strate balanced focus and moderate frustration, while unsuccessful stu-
+dents are more prone to boredom or gaming behaviors. Liu et al. (2022) 
+developed a BERT-CNN-based model to automatically detect emotional 
+and cognitive engagement in MOOC discussions and demonstrated their 
+joint eﬀects on learning achievement. Furthermore, Wang et al. (2024) 
+integrated emotion-based estimates of guess and slip parameters with 
+the fundamental neural cognitive diagnostic framework derived from 
+the DINA model to diagnose the knowledge proﬁciency levels of stu-
+dents.
+However, despite the revealed association between emotional states 
+and learning performance, how to incorporate emotional dynamics into 
+knowledge tracing models to enhance the precision of modeling stu-
+dents’ knowledge states remains a key challenge.
+3.  Preliminaries
+Table 1 
+Main notations in this paper.
+ Symbol  Deﬁnition
+𝑡  Time index.
+𝑛, 𝑚  Number of exercises and concepts.
+𝑥𝑡  Student interaction at time 𝑡.
+  Interaction sequence {𝑥1, … , 𝑥𝑡}.
+𝑞𝑡  Exercise identiﬁer at time 𝑡.
+𝑐𝑗 𝑗th knowledge concept.
+𝑞  Exercise node set in hypergraph.
+𝑎  Aﬀective state node set.
+𝑖𝑛  Hyperedge set for knowledge concepts.
+𝑜𝑢𝑡  Inter-layer edges between exercise and aﬀective layers.
+  Exercise-aﬀect hierarchical hypergraph.
+𝑨 ∈ {0, 1}𝑛×𝑚  Exercise-concept incidence matrix.
+We consider a student’s problem-solving process as an interaction 
+between the student and the problem, which is inﬂuenced not only by 
+the student’s knowledge mastery but also by factors such as emotional 
+state and the number of practice attempts. Therefore, we represent the 
+student’s exercise at time 𝑡 as 𝑥𝑡 = (𝑠𝑡, 𝑞𝑡, 𝑐𝑡, 𝑎𝑡𝑡𝑡, 𝑟𝑡, 𝑎𝑓 𝑡), where 𝑠𝑡 denotes 
+the student ID, 𝑞𝑡 represents the question ID, 𝑐𝑡 indicates the knowl-
+edge concept associated with the question, 𝑎𝑡𝑡𝑡 refers to the number of 
+attempts made by the student, 𝑎𝑓 𝑡 represents the student’s emotional 
+state, and 𝑟𝑡 denotes the response (correct or incorrect). Given the se-
+quence of exercises from time step 1 to 𝑡,  = {𝑥1, 𝑥2, … , 𝑥𝑡}, and the 
+question ID at the next time step 𝑞𝑡+1, the goal of knowledge tracing 
+is to predict the probability that the student will correctly answer the 
+question at time 𝑡 + 1, formulated as 𝑝(𝑟𝑡+1 = 1| , 𝑞𝑡+1). For clarity, the 
+main symbols used throughout this paper are summarized in Table 1.
+4.  The proposed method
+In this section, we propose an Aﬀective Hypergraph Knowledge 
+Tracing (AHGKT) framework, designed to capture the aﬀective inter-
+actions of students during problem-solving, thereby enhancing the per-
+formance of knowledge tracing. As illustrated in Fig. 2, the framework 
+ﬁrst constructs a layered hypergraph, comprising an exercise hyper-
+graph layer and an aﬀection layer. These layers respectively model the 
+high-dimensional relationships between problems and knowledge con-
+cepts, as well as the inﬂuence of students’ aﬀective characteristics on 
+Expert Systems With Applications 331 (2026) 133323 
+3 
+
+--- PAGE 4 ---
+C. Huang et al.
+Fig. 2. The overall architecture of the AHGKT model. An exercise hypergraph layer and an aﬀective layer are ﬁrst constructed. Then, we design an aﬀection-aware 
+hypergraph convolution network to integrate aﬀective and knowledge representations. Finally, a GRU is employed to predict students’ knowledge states.
+the problem-solving process. Subsequently, by integrating the two struc-
+tures, an aﬀection-aware hypergraph convolution is constructed, eﬀec-
+tively capturing the complex high-order relationships among aﬀections, 
+problems, and knowledge concepts. Finally, the model achieves collab-
+orative modeling of aﬀective features and knowledge states through the 
+joint optimization of the aﬀection layer modeling loss and prediction 
+loss, providing more comprehensive and accurate representations for 
+knowledge tracing.
+4.1.  Exercise-aﬀection hierarchical hypergraph
+The hierarchical hypergraph consists of the exercise layer and the af-
+fection layer. The exercise layer connects exercise nodes through hyper-
+edges based on knowledge concepts, capturing the high-dimensional re-
+lationships between exercises and knowledge points. The aﬀection layer 
+models the interactions between students’ aﬀection states and exercises, 
+capturing the inﬂuence of aﬀection on learning behaviors.
+4.1.1.  Exercise-layer hypergraph
+To more comprehensively model the complex interactions among 
+exercises, knowledge concepts, and aﬀective states, we ﬁrst construct 
+an exercise-aﬀection hierarchical hypergraph  = {{𝑞, 𝑎}, 𝑖𝑛, 𝑜𝑢𝑡}, 
+where 𝑞 and 𝑎 denote the sets of exercise nodes and aﬀective state 
+nodes, respectively. The exercise-layer hypergraph is deﬁned as a sub-
+structure 𝑖𝑛 = (𝑞, 𝑖𝑛), which captures the high-order relationships be-
+tween exercises and knowledge concepts. Unlike conventional graphs 
+that represent pairwise relations, hypergraphs allow each hyperedge to 
+connect multiple nodes, making them suitable for modeling the many-
+to-many correspondence between exercises and concepts. Formally, 
+𝑞 = {𝑞1, 𝑞2, … , 𝑞𝑛} denotes the set of exercises, and 𝑖𝑛 = {𝑐1, 𝑐2, … , 𝑐𝑚}
+represents the set of hyperedges corresponding to knowledge concepts. 
+Each hyperedge 𝑐𝑗 ∈ 𝑖𝑛 connects all exercises associated with the con-
+cept 𝑗th, thereby capturing high-order knowledge dependencies.
+The connectivity between exercises and knowledge concepts is rep-
+resented by an incidence matrix 𝑨 ∈ {0, 1}𝑛×𝑚, where 𝑛 and 𝑚 denote 
+the numbers of exercises and concepts, respectively. The element 𝑨𝑖𝑗 is 
+deﬁned as:
+𝑨𝑖𝑗 =
+{
+1, if 𝑞𝑖 ∈ 𝑐𝑗 ,
+0, otherwise.
+(1)
+In addition, to incorporate aﬀective information, we introduce inter-
+layer hyperedges 𝑜𝑢𝑡 to model the correspondence between the exercise 
+layer and the aﬀective layer. Speciﬁcally, each exercise node 𝑣𝑞 ∈ 𝑞 is 
+connected to a corresponding aﬀective state node 𝑣𝑎 ∈ 𝑎 via an inter-
+layer edge 𝑒𝑜 ∈ 𝑜𝑢𝑡. This hierarchical hypergraph structure enables the 
+model to simultaneously capture high-order relationships among exer-
+cises and knowledge concepts, while integrating aﬀective factors to en-
+hance knowledge tracing performance.
+4.1.2.  Aﬀection layer
+The aﬀection state is inﬂuenced by multiple factors and relying on a 
+single dimension cannot fully capture the true emotional characteristics 
+of the students. Therefore, the aﬀection layer integrates students’ per-
+sonalized attributes, problem diﬃculty,  and attempt count to construct 
+associations between aﬀection nodes and other elements. This integra-
+tion enables a more comprehensive and individualized representation 
+of students’ emotional states.
+Individual Student Characteristics: Diﬀerent students may exhibit 
+varying emotional experiences and interpretations when facing the same 
+Expert Systems With Applications 331 (2026) 133323 
+4 
+
+--- PAGE 5 ---
+C. Huang et al.
+problem, even if their knowledge levels are similar. To capture this indi-
+vidual diﬀerence, student features are mapped into a personalized rep-
+resentation vector 𝒈𝑠:
+𝒈𝑠 = Sigmoid(𝒇𝑠 ⋅ 𝑺), (2)
+where 𝒇𝑠 ∈ {0, 1}1×𝑀 denotes the one-hot identity vector of student 𝑠, 
+with 𝑀 representing the total number of unique students across both 
+the training and testing sets. 𝑺 ∈ ℝ𝑀×𝐾 is a global learnable student 
+embedding matrix that maps student features into a 𝐾-dimensional rep-
+resentation space, where 𝐾 denotes the embedding dimension. Since 𝒇𝑠
+is a one-hot vector, the operation 𝒇𝑠 ⋅ 𝑺 is mathematically equivalent to 
+directly indexing and retrieving the corresponding row of 𝑺 associated 
+with student 𝑠. The obtained representation is subsequently transformed 
+by the Sigmoid activation function to produce the personalized student 
+representation 𝒈𝑠.
+Problem Diﬃculty : Problem diﬃculty  signiﬁcantly inﬂuences emo-
+tional states-more diﬃcult  problems may induce confusion or frustra-
+tion, whereas moderately diﬃcult  problems can enhance concentration. 
+The diﬃculty-related  representation vector 𝒈𝑑 is obtained as:
+𝒈𝑑 = Sigmoid(𝒇𝑑 ⋅ 𝑫), (3)
+where 𝒇𝑑 ∈ {0, 1}1×𝑁 denotes the one-hot vector of the problem, with 
+𝑁 being the total number of problems. 𝑫 ∈ ℝ𝑁×𝐾 is a learnable weight 
+matrix that maps problem features into the 𝐾-dimensional representa-
+tion space.
+Attempt Count: The number of attempts reﬂects a student’s behavioral 
+pattern in problem-solving; frequent attempts may indicate confusion 
+or diﬃculty,  while successful consecutive attempts may be associated 
+with a sense of achievement. The attempt-related representation vector 
+𝒈𝑡 is computed as:
+𝒈𝑡 = Sigmoid(𝒇𝑡 ⋅ 𝑻 ), (4)
+where 𝒇𝑡 ∈ {0, 1}1×𝑃 is the one-hot vector representing the number of 
+attempts, with 𝑃 being the maximum number of attempts. 𝑻 ∈ ℝ𝑃 ×𝐾
+is a learnable weight matrix that maps attempt features into the 𝐾-
+dimensional representation space.
+Based on the analysis above, the concatenation of the three feature 
+vectors produces an emotion vector, which is then processed through a 
+fully connected layer to generate the emotion prediction vector ̂𝐚:
+̂𝐚 = Sigmoid(𝑾𝑎[𝒈𝑠|| 𝒈𝑑 || 𝒈𝑡] + 𝐛𝑎), (5)
+where 𝑾𝑎 and 𝐛𝑎 are the learnable parameters of the fully connected 
+layer, and ||  denotes the vector concatenation operation. The emotion 
+prediction vector ̂𝐚 serves as the feature representation of the emotion 
+layer node 𝑣𝑎 ∈ 𝑉𝑎, characterizing the student’s emotional state during 
+the problem-solving process.
+4.2.  Aﬀect-aware hypergraph convolution
+The integration of the exercise layer and the aﬀective layer con-
+structs an aﬀect-aware problem-concept hypergraph representation. 
+During the aﬀect-aware hypergraph convolution process, node updates 
+are inﬂuenced by both the associated hyperedge features and the af-
+fective vector ̂𝐚. Speciﬁcally, the aﬀective vector ̂𝐚 acts as a weighting 
+factor, element-wise modulating the hyperedge features 𝒉𝑐 to amplify 
+the impact of aﬀective information in the node update process.
+Given the interaction-aware one-hot representation ̂𝐪𝑖 ∈ {0, 1}2| 𝑞 | , 
+constructed as onehot(𝑞𝑖 + 𝑟𝑖 ⋅ | 𝑞| ), where 𝑞 denotes the exercise set 
+and | 𝑞|  represents the total number of exercises, which encodes both 
+the target exercise index 𝑞𝑖 and the corresponding binary response cor-
+rectness 𝑟𝑖 ∈ {0, 1}, the ﬁnal aﬀect-aware exercise representation is com-
+puted as follows:
+̃𝐱 = ̂𝐪𝑖
+⎛
+⎜
+⎜
+⎜⎝
+̂𝐚 ⊙ 1√
+𝑑𝑞𝑖
+∑
+𝑐∈𝑖𝑛(𝑞𝑖)
+1√
+𝑑𝑐
+𝑾 𝒉𝑐
+⎞
+⎟
+⎟
+⎟⎠
+, (6)
+where 𝑖𝑛(𝑞𝑖) denotes the set of hyperedges associated with exercise 
+node 𝑞𝑖, 𝒉𝑐 represents the feature vector of concept 𝑐, ̂𝐚 is the aﬀec-
+tive vector, and 𝑑𝑞𝑖 and 𝑑𝑐 denote the degrees of the exercise node and 
+concept hyperedge, respectively. Through this mechanism, the aﬀec-
+tive vector ̂𝐚 eﬀectively regulates the interaction between exercises and 
+knowledge concepts, enabling the hypergraph convolution to capture 
+high-order relationships between problem-concept and problem-aﬀect 
+interactions. The resulting representation ̃𝐱 is then used as the input to 
+the subsequent prediction module.
+4.3.  Prediction module
+Next, the aﬀect-aware exercise representation ̃𝐱 is input into a GRU 
+module to dynamically model the evolution of the student’s knowledge 
+state. The GRU performs dynamic information modeling using the fol-
+lowing state update equations:
+⎧
+⎪
+⎪
+⎨
+⎪
+⎪⎩
+𝒖𝑡 = 𝜎(𝑾𝑢 ̃𝐱 + 𝑼𝑢𝒉𝑡−1 + 𝐛𝑢),
+𝒛𝑡 = 𝜎(𝑾𝑧 ̃𝐱 + 𝑼𝑧𝒉𝑡−1 + 𝐛𝑧),
+̃𝒉𝑡 = tanh( 𝑾ℎ ̃𝐱 + 𝑼ℎ(𝒖𝑡 ⊙ 𝒉𝑡−1) + 𝐛ℎ),
+𝒉𝑡 = (1 − 𝒛𝑡) ⊙ 𝒉𝑡−1 + 𝒛𝑡 ⊙ ̃𝒉𝑡,
+(7)
+where the reset gate 𝒖𝑡 controls the inﬂuence of the previous state 𝒉𝑡−1
+on the current candidate state, determining how much historical infor-
+mation should be forgotten. The update gate 𝒛𝑡 balances the contribu-
+tions of the previous hidden state 𝒉𝑡−1 and the candidate state ̃𝒉𝑡, thereby 
+controlling the integration of historical and newly learned information. 
+The candidate state ̃𝒉𝑡 is generated from the current input ̃𝐱 and the 
+previous hidden state 𝒉𝑡−1 under the modulation of the reset gate. The 
+ﬁnal hidden state 𝒉𝑡 is obtained by adaptively combining the previous 
+hidden state and the candidate state through the update gate.
+The GRU output 𝒉𝑡 is then passed through a linear transformation fol-
+lowed by a Sigmoid activation function to produce the predicted prob-
+ability ̂ 𝑟𝑡+1 of the student answering the next problem correctly:
+̂ 𝑟𝑡+1 = Sigmoid(𝑾𝑐 𝒉𝑡 + 𝐛𝑐). (8)
+By integrating aﬀect-aware problem hypergraph representations with 
+students’ historical interaction records, this prediction module eﬀec-
+tively captures the students’ knowledge states and aﬀective features, 
+thereby enhancing the accuracy of next-response prediction.
+4.4.  Loss and optimization module
+The objective of this module is to optimize both the prediction of 
+student knowledge states and the perception of emotional states. The 
+total loss function consists of two parts: the prediction loss and the aﬀect 
+perception loss. The aﬀect perception module uses either a supervised 
+learning or an unsupervised contrastive learning approach, depending 
+on whether labeled aﬀect data is available in the dataset.
+Prediction Loss. The prediction loss measures the discrepancy between 
+the predicted correctness and the ground-truth responses. We adopt the 
+cross-entropy loss function, deﬁned as:
+𝑝 = − 1
+𝑁
+𝑁−1∑
+𝑡=1
+( 𝑟𝑡+1 log(̂ 𝑟𝑡+1) + (1 − 𝑟𝑡+1) log(1 − ̂ 𝑟𝑡+1)) , (9)
+where 𝑁 denotes the total number of interaction records and i indexes 
+a single interaction record, 𝑟𝑡+1 ∈ {0, 1} represents the ground-truth re-
+sponse at the next interaction step, and ̂ 𝑟𝑡+1 denotes the predicted prob-
+ability of answering correctly at the corresponding interaction step.
+Aﬀect Loss. The aﬀect loss varies depending on whether labeled aﬀect 
+data is available.
+Expert Systems With Applications 331 (2026) 133323 
+5 
+
+--- PAGE 6 ---
+C. Huang et al.
+1) Supervised Learning: When true aﬀect data is available, we use 
+the Mean Squared Error (MSE) loss to measure the error between the 
+predicted and the true aﬀect values. The supervised aﬀect loss is given 
+by:
+𝑠
+𝑎 = 1
+𝑁
+𝑁∑
+𝑖=1
+(𝑎𝑖 − ̂ 𝑎𝑖)2, (10)
+where 𝑎𝑖 is the true aﬀect value and ̂ 𝑎𝑖 is the predicted aﬀect value for 
+the 𝑖th sample.
+2) Unsupervised Contrastive Learning: In the absence of true af-
+fect data, we adopt a contrastive learning approach. We deﬁne positive 
+pairs as interactions sharing the same answer (both correct or both in-
+correct) and negative pairs as interactions with diﬀerent answers (one 
+correct, one incorrect). We assume that positive pairs tend to exhibit 
+similar latent aﬀective tendencies, whereas negative pairs tend to ex-
+hibit relatively diﬀerent aﬀective tendencies. From the perspective of 
+educational psychology (D’Mello & Graesser, 2012), learners’ aﬀective 
+states are dynamically coupled with performance outcomes: repeated in-
+correct responses are often accompanied by increased frustration or anx-
+iety, while sustained correct responses are associated with conﬁdence 
+and positive engagement. Therefore, response correctness can serve as 
+a coarse but informative proxy for underlying aﬀective states. The co-
+sine similarity between positive and negative pairs is then deﬁned as:
+𝑠𝑖,𝑗 =
+𝐚𝑖 ⋅ 𝐚𝑗
+‖ 𝐚𝑖‖‖ 𝐚𝑗 ‖ , 𝑠 𝑘𝑖,𝑘𝑗 =
+𝐚𝑘𝑖 ⋅ 𝐚𝑘𝑗
+‖ 𝐚𝑘𝑖 ‖‖ 𝐚𝑘𝑗 ‖ . (11)
+The total contrastive loss is computed as:
+𝑐
+𝑎 = − 1
+| |
+∑
+(𝑖,𝑗)∈
+log
+exp(𝑠𝑖,𝑗 ∕𝜏)
+∑
+(𝑘𝑖,𝑘𝑗 )∈ exp(𝑠𝑘𝑖,𝑘𝑗 ∕𝜏) , (12)
+where  is the set of positive pairs,  is the set of negative pairs, and 
+𝜏 is the temperature parameter.
+The total loss is the weighted sum of the prediction loss and the aﬀect 
+loss, represented as:
+ = 𝑝 + 𝜆 ⋅ 𝑎, (13)
+where 𝑎 denotes the aﬀect loss, which takes diﬀerent forms depending 
+on the availability of labeled aﬀect data: if aﬀect labels are available, 
+𝑎 = 𝑠
+𝑎; otherwise, 𝑎 = 𝑐
+𝑎. 𝜆 is a hyperparameter that balances the 
+contribution of the prediction loss and the aﬀect loss.
+5.  Experiments
+In this section, we conducted extensive experiments and provided 
+detailed descriptions of the experimental setup. Experiments were con-
+ducted on a Linux server equipped with ﬁve NVIDIA RTX A6000 
+GPUs (48 GB memory each), using CUDA 12.1 and NVIDIA driver ver-
+sion 530.30.02. By addressing the following four questions, we aim to 
+demonstrate the performance advantages of the AHGKT model:
+• RQ1: Does AHGKT improve knowledge state prediction performance 
+compared to other models?
+• RQ2: How do diﬀerent components of the AHGKT model impact the 
+ﬁnal prediction performance?
+• RQ3: Can unsupervised contrastive learning eﬀectively train the 
+aﬀective-aware module?
+• RQ4: Can AHGKT eﬀectively capture the evolution of students’ 
+knowledge states?
+5.1.  Datasets
+We conducted experiments on three benchmark datasets in the ﬁeld 
+of online education and compared the performance of our model with 
+various types of knowledge tracing models. Table 2 presents the number 
+of students, questions, skills, and total exercise records for each of the 
+three datasets.
+The brief description of each dataset is as follows.
+Table 2 
+Statistics of dataset.
+ Statistics  ASSIST2009  ASSIST2012  ASSIST2017
+ #Students  3831  27,405  1709
+ #Problems  16,877  47,104  3162
+ #Concepts  101  265  102
+ #Records  274,092  2,621,374  942,816
+• ASSISTments 2009 (ASSIST09)1 is one of the most widely used 
+datasets in the realm of KT, which is provided by ASSISTments online 
+tutoring platform . In our experiments, we utilize the "skill-builder-
+data-corrected-collapsed" version of this dataset. We also remove 
+users with less than three records to enhance data modeling.
+• ASSISTments 2012 (ASSIST12)2 is the dataset from the 2012-2013 
+school year, containing aﬀective state predictions, and has been 
+widely used in educational research related to emotion data. In our 
+data processing, we removed records that lacked skill tags and scaf-
+folded problems, as well as users with fewer than three records.
+• ASSISTments 2017 (ASSIST17)3 ASSISTments 2017 was collected 
+for the ASSISTments Longitudinal Data Mining Competition in 2017. 
+As part of the data mining competition, this dataset contains the most 
+descriptive information from the ASSISTments data.
+Both ASSISTments2017 and ASSISTments2012 provide four aﬀective 
+states, namely bored, concentrating, confused, and frustrated, with each 
+aﬀective value ranging from 0 to 1. These aﬀective labels are generated 
+by validated sensor-free aﬀect detection models  (Botelho et al., 2017; 
+Pardos et al., 2013). Trained on synchronized classroom observations 
+and ﬁne-grained interaction logs, the models output conﬁdence scores 
+in [0, 1] that represent the estimated intensity of each aﬀective state. 
+Following prior work, we directly use these scores as aﬀective supervi-
+sion signals. In contrast, ASSISTments2009 does not contain aﬀective 
+information.
+5.2.  Baselines and evaluation metrics
+To validate the performance of AHGKT, we compare our model with 
+the following baseline methods.
+• DKT (Piech et al., 2015): It is the pioneering model that employs 
+deep learning techniques in knowledge tracing. In our implementa-
+tion, we employed LSTM to predict students’ performance.
+• DKVMN (Zhang et al., 2017): It constructs a key-value memory net-
+work to obtain student knowledge states, where the key matrix stores 
+static potential knowledge concepts and the value matrix maintains 
+dynamically updated student mastery information.
+• SAKT (Pandey & Karypis, 2019): It relies on attention mechanism to 
+make predictions by capturing relevant interactions in the past.
+• SAINT (Choi et al., 2020):It is based on the Transformer architecture 
+and leverages self-attention mechanisms to capture students’ interac-
+tion histories. Stacked self-attention layers and positional encoders 
+are used for prediction.
+• AKT (Ghosh et al., 2020): It integrates the attention mechanism with 
+the IRT model, employing self-attention to acquire context-aware 
+representations of questions and responses. Additionally, it utilizes 
+a knowledge retriever module to access relevant knowledge for the 
+current problem.
+• GKT (Nakagawa et al., 2019): It models knowledge components and 
+their dependencies as a graph structure and reformulates knowledge 
+1 https://sites.google.com/site/assistmentsdata/home/
+2009-2010-assistment-data
+2 https://sites.google.com/site/assistmentsdata/datasets/
+2012-13-school-data-with-aﬀect
+3 https://sites.google.com/view/assistmentsdatamining/
+Expert Systems With Applications 331 (2026) 133323 
+6 
+
+--- PAGE 7 ---
+C. Huang et al.
+Table 3 
+Comparison of AUC and ACC on ASSIST2012 and ASSIST2017 datasets.
+Methods  ASSIST12  ASSIST17
+AUC ACC AUC ACC
+ DKT 0.7271 0.7339 0.7167 0.6912
+ DKVMN 0.7235 0.7244 0.7032 0.6775
+ SAKT 0.7156 0.7192 0.6728 0.6546
+ SAINT 0.7421 0.7458 0.7405 0.7298
+ AKT 0.7681 0.7628 0.7723 0.7235
+ DGEKT OOM OOM 0.7776 0.7225
+ ASIKT 0.7589 0.7438 0.7916 0.7328
+ AHGKT 0.8103 0.7936 0.7986 0.7336
+ Improvement 5.49% 4.05% 0.88% 0.11%
+tracing as a time-series node-level classiﬁcation problem using graph 
+neural networks.
+• PEBG (Liu et al., 2020): It formalizes question-concept relationships 
+as bipartite graphs and incorporates a product layer to acquire ques-
+tion embeddings for knowledge tracing.
+• DGEKT (Cui et al., 2024): It constructs a hypergraph and a directed 
+transition graph from student learning interactions to learn node em-
+beddings. The model integrates both graphs into a teacher model and 
+uses an online knowledge distillation to transfer the teacher model’s 
+knowledge to the student model.
+• ASIKT (Qin et al., 2025): It combines diﬃculty-aware  attention with 
+a selective state space model to enhance interpretability while ef-
+ﬁciently modeling the dynamic evolution of students’ knowledge 
+states.
+This study frames knowledge tracing as a binary classiﬁcation task, 
+aiming to predict the correctness of a student’s next response (where 1 
+indicates correct and 0 indicates incorrect). To evaluate model perfor-
+mance, Area Under the Curve (AUC) and Accuracy (ACC) metrics are 
+used. In the experiments, a loss coeﬃcient  𝜆 is introduced within the 
+aﬀective module to balance its impact on the overall training objective. 
+We randomly select 80% of students for training, and the remaining 
+20% of students for testing.
+5.3.  Results and discussions (RQ1)
+Table 3 shows the AUC and ACC scores for the baseline method on 
+the two datasets. The AUC scores of the proposed AHGKT model on 
+the ASSIST2012 and ASSIST2017 datasets are 0.8103 and 0.7936, and 
+the ACC scores are 0.7986 and 0.7336, respectively. As can be seen, 
+AHGKT achieved the best results on all datasets, with AUC improving by 
+up to 5% compared to the optimal baseline model. In addition, DGEKT 
+encountered an out-of-memory (OOM) issue on the ASSIST2012 dataset 
+due to its relatively large parameter size and memory consumption, and 
+thus could not be successfully trained under our uniﬁed experimental 
+conﬁguration.
+AHGKT demonstrated its ability to eﬀectively diagnose students’ 
+mastery of knowledge by capturing the relationship between students’ 
+aﬀective data and learning behaviors such as exercise diﬃculty  and 
+number of attempts. Unlike models such as DKT and DKVMN, which 
+primarily model learning sequences based on interaction information, 
+AHGKT further incorporates an aﬀect-aware hypergraph structure to 
+capture the high-order relationships between exercises and knowledge 
+concepts, as well as their interactions with aﬀective factors. Dataset per-
+formance diﬀerences mainly arise from the sparsity of emotional fea-
+tures. In the small-scale ASSIST2017, limited aﬀective signals constrain 
+the model’s learning, whereas the larger ASSIST2012 provides suﬃcient  
+non-zero observations for robust exploitation. The hypergraph structure 
+propagates sparse signals globally, and the adaptive attention mecha-
+nism ﬁlters noise, enabling AHGKT to achieve greater improvements 
+when emotional features are abundant (Fig. 3). Table 4 shows the per-
+Table 4 
+Comparison of AUC and ACC on ASSIST2009 datasets.
+Methods AUC ACC
+DKT 0.7356 0.7081
+DKVMN 0.7394 0.6182
+SAKT 0.7616 0.7578
+AKT 0.8011 0.7762
+PEGB 0.8011 0.7766
+DGEKT 0.7510 0.7223
+ASIKT 0.7978 0.7519
+AHGKT 0.8289 0.7941
+Improvement 3.47% 2.25%
+formance of ASSIST2009 data set without aﬀective labels. The scores of 
+AUC and ACC are 0.8289 and 0.7941 respectively. AUC has increased by 
+3% compared with the best baseline model, indicating that our method 
+can improve greatly even without aﬀective labels. It further proves that 
+students’ aﬀective state can eﬀectively aﬀect students’ knowledge mas-
+tery state.
+5.4.  Ablation study (RQ2)
+In this section, we will address Q2 by conducting ablation experi-
+ments on the model. First, we validate the eﬀectiveness of the aﬀective 
+interaction and hypergraph structure on three datasets. Then, we ex-
+plore the eﬀectiveness of each factor in the aﬀective interaction module.
+5.4.1.  Component adjustment
+As shown in Table 5, it is evident that both the aﬀective module and 
+the hypergraph structure play critical roles in enhancing the predictive 
+performance of the knowledge tracing model. Firstly, the model with-
+out the aﬀective module (AHGKT-NF) shows a noticeable decrease in 
+both AUC and ACC across all datasets, with signiﬁcant drops observed 
+in ASSIST2009 and ASSIST2012, where the AUC scores fell to 0.7326 
+and 0.7281, respectively. This indicates that the aﬀective module ef-
+fectively captures changes in students’ aﬀective states, contributing to 
+more accurate predictions of knowledge mastery. Secondly, replacing 
+the hypergraph with an ordinary graph (AHGKT-OG) results in a sub-
+stantial performance decline on the ASSIST2017 dataset, with the AUC 
+dropping to 0.7324. Here, the ordinary graph refers to a conventional 
+pairwise graph structure, where each edge connects only two nodes. The 
+hypergraph structure excels at capturing the complex relationships be-
+tween questions and skills, enabling the model to better represent the 
+dependencies among knowledge points. These results demonstrate that 
+the inclusion of both the aﬀective module and the hypergraph structure 
+signiﬁcantly enhances AHGKT’s performance, making it well-suited for 
+knowledge tracing tasks.
+5.4.2.  Hyper-parameter analysis
+The parameter 𝜆 is a balancing factor between the prediction loss and 
+the loss of the aﬀect perception module. It is tuned within the range of 
+Expert Systems With Applications 331 (2026) 133323 
+7 
+
+--- PAGE 8 ---
+C. Huang et al.
+Fig. 3. AUC performance comparisons on the ASSIST2012 (a), ASSIST2017 (b), and ASSIST2009 (c) datasets.
+Table 5 
+Performance comparison across ASSIST datasets.
+ Methods  Metrics  ASSIST17  ASSIST12  ASSIST09
+AHGKT-NF  AUC  0.7677  0.7281  0.7326
+ ACC  0.7142  0.7294  0.7142
+AHGKT-OG  AUC  0.7324  OOM  0.7719
+ ACC  0.6934  OOM  0.7545
+AHGKT  AUC  0.7986  0.8103  0.8290
+ ACC  0.7337  0.7937  0.7941
+Fig. 4. Impact of 𝜆 on model performance (AUC and ACC).
+Fig. 5. Radar chart of student knowledge concept mastery changes.
+0.001 to 10. As shown in the Fig. 4, the model achieves optimal perfor-
+mance in both AUC and ACC when 𝜆 is set to 1. Overemphasizing either 
+the aﬀect module or the prediction loss leads to a decline in model per-
+formance.
+5.5.  Valid analysis (RQ3)
+In this experiment, to verify the eﬀectiveness of unsupervised con-
+trastive loss in the aﬀective perception module, we adopted two training 
+approaches on a dataset with real aﬀective labels: one based on aﬀec-
+tive labels using supervised learning with mean squared error (MSE) as 
+Table 6 
+Comparison of supervised and unsupervised training performance on af-
+fective perception module.
+Methods  ASSIST12  ASSIST17
+AUC ACC AUC ACC
+ Supervised 0.8103 0.7937 0.7986 0.7337
+ Unsupervised 0.8097 0.7942 0.7962 0.7316
+ Diﬀerence 0.05% 0.06% 0.24% 0.20%
+the loss function, and the other using unsupervised contrastive learn-
+ing loss without labels, training by constructing positive and negative 
+sample pairs.
+As shown in Table 6, the model performance is nearly identical un-
+der both training approaches, with similar performance outcomes. This 
+indicates that the unsupervised contrastive learning method may learn 
+representations that eﬀectively encode behavioral patterns associated 
+with students’ aﬀective states, thereby improving prediction accuracy 
+even without direct aﬀective supervision. This result suggests that un-
+supervised contrastive learning can serve as an eﬀective training strat-
+egy for the aﬀective perception module, particularly in scenarios with 
+limited labeled data.
+5.6.  Visualization (RQ4)
+The radar chart in Fig. 5 shows the changes in student mastery across 
+ﬁve knowledge concepts (34, 39, 40, 41, 46). The red and blue lines rep-
+resent the mastery levels before practice and after practice, respectively. 
+It is evident that the student shows signiﬁcant improvement in knowl-
+edge concepts 34 and 39, particularly in concept 34. This indicates that 
+the knowledge tracing model can eﬀectively capture student progress 
+across diﬀerent concept points.
+Fig. 6 illustrates the evolution of a student’s knowledge state over 
+time using a sample from the ASSIST2017 dataset. The upper Q-row 
+corresponds to the problem sequence indices, while the R-row repre-
+sents the student’s actual responses. By comparing the prediction results 
+of the AHGKT-Noaﬀect model (Fig. 6(a)), the DGEKT model (Fig. 6(b)), 
+and the AHGKT model (Fig. 6(c)), we analyze the diﬀerences in how the 
+three models capture the student’s mastery of four knowledge concepts 
+(IDs 34, 39, 40, and 41, corresponding to multiplication, subtraction, 
+addition, and division, respectively). The horizontal axis denotes the 
+problem (or response) sequence index, and the vertical axis represents 
+the knowledge concept index. In the heatmap, the color intensity in-
+dicates the predicted probability that the student will correctly master 
+the corresponding knowledge concept at the next time step; darker col-
+ors indicate higher predicted mastery probability, while lighter colors 
+indicate lower predicted mastery probability.
+Several key observations can be made from these visualizations. 
+First, as practice on a speciﬁc knowledge concept increases, the model’s 
+predicted probability of mastering that concept rises signiﬁcantly, align-
+Expert Systems With Applications 331 (2026) 133323 
+8 
+
+--- PAGE 9 ---
+C. Huang et al.
+Fig. 6. Top: Exercise sequence and corresponding response outcomes. Bottom: Heat maps of diﬀerent models. The x-axis denotes the sequence of exercises, and 
+the y-axis indicates knowledge concept IDs (34: multiplication, 39: subtraction, 40: addition, 41: division). The color intensity reﬂects the predicted probability of 
+mastering each concept.
+ing with real-world learning patterns. For example, we further examine 
+the model dynamics over a continuous sequence segment (questions 14-
+20) for concept 39. As shown in the green boxes in Fig. 6, the AHGKT 
+model demonstrates adaptive variations in its predicted mastery proba-
+bility that are more aligned with the student’s actual response patterns 
+(consistent with the R-row response results shown in the upper part of 
+Fig. 6). In contrast, the DGEKT model shows relatively stable outputs 
+with limited sensitivity to changes in student responses. Furthermore, 
+while the AHGKT-Noaﬀect model initially predicts a higher mastery 
+probability for knowledge concept 34, its probability decreases after re-
+peated practice, failing to accurately reﬂect knowledge acquisition, as 
+indicated by the red box in Fig. 6(a).
+Second, answering questions related to a speciﬁc knowledge concept 
+impacts not only the knowledge state of that concept, but also those 
+of related concepts. For example, in the AHGKT model, when problem 
+140 corresponds to knowledge concept 40 (addition), a correct response 
+leads to a signiﬁcant increase in its predicted probability, along with the 
+mastery probabilities of the other three related knowledge concepts, as 
+indicated by the yellow box in Fig. 6(c). This suggests that the AHGKT 
+model is able to capture implicit relationships among addition, subtrac-
+tion, multiplication, and division. In contrast, the other two models do 
+not fully exhibit this feature.
+5.7.  Model complexity analysis
+To evaluate the computational eﬃciency  of AHGKT, we analyzed 
+both the theoretical complexity and actual runtime of its main compo-
+nents on the ASSIST2017 dataset. For sequence modeling, DKT’s RNN 
+has a computational complexity of 𝑂(𝑇 ⋅ 𝐻 ⋅ (𝐻 + 𝐷)), where 𝑇 is the 
+sequence length, 𝐻 is the hidden dimension, and 𝐷 is the input dimen-
+sion. AHGKT introduces hypergraph convolution (HGNN) with com-
+plexity 𝑂(𝑁 ⋅ 𝐷2) and an aﬀective modulation module with complexity 
+𝑂(𝑁 ⋅ 𝑆), which adds limited overhead compared to the multi-step RNN 
+computations. Table 7 presents a comparison of parameter count, train-
+Expert Systems With Applications 331 (2026) 133323 
+9 
+
+--- PAGE 10 ---
+C. Huang et al.
+Table 7 
+Comparison of model complexity and performance on AS-
+SIST2017.
+ Model  Params (M)  Train (s)  Inference (s)  AUC
+ DKT  2.498  378  101  0.7271
+ DGEKT  10.596  390  75  0.7747
+ AHGKT  6.405  115  15  0.7947
+ing and inference time per epoch, and predictive performance (AUC) on 
+ASSIST2017.
+The results show that, despite introducing hypergraph and aﬀective 
+modules, AHGKT maintains a moderate parameter size, achieves sig-
+niﬁcantly faster training and inference, and improves predictive perfor-
+mance on ASSIST2017, demonstrating a good balance between compu-
+tational complexity and eﬀectiveness.
+6.  Conclusion
+We present an aﬀective hypergraph knowledge tracing (AHGKT), a 
+knowledge tracing framework that innovatively integrates aﬀective dy-
+namics through a bilevel hypergraph architecture. The exercise layer 
+models high-order question-concept relationships, while the aﬀective 
+layer tracks emotion-driven behavioral patterns. Our aﬀect-aware hy-
+pergraph convolution mechanism fuses these cognitive and emotional 
+signals via multilayer message passing, enabling precise knowledge state 
+modeling. Evaluations across three datasets demonstrate AHGKT’s supe-
+riority and cross-domain robustness. By unifying hypergraph learning 
+with aﬀective computing, this work advances educational AI through 
+two critical insights: aﬀective states are quantiﬁable predictors of learn-
+ing outcomes, and hypergraphs inherently capture the multidimensional 
+interactions in learning systems. The framework provides a blueprint for 
+emotionally intelligent tutoring tools that address both cognitive and af-
+fective dimensions of education.
+In future work, we will explore rapid adaptation mechanisms (e.g., 
+meta-learning) to improve modeling for new users, and investigate 
+cross-domain representation learning to enhance transferability across 
+courses and platforms. We also plan to incorporate richer behavioral sig-
+nals and adopt a causal perspective to better understand the dynamic 
+interplay between aﬀect and knowledge acquisition, thereby improving 
+the robustness and interpretability of aﬀect-aware knowledge tracing 
+systems.
+CRediT authorship contribution statement
+Changqin Huang: Conceptualization, Investigation, Resources, 
+Writing – original draft; Xi Cheng: Data curation, Methodology, Writing 
+– original draft; Yi Wang: Conceptualization, Formal analysis, Supervi-
+sion, Writing – review & editing; Huicheng Zeng: Visualization, Re-
+sources, Supervision, Writing – review & editing; Xiaodi Huang: Visu-
+alization, Investigation, Validation, Writing – review & editing; Qiong-
+hao Huang: Visualization, Validation, Supervision, Writing – review & 
+editing.
+Declaration of competing interest
+The authors declare that they have no known competing ﬁnancial 
+interests or personal relationships that could have appeared to inﬂuence 
+the work reported in this paper. 
+Data availability
+The manuscript already contains the links to the publicly available 
+datasets used in the paper.
+Acknowledgements
+This work was supported by the National Natural Science Foundation 
+of China (No. 62337001).
+References
+Abdelrahman, G., Wang, Q., & Nunes, B. (2023). Knowledge tracing: A survey. ACM Com-
+puting Surveys, 55(11), 1–37.
+Baker, R. S. J. d., Corbett, A. T., & Aleven, V. (2008). More accurate student modeling 
+through contextual estimation of slip and guess probabilities in bayesian knowledge 
+tracing. In Intelligent tutoring systems: In proceedings of the 9th international conference, 
+ITS 2008, montreal, canada, june 23–27, 2008 proceedings 9 (pp. 406–415). Springer.
+Botelho, A. F., Baker, R. S., & Heﬀernan, N. T. (2017). Improving sensor-free aﬀect detec-
+tion using deep learning. In International conference on artiﬁcial intelligence in education 
+(pp. 40–51). Springer.
+Chen, C., Cheng, Z., Li, Z., & Wang, M. (2020). Hypergraph attention networks. In In 
+proceedings of the 2020 IEEE 19th international conference on trust, security and privacy 
+in computing and communications (trustcom) (pp. 1560–1565). IEEE.
+Choi, Y., Lee, Y., Cho, J., Baek, J., Kim, B., Cha, Y., Shin, D., Bae, C., & Heo, J. (2020). 
+Towards an appropriate query, key, and value computation for knowledge tracing. In 
+In proceedings of the seventh ACM conference on learning@ scale (pp. 341–344).
+Corbett, A. T., & Anderson, J. R. (1994). Knowledge tracing: Modeling the acquisition of 
+procedural knowledge. User Modeling and User-Adapted Interaction, 4, 253–278.
+Craig, S., Graesser, A., Sullins, J., & Gholson, B. (2004). Aﬀect and learning: An exploratory 
+look into the role of aﬀect in learning with autotutor. Journal of Educational Media, 
+29(3), 241–250.
+Cui, C., Yao, Y., Zhang, C., Ma, H., Ma, Y., Ren, Z., Zhang, C., & Ko, J. (2024). DGEKT: 
+A dual graph ensemble learning method for knowledge tracing. ACM Transactions on 
+Information Systems, 42(3), 1–24.
+D’Mello, S., & Graesser, A. (2012). Dynamics of aﬀective states during complex learning. 
+Learning and Instruction, 22(2), 145–157.
+Feng, Y., You, H., Zhang, Z., Ji, R., & Gao, Y. (2019). Hypergraph neural networks. In In 
+proceedings of the AAAI conference on artiﬁcial intelligence (pp. 3558–3565). (vol. 33).
+Ghosh, A., Heﬀernan, N., & Lan, A. S. (2020). Context-aware attentive knowledge tracing. 
+In In proceedings of the 26th ACM SIGKDD international conference on knowledge discovery 
+& data mining (pp. 2330–2339).
+Graves, A. (2013). Generating sequences with recurrent neural networks. arXiv preprint 
+arXiv:1308.0850, .
+Graves, A., Mohamed, A.-r., & Hinton, G. (2013). Speech recognition with deep recurrent 
+neural networks. In In proceedings of the 2013 IEEE international conference on acoustics, 
+speech and signal processing (pp. 6645–6649). Ieee.
+Hochreiter, S., & Schmidhuber, J. (1997). Long short-term memory. Neural Computation, 
+9(8), 1735–1780.
+Huang, C., Wei, H., Huang, Q., Jiang, F., Han, Z., & Huang, X. (2024a). Learning consistent 
+representations with temporal and causal enhancement for knowledge tracing. Expert 
+Systems with Applications, 245, 123128.
+Huang, C.-Q., Huang, Q.-H., Huang, X., Wang, H., Li, M., Lin, K.-J., & Chang, Y. (2024b). 
+XKT: Toward explainable knowledge tracing model with cognitive learning theories 
+for questions of multiple knowledge concepts. IEEE Transactions on Knowledge and Data 
+Engineering, 36(11), 7308–7325.
+Käser, T., Klingler, S., Schwing, A. G., & Gross, M. (2017). Dynamic bayesian networks for 
+student modeling. IEEE Transactions on Learning Technologies, 10(4), 450–462.
+Kipf, T. N., & Welling, M. (2016). Semi-supervised classiﬁcation with graph convolutional 
+networks. arXiv preprint arXiv:1609.02907, .
+Lee, J. I., & Brunskill, E. (2012). The impact on individualizing student models on neces-
+sary practice opportunities. International Educational Data Mining Society, 118–125.
+Lipton, Z. C., Berkowitz, J., & Elkan, C. (2015). A critical review of recurrent neural net-
+works for sequence learning. arXiv preprint arXiv:1506.00019, .
+Liu, S., Liu, S., Liu, Z., Peng, X., & Yang, Z. (2022). Automated detection of emotional and 
+cognitive engagement in MOOC discussions to predict learning achievement. Comput-
+ers & Education, 181, 104461.
+Liu, Y., Yang, Y., Chen, X., Shen, J., Zhang, H., & Yu, Y. (2020). Improving knowledge 
+tracing via pre-training question embeddings. arXiv preprint arXiv:2012.05031, .
+Mehta, K. J. (2022). Eﬀect of sleep and mood on academic performance-at interface of 
+physiology, psychology, and education. Humanities and Social Sciences Communications, 
+9(1), 1–13.
+Nakagawa, H., Iwasawa, Y., & Matsuo, Y. (2019). Graph-based knowledge tracing: 
+Modeling student proﬁciency using graph neural network. In In proceedings of the 
+IEEE/WIC/ACM international conference on web intelligence (pp. 156–163).
+Pandey, S., & Karypis, G. (2019). A self-attentive model for knowledge tracing. arXiv 
+preprint arXiv:1907.06837, .
+Pardos, Z. A., Baker, R. S., San Pedro, M. O., Gowda, S. M., & Gowda, S. M. (2013). Aﬀec-
+tive states and state tests: Investigating how aﬀect throughout the school year predicts 
+end of year learning outcomes. In In proceedings of the third international conference on 
+learning analytics and knowledge (pp. 117–124).
+Pardos, Z. A., & Heﬀernan, N. T. (2010). Modeling individualization in a bayesian net-
+works implementation of knowledge tracing. In User modeling, adaptation, and person-
+alization:in proceedings of the 18th international conference, UMAP 2010, big island, HI, 
+USA, june 20–24, 2010. proceedings 18 (pp. 255–266). Springer.
+Pedro, M. O., Baker, R., Bowers, A., & Heﬀernan, N. (2013). Predicting college enroll-
+ment from student interaction with an intelligent tutoring system in middle school. In 
+Educational data mining 2013. Citeseer.
+Expert Systems With Applications 331 (2026) 133323 
+10 
+
+--- PAGE 11 ---
+C. Huang et al.
+Piech, C., Bassen, J., Huang, J., Ganguli, S., Sahami, M., Guibas, L. J., & Sohl-Dickstein, 
+J. (2015). Deep knowledge tracing. Advances in Neural Information Processing Systems, 
+28 505–513.
+Qin, Y., Zhu, X., Tang, X., Zhang, C., Wu, K., Chang, F., Diao, J., & Hu, Z. (2025). Inter-
+pretable knowledge tracing with diﬃculty-aware  attention and selective state space 
+model. In Proceedings of the 48th international ACM SIGIR conference on research and 
+development in information retrieval (pp. 316–325).
+Scarselli, F., Gori, M., Tsoi, A. C., Hagenbuchner, M., & Monfardini, G. (2008). The graph 
+neural network model. IEEE Transactions on Neural Networks, 20(1), 61–80.
+Shen, S., Huang, Z., Liu, Q., Su, Y., Wang, S., & Chen, E. (2022). Assessing student’s dy-
+namic knowledge state by exploring the question diﬃculty  eﬀect. In In proceedings of 
+the 45th international ACM SIGIR conference on research and development in information 
+retrieval (pp. 427–437).
+Song, X., Li, J., Lei, Q., Zhao, W., Chen, Y., & Mian, A. (2022). Bi-CLKT: Bi-
+graph contrastive learning based knowledge tracing. Knowledge-Based Systems, 241,
+108274.
+Sonkar, S., Waters, A. E., Lan, A. S., Grimaldi, P. J., & Baraniuk, R. G.
+(2020). qDKT: Question-centric deep knowledge tracing. arXiv preprint 
+arXiv:2005.12442, .
+Sun, J., Du, S., Liu, Z., Yu, F., Liu, S., & Shen, X. (2023). Weighted heterogeneous graph-
+based three-view contrastive learning for knowledge tracing in personalized e-learning 
+systems. IEEE Transactions on Consumer Electronics, 70(1), 2838–2847.
+Sun, X., Zhang, K., Shen, S., Wang, F., Guo, Y., & Liu, Q. (2024). Target hierarchy-guided 
+knowledge tracing: Fine-grained knowledge state modeling. Expert Systems with Appli-
+cations, 251, 123898.
+Tomasevic, N., Gvozdenovic, N., & Vranes, S. (2020). An overview and comparison of su-
+pervised data mining techniques for student exam performance prediction. Computers 
+& Education, 143, 103676.
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & 
+Polosukhin, I. (2017). Attention is all you need. Advances in Neural Information Pro-
+cessing Systems, 30, 5998–6008.
+Wang, C., Zhu, H., Wang, P., Zhu, C., Zhang, X., Chen, E., & Xiong, H. (2021). Personalized 
+and explainable employee training course recommendations: A bayesian variational 
+approach. ACM Transactions on Information Systems (TOIS), 40(4), 1–32.
+Wang, S., Zeng, Z., Yang, X., Xu, K., & Zhang, X. (2024). Boosting neural cognitive diag-
+nosis with student’s aﬀective state modeling. In In proceedings of the AAAI conference 
+on artiﬁcial intelligence (pp. 620–627). (vol. 38).
+Wu, Z., Huang, L., Huang, Q., Huang, C., & Tang, Y. (2022). SGKT: Session graph-based 
+knowledge tracing for student performance prediction. Expert Systems with Applications, 
+206, 117681.
+Xiong, X., Zhao, S., Van Inwegen, E. G., & Beck, J. E. (2016). Going deeper with deep 
+knowledge tracing. International Educational Data Mining Society, 545–550.
+Yeung, C.-K., & Yeung, D.-Y. (2018). Addressing two problems in deep knowledge trac-
+ing via prediction-consistent regularization. In In proceedings of the ﬁfth annual ACM 
+conference on learning at scale (pp. 1–10).
+Yudelson, M. V., Koedinger, K. R., & Gordon, G. J. (2013). Individualized bayesian knowl-
+edge tracing models. In Artiﬁcial intelligence in education:in proceedings of the 16th in-
+ternational conference, AIED 2013, memphis, TN, USA, july 9–13, 2013. proceedings 16 
+(pp. 171–180). Springer.
+Zhang, J., Shi, X., King, I., & Yeung, D.-Y. (2017). Dynamic key-value memory networks 
+for knowledge tracing. In In proceedings of the 26th international conference on world 
+wide web (pp. 765–774).
+Zong, J., Cui, C., Ma, Y., Yao, L., Chen, M., & Yin, Y. (2020). Behavior-driven student 
+performance prediction with tri-branch convolutional neural network. In In proceedings 
+of the 29th ACM international conference on information & knowledge management (pp. 
+2353–2356).
+Expert Systems With Applications 331 (2026) 133323 
+11 

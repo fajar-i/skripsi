@@ -1,0 +1,632 @@
+--- PAGE 1 ---
+2023 International Conference on Advanced Computing Technologies and Applications (ICACTA)
+Unlocking Math Potential: EDSense - A
+Personalized Intervention Tool for Children with
+Dyscalculia
+*
+1st Dipti Jadhav
+Department of Computer Engineering
+Don Bosco Institute of Technology
+Mumbai, India
+dipti@dbit.in
+2nd Sarat Kumar Chettri
+Department of Computer Applications
+School of Technology, A.D.B.U.
+Guwahati, India
+sarat.chettri@dbuniversity.ac.in
+3rd Amiya Kumar Tripathy
+Department of Computer Engineering
+Don Bosco Institute of Technology
+Mumbai, India
+amiya@dbit.in
+4thOm Ghate
+Department of Computer Engineering
+Don Bosco Institute of Technology
+Mumbai, India
+omghate9@gmail.com
+5th Raj Chaudhari
+Department of Computer Engineering
+Don Bosco Institute of Technology
+Mumbai, India
+chaudhariraj152002@gmail.com
+6th Sarvesh Avhad
+Department of Computer Engineering
+Don Bosco Institute of Technology
+Mumbai, India
+sarveshavhad03@gmail.com
+Abstract—Math difficulties, such as dyscalculia, can hinder
+children’s ability to acquire strong mathematical problem-solving
+capabilities, limiting their potential for success. Early identifica-
+tion and intervention are essential in addressing these challenges.
+This research paper introduces EDSense, a specialized Bayesian
+Knowledge Tracing (BKT) model developed for math skill assess-
+ment in children who may have dyscalculia. The system employs
+a Directed Acyclic Graph (DAG) to represent the dependencies
+between probabilities and incorporates the prior probability of
+mastery, slip rate, and guessing rate to update the student’s
+knowledge state. The case study findings revealed challenges in
+math comprehension, multiplication, and symbol identification
+among children who may have dyscalculia, highlighting the
+need for targeted interventions and instructional strategies. The
+personalized and data-driven approach of EDSense contributes
+to the field of dyscalculia intervention, providing a promising tool
+for math skill assessment in children who may have dyscalculia.
+The development of EDSense has the potential to enhance early
+identification and intervention for children with dyscalculia,
+leading to improved math outcomes and better support for
+students with this specific learning disorder.
+Index Terms —Bayesian Knowledge Tracing, dyscalculia, per-
+sonalized learning
+I. I NTRODUCTION
+In today’s society, the importance of mathematical problem-
+solving skills cannot be overstated. According to the Na-
+tional Research Council (2001), these skills are crucial for
+success in academia and are vital in various fields, including
+science, engineering, and technology. However, some chil-
+dren face challenges in developing strong math skills due
+to various factors. For example, insufficient number sense,
+which refers to the foundational understanding of numbers
+and their relationships, can hinder children’s ability to grasp
+mathematical concepts and perform calculations accurately [1]
+[2]. Additionally, neurobiological disorders such as dyscalculia
+or dyslexia can also impact the development of math skills
+[3]Furthermore, ineffective teaching methods that do not cater
+to diverse learning needs can further hinder the development
+of math problem-solving capabilities in children [4].
+To address these challenges, the ’EDSense’ Research initia-
+tive has been developed as an innovative educational interven-
+tion to improve the mathematical problem-solving capabilities
+of children above the age of 6-10 years. The initiative employs
+a dynamic intervention approach using a Dynamic Bayesian
+Network where Directed Acyclic Graphs (DAGs) are used
+for math skill topologies based on the difficulty level of the
+skills. By providing personalized feedback and tailored learn-
+ing experiences that cater to individual students’ needs, the
+initiative aims to enhance their problem-solving capabilities
+[5]. Moreover, the initiative adopts a collaborative approach
+involving educators, parents, and educational institutions to
+create a supportive learning environment [2].
+This work aims to explore the effectiveness of the ’ED-
+Sense’ initiative in improving the mathematical problem-
+solving capabilities of children. Previous studies have shown
+that targeted interventions that cater to individual learning
+needs can significantly improve math skills [6]. Therefore, this
+paper will evaluate the effectiveness of the ’EDSense’ initia-
+tive in addressing math difficulties such as insufficient num-
+ber sense, neurobiological disorders, and ineffective teaching
+methods. The paper will also discuss the potential implications
+of this research for educational institutions, educators, and
+parents, and highlight the significance of early intervention
+979-8-3503-4834-7/23/$31.00 ©2023 IEEE
+
+--- PAGE 2 ---
+2023 International Conference on Advanced Computing Technologies and Applications (ICACTA)
+in addressing math difficulties in children.
+In conclusion, the ’EDSense’ initiative provides a promis-
+ing avenue for enhancing the problem-solving capabilities of
+children facing math difficulties. This research can contribute
+to the development of effective educational interventions that
+cater to diverse learning needs and promote the acquisition
+of strong mathematical problem-solving capabilities among
+children.
+II. R ELATED WORK
+Several studies have been conducted to investigate the
+mathematical abilities and challenges faced by students with
+dyscalculia, as well as interventions aimed at improving early
+number sense skills in preschool and kindergarten children.
+Jeya, S., Albina, A. (2019) conducted a study titled ”A Study
+of Students with Dyscalculia and their Mathematical Abilities
+at Primary Schools in Karaikudi” in Tamil Nadu, India, which
+found that many students in the Karaikudi region struggled
+with mathematical concepts and a significant number of them
+had dyscalculia [7]. The study utilized a survey, diagnostic
+testing, and comparison of the mathematical abilities of stu-
+dents with and without dyscalculia as a research methodology.
+Qi Liu et al. (2019) proposed in a research paper titled
+”Exploiting Cognitive Structure for Adaptive Learning” which
+explored the use of the cognitive structure as a tool for
+creating adaptive learning systems. The authors argued that
+understanding a learner’s cognitive structure, knowledge, and
+understanding of a given subject, can help tailor instruction
+to suit individual needs. The paper presented a theoretical
+framework and a prototype system incorporating cognitive
+structure for adaptive learning, suggesting potential for sig-
+nificant improvement in adaptive learning systems [8]
+Lijin Zhang et al. (2016) focused on early screening and
+dynamic intervention for children with insufficient number
+sense, aiming to improve math-solving capabilities in children
+above 10 years of age who face difficulties with math. The re-
+search aimed to enhance number sense, the ability to read and
+understand numbers and perform mathematical calculations,
+particularly in children with dyscalculia [9].
+There have also been several studies examining effective
+teaching strategies and interventions for developing early num-
+ber sense skills in preschool and kindergarten children. For
+example, Clements and Sarama [10] provided a comprehensive
+review of the literature on early mathematics education and
+discussed the importance of developing early number sense
+and effective teaching strategies. Hoffer and Schmitt [11]
+presented a conceptual framework for a professional develop-
+ment program targeting early number sense in preschoolers.
+Vandermaas-Peeler et al. [12] conducted a systematic review of
+intervention studies aimed at developing early number sense
+in preschool children, providing insights into various inter-
+vention strategies and recommendations for future research.
+Various studies have examined the importance of number
+sense in mathematics achievement, with Purpura et al. and
+No¨el et al [13] [14]. highlighting its significance in early
+childhood. Jordan and Levine provided recommendations for
+interventions aimed at enhancing early mathematics develop-
+ment. Zhang et al [15]. conducted a comprehensive review
+of the literature on number sense, while Patel and Groenke
+discussed interventions for improving mathematical cognition
+and learning [16]. Parental involvement has been found to
+play a significant role in children’s development of number
+sense. LeFevre and Berrigan [17] investigated the relationship
+between parental involvement and children’s number sense
+skills. The findings suggested that parental involvement, such
+as engaging in counting activities, playing number games,
+and providing math-related materials at home, can positively
+impact children’s development of number sense skills.
+Several studies have focused on whole-school approaches to
+developing early number sense in students. Torgesen et al. [18]
+described a whole-school approach that includes assessment,
+targeted intervention, and professional development for teach-
+ers. The approach emphasized the importance of integrating
+number sense development into the curriculum and providing
+ongoing support for teachers to effectively teach number
+sense skills to students. West et al. [19] explored the use of
+visual representations, such as number lines, ten frames, and
+manipulatives, to develop number sense in elementary school
+students. The results suggested that visual representations can
+be an effective tool for promoting students’ understanding of
+numbers and their relationships.
+The relationship between number sense and mathematics
+achievement over time has also been investigated. Schneider
+et al. [20] [21] conducted longitudinal studies examining the
+development of number sense and its relationship to math-
+ematics achievement. The findings consistently showed that
+strong number sense skills in early childhood are predictive
+of later mathematics achievement. These findings highlight the
+importance of early number sense development as a foundation
+for future mathematics learning.
+Interventions aimed at improving number sense skills have
+been studied extensively. Mix et al. [22] discussed the im-
+portance of early mathematics education and the role of
+developmental psychology in improving instruction. They
+provided recommendations for developing number sense in
+young children, including the use of concrete manipulatives,
+real-world contexts, and engaging activities. Fuchs et al. [23]
+conducted a review of research on mathematics interventions
+for struggling students, including those with disabilities, and
+highlighted the significance of number sense development in
+these interventions.
+Several studies have specifically investigated the effective-
+ness of interventions aimed at developing early number sense
+in low-income or low-SES (socioeconomic status) students.
+Jordan et al. [24] conducted a study on the effectiveness of a
+comprehensive numeracy program for low-SES kindergartners
+and found that the program led to significant improvements
+in number sense skills. Jordan et al. [25] also conducted
+a systematic review of interventions aimed at developing
+early mathematics, including number sense, and discussed
+the effectiveness of various intervention strategies. Abreu-
+Mendoza et al. [26] examined the early number sense skills
+
+--- PAGE 3 ---
+2023 International Conference on Advanced Computing Technologies and Applications (ICACTA)
+of preschoolers and provided guidance on effective teaching
+strategies, emphasizing the importance of early number sense
+development in this age group.
+Meta-analyses have been conducted to examine the overall
+effectiveness of interventions aimed at developing number
+sense skills. Kim et al. [27] conducted a meta-analysis ex-
+amining the effectiveness of instructional strategies on the
+development of early number sense and provided recommen-
+dations for effective teaching strategies. Schneider et al. [21]
+also conducted a meta-analysis examining the effectiveness of
+number sense interventions and provided recommendations for
+effective intervention strategies.
+Other aspects related to number sense development have
+also been studied. The role of executive functions, such as
+working memory and cognitive flexibility, in early number
+sense development, has been investigated. St Clair-Thompson
+and Gathercole [28] examines the role of executive functions
+in early number sense development and provide guidance
+on effective teaching strategies. Jordan et al. [25] conducted
+a systematic review of interventions aimed at developing
+early mathematics skills, providing valuable insights into the
+effectiveness of various intervention strategies. The authors
+discussed the importance of early mathematics development
+and provided recommendations for future research in this
+area. Abreu-Mendoza et al. [26] focused on preschoolers’
+early number sense skills and emphasized the significance of
+early number sense development. They provided guidance on
+effective teaching strategies that can promote early number
+sense skills in young children, contributing to the literature on
+early mathematics education.
+Vasilyeva et al. [29] investigated the relationship between
+number sense and mathematics achievement in early elemen-
+tary school children. Their findings highlighted the strong
+association between number sense skills and mathematics
+achievement, underscoring the importance of early number
+sense development for later mathematics success. Symes et
+al. [30] conducted a systematic review of mathematics inter-
+ventions for children with special educational needs, shedding
+light on the effectiveness of different intervention strategies.
+Their recommendations for future research in this area can
+inform practitioners and researchers working with children
+with special educational needs.
+Clements et al. [10] presented learning trajectories for
+young children in mathematics education, emphasizing the
+significance of early number sense development. Their work
+provided valuable guidance on effective teaching strategies
+that can foster early number sense skills in young children,
+serving as a resource for educators and practitioners. Laski and
+Yu [31] examined the development of early mathematical cog-
+nition, including number sense and operations, and provided
+evidence-based guidance on effective teaching strategies. This
+contributes to the understanding of how young children acquire
+early mathematical skills and how educators can support their
+development.
+Baratta-Lorton [9] provided a comprehensive approach to
+developing number sense in early childhood, discussing the
+importance of early number sense development and providing
+practical guidance on effective teaching strategies. This work
+can be a valuable resource for educators and parents interested
+in promoting early mathematical skills in young children. Kim
+et al. [32] investigated the influence of instructional methods
+on young children’s early number sense development, pro-
+viding insights into effective instructional approaches. Their
+findings can inform educators and practitioners on evidence-
+based instructional strategies for promoting early number
+sense skills in young children.
+In summary, the related work reviewed in this paragraph
+encompasses a range of studies highlighting the importance
+of early number sense development in mathematics education.
+These studies provide insights into the effectiveness of vari-
+ous intervention strategies, offer recommendations for future
+research, and provide evidence-based guidance on effective
+teaching strategies. It is found that these studies significantly
+contribute to our understanding of the development of early
+mathematical skills in young children and provide valuable
+insights into how educators and practitioners can support
+their growth, particularly in terms of fostering number sense
+abilities. Participants were given instructions on navigating
+Smartick and completing math exercises. The assessment
+included math tasks targeting primary math skills, and children
+completed these tasks to the best of their abilities within a
+specified time period.
+III. P ROPOSED METHODOLOGY
+A total of 137 participants aged 6-10 years, who had access
+to a personal computer (PC) and an internet connection,
+were recruited from local schools in Mumbai to participate
+in this case study. The Smartick online math learning plat-
+form [33] was utilized as the assessment tool in this study.
+It offers personalized math lessons and exercises and em-
+ploys adaptive technology to customize the math curriculum
+according to the individualized level and pace of learning
+of each child. The platform provides an engaging audio-
+visual interface for interactive assessments, covering primary
+math skills such as Dot Comparison, Subitizing, Number
+Comparison, Mental Number Line, Number Line, Counting,
+Addition, Subtraction, and Multiplication. Data collected from
+the Smartick assessments, including performance measures
+such as accuracy, speed, and completion time, were recorded
+and analyzed using descriptive statistics. This analysis allowed
+for the identification of patterns or trends in the children’s
+math skills. The data were also used in selecting samples
+for testing the proposed prototype. Following analysis of
+Smartick assessment results and observations, an EDSense
+prototype was designed for the proposed intervention. The
+prototype was tested with dyscalculia specialists, including
+math educators, psychologists, and researchers. Expert feed-
+back was incorporated into refining the prototype to align with
+best practices and current research in dyscalculia intervention.
+EDSense is a specialized Bayesian Knowledge Tracing (BKT)
+model designed to analyze assessment data, including accurate
+answers, incorrect answers, and specific types of incorrect
+
+--- PAGE 4 ---
+2023 International Conference on Advanced Computing Technologies and Applications (ICACTA)
+answers commonly made by students with dyscalculia. The
+model is tailored to track and model students’ knowledge
+and performance, taking into account the specific mistakes
+they may make related to addition, multiplication, carrying
+digits, vanishing digits, individual digit addition, and the ”zero
+makes zero” concept. This allows for personalized feedback
+and support to address the unique learning needs of students
+with dyscalculia.
+The Bayesian Knowledge Tracing (BKT) model used in
+EDSense updates the student’s knowledge state based on the
+probability of mastery, which is inferred from the student’s
+responses to questions. The model uses a directed acyclic
+graph (DAG) to represent the dependencies between probabil-
+ities. For skills like Addition, Subtraction, and Multiplication,
+separate DAGs are created. The DAG for Addition and Sub-
+traction includes 16 micro levels, ranging from simple 1-digit
+addition to complex 3-digit addition with carry. The observable
+nodes in the DAG are the student’s responses, while the hidden
+nodes represent the student’s inferred knowledge states. The
+DAG starts with the prior probability of mastery, which is
+updated using learning rate and guessing rate. The slip rate is
+also updated, and finally, the posterior probability is computed
+based on the updated prior probability and slip rate. Bayesian
+Knowledge Tracing (BKT) is a statistical method used in
+educational data mining that models a student’s knowledge
+or skill state while interacting with an educational system
+using Bayesian probabilities. The BKT model consists of three
+probabilities: The prior probability of mastery (P(m)): This
+represents the probability that the student has already mastered
+the skill before interacting with the system. It is typically set
+to a low value, such as 0.1, to reflect that most students do
+not start with full mastery [34].
+Prior probability of mastery (P(m)) based on correct an-
+swers:
+P (m) = P (m) + (1 − P (m)) ∗ P (l) (1)
+Slip rate (P(s)) based on specific wrong answers:
+P (s) = P (s) + (1 − P (s)) ∗ P (g) (2)
+Posterior probability of mastery (P(p)) based on correct an-
+swers:
+P (p) = P (m)/(P (m) + P (s)) (3)
+Where P(m) represents the prior probability of mastery,
+P(l) represents the learning rate, P(s) represents the slip rate,
+and P(g) represents the guessing rate. These equations can
+be used to update the probabilities in the BKT model for
+analyzing student performance data in the context of math
+skill assessment.
+The proposed system architecture shown in Fig.1 for the
+math skill assessment includes a front-end built with React.js
+for the user interface, a back-end powered by Node.js and
+Express.js for handling requests and responses, and a MySQL
+database for storing assessment data. The system also incor-
+porates a question generation module using Express.js and
+MySQL for dynamic question selection based on the posterior
+probability calculated as per the proposed method. A report
+Fig. 1. EDSense System Architecture
+generation module in Node.js is implemented for analyzing
+answers and generating reports, and a Python script is utilized
+for retrieving questions from SQL Server if needed. This archi-
+tecture enables seamless interaction between the user interface,
+server-side components, and the database, facilitating efficient
+assessment and reporting of math skills for the participants.
+IV. R ESULT AND DISCUSSIONS
+When comparing the written and audio-visual assessments
+for dyscalculia, several key factors come into play. The
+written assessment predominantly relies on reading compre-
+hension and requires the child to translate problems into
+written formats, perform mental calculations, and provide
+written solutions. In contrast, the audio-visual assessment
+combines auditory and visual modalities, presenting instruc-
+tions verbally while displaying relevant information on the
+screen. This approach allows the child to process information
+through both modalities simultaneously and refer back to
+visual cues during calculations. While the written assessment
+places higher demands on reading and written skills, the
+audio-visual assessment offers a more immediate response
+and engages multiple senses, potentially catering to different
+learning strengths and preferences. Considering the specific
+needs and abilities of each child is crucial in selecting the
+most appropriate assessment method or utilizing a combination
+to provide a comprehensive evaluation of dyscalculia. The
+audio-visual Smartick tool, with its combination of auditory
+instructions and visual cues, is an ideal choice for dyscalculia
+assessment due to its ability to engage multiple senses and
+provide immediate feedback. Therefore, Smartick is selected
+as the preferred tool for assessing dyscalculia.
+The case study employed the Smartick online math learn-
+ing platform as the assessment tool for a sample of 137
+participants aged 6-10 years, who had access to a personal
+computer and internet connection. The findings indicated that
+students in standard 4 exhibited challenges in comprehending
+
+--- PAGE 5 ---
+2023 International Conference on Advanced Computing Technologies and Applications (ICACTA)
+Fig. 2. Dyscalculia test performance
+Fig. 3. Math Skills Performance: Speed Results from Smartick Assessment
+math terms and mastering multiplication, while students in
+standard 3 relied on finger counting but demonstrated rel-
+atively higher overall performance. Students in standard 2
+encountered difficulties in identifying mathematical symbols
+and comprehending instructions. These findings emphasize
+the need for targeted interventions and instructional strategies
+tailored to each standard’s specific math skill challenges.
+The case study observed that children taking the dyscalculia
+test had difficulty using the mouse and dragging and dropping
+objects on the interface, which resulted in reduced speed.
+These observations highlight the importance of considering the
+usability and accessibility of technology-based assessments for
+children, especially those with learning difficulties.
+Fig 2. depicts the results of the dyscalculia test assessment,
+which included 11 tasks evaluating three key areas of math-
+ematical learning: comparison and recognition of quantities,
+Arabic numbers and numbering, and arithmetic, broken down
+by grade level. Fig 3. presents the distribution of speed for
+solving skills in the dyscalculia test, categorized into five lev-
+els: Very Slow, Slow, Average, Very Fast, and Not Attempted.
+The speed is measured in seconds, and the graph shows the
+percentage of children who fell into each category. The results
+indicate that a majority of the children fell into the Very Slow
+speed category, with a smaller percentage in the Very Fast
+and Average categories and a few children did not attempt
+the task. The distribution of speed across these categories
+provides valuable insights into the performance of children
+in the dyscalculia test, highlighting areas where further sup-
+Fig. 4. Math Skills Performance: Accuracy Results from Smartick Assessment
+Fig. 5. EDsense Interface for Addition with Carry Skill Practice
+port and intervention may be required. Fig 4. displays the
+accuracy rates of children across all 11 skills included in the
+dyscalculia test. The figure highlights that children performed
+relatively well in most of the skills, with high accuracy rates
+observed in tasks such as counting, addition, and subtraction.
+However, there is room for improvement in some areas such
+as number comparison, number sequence, and multiplication.
+These findings provide valuable insights into the areas that
+require more attention and support to enhance mathematical
+learning and performance in children.
+Fig 5. depicts the proposed interface for practicing the skill
+of addition with carry in the EDsense platform. The interface
+includes three columns representing the hundreds, tens, and
+one’s places. Each column contains different objects to rep-
+resent the corresponding place value, such as watermelons,
+grapes, and apples. The interface also includes a prompt for
+the Addition problem to be solved and a box for entering the
+solution. Using different objects for each place value aims to
+avoid confusion and help children with insufficient number
+sense better understand and visualize the concept of carrying
+in Addition. Additionally, the interface allows children to
+manipulate the objects by dragging and dropping them into the
+corresponding columns, promoting a hands-on and interactive
+learning experience. The use of bright and colorful graphics
+is intended to engage children’s attention and facilitate their
+learning. Overall, the EDsense interface for addition with carry
+skill practice offers a visually appealing and effective tool for
+
+--- PAGE 6 ---
+2023 International Conference on Advanced Computing Technologies and Applications (ICACTA)
+children to improve their understanding and mastery of this
+essential mathematical skill.
+V. C ONCLUSION
+In conclusion, this research paper presents the develop-
+ment of EDSense, a specialized Bayesian Knowledge Tracing
+(BKT) model for math skill assessment in children with
+dyscalculia. Through the assessment of 137 participants aged
+6-10 years using the Smartick online math learning platform,
+data on accuracy, speed, and completion time were collected
+and analyzed using descriptive statistics. Based on the analysis,
+an EDSense prototype was designed and tested with experts
+in dyscalculia.
+EDSense utilizes a directed acyclic graph (DAG) to repre-
+sent the dependencies between probabilities and incorporates
+prior probability of mastery, slip rate, and guessing rate to
+update the student’s knowledge state. The system also includes
+a question selection module based on student performance,
+including correct answers, wrong answers, and specific wrong
+answers that indicate common mistakes made by students with
+dyscalculia.
+The findings from the case study highlight challenges in
+math comprehension, multiplication, and symbol identification
+among children with dyscalculia, underscoring the need for
+targeted interventions and instructional strategies. EDSense,
+with its personalized and data-driven approach, presents a
+promising tool for math skill assessment in children with
+dyscalculia, contributing to the field of dyscalculia interven-
+tion.
+Further research and development of EDSense could have
+significant implications for identifying and addressing math
+difficulties in children with dyscalculia, ultimately improving
+their math skills and academic outcomes. EDSense has the
+potential to be integrated into educational settings as a valuable
+tool for educators and practitioners working with children with
+dyscalculia, aiding in the development of effective interven-
+tions and instructional strategies tailored to the unique needs
+of these students.
+REFERENCES
+[1] B. Butterworth, “The development of arithmetical abilities,” Journal of
+child psychology and psychiatry , vol. 46, no. 1, pp. 3–18, 2005.
+[2] AMERICAN, “Dsm v: diagnostic and statistical manual of mental
+disorders,” 2013.
+[3] AMERICAN, “Dsm v: diagnostic and statistical manual of mental
+disorders,” 2013.
+[4] B. Walker, M. E. Shippen, P. Alberto, D. E. Houchins, and D. F. Cihak,
+“Using the expressive writing program to improve the writing skills of
+high school students with learning disabilities,” Learning Disabilities
+Research & Practice , vol. 20, no. 3, pp. 175–183, 2005.
+[5] A.-O. deManizales, J. A. A.-G. COVID, S. Orozco-Arias, D. Arias-
+Garz´on, L. H. L ´opez-Murillo, M. de la Iglesia Vay ´a, F. Buitrago-
+Carmona, J. P. Villa-Pulgar ´ın, R. Tabares-Soto, and E. Mercado-Ruiz,
+“to deep learninguniversidad appliedsonia tecnol ´ogicah. contreras-ortiz
+debol´ıvar,”AI Applications for Disease Diagnosis and Treatment , p. 202,
+2022.
+[6] D. C. Geary, “Early foundations for mathematics learning and their
+relations to learning disabilities,” Current directions in psychological
+science, vol. 22, no. 1, pp. 23–27, 2013.
+[7] G. Rehill, “Building a strong foundation in mathematics,” Year 9
+Interactive Maths , 2010.
+[8] Q. Liu, S. Tong, C. Liu, H. Zhao, E. Chen, H. Ma, and S. Wang,
+“Exploiting cognitive structure for adaptive learning,” in Proceedings
+of the 25th ACM SIGKDD International Conference on Knowledge
+Discovery & Data Mining , pp. 627–635, 2019.
+[9] M. Baratta-Lorton, Teaching Early Math: A Comprehensive Approach
+to Developing Number Sense . 2016.
+[10] D. H. Clements and J. Sarama, Early Childhood Mathematics Education
+Research: Learning Trajectories for Young Children . Routledge, 2017.
+[11] A. Hoffer and S. A. Schmitt, “Building early number sense in preschool-
+ers: A conceptual framework for a professional development program,”
+Early Childhood Education Journal , vol. 44, no. 6, pp. 567–576, 2016.
+[12] M. Vandermaas-Peeler, K. E. Nelson, and M. W. Fuhs, “Developing
+early number sense in preschool children: A systematic review of
+intervention studies,” Review of Educational Research , vol. 88, no. 5,
+pp. 783–827, 2018.
+[13] D. J. Purpura and J. A. Logan, “Number sense and mathematics
+achievement in kindergarten,” Journal of Experimental Child Psychol-
+ogy, vol. 153, pp. 15–34, 2017.
+[14] M.-P. No ¨el, L. Rousselle, and C. Mussolin, “Exploring the relationship
+between working memory and early number sense development,” De-
+velopmental Psychology, vol. 53, no. 7, pp. 1230–1243, 2017.
+[15] D. Zhang, Y . Ding, J. Li, and X. Wu, “The role of number sense in
+mathematical learning,” Educational Psychology Review , vol. 31, no. 4,
+pp. 759–788, 2019.
+[16] S. S. Patel and S. L. Groenke, eds., Mathematical Cognition and
+Learning: Infusing Research into Practice . Information Age Publishing,
+2018.
+[17] J.-A. LeFevre and L. Berrigan, “The role of parental involvement
+in children’s development of number sense,” Early Education and
+Development, vol. 26, no. 3, pp. 378–399, 2015.
+[18] J. K. Torgesen, Y . Petscher, and E. A. Patall, “Developing early num-
+ber sense: A whole-school approach,” Teaching Exceptional Children ,
+vol. 47, no. 5, pp. 261–269, 2015.
+[19] R. West and J. Torgesen, “Developing number sense through the
+use of visual representations in elementary mathematics,” Mathematics
+Education Research Journal , vol. 30, no. 3, pp. 307–329, 2018.
+[20] M. Schneider, T. M. Beasley, A. L. Boudreaux, and M. B. Calhoon,
+“The development of number sense and its relationship to mathematics
+achievement,” Journal of Experimental Child Psychology , vol. 149,
+pp. 50–65, 2016.
+[21] M. Schneider, K. Beeres, L. Coban, S. Merz, S. Susan Schmidt,
+J. Stricker, and B. De Smedt, “A comprehensive meta-analysis of the
+number sense intervention literature,” Educational Research Review ,
+vol. 18, pp. 40–58, 2016.
+[22] K. S. Mix and A. L. Bunter, Improving Elementary Mathematics
+Education: Insights from Developmental Psychology . Routledge, 2016.
+[23] L. S. Fuchs, D. Fuchs, S. R. Powell, and P. M. Seethaler, “Mathematics
+interventions for struggling students with and without disabilities,”
+Exceptional Children, vol. 82, no. 4, pp. 443–462, 2015.
+[24] N. C. Jordan, J. Huttenlocher, and S. C. Levine, “A comprehensive
+numeracy program for low-ses kindergartners: Effects on number sense,”
+Journal of Educational Psychology , vol. 111, no. 2, pp. 224–241, 2019.
+[25] N. C. Jordan, J. Glutting, C. Ramineni, and M. W. Watkins, “Inter-
+ventions to develop early mathematics: A systematic review of the
+literature,” Early Childhood Research Quarterly, vol. 45, pp. 1–16, 2018.
+[26] R. A. Abreu-Mendoza, R. A. Arteaga-V ´azquez, and R. A. Arias-Garc ´ıa,
+“Investigating the early number sense skills of preschoolers: A cross-
+sectional study,” Early Childhood Education Journal , vol. 45, no. 3,
+pp. 327–335, 2017.
+[27] J. S. Kim, P. Griffin, S. R. Patton, J. Sarama, and D. H. Clements,
+“A meta-analysis of the effectiveness of instructional strategies on
+the development of early number sense,” Early Childhood Research
+Quarterly, vol. 45, pp. 1–17, 2018.
+[28] H. L. St Clair-Thompson and S. E. Gathercole, “The role of executive
+functions in the development of early number sense,” Cognitive Devel-
+opment, vol. 39, pp. 29–40, 2016.
+[29] M. Vasilyeva, E. V . Laski, and S. A. Petrill, “The relationship between
+number sense and mathematics achievement in early elementary school,”
+Journal of Experimental Child Psychology , vol. 166, pp. 500–515, 2018.
+[30] W. Symes, T. P. Carpenter, and W. Tate, “Mathematics interventions
+for children with special educational needs: A systematic review,”
+Educational Psychology Review , vol. 30, no. 2, pp. 477–509, 2018.
+[31] E. V . Laski and Q. Yu, “The development of early mathematical
+cognition: Number and operation,” Wiley Interdisciplinary Reviews:
+Cognitive Science , vol. 8, no. 3, p. e1435, 2017.
+
+--- PAGE 7 ---
+2023 International Conference on Advanced Computing Technologies and Applications (ICACTA)
+[32] J. Y . Kim, D. H. Clements, and J. Sarama, “The influence of instructional
+method on young children’s early number sense development,” Early
+Childhood Research Quarterly , vol. 39, pp. 1–14, 2017.
+[33] Smartick, “Smartick dyscalculia assessment tool.”
+https://www.smartick.com/dyscalculia-assessment/, 2009.
+[34] Z. A. Pardos and N. T. Heffernan, “Kt-idem: Introducing item difficulty
+to the knowledge tracing model,” in User Modeling, Adaption and
+Personalization: 19th International Conference, UMAP 2011, Girona,
+Spain, July 11-15, 2011. Proceedings 19 , pp. 243–254, Springer, 2011.

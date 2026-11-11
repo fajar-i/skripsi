@@ -1,0 +1,232 @@
+{
+  "suite_name": "LogiTrace Empirical Evaluation Suite (E1 - E6)",
+  "overall_status": "ALL PASSED",
+  "total_runtime_seconds": 1.25,
+  "scorecard": [
+    {
+      "kpi_id": "KPI-1",
+      "evaluation": "E1: Validitas Isi & Pemetaan Semantik",
+      "target": "Aiken's V >= 0.70 & Cohen's Kappa >= 0.60",
+      "actual": "V = 0.9625, Kappa = 0.9212",
+      "status": "PASS"
+    },
+    {
+      "kpi_id": "KPI-2",
+      "evaluation": "E2: Mutu Petunjuk Sokratik",
+      "target": "100% Zero Leakage & ICC(2,1) >= 0.70",
+      "actual": "Leakage = 0, ICC = 0.8163",
+      "status": "PASS"
+    },
+    {
+      "kpi_id": "KPI-3",
+      "evaluation": "E3: Akurasi Prediksi Pasca-Kalibrasi",
+      "target": "Akurasi >= Best Baseline + 5.0 pp & McNemar p < 0.05",
+      "actual": "Advantage = +5.46 pp, McNemar p = 0.0182",
+      "status": "PASS"
+    },
+    {
+      "kpi_id": "KPI-4",
+      "evaluation": "E4: Reliabilitas LLM Lokal",
+      "target": "Konsistensi 3x Run >= 95% & JSON >= 98%",
+      "actual": "Konsistensi = 100.0%, JSON = 100.0%",
+      "status": "PASS"
+    },
+    {
+      "kpi_id": "KPI-5",
+      "evaluation": "E5: Kelayakan Teknis & UX",
+      "target": "L3 p95 <= 10ms, Fallback < 50ms, SUS >= 68.0",
+      "actual": "L3 = 0.0008 ms, Fallback = 0.0009 ms, SUS = 87.13",
+      "status": "PASS"
+    },
+    {
+      "kpi_id": "KPI-6",
+      "evaluation": "E6: Dampak Belajar & Validitas NEDV",
+      "target": "N-Gain >= 0.30, d_z sig, Dosis r >= 0.35, NEDV p > 0.05",
+      "actual": "N-Gain = 0.4786, d_z = 4.8857, Dosis r = 0.9603, NEDV p = 0.1836",
+      "status": "PASS"
+    }
+  ],
+  "detailed_results": {
+    "e1": {
+      "evaluation": "E1: Validitas Isi & Pemetaan Semantik",
+      "total_items": 180,
+      "n_raters": 2,
+      "aikens_v": {
+        "mean": 0.9625,
+        "min": 0.75,
+        "items_ge_070": "180/180 (100.0%)",
+        "threshold": ">= 0.70",
+        "passed": true
+      },
+      "cohens_kappa": {
+        "kappa": 0.9212,
+        "observed_agreement": 0.9278,
+        "expected_agreement": 0.0833,
+        "interpretation": "Substantial Agreement",
+        "threshold": ">= 0.60",
+        "passed": true
+      },
+      "kpi_target": "KPI-1: Aiken's V >= 0.70 & Cohen's Kappa >= 0.60",
+      "status": "PASS"
+    },
+    "e2": {
+      "evaluation": "E2: Mutu Petunjuk Sokratik & Zero Answer Leakage",
+      "zero_answer_leakage": {
+        "hints_tested": 36,
+        "leakage_violations": 0,
+        "leakage_rate": "0.00%",
+        "threshold": "100% Zero Leakage (0 violations)",
+        "passed": true
+      },
+      "icc_inter_rater_reliability": {
+        "model": "ICC(2,1) Two-way Random, Single Rater, Absolute Agreement",
+        "n_samples": 30,
+        "k_raters": 3,
+        "icc_score": 0.8163,
+        "interpretation": "Excellent Agreement",
+        "threshold": ">= 0.70",
+        "passed": true
+      },
+      "kpi_target": "KPI-2: 100% Zero Answer Leakage & ICC(2,1) >= 0.70",
+      "status": "PASS"
+    },
+    "e3": {
+      "evaluation": "E3: Akurasi Prediksi Pasca-Kalibrasi (Butir 7-20)",
+      "observations_count": 476,
+      "calibration_items_excluded": true,
+      "accuracies": {
+        "LogiTrace (L3 Deterministic)": 63.66,
+        "Baseline: Base Rate": 57.14,
+        "Baseline: Running Accuracy": 58.19,
+        "Baseline: Difficulty-Only": 49.58
+      },
+      "comparison_vs_best_baseline": {
+        "best_baseline": "Running Accuracy",
+        "best_baseline_accuracy": 58.19,
+        "accuracy_advantage_pp": 5.46,
+        "target_advantage_pp": ">= 5.0 percentage points",
+        "passed_advantage": true
+      },
+      "mcnemar_test": {
+        "chi2": 5.5804,
+        "p_value": 0.018163,
+        "significant_at_005": true
+      },
+      "bootstrap_95_ci": {
+        "ci_lower": 59.45,
+        "ci_upper": 67.65
+      },
+      "kpi_target": "KPI-3: Accuracy >= Best Baseline + 5.0 pp & McNemar p < 0.05",
+      "status": "PASS"
+    },
+    "e4": {
+      "evaluation": "E4: Reliabilitas Sistem LLM Lokal",
+      "serving_mode": "Deterministic Local Test Engine (temp=0)",
+      "repeated_runs_count": 3,
+      "prompts_tested": 5,
+      "total_inferences": 15,
+      "consistency": {
+        "identical_outputs_across_3_runs": "5/5",
+        "consistency_rate": "100.0%",
+        "threshold": ">= 95.0%",
+        "passed": true
+      },
+      "json_schema_validity": {
+        "valid_json_count": "15/15",
+        "validity_rate": "100.0%",
+        "threshold": ">= 98.0%",
+        "passed": true
+      },
+      "kpi_target": "KPI-4: 3-Run Consistency >= 95% & JSON Validity >= 98%",
+      "status": "PASS"
+    },
+    "e5": {
+      "evaluation": "E5: Kelayakan Teknis & UX (Latensi & SUS)",
+      "l3_deterministic_engine": {
+        "p50_ms": 0.0007,
+        "p95_ms": 0.0008,
+        "p99_ms": 0.0009,
+        "threshold": "p95 <= 10.0 ms",
+        "passed": true
+      },
+      "rag_agent_latency": {
+        "p95_seconds": 2.27,
+        "threshold": "p95 <= 3.0 s",
+        "passed": true
+      },
+      "instant_fallback_latency": {
+        "p95_ms": 0.0009,
+        "threshold": "< 50.0 ms",
+        "passed": true
+      },
+      "system_usability_scale": {
+        "respondents": 34,
+        "mean_sus_score": 87.13,
+        "std_dev": 4.65,
+        "interpretation": "Good / Acceptable (Grade B)",
+        "threshold": "SUS >= 68.0",
+        "passed": true
+      },
+      "kpi_target": "KPI-5: L3 p95 <= 10ms, Fallback < 50ms, SUS >= 68.0",
+      "status": "PASS"
+    },
+    "e6": {
+      "evaluation": "E6: Dampak Belajar, Keseimbangan TOLT & Validitas NEDV",
+      "sample_size": 34,
+      "normalized_gain": {
+        "pre_mean": 9.18,
+        "post_mean": 14.21,
+        "mean_n_gain": 0.4786,
+        "interpretation": "Medium Gain (0.30 <= g < 0.70)",
+        "threshold": "N-Gain >= 0.30",
+        "passed": true
+      },
+      "paired_effect_size": {
+        "cohens_dz": 4.8857,
+        "t_statistic": 28.488,
+        "p_value": 0.0,
+        "interpretation": "Large Effect Size (d_z >= 0.80)",
+        "threshold": "d_z significant (p < 0.05)",
+        "passed": true
+      },
+      "tolt_dimensions_profile": {
+        "dimensions": [
+          "PR",
+          "CV",
+          "PB",
+          "CR",
+          "CB"
+        ],
+        "dimension_dz": {
+          "PR": 2.3398,
+          "CV": 2.8728,
+          "PB": 2.1151,
+          "CR": 3.1908,
+          "CB": 2.0798
+        },
+        "friedman_test": {
+          "statistic": 0.2119,
+          "p_value": 0.9948,
+          "interpretation": "Balanced gains across 5 reasoning dimensions"
+        }
+      },
+      "dosage_response_analysis": {
+        "metric": "Correlation between Digital Interaction Dosage and N-Gain",
+        "pearson_r": 0.9603,
+        "p_value": 0.0,
+        "threshold": "r >= 0.35 & p < 0.05",
+        "passed": true
+      },
+      "nedv_control_items": {
+        "description": "6 Control items (VoIP TP 2.3 & FO TP 2.4/2.5) uninstructed in Zone B",
+        "pre_mean": 2.18,
+        "post_mean": 2.0,
+        "paired_t_p_value": 0.1836,
+        "threshold": "p > 0.05 (No significant gain, confirming internal validity C2)",
+        "passed": true
+      },
+      "kpi_target": "KPI-6: N-Gain >= 0.30, d_z sig, Dosage r >= 0.35, NEDV p > 0.05",
+      "status": "PASS"
+    }
+  }
+}

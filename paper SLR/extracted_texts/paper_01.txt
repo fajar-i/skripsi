@@ -1,0 +1,2799 @@
+--- PAGE 1 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 1
+A Survey of Knowledge Tracing: Models, Variants,
+and Applications
+Shuanghong Shen, Qi Liu, Member, IEEE, Zhenya Huang, Member, IEEE, Yonghe Zheng,
+Minghao Yin, Member, IEEE, Minjuan Wang, Member, IEEE, and Enhong Chen, Fellow, IEEE
+Abstract—Modern online education has the capacity to provide
+intelligent educational services by automatically analyzing sub-
+stantial amounts of student behavioral data. Knowledge Tracing
+(KT) is one of the fundamental tasks for student behavioral
+data analysis, aiming to monitor students’ evolving knowledge
+state during their problem-solving process. In recent years, a
+substantial number of studies have concentrated on this rapidly
+growing field, significantly contributing to its advancements. In
+this survey, we will conduct a thorough investigation of these
+progressions. Firstly, we present three types of fundamental KT
+models with distinct technical routes. Subsequently, we review
+extensive variants of the fundamental KT models that consider
+more stringent learning assumptions. Moreover, the development
+of KT cannot be separated from its applications, thereby we
+present typical KT applications in various scenarios. To facilitate
+the work of researchers and practitioners in this field, we
+have developed two open-source algorithm libraries: EduData
+that enables the download and preprocessing of KT-related
+datasets, and EduKTM that provides an extensible and unified
+implementation of existing mainstream KT models. Finally, we
+discuss potential directions for future research in this rapidly
+growing field. We hope that the current survey will assist both
+researchers and practitioners in fostering the development of KT,
+thereby benefiting a broader range of students.
+Index Terms—Online Education, Knowledge Tracing, Educa-
+tional Data Mining, Adaptive Learning, User Modeling.
+I. I NTRODUCTION
+W
+ITH the proliferation of the Internet and mobile com-
+munication technology, online education has become
+increasingly popular and is now developing at an unprece-
+dented scale [1, 2, 3]. This innovative style of learning pro-
+S. Shen, and E. Chen (corresponding author) are with the School of
+Data Science, University of Science and Technology of China & State Key
+Laboratory of Cognitive Intelligence, Hefei, Anhui, 230026, China. Email:
+closer@mail.ustc.edu.cn, cheneh@ustc.edu.cn
+Q. Liu (corresponding author), and Z. Huang are with the School of
+Computer Science and Techonology, University of Science and Technology
+of China & State Key Laboratory of Cognitive Intelligence & Institute of
+Artificial Intelligence, Hefei Comprehensive National Science Center, Hefei,
+Anhui, 230026, China. Email: {qiliuql, huangzhy}@ustc.edu.cn
+Y . Zheng is with the Research Institute of Science Education, Faculty
+of Education, Beijing Normal University, Haidian, Beijing, 100875, China.
+Email: zhengyonghe@bnu.edu.cn
+M. Yin is with the School of Information Science and Technology,
+Northeast Normal University, Changchun, Jilin, 130117, China. Email:
+ymh@nenu.edu.cn
+M. Wang is with The Education University of Hong Kong, Hong Kong
+SAR, 999077, China and San Diego State University, San Diego, CA 92182
+USA. Email: mwang@sdsu.edu
+vides a degree of flexibility that conventional education cannot
+match, which enables teaching and learning to occur at any
+time and any place. Meanwhile, online learning systems (e.g.,
+Coursera, ASSISTment) [4, 5, 6] have proven to be even more
+effective than traditional learning styles, since they can offer
+more intelligent educational services, such as recommending
+individualized learning resources to students [7, 8]. To provide
+these intelligent services, online learning systems continuously
+record a massive amount of available data about student-
+system interactions (e.g., responding to exercises), which can
+be further mined to assess their knowledge levels, learn-
+ing preferences, and other attributes. Specifically, Knowledge
+Tracing (KT) [9] is one of the most fundamental and critical
+tasks for analyzing students’ learning behavior data, which
+aims to explore the recorded student-system interactions to
+monitor their evolving knowledge states [10, 11].
+Fig. 1 presents a simple schematic diagram of knowledge
+tracing. During the learning process, online learning systems
+continuously record students’ learning behavioral data, in-
+cluding exercises and their related knowledge concepts (e.g.,
+equality, inequality, plane vector , probability, represented in
+various colors), and students’ answers (i.e., correct or incorrect
+responses). A substantial amount of supplementary informa-
+tion is also simultaneously recorded, including response time,
+opportunity count, and tutor intervention, which provides a
+more comprehensive reflection of students’ learning process.
+Based on the collected learning data, researchers are striving
+to maintain an estimate of students’ evolving knowledge
+states. For illustration, we give a case in Fig. 1, where the
+student’s prior knowledge is quantified as 0.2, 0.4, 0.4, and
+0.5 across four distinct knowledge concepts. The radar map
+serves as a visual representation of the student’s knowledge
+mastery, which progressively expands as the student continues
+to acquire new knowledge in learning. After a period of
+learning, the student’s knowledge states reach 0.9, 0.8, 0.8, and
+0.7 respectively, suggesting good knowledge growth. In the
+aforementioned learning process, KT models aim to monitor
+changes in students’ knowledge states. Once we understand
+students’ knowledge states, the learning system can customize
+more suitable learning schemes for different students, thereby
+enabling the teaching of students in accordance with their
+proficiency. It also allows students to better comprehend their
+learning process and gradually focus on improving their skills
+with poorly mastered concepts [12, 13].
+Knowledge tracing has been studied for decades, with the
+first studies tracing back to the late 1970s. These initial
+works primarily focused on confirming the effectiveness of
+arXiv:2105.15106v4  [cs.CY]  11 Apr 2024
+
+--- PAGE 2 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 2
+k1：equality k2：inequality k3：plane vector
+e2 e3 e4 e5 e6 e7 e8e1 e9
+Knowledge
+Components
+Exercises
+Side Information response time, opportunity count, tutor intervention , engagement …
+Answers
+Knowledge
+State
+k4：probability
+e10 e11 e12
+× √ × × ×√ √ √ √ √√×
+0.2
+0.4
+0.4
+0.5
+0.7
+0.5
+0.4
+0.5
+0.7
+0.8
+0.4
+0.5
+0.6
+0.6
+0.4
+0.4
+0.7
+0.6
+0.4
+0.4
+0.8
+0.7
+0.4
+0.4
+0.8
+0.9
+0.3
+0.4
+0.8
+0.9
+0.5
+0.4
+0.9
+0.9
+0.5
+0.4
+0.9
+0.8
+0.5
+0.3
+0.8
+0.8
+0.7
+0.4
+0.9
+0.8
+0.8
+0.7
+Student
+Fig. 1. A simple schematic diagram of knowledge tracing. Different knowledge concepts are represented in different colors, while exercises are also depicted
+in the color relevant to the knowledge concepts. During the learning process, different kinds of side information are also recorded. The evolving process of
+the knowledge state is assessed by KT models and illustrated by the radar maps.
+mastery learning [14]. To the best of our knowledge, Corbett
+and Anderson [9] were the first to introduce the concept of
+knowledge tracing, employing Bayesian networks to model the
+student learning process, which they referred to as Bayesian
+Knowledge Tracing. Since then, the significance of KT has
+been recognized by a broader spectrum of researchers, and
+increasing attention has been directed towards KT-related
+research. Many logistic models have been applied to KT,
+including Learning Factor Analysis [15] and Performance
+Factor Analysis [16]. In recent years, deep learning has
+greatly enhanced research into the KT task, largely due to
+its capacity to extract and represent features and discover
+intricate structure. For instance, Deep Knowledge Tracing
+introduced recurrent neural networks (RNNs) [17] into the
+KT task and was found to significantly outperform previous
+methods [18]. Following this, various methods have been
+introduced that employ various types of neural networks to
+the KT task, considering various characteristics of the learning
+sequence [19, 20, 21]. Moreover, due to the requirements of
+practical applications, many variants of KT models have been
+continuously developed, and KT has already been broadly
+applied in numerous educational scenarios.
+While novel KT models continue to emerge, there remains
+a lack of comprehensive surveys exploring this young research
+field, particularly regarding its numerous variants and appli-
+cations. To this end, the current survey aims to systematically
+review the development of KT. As depicted in Figure 2,
+we initially categorize existing KT models from a technical
+perspective, which is consistent with the majority of existing
+surveys [22, 23]. This categorization splits them into three cat-
+egories: (1) Bayesian models, (2) logistic models, and (3) deep
+learning models. In each category, we further organize specific
+KT methods according to their various techniques. Subse-
+quently, we introduce extensive variants of these fundamental
+KT models, which consider more stringent assumptions about
+more complete learning process in different learning phases.
+In addition, we present several typical applications of KT in
+real learning scenarios. Due to the complexity of different KT
+models, we have open sourced two algorithm libraries to better
+aid researchers and practitioners in implementing KT models
+and facilitate community development in this domain. These
+libraries, EduData1 and EduKTM2, include most existing KT-
+related datasets, extensible, and unified implementations of
+existing KT models, and relevant resources. Finally, we discuss
+potential future research directions. In summary, this paper
+presents an extensive survey of KT that can serve as a
+comprehensive guide for both researchers and practitioners.
+The remainder of this survey is structured as follows.
+Section II presents an overview of the KT task and we discuss
+the differences between this and previous surveys. Section III
+provides a review of the three categories of fundamental KT
+models. Section IV describes the variants of fundamental KT
+models. Section V introduces the extensive applications of
+KT in different scenarios. Section VI gives the summary of
+existing datasets for evaluating KT models and details of the
+algorithm libraries we have released. Section VII discusses
+some potential future research directions. Finally, section VIII
+summarizes the paper.
+II. O VERVIEW
+A. Problem Definition
+In an online learning system, supposing there exists a set of
+students S and a set of exercises E. Each exercise is related
+to specific Knowledge Concepts (KCs). Generally, the name
+given to the knowledge related to exercises differs across
+online learning platforms. For instance, it is named skill in
+ASSISTments [24]. To promote better understanding, we refer
+to these uniformly as knowledge concepts throughout this pa-
+per, and denote the set of all KCs as KC. Moreover, M and K
+are respectively used to represent the total number of exercises
+and KCs. Students are asked to answer different exercises in
+order to achieve mastery of the related knowledge. Therefore,
+the learning sequence of a student can be formulated as X =
+{([e1, ke1 ], a1, r1), ([e2, ke2 ], a2, r2), ..., ([et, ket ], at, rt), ...,
+([eN , keN ], aN , rN )}, where the tuple ([et, ket ], at, rt) rep-
+resents the learning interaction at the t−th time step, et
+represents the exercise, ket represents the exercise’s related
+KCs, at represents the correctness label (i.e., with 1 for correct
+and 0 for incorrect answers), rt stands for the side information
+recorded in this learning interaction, and N is the length of the
+learning sequence. The research problem of knowledge tracing
+can thus be defined as follows:
+1https://github.com/bigdata-ustc/EduData
+2https://github.com/bigdata-ustc/EduKTM
+
+--- PAGE 3 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 3
+Knowledge Tracing 
+Deep learning models
+Logistic models
+Bayesian models
+Variants Applications
+Modeling individualization 
+before learning
+Incorporating engagement
+during learning
+ player modeling
+Fundamental models
+Considering forgetting 
+after learning
+Learning resources 
+recommendation
+Adaptive learning
+Broader Applications
+Bayesian knowledge tracing
+Dynamic Bayesian 
+knowledge tracing
+Learning factor analysis
+Performance factor analysis
+Knowledge tracing machines
+Deep knowledge tracing
+Memory-aware knowledge tracing
+Attentive knowledge tracing
+Graph-based knowledge tracing
+Utilizing side information 
+across learning
+Fig. 2. An overview of knowledge tracing models.
+Given sequences of learning interactions in online learn-
+ing systems, knowledge tracing aims to monitor students’
+evolving knowledge states during the learning process
+and predict their performance on future exercises. The
+measured knowledge states can be further applied to indi-
+vidualize students’ learning schemes in order to maximize
+their learning efficiency.
+Some recent works directly regarded the KT task as student
+performance prediction, without considering students’ knowl-
+edge states [25, 26, 27]. We agree that predicting student
+performance is of great significance, as it is now the best way
+to evaluate the quality of the knowledge state traced by KT
+models. However, we have to point out that KT focuses more
+on students’ knowledge states, especially their interpretability
+and rationality, which is related to the students’ acceptance of
+the conclusions given based on the KT model [28, 29].
+B. Categorization
+As shown in Fig. 2, we categorize and summarize the
+existing KT models according to their technical differences.
+In more detail, the proposed taxonomy splits existing KT
+methods into three categories: (1) Bayesian models, which are
+implemented through probability model, (2) logistic models,
+which are implemented through logistic functions, and (3)
+deep learning models, which are implemented through neural
+networks. Specifically, we divide the deep learning models into
+four sub-categories according to four various neural networks,
+i.e., deep knowledge tracing based on recurrent neural net-
+works, memory-aware knowledge tracing based on memory
+networks, attentive knowledge tracing based on self-attention
+mechanism, and graph-based knowledge tracing based on
+graph neural networks. In addition to these fundamental KT
+models, we also introduce a large number of their variants,
+which respectively consider a more complete learning process
+in distinct learning phases: (1) modeling individualization
+before learning, (2) incorporating engagement during learning,
+(3) considering forgetting after learning, and (4) utilizing side
+information across learning. Moreover, we also summarize the
+extensive applications of KT in different educational scenarios,
+including learning resources recommendation, adaptive learn-
+ing and broader applications beyond student learning.
+C. Differences between this and previous surveys
+Given the increasing importance of KT, several recent
+surveys have also examined this area. These include works
+by Schmucker et al. [22], Abdelrahman et al. [23], Pel ´anek
+[30], Song et al. [31], Liu [32], Zanellati et al. [33]. Here, we
+will briefly discuss the key distinctions between these studies
+to highlight the necessity and significance of this survey.
+Existing surveys have either focused on specific categories
+of KT models or comprehensively reviewed all available KT
+models. For example, Pel ´anek [30] provided an overview of
+KT in terms of Bayesian models and logistic models, Song
+et al. [31] compared and discussed deep learning based KT
+models, while Zanellati et al. [33] presented to pay more
+attention to hybird models in KT. Liu [32] conducted a
+bibliometric analysis to examine the evolution of KT research
+from 1992 to 2021. Abdelrahman et al. [23] also presented a
+comprehensive survey for the KT literature, including a broad
+range of methods starting from the early attempts to the recent
+state-of-the-art techniques utilizing deep learning. Schmucker
+et al. [22] summarized KT methods in the context of student
+performance modeling problems.
+However, current surveys are somewhat limited in their
+scope, they only provide a detailed introduction to various KT
+methods and comparisons between them. Given the complexity
+of online learning systems and the significant importance
+of KT research in practical applications, this survey places
+a greater emphasis on the variants and applications of KT
+models, rather than solely introducing and comparing dif-
+ferent KT methods. Moreover, considering that datasets are
+collected from different systems with various setting, subjects,
+learning stages, and scales, we do not report and compare
+the performance of KT models on the student performance
+prediction task across various datasets in this survey. Pavlik
+et al. [34] have also empirically verified that no single KT
+model was always the best, a specific better model must
+consider multiple student features and the learning context.
+Instead, we have open sourced two algorithm libraries which
+include the majority of existing KT-related datasets and uni-
+fied implementations of existing KT models. Consequently,
+researchers and practitioners can freely select appropriate
+KT models based on their specific requirements in various
+application scenarios.
+
+--- PAGE 4 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 4
+TABLE I
+A SUMMARY OF DIFFERENT TYPES OF FUNDAMENTAL KNOWLEDGE TRACING MODELS .
+Category Typical approach Technique KC relationship Knowledge state
+Bayesian models
+Bayesian knowledge tracing [9] Bayesian networks independent unobservable node
+in HMMdynamic Bayesian knowledge tracing [35] dynamic Bayesian networks pre-defined
+Logistic models
+learning factor analysis [15]
+logistic regression
+independent
+the output of
+logistic regression functionperformance factor analysis [16]
+knowledge tracing machines [36] factorization machines
+Deep learning
+models
+deep knowledge tracing [18] RNN/LSTM discover automatically the hidden state
+memory-aware knowledge tracing [37] memory networks correlation weights value matrix
+attentive knowledge tracing [20, 21] self-attention mechanism attention weights attentive historical knowledge state
+graph-based knowledge tracing [19] graph neural networks edges in graph aggregate in the graph
+III. F UNDAMENTAL KNOWLEDGE TRACING MODELS
+In this section, as shown in Table I, we will present the
+fundamental KT models, based on our taxonomic framework.
+Specifically, we will introduce these models in accordance
+with their development timeline. Subsequently, we will pro-
+vide a summary of these fundamental KT models.
+A. Bayesian Models
+Bayesian models assume that the learning process adheres
+to a Markov process. This process allows for the estimation
+of students’ latent knowledge states based on their observed
+performance. In the subsequent section, we will present two
+Bayesian models in our taxonomy framework: the Bayesian
+Knowledge Tracing (BKT) and the Dynamic Bayesian Knowl-
+edge Tracing (DBKT).
+1) Bayesian Knowledge Tracing: BKT’s structure is illus-
+trated in Fig. 3; here, the unshaded nodes represent unobserv-
+able latent knowledge states, while the shaded nodes represent
+the observable answers of the student.
+BKT is a unique instance of the Hidden Markov Model
+(HMM). There are two types of parameters in HMM: transition
+probabilities and emission probabilities. In BKT, the transition
+probabilities are defined by two learning parameters: (1)
+P (T ), the probability of transition from the unlearned state
+to the learned state; (2) P (F ), the probability of forgetting
+previously mastered knowledge. Moreover, the emission prob-
+abilities are determined by two performance parameters: (1)
+P (G) - the probability that a student will guess correctly,
+despite non-mastery; (2) P (S) - the probability that a student
+will make a mistake, despite mastery. Additionally,P (L0) rep-
+resents the initial probability of mastery. BKT operates within
+a two-state student modeling framework: knowledge is either
+learned or unlearned, and there is no forgetting once a student
+has mastered the knowledge. Based on the observations of
+the student’s learning interactions, the following equation is
+utilized to estimate the knowledge state and the probability of
+correct answers:
+P (Ln) = P (Ln|Answer) + (1 − P (Ln|Answer))P (T ),
+P (Cn+1) = P (Ln)(1 − P (S)) + (1 − P (Ln))P (G), (1)
+where P (Ln) is the probability that a KC is mastered at
+the n-th learning interaction, P (Cn+1) is the probability of
+correct answers at the next learning interaction. P (Ln) is the
+sum of two probabilities: (1) the probability that the KC is
+already mastered; (2) the probability that the knowledge state
+K
+ K
+ K
+A
+ A
+A
+P(L0) P(T) P(T) P(T)
+P(G)
+P(S)
+P(G)
+P(S)
+P(G)
+P(S)
+. . .
+. . .
+Fig. 3. The topology of Bayesian Knowledge Tracing [9]. K are the un-
+observed knowledge nodes, A are the observed performance (answer) nodes,
+P (L0) represents the initial probability, P (T ) is the transition probability,
+P (G) is the guessing probability and P (S) is the slipping probability.
+will convert to the mastered state. The posterior probability
+P (Ln|Answer) is estimated as follows:
+P (Ln|correct) = P (Ln−1)(1 − P (S))
+P (Ln−1)(1 − P (S)) + (1 − P (Ln−1))P (G) ,
+P (Ln|incorrect) = P (Ln−1)P (S)
+P (Ln−1)P (S) + (1 − P (Ln−1))(1 − P (G)) .
+(2)
+2) Dynamic Bayesian Knowledge Tracing: BKT indepen-
+dently models the parameters of each KC, employing a spe-
+cific model for each KC. However, KCs are not completely
+independent, but rather hierarchical and closely related [38].
+Dynamic Bayesian networks are capable of jointly represent-
+ing multiple skills within a single model, potentially enhancing
+the representational power of BKT. Consequently, K ¨aser et al.
+[35] propose dynamic Bayesian knowledge tracing (DBKT) to
+represent the hierarchies and relationships within KCs using
+dynamic Bayesian networks. This approach considers different
+KCs jointly within a single model.
+In DBKT, a student’s knowledge mastery is represented
+by binary latent variables, which are estimated based on
+their learning interactions. Unlike BKT, DBKT takes into
+account the dependencies between various KCs. For exam-
+ple, if KC 1 and KC 2 are prerequisites for mastering KC 3,
+students’ mastery of KC 3 depends on their mastery of KC 1
+and KC 2. Let H denote the unobserved variables, i.e., lack
+of student answers and binary mastery variables. Assuming
+the student correctly answers an exercise associated with
+KC 1 at time step t1, i.e., a1,1 = 1 . The observed vari-
+ables are then am = a1,1 and the unobserved variables are
+hm = {KC 1,1, KC2,1, KC3,1, a2,1, a3,1}. The objective of
+DBKT is to find the parameters θ that maximize the joint
+probability p(am, hm|θ). The log-likelihood can alternatively
+be formulated using a log-linear model, as follows:
+L(w) =
+X
+m
+ln(
+X
+hm
+exp(wT Φ(am, hm) − ln(Z))), (3)
+where Φ : A×H → RF denotes a mapping from the observed
+space A and the latent space H to an F -dimensional feature
+vector. Z is a normalizing constant, w denotes the weights.
+
+--- PAGE 5 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 5
+          1                                   
+           1   
+                1                                   
+Ui Ij Sk
+l
+w
+V
+ vi
+wi
+vj’
+wj’
+vk’
+wk’
+Students Exercises KCs
+Fig. 4. Example of activation of a knowledge tracing machine [36]. V refers
+to the matrix of embeddings, w refers to the vector of biases, x is the encoding
+vector of the learning interaction.
+B. Logistic Models
+Logistic models represent the probability of students cor-
+rectly answering exercises as a logistic function of the student
+and KC parameters. They first use different factors in students’
+learning interactions to compute an estimation of the student
+and KC parameters, then utilize a logistic function to transform
+this estimation into the prediction of the probability of mas-
+tery [30]. In the subsequent section, we will introduce three
+types of logistic models: (1) Learning Factor Analysis (LFA),
+(2) Performance Factor Analysis (PFA) and (3) Knowledge
+Tracing Machines (KTM).
+1) Learning Factor Analysis: The LFA model [15] consid-
+ers the following learning factors:
+• Initial knowledge state: parameter α estimates the initial
+knowledge state of each student;
+• Easiness of KCs: parameter β captures the easiness of
+different KCs;
+• Learning rate of KCs: parameter γ denotes the learning
+rate of KCs.
+The standard LFA model takes the following form:
+p(θ) = σ(
+X
+i∈N
+αiSi +
+X
+j∈KCs
+(βj + γjTj)Kj), (4)
+where σ is the sigmoid function, Si is the covariate for
+the student i, Tj represents the covariate for the number of
+interactions on KC j, Kj is the covariate for KC j, p(θ) is
+the estimation of the probability of a correct answer.
+2) Performance Factor Analysis: The PFA model [16] can
+be seen as an extension of the LFA model that is especially
+sensitive to the student performance. In contrast to the LFA
+model, PFA considers the following different factors:
+• Previous failures: parameter f is the prior failures for the
+KC of the student;
+• Previous successes: parameter s represents the prior suc-
+cesses for the KC of the student;
+• Easiness of KCs: parameter β means the easiness of
+different KCs, which is the same as in the LFA model.
+The standard PFA model takes the following form:
+p(θ) = σ(
+X
+j∈KCs
+(βj + µjsij + νjfij)), (5)
+where µ and ν are the coefficients for s and f, which denote
+the learning rates for successes and failures.
+3) Knowledge Tracing Machines: The KTM model, devel-
+oped by Vie et al. [36], employs factorization machines (FMs)
+[39, 40] to generalize logistic models to higher dimensions.
+FMs were initially introduced as a general predictor capable
+of working with any real-valued feature vector, enabling the
+model to represent all interactions between variables using
+factorized parameters [41]. FMs provide a means of encoding
+side information about exercises or students into the model.
+Figure 4 illustrates the example of KTM, which models the
+knowledge mastery of the student based on a sparse set of
+weights for all features involved in the event. Let L be
+the number of features; here, the features can be related to
+students, exercises, KCs, or any other side information. The
+learning interaction is encoded by a sparse vector l of length
+L. When feature i is involved in the interaction, li > 0. The
+probability p(θ) of the correct answer is determined by the
+following equations:
+p(θ) = σ(µ +
+LX
+i=1
+wili +
+X
+1≤i<j≤L
+lilj⟨vi, vj⟩), (6)
+where µ is the global bias, the feature i is modeled by the bias
+wi ∈ R and the embedding vi ∈ Rd (d is the dimension).
+Note that only features with li > 0 will have impacts on the
+predictions.
+C. Deep Learning Models
+The cognitive process can be influenced by various factors
+at both the macro and micro levels. It is difficult for Bayesian
+models or logistic models to adequately capture a cognitive
+process of high complexity [18]. Deep learning, with its potent
+ability to achieve non-linearity and feature extraction, is well-
+suited for modeling complex learning processes, particularly
+when a significant amount of learning interaction data is avail-
+able [42]. In recent years, numerous research works have been
+proposed on deep learning KT models, we will introduce deep
+learning models from four sub-categories: (1) deep knowledge
+tracing, (2) memory-aware knowledge tracing, (3) attentive
+knowledge tracing, and (4) graph-based knowledge tracing.
+1) Deep Knowledge Tracing: Deep Knowledge Tracing
+(DKT) is the pioneering approach that introduces deep learn-
+ing to complete the KT task. DKT employs Recurrent Neural
+Networks (RNNs) [17] to process the input sequence of
+learning interactions over time, maintaining a hidden state that
+implicitly contains information about the history of all past
+elements of the sequence. This hidden state evolves based
+on both the previous knowledge state and the present input
+learning interaction [18]. DKT provides a high-dimensional
+and continuous representation of the knowledge state, en-
+abling it to more effectively model the complex learning
+process. Typically, RNNs’ variant, the Long Short-Term Mem-
+ory (LSTM) networks [43], are more frequently used in the
+implementation of DKT, which is further strengthened by
+considering forgetting.
+Fig. 5 illustrates the process of deep knowledge tracing.
+In DKT, exercises are represented by their contained KCs.
+For datasets with different numbers of KCs, DKT applies
+two different methods to convert students’ learning interac-
+tions X = {(e1, a1), (e2, a2), ..., (et, at), ..., (eN , aN )} into a
+sequence of fixed-length input vectors. More specifically, for
+datasets with a small number K of unique KCs, xt ∈ {0, 1}2K
+is set as a one-hot embedding, where xk
+t = 1 if the answer
+at of the exercise with KC k was correct or xk+K
+t = 1
+
+--- PAGE 6 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 6
+. . .
+y1 y2 y3 yN
+h1
+ h2
+ h3
+ hN
+h0
+learning interactions
+hidden states
+predictions
+x1
+ x2
+ x3
+ xN
+Fig. 5. The architecture of DKT [18].
+if the answer was incorrect. For datasets with a large num-
+ber of unique KCs, one-hot embeddings are considered too
+sparse. Therefore, DKT assigns each input vector xt to a
+corresponding random vector, and then uses the embedded
+learning sequence as the input of RNNs. A linear mapping
+and activation function are then applied to the output hidden
+states to obtain the knowledge state of students:
+ht = tanh(Whsxt + Whhht−1 + bh),
+yt = σ(Wyhht + by), (7)
+where tanh is the activation function, Whs is the input
+weights, Whh is the recurrent weights, Wyh is the readout
+weights, and bh and by are the bias terms.
+Despite demonstrating superior performance compared to
+Bayesian and logistic models, DKT has several inherent
+shortcomings. For instance, the lack of interpretability is a
+significant drawback. It is challenging to understand how
+the hidden states represent students’ knowledge states, and
+the model cannot explicitly determine a student’s knowledge
+mastery from the hidden state [42]. Additionally, Yeung and
+Yeung [44] identified two unreasonable phenomena in DKT
+that contravene common sense. These are: (1) the inability
+to reconstruct observed input, and (2) inconsistent predicted
+knowledge states across time-steps. However, despite these
+shortcomings, DKT remains a promising KT model [45].
+2) Memory-aware Knowledge Tracing: To enhance the in-
+terpretability of DKT, memory-aware knowledge tracing intro-
+duces an external memory module, as proposed by [46]. This
+module is designed to store the and update the corresponding
+knowledge mastery of the student. The most representative
+example is Dynamic Key-Value Memory Networks (DKVMN)
+for knowledge tracing, as proposed by [37]. DKVMN high-
+lights students’ specific knowledge states on various knowl-
+edge categories. It initializes a static matrix, referred to as a
+key matrix to store latent KCs and a dynamic matrix, called a
+value matrix to store and update the mastery of corresponding
+KCs through read and write operations over time.
+As shown in Fig. 6, an embedding matrix is first defined to
+obtain the embedding vector kt of the exercises. A correlation
+weight wt is then obtained by taking the inner product
+between the exercise embedding kt and the key vectors M k,
+followed by the softmax activation:
+wt = Sof tmax(ktM k), (8)
+where the correlation weight wt represents the correlation
+between the exercises and all latent KCs.
+In the read operation, DKVMN predicts student perfor-
+mance based on the student’s knowledge mastery. Specifically,
+DKVMN reads students’ mastery of the exercise rt with refer-
+ence to the weighted sum of all memory vectors in the value
+matrix using the correlation weight. The read content and the
+input exercise embeddings are then concatenated together and
+passed to a fully connected layer to yield a summary vector
+ft, which contains both the student’s knowledge mastery
+and the prior difficulty of the exercise. Furthermore, the
+student’s performance can be predicted by applying another
+fully connected layer with a sigmoid activation function to
+the summary vector:
+rt =
+NX
+i=1
+wt(i)M v
+t (i),
+ft = tanh(Wf [rt, kt] + bf ),
+pt = σ(Wpft + bp),
+(9)
+where Wf and Wp are the weights, bf and bp are bias terms.
+In the write operation, after an exercise has been answered,
+DKVMN updates students’ knowledge mastery (i.e., the value
+matrix) based on their performance. Specifically, the learning
+interaction (et, at) is first embedded with an embedding ma-
+trix B to obtain the student’s knowledge growth vt. Then
+DKVMN calculates an erase vector eraset from vt and
+decides to erase the previous memory with reference to both
+the erase vector and the correlation weight wt. Following
+erasure, the new memory vectors are updated by the new
+knowledge state and the add vector addt, which forms an
+erase-followed-by-add mechanism that allows forgetting and
+strengthening knowledge mastery in the learning process:
+eraset = σ(Wevt + be),
+fM v
+t (i) = M v
+t−1(i)[1 − wt(i)eraset],
+addt = tanh(Wdvt + bd),
+M v
+t (i) = fM v
+t (i) + wt(i)addt,
+(10)
+where We and Wd are the weights, be and bd are bias terms.
+Abdelrahman and Wang [47] point out that DKVMN failed
+to capture long-term dependencies in the learning process.
+Therefore, they propose a Sequential Key-Value Memory
+Network (SKVMN) to combine the strengths of DKT’s recur-
+rent modelling capacity and DKVMN’s memory capacity. In
+SKVMN, a modified LSTM called Hop-LSTM is used to hop
+across LSTM cells according to the relevance of the latent
+KCs, which directly captures the long-term dependencies.
+During the writing process, SKVMN allows for the calculation
+of the knowledge growth of a new exercise, taking into
+consideration the current knowledge state, thereby yielding
+more reasonable results.
+3) Attentive Knowledge Tracing: In the development of
+deep learning, the Transformer is initially proposed for neural
+machine translation [25], which abandons recurrence and
+solely relies on the self-attention mechanism to capture global
+dependencies within a sequence. The Transformer has been
+demonstrated to excel in feature extraction and dependency
+capture, while maintaining high computational efficiency.
+Some representative pre-training models based on the Trans-
+former, such as BERT [48] and GPT [49], have obtained state-
+of-the-art results on various natural language processing tasks.
+Pandey and Karypis [20] propose a self-attentive model for
+knowledge tracing (SAKT), which directly apply the Trans-
+former to capture long-term dependencies between students’
+learning interactions. Furthermore, Wang et al. [50] introduce
+
+--- PAGE 7 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 7
+ 
+et
+A
+kt
+Mk
+softmax
+wt
+∑
+rt
+pt
+ft
+Mv
+t
+-1Mv
+t
+(et ,  at)
+vt
+Sigmoid Tanh
+eraset
+ addt
+B
+1 - 
+1Mv
+t
+Read operation
+Write operation
+Fig. 6. The architecture of DKVMN [37].
+an adaptive sparse self-attention network to generate missing
+features and simultaneously produce fine-grained predictions
+of student performance. Zhu et al. [51] employ a multi-
+head ProbSparse self-attention mechanism to mitigate the time
+complexity and effectively capture the long-term dependencies
+in students’ learning interactions.
+However, the complexity of the KT task often limits the
+performance of the aforementioned simple Transformer appli-
+cations. Choi et al. [26] introduce a novel approach named
+Separated Self-Attentive Neural Knowledge Tracing (SAINT)
+to enhance self-attentive computation for KT adaptability.
+Specifically, SAINT employs an encoder-decoder structure,
+with the exercise and answer embeddings being separately en-
+coded and decoded by self-attention layers. The separation of
+the input allows SAINT to stack self-attention layers multiple
+times, thus capturing complex relations in student interactions.
+Subsequently, Shin et al. [27] introduce the SAINT+ model,
+which integrates two temporal features into SAINT: namely,
+the time taken to answer each exercise and the interval time
+between consecutive learning interactions. Both SAINT and
+SAINT+ have outperformed the SAKT model on the student
+performance prediction task.
+Additionally, Ghosh et al. [21] observe that SAKT does
+not surpass DKT and DKVMN in their experiments. Unlike
+SAINT and SAINT+, they present a context-aware attentive
+knowledge tracing (AKT) model. This model integrates the
+self-attention mechanism with psychometric models, creating
+a more effective system. AKT is composed of four modules:
+Rasch model-based embeddings, exercise encoder, knowledge
+encoder, and knowledge retriever. Specifically, the embedding
+module employs the classic Rasch model in psychometrics
+[52] to construct embeddings for exercises and KCs:
+xt = cct + µet · dct , (11)
+where cct ∈ RD is the embedding of the KC of this exercise,
+dct ∈ RD is a vector that summarizes the variation in
+exercises with the related KC, and µet ∈ RD is a scalar
+difficulty parameter that controls the extent to which this
+exercise deviates from the related KC. The exercise-answer
+tuple (et, at) is similarly extended using the scalar difficulty
+parameter for each pair:
+yt = q(ct,at) + µet · f(ct,at), (12)
+where q(ct,at) ∈ RD is the KC-answer embedding, f(ct,at) ∈
+RD is the variation vector. Through the above embedding,
+exercises labeled as the same KCs are determined to be
+closely related while retaining important individual charac-
+teristics. Then, in the exercise encoder, the input is the
+exercise embeddings {e1, ..., et} and the output is a sequence
+of context-aware exercise embeddings {ee1, ..., eet}. AKT de-
+signs a monotonic attention mechanism to accomplish the
+above process, where the context-aware embedding of each
+exercise depends on both itself and the previous exercises,
+i.e., eet = fenc1 (e1, ..., et). Similarly, the knowledge en-
+coder takes exercise-answer embeddings {y1, ..., yt} as input
+and outputs a sequence of context-aware embeddings of the
+knowledge acquisitions {ey1, ..., eyt} using the same monotonic
+attention mechanism; these are also determined by students’
+answers to both the current exercise and prior exercises,
+i.e., eyt = fenc1 (y1, ..., yt). Finally, the knowledge retriever
+takes the context-aware exercise embedding ee1:t and exercise-
+answer pair embeddings ey1:t as input and outputs a retrieved
+knowledge state ht for the current exercise. Since the student’s
+current knowledge state depends on answering the related
+exercise, it is also context-aware in AKT. The novel mono-
+tonic attention mechanism proposed in AKT is based on the
+assumption that the learning process is temporal and students’
+knowledge will decay over time. Therefore, the scaled inner-
+product attention mechanism utilized in the original Trans-
+former is not suitable for the KT task. AKT uses exponential
+decay and a context-aware relative distance measure to com-
+pute the attention weights. Finally, AKT achieves outstanding
+performance in predicting students’ future answers, as well as
+demonstrating interpretability due to the combination of the
+psychometric model.
+It is important to note that Pu and Becker [53] have recently
+proposed that attentive knowledge tracing models significantly
+benefit from students’ continuous, repeated interactions on the
+same exercises throughout the learning process. In their experi-
+ments, the removal of these repeated interactions in the dataset
+led to a decline in AKT’s performance, bringing it close to
+that of DKVMN. Moreover, according to the findings of Yin
+et al. [54], existing attentive attentive KT models primarily
+trace patterns of a learner’s learning activities, rather than
+their evolving knowledge states. Consequently, they develop
+the DTransformer model to facilitate stable knowledge state
+estimation and tracing, rather than solely focusing on next
+performance prediction.
+4) Graph-based Knowledge Tracing: Graph neural net-
+works (GNNs), which are designed to handle complex graph-
+related data, have developed rapidly in recent years [55]. The
+graph represents a kind of data structure that models a set
+of objects (nodes) and their relationships (edges). From a
+data structure perspective, there is a naturally existing graph
+structure within the KCs. Therefore, incorporating the graph
+structure of the KCs as additional information should be ben-
+eficial to the KT task. Nakagawa et al. [19] presented graph-
+based knowledge tracing (GKT), which conceptualizes the
+potential graph structure of the KCs as a graph G = ( V, E),
+where nodes V = {v1, v2, ..., vN } represent the set of KCs and
+the edges E ⊆ V × V represent relationships of these KCs;
+
+--- PAGE 8 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 8
+j
+Knowledge
+state
+exercise
+embedding
+ht
+j
+E ( )c j
+i
+Knowledge
+state
+exercise + answer
+embedding
+iht
+xtxE
+k
+Knowledge
+state
+exercise
+embedding
+kht
+E (k)c
+foutgo
+ fself
+ fincome
+Aggregate
+Update
+Predict
+yt
+neighbor neighbor
+Fig. 7. The architecture of graph-based knowledge tracing [19].
+moreover, ht = {ht
+i∈V } represents the student’s temporal
+knowledge state after answering the exercise at time t. The
+architecture for graph-based knowledge tracing is presented
+in Figure 7, which is composed of three parts: (1) aggregate ,
+(2) update and (3) predict.
+In the aggregate module, GKT aggregates the temporal
+knowledge state and the embedding for the answered KC i
+and its neighboring KC j:
+h
+′t
+k =
+(
+[ht
+k, atEs] ( k = i),
+[ht
+k, Ee(k)] ( k ̸= i), (13)
+where at represents the exercises answered correctly or in-
+correctly at time step t, Es is the embedding matrix for the
+learning interactions, Ee is the embedding matrix for the KC,
+and k represents the k-th row of Ee.
+In the update module, GKT updates the temporal knowl-
+edge state based on the aggregated features and the knowledge
+graph structure, as follows:
+mt+1
+k =
+(
+fself (h
+′t
+k )(k = i),
+fneighbor(h
+′t
+i , h
+′t
+k )(k ̸= i),
+fmt+1
+k = Gea(mt+1
+k ),
+ht+1
+k = Ggru(fmt+1
+k , ht
+k),
+(14)
+where fself is the multilayer perceptron, Gea is the same
+erase-followed-by-add mechanism used in DKVMN, and
+Ggru is the gated recurrent unit (GRU) gate [56]. Moreover,
+fneighbor defines the information propagation to neighboring
+nodes based on the knowledge graph structure.
+In the predict module, GKT predicts the student’s perfor-
+mance at the next time step according to the updated temporal
+knowledge state:
+yt
+k = σ(Wkht+1
+k + bk), (15)
+where Wk is the weight parameter and bk is the bias term.
+In addition to modeling the graph structure in KCs by graph
+neural networks, Lu et al. [57] propose to model the educa-
+tional relation and topology in the concept map, which will be
+intended to act as mathematical constraints for the construction
+of the KT model. Recently, in the attempt to further explore
+knowledge structure, Tong et al. [58] propose structure-based
+knowledge tracing (SKT), which aims to capture the multi-
+ple relations in knowledge structure to model the influence
+propagation among concepts. SKT is mainly motivated by an
+education theory, transfer of knowledge [59], which claims that
+students’ knowledge states on some relevant KCs will also
+be changed when they are practicing on a specific KC due
+to the potential knowledge structure among KCs. Therefore,
+a student’s knowledge state is determined by not only the
+temporal effect from the exercise sequence, but also the spatial
+effect from the knowledge structure. To concurrently model
+the latent spatial effects, SKT presents the synchronization and
+partial propagation methods to characterize the undirected and
+directed relations between KCs, respectively. In this way, SKT
+measures influence propagation in the knowledge structure
+with both temporal and spatial relations. To get rid of de-
+pendence on knowledge structure, Long et al. [60] propose the
+Automatical Graph-based Knowledge Tracing (AGKT), which
+utilizes the automatical graph to measure students’ knowledge
+states automatically without annotation manual annotations.
+D. Summarization
+It is crucial to emphasize that, despite deep learning models
+exhibiting superior performance compared to Bayesian mod-
+els and logistic models, there remains significant room for
+improvement in their interpretability and explainability. Due
+to the end-to-end learning strategy, deep learning models are
+notoriously difficult to interpret. The modeling process itself is
+also challenging to explain. Specifically, deep learning models
+are predominantly data-driven and benefit a lot from large-
+scale student learning data. It is challenging to understand how
+they calculate a student’s knowledge state with no theoretical
+guidance [33]. All we have are the results generated by these
+models. Therefore, any errors made by these models will lead
+students to doubt their reliability. The lack of explainability
+and interpretability has thus limited their further applicability.
+To make the complex KT models interpretable, especially
+those deep learning models, researchers have attempted vari-
+ous methods. Lu et al. [61] presented a post-hoc approach to
+reveal the interpretability of DKT. Specifically, they employed
+the layer-wise relevance propagation (LRP) technique [62] to
+interpret DKT by measuring the relevance between DKT’s
+output and input. Preliminary experimental results suggest
+that this post-hoc approach could be a promising method for
+explaining DKT. Besides, explainable AI (xAI) is proposed to
+make the black-box deep learning models more transparent,
+thereby promoting its applications [63]. Lu et al. [64] proposed
+to use the xAI technique to interpret the complex KT models
+based on deep learning. The interpreting results of DKT have
+been demonstrated to aid in enhancing the trust of students
+and teachers. Their findings suggested that it is promising
+to utilize xAI techniques to interpret the deep learning KT
+models, thereby assisting users in accepting and applying the
+suggestions provided by these models.
+IV. V ARIANTS OF KNOWLEDGE TRACING MODELS
+The aforementioned fundamental KT models are typically
+based on simplistic assumptions regarding the learning pro-
+
+--- PAGE 9 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 9
+cess. Specifically, these models predominantly employ learn-
+ing interactions such as exercises and responses to estimate
+students’ knowledge states. However, the learning process
+is not solely represented by exercises and responses, but is
+influenced by various factors. In summary, the aforemen-
+tioned fundamental KT models, while straightforward, may
+have reduced performance in real-world learning scenarios.
+Consequently, numerous variants have been proposed under
+more stringent assumptions, reflecting a more comprehensive
+learning process in real-world scenarios. Accordingly, we
+classify and review current variants of fundamental KT models
+into four categories: (1) Modeling individualization before
+learning, (2) Incorporating engagement during learning, (3)
+Considering forgetting after learning, and (4) utilizing side
+information across learning.
+A. Modeling Individualization before Learning
+Everything and everyone possess unique characteristics.
+For instance, Liu et al. [65] explored several personalized
+factors of various tourists to recommend personalized travel
+packages. Similarly, the concept of individualization in the
+KT task implies that different students often exhibit different
+learning characteristics (such as varying learning rates or
+prior knowledge). Considering the student-specific variability
+in learning could potentially enhance the KT process, as
+suggested by Yudelson et al. [66]. In the subsequent sections,
+we will introduce various variant KT models that take into
+account individualization before learning.
+The initial BKT paper has delved into the concept of
+individualization. Specifically, it uses all students’ learning
+interactions on a specific KC to learn the individual parameter.
+Similarly, for a specific student, all her learning interactions
+are utilized to fit her individual learning parameters [9].
+Consequently, BKT is able to ascertain different learning
+and performance parameters for various students and KCs.
+However, this approach only offers a marginal improvement
+compared to original BKT.
+Subsequently, Pardos and Heffernan [67] propose two sim-
+ple variants of BKT that respectively individualize students’
+initial probability of mastery and the probability of transition
+from the unlearned state to the learned state. Specifically, a
+student node is added to individualize the initial probability
+of mastery for each student. The student node assigns each
+student with a personalized initial probability of mastery. A
+conditional probability table is designed to determine the value
+of the student node. Similarly, if changing the connection
+of the student node to the subsequent knowledge nodes, the
+transition probability parameter can also be individualized.
+In this case, the student node gives individualized transition
+parameters to each student. Moreover, rather than individ-
+ualizing only one kind of parameter in BKT, some other
+variants of BKT opt to individualize all four BKT parameters
+simultaneously [66]. Lee and Brunskill [68] suggest that when
+applied in an intelligent tutoring system, the individualized
+BKT model can yield good improvements to student learning
+efficacy, reducing by about half the amount of questions
+required for 20% of students to achieve mastery.
+Another means of modeling individualization is clustering,
+which considers a wider range of students in different groups
+[69]. By clustering the students into various groups, we can
+train different KT models and make predictions on the test
+data. The number of clusters is then varied according to
+the student groups and the predicting process is repeated
+iteratively. Finally, we can obtain a set of different predic-
+tions. Furthermore, there are two common methods used to
+combine these predictions [70]: (1) uniform averaging, which
+simply averages the predictions; (2) weighted averaging, which
+combines the models by means of a weighted average. To
+realize clustering, K-means is a basic clustering algorithm
+that randomly initializes a set of cluster centroids, which are
+identified using Euclidean distance. Another popular clustering
+algorithm is spectral clustering, which represents the data
+as an undirected graph and analyzes the spectrum of the
+graph Laplacian obtained from the pairwise similarities of data
+points. Recently, some novel clustering algorithms have been
+proposed, including discrete nonnegative spectral clustering
+[71] and clustering uncertain data [72].
+Minn et al. [73] propose a model named deep knowledge
+tracing with dynamic student classification (DKT-DSC), which
+introduces individualization to DKT by exploiting the idea
+of clustering. According to students’ previous performance,
+DKT-DSC assigns students with similar learning ability to the
+same group . The knowledge states of students in different
+groups are then traced by different DKT models. Moreover,
+considering the dynamic property of the learning ability, each
+student’s learning sequence is segmented into multiple time
+intervals. At the start of each time interval, DKT-DSC will
+reassess students’ learning ability and reassign their groups.
+In DKT-DSC, the K-means clustering algorithm is utilized
+to split students with similar ability levels into the same
+group at each time interval. After learning the centroids of
+all K clusters, each student is assigned to the nearest cluster.
+Through dynamic student clustering, DKT-DSC offers an
+effective approach to realizing individualization in DKT.
+Mao et al. [74] claim that it is significant to consider
+both individual exercise representation and individual prior
+knowledge. They propose a fine-grained knowledge tracing
+model, named FGKT. FGKT obtains the individual exercise
+representation through the acquisition of knowledge cells
+(KCs) and exercise distinctions. Subsequently, it assesses the
+individual prior knowledge by evaluating the relevance be-
+tween current and historical learning interactions. Finally, the
+above individual representations will be utilized as the input
+of LSTM in FGKT to evaluate students’ evolving knowledge
+states. Zhao et al. [75] also notice that the individualization
+of exercises is significant for measuring students’ knowledge
+states. They propose to consider multiple exercise factors,
+including the difficulty and the discrimination, to enhance the
+performance of DKT.
+Shen et al. [76] propose a convolutional knowledge tracing
+model (CKT) to implicitly measure student individualiza-
+tion. Specifically, CKT considers two factors that influence
+students’ individualization: individualized learning rates and
+individualized prior knowledge. Individualized learning rates
+represent students’ differing capacities to absorb knowledge.
+
+--- PAGE 10 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 10
+The sequence of student learning interactions can reflect
+different learning rates in the sense that students with high
+learning rates can rapidly master knowledge, while others
+need to spend more time trying and failing. Therefore, it is
+reasonable to assess the differences in learning rate by simul-
+taneously processing several continuous learning interactions
+within a sliding window of convolutional neural networks [77].
+Besides, individualized prior knowledge refers to students’
+prior knowledge, which can be assessed via their historical
+learning interactions.
+B. Incorporating Engagement during Learning
+Student engagement is defined as ”the quality of effort
+students themselves devote to educationally purposeful ac-
+tivities that contribute directly to desired outcomes” [78].
+This definition highlights a strong connection between student
+engagement and the learning process. Generally, higher en-
+gagement leads to enhanced knowledge gains. Consequently,
+considering student engagement in the learning process could
+potentially improve knowledge tracing results [79]. In this
+section, we will present some variants that integrate student
+engagement into the KT models.
+Student engagement is difficult to be directly measured.
+In practice, some online learning systems have made use of
+sensor data to measure student engagement. For example,
+inexpensive portable electroencephalography (EEG) devices
+can help to detect a variety of student mental states in learning,
+which can be seen as reflections of student engagement [80].
+Xu et al. [81] propose two methods that combine EEG-
+measured mental states to improve the performance of BKT.
+Concretely, the first one inserts a one-dimensional binary
+EEG measure into BKT, forming the EEG-BKT structure that
+extends BKT by adding a binary variable node E between
+the knowledge node and the answer node. The second one,
+i.e., EEG-LRKT, utilizes logistic regression to combine an
+m-dimensional continuous variable E extracted from the raw
+EEG signal in BKT.
+However, in most cases, it is difficult to collect sensor
+data on every student. Therefore, Schultz and Arroyo [82]
+propose the knowledge and affect tracing (KAT) to model
+both knowledge and engagement in parallel. KAT is a sen-
+sorless model that does not rely on any sensor data. In this
+model, both knowledge and engagement are assumed to have
+direct influences on student performance. KAT considers three
+kinds of disengagement behaviors: quick guess (the student
+makes an attempt very quickly), bottom-out hint (all available
+hints are used) and many attempts (making more than three
+attempts at an exercise). These three behaviors are grouped as
+“gaming” behaviors in order to predict students’ knowledge
+and engagement at each learning interaction. Rather than
+assuming equal influence of knowledge and engagement on
+students’ knowledge state, one variation on the KAT model
+defines the connection between knowledge and engagement,
+and accordingly considers that students’ knowledge states will
+influence their engagement. For example, students are more
+likely to disengage from knowledge they are not familiar with.
+Moreover, rather than explicitly modeling student engagement,
+Schultz and Arroyo [83] further propose the knowledge trac-
+ing with behavior (KTB) model, which has only one latent
+knowledge node that acts as a combination of both knowledge
+and engagement. KTB assumes that both engagement and
+performance are expressions of knowledge. The Bayesian
+estimation of the knowledge state needs to be inferred by both
+student engagement and performance.
+Mongkhonvanit et al. [84] propose to add five features in
+the process of watching videos on MOOCs to the input of
+DKT. These features reflect student engagement from various
+aspects, including playback speed, whether or not the video
+was paused, fast-forwarded or rewound, and whether or not
+the video was completed. For example, if a student watches a
+video at a much faster playback speed, it is likely that he/she
+is impatient and absent-minded. This model incorporates two
+further features: whether or not the exercise was submitted
+with an answer selected and whether or not the exercise was
+a part of an end-of-unit quiz, both of which are considered
+together. Experimental results indicate that DKT can achieve
+better performance through incorporating the above binarized
+engagement covariates.
+C. Considering Forgetting after Learning
+In real-world scenarios, while learning, forgetting is in-
+evitable [85]. The Ebbinghaus forgetting curve theory indi-
+cates that students’ knowledge proficiency will decline due
+to forgetting [86]. Recently, Huang et al. [87] proposed the
+concept of ’Knowledge Proficiency Tracing’ (KPT), a model
+that can dynamically capture the changes in students’ profi-
+ciency levels on knowledge concepts over time. This model
+effectively tracks these changes in an interpretable manner.
+Therefore, the assumption that students’ knowledge states will
+remain constant over time is untenable. However, fundamental
+KT models, such as the BKT, often overlook forgetting. In the
+following, we will introduce some variants of fundamental
+KT models that have attempted to consider forgetting after
+learning for more precise knowledge states.
+Qiu et al. [88] discover that BKT consistently overestimates
+the accuracy of students’ answers when a day or more had
+elapsed since their previous responses. The underlying reason
+is that BKT assumes that student performance will remain the
+same regardless of how much time has passed. To consider
+how student performance declines with time, they propose
+a BKT-Forget model, which hypothesizes that students may
+forget information they have learned as days go by. In the
+BKT-Forget model, a time node is added to specify which
+parameters should be affected by a new day and the new day
+node is fixed with a prior probability of 0.2. It also introduced
+parameters to represent the forgetting rate on a new day and
+denote the forgetting rate on the same day. However, although
+BKT-forget does consider the decline in student performance,
+it can only model forgetting that occurs over the time scale
+of days. To model the continuous decay of knowledge as time
+progresses, Nedungadi and Remya [89] incorporate forgetting
+into BKT based on the assumption that learned knowledge
+decays exponentially over time [90]. An exponential decay
+function is thus utilized to update the knowledge mastery
+
+--- PAGE 11 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 11
+level. They further assumed that the chance of forgetting will
+increase if a student does not practice the knowledge concepts
+within 30 days. Moreover, Khajah et al. [42] introduce an
+approach that counts the number of intervening trials and treats
+each as an independent opportunity for forgetting to occur.
+Recall the PFA model in Eq.(5), in which the probability of
+students’ mastery is estimated using a logistic function:p(θ) =
+σ(β + µs + νf ). The original PFA model ignores the order of
+answers, in addition to the time between learning interactions.
+It is therefore difficult to directly incorporate time information
+into the original PFA model. Pel´anek et al. [91] propose PFAE
+(PFA Elo/Extended), a variant of the PFA model that combines
+PFA with some aspects of the Elo rating system [92]. The Elo
+rating system is originally devised for chess rating (estimating
+players’ skills based on match results). In PFAE, θ is updated
+after each learning interaction:
+θ :=
+(
+θ + µ · (1 − p(θ)) if the answer was correct ,
+θ + ν · p(θ) if the answer was wrong . (16)
+As the forgetting behavior of students is closely related
+to time, in order to consider forgetting, Pel ´anek [93] add a
+time effect function f to θ, i.e., using p(θ + f (t)) instead of
+p(θ), where t is the time (in seconds) from the last learning
+interaction, and f is the time effect function.
+To represent the complex forgetting behavior, the DKT-
+forget model [94] introduces forgetting into DKT, which
+considers three types of side information related to forgetting:
+(1) the repeated time gap that represents the interval time
+between the present interaction and the previous interaction
+with the same KC, (2) the sequence time gap that represents
+the interval time between the present interaction and the
+previous interaction, and (3) past trial counts that represent the
+number of times a student has attempted on the exercise with
+the same KC. All these three features are discretized at log2
+scale. Those side information is concatenated as additional
+information and represented as a multi-hot vector ct, which
+is integrated with the embedding vector vt of the learning
+interaction, as follows:
+vc
+t = θin(vt, ct), (17)
+where θin is the input integration function. The integrated
+input vc
+t and the previous knowledge state ht−1 are passed
+through the RNNs to update ht in the same way as in Eq.(7).
+The additional information at the next time step ct+1 is also
+integrated with the updated ht:
+hc
+t = θout(ht, ct+1), (18)
+where θout is the output integration function.
+Wang et al. [95] propose a novel HawkesKT model, which
+introduces the Hawkes process to adaptively model temporal
+cross-effects. The Hawkes process performs well at modeling
+sequential events localized in time, as it controls corresponding
+temporal trends by the intensity function. The intensity func-
+tion in HawkesKT is designed to characterize the accumulative
+effects of previous learning interactions, along with their
+evolutions over time. In HawkesKT, the temporal cross-effects
+and the ways in which they evolve between historical learning
+interactions combine to form a dynamic learning process.
+D. Utilizing Side Information across Learning
+Most KT models primarily rely on exercises and student
+responses to evaluate students’ knowledge states. These mod-
+els have yielded impressive results and have been effectively
+implemented in online learning systems. Despite this, there
+are various other types of side information collected across
+the learning process that could be utilized to enhance these
+models. In this section, we will introduce several variants that
+aim to leverage this diverse side information across learning.
+In terms of a student’s first response time, a short ini-
+tial response time could indicate either high proficiency or
+’gaming’ behavior, while a long initial response time could
+indicate either careful thinking or lack of concentration. Since
+the connection between initial response time and knowledge
+state could be influenced by complex factors, Wang and Hef-
+fernan [96] propose to discretize the continuous first response
+time into four categories (i.e., extremely short, short, long,
+extremely long) to eliminate unnecessary information and
+simplify the latent complex possibilities. They then build a
+one-by-four parameter table, in which each column represents
+the category of the initial response time of the previous
+exercise, while the relevant values represent the probability
+of correct answers.
+Regarding tutor intervention, Beck et al. [97] propose the
+Bayesian evaluation and assessment model, which simultane-
+ously assesses students’ knowledge states and evaluates the
+lasting impact of tutor intervention. More specifically, it adds
+one observable binary intervention node to BKT: True means
+that the tutor intervention occurs in corresponding interactions
+while False indicates the opposite. The connection between the
+intervention node and knowledge node indicates the potential
+impact of the tutor intervention on students’ knowledge states.
+The intervention node is linked to all four BKT parameters.
+As a result, there are a total of eight parameters to learn in
+order to incorporate tutor intervention. One possible way to
+reduce the number of parameters is choosing to link only the
+intervention node to the learning rate parameter [98]. Similarly,
+Lin and Chi [99] develop the intervention-Bayesian knowl-
+edge tracing (Intervention-BKT) model, which incorporates
+two types of interventions into BKT and distinguishes their
+different effects: elicit and tell . The relations between the
+intervention and performance nodes represent the impact of
+teaching interventions on student performance, while the rela-
+tions between the intervention and knowledge nodes represent
+the impact of teaching interventions on students’ knowledge
+states. Therefore, at each learning interaction, while the present
+knowledge state is conditional on both the previous knowledge
+state and the current intervention, the student’s performance
+depends on both the present knowledge state and the current
+intervention.
+Rather than considering only one kind of side informa-
+tion, Gonz ´alez-Brenes et al. [100] propose a feature-aware
+student knowledge tracing (FAST) model, which allows for
+the utilization of all kinds of side information. Traditional
+BKT uses conditional probability tables for the guessing,
+slipping, transition and learning probabilities, meaning that the
+number of features involved in inference grows exponentially.
+
+--- PAGE 12 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 12
+Therefore, as the number of features increases, the time and
+space complexity of the model also grow exponentially. To
+deal with this large number of features, FAST uses logistic
+regression parameters rather than conditional probability ta-
+bles. The number of features and complexity increase linearly
+rather than exponentially. For parameter learning, FAST uses
+the Expectation Maximization with Features algorithm [101]
+and focuses on only emission features. The E step uses the
+current parameter estimates λ to infer the probability of the
+student having mastered the KC at each learning interaction.
+The parameters λ are now a function of the weight β and the
+feature vector f (t). f is the feature extraction function, and
+f (t) is the feature vector constructed from the observations at
+the relevant time step. The emission probability is represented
+with a logistic function:
+λ(β)y
+′
+,k
+′
+= 1
+1 + exp(−βT · f (t)) , (19)
+where β is learned by training a weighted regularized logistic
+regression using a gradient-based search algorithm.
+Zhang et al. [102] propose an extension to DKT that
+explored the inclusion of additional features. Specifically, it
+incorporates an auto-encoder network layer to convert the
+higher-dimensional input data into smaller representative fea-
+ture vectors, thereby reducing both the resource and time
+requirement for training. Students’ response time, opportunity
+count, and first action are selected as incorporated side in-
+formation and all input features are converted into a fixed-
+length input vector. First, all input features are converted into
+categorical data and represented as a sparse vector by means of
+one-hot encodings. These encoded features are concatenated
+together to construct the higher-dimensional input vector:
+C(et, at) = et + (max(e) + 1)at,
+vt = O(C(et, at)) ⊕ O(C(tt, at)) ⊕ O(tt),
+v
+′
+t = tanh(Wvvt + bv),
+(20)
+where C is the cross feature, O is the one-hot encoder
+format, vt represents the resulting input vector of each learning
+interaction, et is the exercise, at refers to the answer, tt is the
+response time, Wv is the weight parameter and bv is the bias
+term. Subsequently, an auto-encoder is introduced to reduce
+the dimensionality without incurring the loss of too much
+important information. Finally, the feature vectors extracted
+by auto-encoder will be the new input of DKT.
+Liu et al. [103] presented another extension to DKT, namely
+the Exercise-aware Knowledge Tracing (EKT), which utilized
+the potential value of exercises’ text contents. Generally, the
+text content is of great significance for students to understand
+the exercises. For example, Huang et al. [104] used text
+materials to automatically predict their difficulties, Liu et al.
+[105] utilized the text content to find similar exercises. Yin
+et al. [106] further proposed a pre-training model called Ques-
+Net for learning the unified representations of heterogeneous
+exercises. Therefore, instead of using one-hot encoding of
+exercises, EKT automatically learns the semantic representa-
+tion of each exercise from its text contents. EKT first uses
+W ord2vec [107] to pre-train the embedding vector for each
+word in the exercise. It then constructs a bidirectional LSTM,
+which captures the word sequence from both forward and
+backward directions to learn the semantic word representation.
+The element-wise max-pooling operation is utilized to merge
+words’ contextual representations into a global embedding.
+Finally, EKT can update the student’s knowledge state with
+the aid of the semantic representation of each exercise.
+To achieve more feasible integration of side information,
+Loh [108] present a deep knowledge tracing method with
+decision trees (DKT-DT), which takes advantage of Clas-
+sification And Regression Trees (CART) to preprocess the
+heterogeneous input features [109]. Specifically, CART is
+utilized to automatically partition the feature space and outputs
+whether or not a student can answer an exercise correctly.
+The predicted response and the true response are encoded into
+a four-bit binary code; for example, the code is 1010 if the
+predicted response and the true response are both correct. This
+binary code is then concatenated with the original one-hot
+encoding of the exercise as the new input of DKT to train the
+corresponding model.
+Jung et al. [110] suggests that the student’s language pro-
+ficiency can serve as supplementary information to improve
+existing KT models. The student’s language proficiency is
+extracted by Elo rating score and time window features. Then,
+the language proficiency information is demonstrated to be
+effective in promoting several KT models, including DKT,
+DKVMN, and SAKT. Additionally, the problem of cold start
+in the KT task is alleviated with the assistance of language
+proficiency information. Liu et al. [111] explore to add side
+information to the original KT model by auxiliary learning
+tasks. They specifically introduced two tasks: (1) predicting the
+KCs of the question, and (2) predicting the individualized prior
+knowledge. By training with these tasks, KT can enhance its
+understanding of the intrinsic relationships between questions
+and KCs, while explicitly capturing student-level variability.
+When solving programming problems, we can record stu-
+dents’ full code submissions, which can be employed to
+analyze their programming ability. Kasurinen and Nikula
+[112] collected student programming data and analyzed their
+personalized programming preferences. The study commenced
+with a statistical analysis of student errors, followed by an
+examination of students’ programming structures derived from
+their code submissions, and finally used BKT to measure
+students’ programming abilities. Wang et al. [113] transformed
+students’ code submissions into embedded vectors, and applied
+them in DKT to model students’ fine-graded programming
+knowledge states. Zhu et al. [114] noticed that a single
+programming problem generally involves in multiple KCs,
+thereby they proposed to learn useful information about the
+programming problem’s multiple requirements from students’
+code submissions.
+V. A PPLICATIONS
+Although knowledge tracing is an emerging research area,
+it has already been applied in a wide variety of scenarios.
+In the following, we will first survey the applications of KT
+models in two typical educational scenarios: learning resources
+recommendation and adaptive learning. Then, we will discuss
+broader applications of KT beyond student learning.
+
+--- PAGE 13 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 13
+A. Learning Resources Recommendation
+Traditionally, learning resources for each student are se-
+lected in one of two ways. The first one requires teachers
+to manually select suitable resources that match students’
+knowledge levels. However, this approach requires substantial
+time and effort, and different teachers may have different
+preferences. The second one allows students themselves to
+freely choose resources to learn. However, this may result
+in students choosing too easy or too difficult materials that
+will not benefit their learning [115], leading to low learning
+efficiency. In recent years, the prevalence of intelligent tutoring
+systems and the development of KT methods have made it
+possible to automatically recommend appropriate exercises to
+each student based on artificially designed algorithms.
+Exercises are the most common learning resources in learn-
+ing. Given the inferred knowledge states, one common strategy
+is selecting the next exercise that will best advance students’
+knowledge acquisition. Desmarais and Baker [115] propose
+two extensions of the original BKT model, which respec-
+tively considered exercises’ difficulties and students’ multiple-
+attempt behaviors. These two extensions are integrated into a
+BKT-sequence algorithm to recommend exercises to students
+based on their knowledge states. Specifically, BKT-sequence
+first determines the predicted range of scores for each exercise.
+It then computes an expected score for each exercise that the
+student should get to achieve mastery, which is dependent on
+their current knowledge state (for instance, a lower knowledge
+state will result in higher expected scores). Finally, the algo-
+rithm returns the exercise with a predicted score that is closest
+to that of the expected score. Therefore, as the knowledge
+state of a particular KC grows, more difficult exercises will be
+recommended, as harder exercises are associated with a lower
+predictive score. Experimental results have shown that students
+using the BKT-sequence algorithm were able to solve more
+difficult exercises, obtained higher performance and spent
+more time in the system than students who used the traditional
+approach. Moreover, students also expressed that the BKT-
+sequence algorithm was more efficient. Wan et al. [116]
+expanded the DKVMN model [37] to include the exercise’s
+type and difficulty. This model is then used to assess students’
+knowledge state and subsequently recommends personalized
+exercises for each student in Ssmall Private Online Courses
+(SPOCs). They conducted a randomized controlled trial to
+show the proposed personalized exercise recommendation
+could enhance students’ learning efficiency.
+In addition to exercises, there are also some other types of
+multi-modal learning resources, such as videos and figures.
+Machardy [117] utilizes an adaptation of BKT to improve
+student performance prediction by incorporating video ob-
+servation. Experimental verification demonstrates the impact
+of both using and eschewing video data, as well as the
+learning rate associated with a particular video. In this way,
+they further developed a method to help people evaluate the
+quality of video resources. Concretely, they proposed the
+Template 1 Video model to incorporate video observations
+into BKT, which adds video activity as additional independent
+observation nodes to the BKT model. This model accord-
+ingly considers the probability that a given video resource
+will impart knowledge to a student. Moreover, the transition
+probability in BKT is conditional only on the presence of
+either a video or an exercise. Thus, the quality of the video can
+be determined by its promotion of learning, and this model can
+be leveraged as a tool to aid in evaluating and recommending
+video resources.
+When recommending learning resources, the primary aim of
+existing solutions is to choose a simple strategy for assigning
+non-mastered exercises to students. While reasonable, it is
+also too broad to advance learning effectively. Huang et al.
+[118] accordingly propose three more beneficial and specific
+objectives: review and explore , smoothness of difficulty level
+and student engagement . In more detail, review and explore
+considers both enhancing students’ non-mastered concepts
+with timely reviews and reserving certain opportunities to
+explore new knowledge; smoothness of difficulty level indi-
+cates that the difficulty levels of several continuous exercises
+should vary within a small range as students gradually learn
+new knowledge; finally, student engagement considers that
+to promote students’ enthusiasm during learning, the recom-
+mended exercises should be in line with their preferences.
+In order to support online intelligent education with the
+above three domain-specific objectives, they developed a more
+reasonable multi-objective deep reinforcement learning (DRE)
+framework. DRE presented three corresponding novel reward
+functions to capture and quantify the effects of the above
+three objectives. This DRE framework is a unified platform
+designed to optimize multiple learning objectives, where more
+reasonable objectives also can be incorporated if necessary.
+Experimental results show that DRE can effectively learn from
+the students’ learning records to optimize multiple objectives
+and adaptively recommend suitable exercises.
+B. Adaptive Learning
+Adaptive learning, unlike learning resource recommenda-
+tions, goes beyond the mere provision of resources. It not
+only concentrates on the selection of appropriate learning
+materials but also designs effective learning strategies and
+dynamic learning pathways. These are structured based on
+both the learning rules and students’ evolving knowledge
+states. Specifically, adaptive learning broadly refers to ”a
+learning process in which the content taught, or the way such
+content is presented, changes or ’adapts’ based on individual
+student responses, and which dynamically adjusts the level or
+types of instruction based on individual student abilities or
+preferences” [119].
+The first few attempt made to apply KT to adaptive learning
+was the ACT Programming Tutor (APT) [9], where students
+were asked to write short programs and BKT was utilized
+to estimate their evolving knowledge state. This tutor can
+present an individualized sequence of exercises to each student
+based on their estimated knowledge states until the student has
+”mastered” each rule.
+In recent years, Massive Open Online Courses (MOOCs)
+have become an emerging modality of learning, particularly
+in higher education. Pardos et al. [11] adapt BKT on the edX
+
+--- PAGE 14 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 14
+platform. The research object was a 14-week online course
+that included weekly video lectures and corresponding lecture
+problems. BKT was applied to enhance students’ learning
+on this course. In order to better adapt BKT to the learning
+platform, the original BKT was modified in several respects.
+First, due to the lack of labeled KCs, the problems would
+be directly seen as the KCs, while the questions would be
+seen as the exercises belonging to the KC. Second, in order to
+capture the varying degrees of students’ knowledge acquisition
+at each attempt, the modified model assigned different guess
+and slip parameters to different attempt counts. Third, to deal
+with the problem of multiple pathways in the system, which
+reflected that the impacts on learning may come from various
+resources, they framed the influence of resources on learning
+as a credit/blame inference problem.
+Generally, students’ cognitive structures include both stu-
+dents’ knowledge level and the knowledge structure of learning
+items (e.g., one-digit addition is the prerequisite knowledge
+of two-digit addition ). Therefore, adaptive learning should
+maintain consistency with both students’ knowledge level and
+the latent knowledge structure. Nevertheless, existing methods
+for adaptive learning often focus separately on either the
+knowledge levels of students (i.e., with the help of specific KT
+models) or the knowledge structure of learning items. To fully
+exploit the cognitive structure for adaptive learning, Liu et al.
+[13] propose a Cognitive Structure Enhanced framework for
+adaptive Learning (CSEAL). CSEAL conceptualized adaptive
+learning as a Markov Decision Process. It first utilized DKT
+to trace the evolving knowledge states of students at each
+learning step. Subsequently, the authors designed a navigation
+algorithm based on the knowledge structure to ensure that
+the learning paths in adaptive learning were logical and
+reasonable, which also reduced the search space in the decision
+process. Finally, CSEAL utilized the actor-critic algorithm
+to dynamically determine what should be learned next. In
+this way, CSEAL can sequentially identify the most suitable
+learning resources for different students.
+C. Broader Applications
+The above two types of applications are most commonly
+used for KT in student learning. In addition, the KT methods
+can be expanded to be utilized in any systems that necessitate
+continuous evaluation of user capabilities or states. We will
+introduce some broader applications of KT in this section.
+In gaming systems, the paradigm of tracing students’ knowl-
+edge state can also work for player modeling. Here, player
+modeling, which is the study of computational models of
+players in games, aims to capture human players’ characteris-
+tics and cognitive features [120]. For instance, Fisch et al.
+[121] reveal that children engage in cycles of increasingly
+sophisticated mathematical thinking over the course of playing
+an online game. Kantharaju et al. [122] present an approach to
+trace player knowledge in a parallel programming educational
+game, which is capable of measuring the current players’ real-
+time state across the different skills required to play an edu-
+cational game based only on in-game player activities. Long
+and Aleven [123] conduct a classroom experiment comparing
+a commercial game for equation solving, i.e., DragonBox, with
+a research-based intelligent tutoring system, i.e., Lynnette. The
+results indicated that students who used DragonBox enjoyed
+the experience more, while students who used Lynnette per-
+formed significantly better on the test. Therefore, it is possible
+to enable students to learn effectively and happily by designing
+suitable educational games on the online learning platform.
+In crowdsourcing, unlabeled data or specific tasks are as-
+signed to various crowd annotators. Understanding the dy-
+namic capabilities of these annotators is crucial in ensuring
+the reliability of their annotations and promoting the anno-
+tation efficiency. Wang et al. [124] developed a framework
+called KT4Crowd, which utilized KT methods to predict the
+performance of annotators, which surpassed traditional rating
+systems. Besides, Abdi et al. [125] observed that students’ par-
+ticipation in crowdsourcing tasks can enhance their learning.
+KT methods can also better comprehend students’ knowledge
+states, aided by the students’ annotated items.
+Crowston et al. [126] develop an online citizen science
+project that employs machine learning techniques to improve
+the training of new volunteers using authentic tasks featuring
+uncertain outcomes, such as image classification. Specifically,
+they employ the BKT model to monitor the knowledge states
+of volunteers, enabling them to more efficiently complete
+assigned tasks and contribute meaningfully to the project.
+Zhao et al. [127] develop an automated exercise collection
+approach for teachers, employing the KT model and reinforce-
+ment learning. Specifically, the exercise collection need to be
+well-designed to align with students’ abilities. This study first
+leverages the KT model to forecast students’ performance on
+unseen exercise candidates. Subsequently, the exercise selector
+is designed based on the KT model’s predictions, ensuring
+that the exercise collection is both approximate and optimized.
+Similarly, Shang et al. [128] design a reinforcement learning
+guided method for exam paper generation, where the DKT
+model is utilized to measure examinees’ knowledge states.
+VI. D ATASETS AND BASELINES
+After introducing above KT models and variants, to bet-
+ter help researchers and practitioners who want to further
+conduct related work and promote the application of KT,
+we have open sourced two algorithm libraries, i.e., EduData
+that for downloading and preprocessing most existing KT-
+related datasets, and EduKTM that includes extensible and
+unified implementations of existing popular KT models. In
+the following, we will give detailed introduction of these two
+algorithm libraries.
+A. Datasets
+As we have mentioned, KT emerges from the development
+of online education, where a large number of students’ learning
+data is collected for analyzing their learning behaviors and
+knowledge states. In this section, we mainly introduce existing
+public datasets available for evaluating KT models. Table
+II lists all datasets, as well as their basic information and
+statistics. In our released EduData, we provide the service
+of downloading and preprocessing all these datasets, which
+
+--- PAGE 15 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 15
+TABLE II
+BASIC INFORMATION AND STATISTICS OF EXISTING DATASETS AVAILABLE FOR EVALUATING KT MODELS .
+Datasets Subjects Learning Stages Side
+Information
+Sources Statistics
+Online
+platforms
+Educational
+challenges
+# of
+Students
+# of
+Exercises
+# of
+KCs
+# of
+Learning records
+ASSISTments2009 [129] mathematics middle school Yes ! 4,163 17,751 123 346,860
+ASSISTments2012 [130] mathematics middle school Yes ! 46,674 179,999 265 6,123,270
+ASSISTments2015 mathematics middle school No ! 19,917 / 100 708,631
+ASSISTments2017 mathematics from middle school
+to college Yes ! 1,709 3,162 102 942,816
+Junyi [131] mathematics from primary
+to high school Yes ! 247,606 722 41 25,925,922
+Eedi2020 [132] mathematics from primary
+to high school Yes ! 118,971 27,613 388 15,867,850
+Statics2011 [133] engineering university Yes ! 335 1,224 80 361,092
+EdNet-KT1 [134] english / Yes ! 784,309 13,169 188 95,293,926
+EdNet-KT2 [134] english / Yes ! 297,444 13,169 188 56,360,602
+EdNet-KT3 [134] english / Yes ! 297,915 13,169 293 89,270,654
+EdNet-KT4 [134] english / Yes ! 297,915 13,169 293 131,441,538
+CodeWorkout [135] programming university Yes ! 819 50 50 >130,000
+is convenient to help beginners analyze and utilize them
+quickly. In summary, these datasets are collected in different
+learning scenarios, so that they exhibit an extremely distinct
+difference in data scale, subject, and so on, indicating complex
+applications in practical for KT models.
+1) ASSISTments Datasets: ASSISTments [129], created in
+2004, is an online tutoring system in the United States,
+which provides students with both assessment information and
+tutoring assistance. While working on ASSISTments, students
+will be provided with instructional assistance to help them
+solve the problem in several substeps when they give wrong
+answers. After obtaining correct answers, they will be given a
+new one. Meanwhile, the system will learn about the students’
+knowledge states and predict how they will do in future
+tests. Up to now, the organizers have released four public
+avaliable datasets from ASSISTments, which are respectively
+ASSISTments2009, ASSISTments20123, ASSISTments20154,
+and ASSISTments2017 5. The ASSISTments datasets have
+built profound impacts in the research community of KT,
+which can be seen in many related papers. Most of these
+datasets were collected from mathematics in middle school,
+the details of them are listed as follows.
+• ASSISTments2009. The full name of ASSISTments2009
+is the ASSISTments 2009-2010 skill builder data set [129],
+which was collected form ASSISTments’ skill builder prob-
+lem sets during the school year from 2009 to 2010. Students
+were asked to work on exercises with similar knowledge
+concepts until they can answer correctly for three or more
+times in a row. This dataset contains many valuable side
+information, such as attempt count that represents the
+number of attempts of the student, ms first reponse that
+represents the time in the milliseconds for the student’s
+first response, and opportunity that represents the number
+of opportunities the student has to practice. It worth noting
+that the original version of ASSISTments2009 has three
+serious problems that lead to unreliable experimental results
+[45]: (1) a large number of duplicated records, (2) treating
+3https://sites.google.com/site/assistmentsdata/datasets/2012-13-school-data-
+with-affect
+4https://sites.google.com/site/assistmentsdata/datasets/2015-assistments-
+skill-builder-data
+5https://sites.google.com/view/assistmentsdatamining/dataset
+scaffolding problems as the same as main problems, and (3)
+repeated response sequences with different KCs. The latest
+version of ASSISTments2009 has fixed these problems.
+• ASSISTments2012. ASSISTments2012 is collected from
+the ASSISTments system, in the school year from 2012
+to 2013 with affect predictions. Compared with ASSIST-
+ments2009, ASSISTments2012 has much more students, ex-
+ercises, as well as learning records. However, many learning
+records have missed the related KCs in this dataset. After
+filtering these records, there are only 29,018 students, 53,091
+exercises, and 2,711,813 learning records. Besides, this
+dataset contains more side information, such as start time ,
+end time , problem type , and average confidence. It worth
+noting that you can access to the text of the exercises in AS-
+SISTments2012 for more fine-grained research. Specifically,
+you can email nth@wpi.edu and cc td@wpi.edu, explaining
+your purpose and promising not to share it with anyone else.
+• ASSISTments2015. ASSISTments2015 covers the 2015
+school years’ student response records on ASSISTments.
+This dataset only contains student learning records on 100
+KCs, there is no information about the exercise, as well as
+any other side information.
+• ASSISTments2017. ASSISTments2017 is the dataset used
+in the 2017 ASSISTments Longitudinal Data Mining Com-
+petition. This dataset collected data over a decade, which
+tracked students’ intercations at the ASSISTments learning
+platform from middle school study in 2004-2007 to their
+high school course-taking, until they graduated from the
+college. Therefore, the average learning record of students in
+ASSISTments2017 is much longer than other dataset, which
+is beyond the length of 1,000. ASSISTments2017 also has
+rich side information, including but not limited to AveKnow
+that indicates students’ average knowledge level based on
+BKT, timeTaken that represents the time spent on the current
+exercise, frIsHelpRequest that represents whether the first
+response is a help request.
+2) Junyi Dataset: The Junyi dataset [131] contains the
+problem log and exercise-related information on the Junyi
+Academy6, a Chinese e-learning website established in 2012
+on the basis of the open-source code released by Khan
+6http://www.junyiacademy.org/
+
+--- PAGE 16 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 16
+Academy. In contrast to the ASSISTments datasets, Junyi has
+less exercsies and KCs, but includes an exercise hierarchy
+labeled by experts, the annotations of exercise relationship are
+also available. Therefore, many research works that focused on
+the knowledge structure in KT had utilized this dataset [58].
+Junyi provides the prerequisite exercise of a specific exercise
+in the knowledge map, the topic and area of each exercise, as
+well as the coordiate position of the knowledge map.
+3) Eedi2020 Dataset: The Eedi2020 dataset [132] is also
+released in an achedemic challenge, i.e., NeurIPS 2020 Ed-
+ucation Challenge 7. This dataset contains students’ answers
+to mathematics questions from Eedi, an online educational
+platform which millions of students interact with daily around
+the globe from school year 2018 to 2020. All exercises are
+multiple-choice problems with 4 possible answer choices, ex-
+actly one of which is correct. In Table II, we give the statistics
+based on the training data in this competition, the total number
+of learning records in the full dataset exceeds 17 million.
+It worth noting that Eedi2020 gives students’ exact answer
+choice so that we can also predict students options [136].
+Moreover, for the students, Eedi2020 records lots of valuable
+context information, including the Gender, DateOfBirth, Pre-
+miumPupil. For the learning records, Eedi2020 also presents
+their Confidence, GroupId, QuizId, and SchemeOfWorkId.
+4) Statics2011 Dataset: Different from the above datasets
+that focus on mathematics exercises, the Statics2011 dataset
+[133] is obtained from a college-level engineering statics
+course via online educational system developed by Carnegie
+Mellon University 8. The problems in college engineering
+course are quite complex, often comprising numerous inde-
+pendent sub-steps. Consequently, we treat each sub-problem
+as an exercise and calculate the number of exercises and KCs
+within this dataset.
+5) EdNet Dataset: The EdNet dataset [134] is related to
+the english subject, which is consisted of students’ learning
+records in the multi-platform AI tutoring system Santa in
+South Korea9. EdNet collected learning data of students over
+two years for their preparation of the e TOEIC (Test of English
+for International Communication) Listening and Reading Test.
+EdNet is now the largest public dataset in KT field with a total
+of 131,441,538 learning records from 784,309 students. Be-
+sides, it contains various features of students’ learning actions,
+such as the specific learning material they have interacted, how
+much time they have spent for answering a given exercise.
+There are four differnet versions of EdNet, respectively named
+EdNet-KT1, EdNet-KT2, EdNet-KT3, and EdNet-KT4 with
+different extents. We note that the students in this dataset may
+be in different learning states. Therefore we do not give the
+learning state information in Table II.
+• EdNet-KT1. EdNet-KT1 contains students’ basic exercise-
+answering logs. This dataset has 784,309 students, 13,169
+exercises, 188 KCs, and a total of 95,293,926 learning
+records. Exercises in EdNet-KT1 are organized by bundles,
+i.e., a collection of exercises sharing a common passage,
+7https://eedi.com/projects/neurips-education-challenge
+8https://pslcdatashop.web.cmu.edu/DatasetInfo?datasetId=507
+9https://github.com/riiid/ednet
+picture or listening material. Therefore, exercises come up in
+bundles and students have to answer all contained exercises
+when a bundle is given.
+• EdNet-KT2. EdNet-KT2 recorded students’ action se-
+quences, which indicated their full learning behaviors. For
+example, a student who is not confident about the answer
+may alternately select among several answer choices before
+submitting. Such learning behaviors can reflect more fine-
+grained knowledge state of students. EdNet-KT2 contains
+three kinds of actions: enter when student first receives and
+views a bundle , respond when the student selects an answer
+choice to the exercise, and submit when the student submits
+his final answers to the the given bundle. It is worth noting
+that EdNet-KT2 is a subset of EdNet-KT1.
+• EdNet-KT3. On the basis of EdNet-KT2, EdNet-KT3 col-
+lected more students’ learning activities, such as reading
+explanations or watching lectures. These learning activities
+have potential impacts on students’ knowledge state so that
+they are valuable to be analyzed.
+• EdNet-KT4. In EdNet-KT4, the very fine details of actions
+were provided. In particular, the following types of actions
+are added to EdNet-KT3: erase choice, undo erase choice,
+play audio, pause audio, play video, pause video, pay,
+refund, and enroll coupon.
+6) CodeWorkout Dataset: The CodeWorkout dataset [135]
+is utilized in the 2nd Computer Science Educational Data
+Mining Challenge (CSEDM) 10. This dataset is collected from
+a CS1 course in the Spring and Fall 2019 semesters at a public
+university in United States. It contains the code submissions
+from students for 50 coding problems, each requiring 10-
+26 lines of code. In this dataset, each exercise has a unique
+KC, thereby the number of KCs is equal to the number of
+exercises. In total, there are 329 and 490 students in the Spring
+and Fall semesters who completed the course. Each dataset
+contains more than 65,000 code submissions, the scores of the
+submissions (% of unit tests passes) are also available, as well
+as the compiler message if the compilation is not successful.
+The final grades of students are also provided for this dataset.
+B. Baselines
+The implementations of existing KT methods are not stan-
+dardized, which may use different program languages (e.g.,
+python, lua) and different deep learning frameworks (e.g.,
+tensorflow, torch). Furthermore, some works did not well
+organize the codes systematically (e.g., the missing of running
+environments and dependencies), which brings difficulties in
+reproducing the models. To this end, we put forward the
+algorithm library for KT baselines, named EduKTM, which
+now has contained the concurrent popular works. EduKTM
+will be always under development for including the latest KT
+models, more algorithms and features are going to be added.
+Besides, we provide detailed guidelines for everyone who is
+interested in contributing to EduKTM.
+It worth nothing that we do not provide the performance
+evaluation of these baselines using the aforementioned bench-
+mark datasets. The reasons are two-folds: (1) For each baseline
+10https://sites.google.com/ncsu.edu/csedm-dc-2021/home
+
+--- PAGE 17 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 17
+method, their experimental settings are quite different as they
+were designed to handle with various learning scenarios. No
+single KT model can always be the best one under various
+learning contexts. It is not fair to compare all baselines under
+a fixed setting. (2) Existing evaluation standards primarily
+concentrate on the performance of student performance pre-
+diction task, which cannot directly reflect the effectiveness of
+various KT models in practical applications. Therefore, we
+decide to open source EduData and EduKTM. Researchers
+and practitioners can freely compare and select appropriate
+KT models based on their specific requirements in various
+application scenarios.
+VII. F UTURE RESEARCH DIRECTIONS
+This survey has comprehensively reviewed the abundant
+current developments in the field of knowledge tracing, in-
+cluding fundamental KT models, their variations and typical
+applications. Despite this, as knowledge tracing is a relatively
+new but promising research area, there are still a substantial
+number of problems that require urgent resolution. In this
+section, we discuss several potential future research directions.
+A. Knowledge Tracing with Interpretability
+The performance of KT models is now evaluated indirectly
+through the student performance prediction task. The higher
+the precision of students’ responses on future exercises, the
+better the KT model’s performance. Nonetheless, interpretabil-
+ity plays a significant role in education, as students often
+express more concern about the ’why’ than the ’what’ of
+a learning decision [137]. Enhancing the interpretability of
+KT models is therefore crucial. Some educational theories,
+such as the Rasch model used in AKT [21] and the transfer
+of knowledge used in SKT [58], could be considered for
+this purpose. Minn et al. [138] noticed the significance of
+interpretable KT, particularly for deep learning models, as
+they have numerous parameters that are challenging to explain
+meaningfully. Thus, they [138] introduced a straightforward
+and interpretable KT approach, based on the causal rela-
+tionships within the latent features extracted from students’
+behavioral data. Zhu et al. [29] attempted to introduce causal
+inference for explanatory analysis on KT, and they achieved
+more stable and explainable knowledge tracing based on the
+analysis results. It is imperative to further refine existing KT
+models or to explore additional methods for interpretable KT
+researches. This will lead to the production of more accurate
+and interpretable evaluations of students’ knowledge states.
+B. Knowledge Tracing with Sparse Learning Interactions
+The acquisition of high-quality KT models necessarily re-
+quires a substantial amount of data to ensure training stability.
+However, online learning systems often achieve less learning
+interactions in practical educational scenarios, thereby leading
+to the data sparsity problem. To address this issue, Yang
+et al. [139] utilized graph convolutional network to include
+exercise-KC correlations. Huang et al. [140] turned to improve
+the attention mechanism. More recently, researchers have
+employed contrastive learning to alleviate the data sparsity
+problem in KT [141, 142]. For example, Lee et al. [143]
+presented a contrastive learning framework to enhance KT,
+which measure the semantical similarity between various
+learning interactions to effectively learn their representations.
+They further designed data augmentation methods to enhance
+the semantics of students’ learning interactions. However,
+while the aforementioned methods alleviate the data sparsity
+problem in various aspects, there remains a need for further
+improvement in addressing this issue comprehensively.
+C. Knowledge Tracing with Subjective Exercises
+Most existing KT researches are capable of dealing with
+objective exercises, assuming student responses are binary.
+However, they overlook students’ open-ended answers, often
+presented in natural language, on subjective exercises. As per
+the work by Liu et al. [144], an open-ended KT approach
+for computer science education was explored. This method
+aimed to predict students’ precise solutions to programming
+questions, utilizing language models for assistance. Recent ad-
+vancements in large language models offer promising potential
+to enhance the ability of KT models to comprehend the critical
+information regarding students’ knowledge states embedded
+within their open-ended answers on subjective exercises [145].
+D. Knowledge Tracing with Students’ Feedback
+Learning records are passive representations of students’
+knowledge states. In contrast, students’ feedback provides
+us with their proactive understanding of their knowledge
+states, thereby offering direct and authentic indicators of their
+learning situation. However, there are few KT models that take
+advantage of training data related to students’ feedback, even
+though it can play an important role in fixing the KT results
+[146]. Wang et al. [147] have noted that feedback plays a
+positive role in learning, which may promote transfer and
+retention in learning from worked-out examples. Therefore,
+incorporating students’ feedback presents a meaningful avenue
+that could lead to significant improvements.
+E. Knowledge Tracing for General User Modeling
+Generally, user modeling refers to tools for characterizing
+users’ behaviors (e.g., frequent locations), personal informa-
+tion (e.g., age, gender, and occupation) and latent features
+(e.g., interests and abilities), which facilitate the provision of
+targeted services for different users [148]. As a type of latent
+feature modeling, knowledge tracing diagnoses the proficiency
+of users (not only individuals, but also groups of individuals,
+like user teams and companies) on specific skills/concepts.
+Thus, in addition to education, knowledge tracing can be
+developed and applied across a wide range of domains for
+user modeling, including games, sports, and recruitment.
+F . Knowledge Tracing with Large Language Models
+In recent years, the advancement of large language models
+(LLM), notably ChatGPT, has led to significant impacts and
+garnered considerable research interest worldwide [149]. The
+
+--- PAGE 18 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 18
+use of LLM in education is promising to revolutionize the cur-
+rent learning pattern [145]. The current study mainly focuses
+on generating learning materials, improving student-system
+interaction, and explaining educational contents. However,
+it remains unclear how LLM can assist in understanding
+students’ knowledge states. Given the powerful capabilities
+of LLM, it has the potential to enhance the generalization and
+interpretability of existing KT methods. Specifically, LLM can
+analyze the content of students’ responses and evaluate their
+quality, which directly reflects students’ knowledge states.
+Besides, LLM can play the role of the instructor, answering
+questions for students and identifying their strengths and
+weaknesses. Furthermore, LLM itself can serve as a KT
+model, which can output reasonable results about students’
+knowledge states given their previous learning interactions.
+Simultaneously, it is imperative to safeguard the privacy and
+security of student data when utilizing LLM [150].
+VIII. D ISCUSSIONS AND CONCLUSIONS
+In this survey, we conducted a thorough review of knowl-
+edge tracing. Specifically, we initially conducted a comprehen-
+sive review of existing fundamental KT models. Considering
+the complexity of online learning systems and the significant
+importance of KT research in practical scenarios, we inves-
+tigated a broad range of variant KT research. Subsequently,
+we summarized some typical applications of KT in common
+educational scenarios. Furthermore, we released two algorithm
+libraries for KT-related datasets and baselines, thereby facil-
+itating researchers and practitioners in selecting appropriate
+KT models based on their specific requirements. Finally, we
+outlined some potential future directions.
+We hope that this comprehensive survey of knowledge
+tracing will assist readers in understanding the problem of
+modeling students’ dynamic knowledge states. It serves as a
+fundamental framework for both researchers and practition-
+ers in future studies, fostering the development of KT. The
+development of KT will directly benefit millions of students,
+with its impact potentially extending to a broader audience
+as online learning continues to evolve. In this context, KT
+will play an increasingly important role in enabling individuals
+to adapt to the ever-changing society [151]. Furthermore, the
+development of more refined KT methods tailored to students
+in various subjects and age groups will enhance their ability
+to comprehend students’ individual knowledge states.
+However, we recognize some limitations of the current
+survey. Firstly, as new KT methods continue to emerge,
+although we have conducted a thorough investigation, there
+may be some representative works that we have overlooked. If
+necessary, we will incorporate these into our proposed frame-
+work in the future. Secondly, the complexity of KT methods
+warrants attention, as it continues to grow, particularly in
+those based on deep learning. The complexity of the model
+may enhance its accuracy, but it could also compromise its
+applicability, as users will question the reliability of complex
+models. Despite the fact that some studies have attempted to
+reveal the interpretability of complex KT models, for instance,
+by utilizing the xAI technique, there remains a significant
+distance to traverse before achieving a completely transparent
+deep learning KT model.
+We posit that the application of KT methods in online edu-
+cation presents a promising avenue for research. It significantly
+enhances the learning experience for students while simultane-
+ously alleviating the burden on teachers. Despite the numerous
+challenges and obstacles, researchers are be encouraged to
+overcome them and ensure a reliable and equitable access to
+students’ evolving knowledge state in learning.
+ACKNOWLEDGMENT
+This research was supported by grants from the National
+Key Research and Development Program of China (Grant
+No. 2021YFF0901003), and the National Natural Science
+Foundation of China (Grant No. 62337001, U20A20229).
+REFERENCES
+[1] G. Mckenna, “Theory and practice of online learning,” International
+Journal of Information Management, vol. 29, no. 6, pp. 503–504, 2009.
+[2] A. Sun and X. Chen, “Online education and its effective practice:
+A research review,” Journal of Information Technology Education
+Research, vol. 15, no. 2016, pp. 157–190, 2015.
+[3] M. Wang, M. Wang, Y . Cui, and H. Zhang, “Art teachers’ attitudes
+toward online learning: an empirical study using self determination
+theory,” Frontiers in Psychology, vol. 12, p. 627095, 2021.
+[4] K. VanLEHN, “The relative effectiveness of human tutoring, intelligent
+tutoring systems, and other tutoring systems,” Educational Psycholo-
+gist, vol. 46, no. 4, pp. 197–221, 2011.
+[5] A. Cully and Y . Demiris, “Online knowledge level tracking with data-
+driven student models and collaborative filtering,” IEEE Transactions
+on Knowledge and Data Engineering , vol. 32, no. 10, pp. 2000–2013,
+2020.
+[6] M. Guo, M. Wang, and B. Li, “A case study of mobile blended learning
+in teaching english as a foreign language.” in Intelligent Environments
+(Workshops), 2019, pp. 269–279.
+[7] L. Jiang, K. Liu, Y . Wang, D. Wang, P. Wang, Y . Fu, and M. Yin, “Re-
+inforced explainable knowledge concept recommendation in moocs,”
+ACM Transactions on Intelligent Systems and Technology , vol. 14,
+no. 3, pp. 1–20, 2023.
+[8] L. Jiang, Y . Wang, S. Xie, J. Wu, M. Yin, and J. Wang, “Which
+courses to choose? recommending courses to groups of students in
+online tutoring platforms,” Applied Intelligence , vol. 53, no. 10, pp.
+11 727–11 736, 2023.
+[9] A. T. Corbett and J. R. Anderson, “Knowledge tracing: Modeling
+the acquisition of procedural knowledge,” User Modelling and User-
+Adapted Interaction, vol. 4, no. 4, pp. 253–278, 1995.
+[10] C. E. Dowling and C. Hockemeyer, “Automata for the assessment of
+knowledge,” IEEE Transactions on Knowledge and Data Engineering ,
+vol. 13, no. 3, pp. 451–461, 2001.
+[11] Z. A. Pardos, Y . Bergner, D. T. Seaton, and D. E. Pritchard, “Adapting
+bayesian knowledge tracing to a massive open online course in edx.”
+Educational Data Mining , vol. 13, pp. 137–144, 2013.
+[12] J. Cowan, “A learner centered approach to online education,” British
+Journal of Educational Technology, vol. 44, no. 6, p. E221–E222, 2013.
+[13] Q. Liu, S. Tong, C. Liu, H. Zhao, E. Chen, H. Ma, and S. Wang,
+“Exploiting cognitive structure for adaptive learning,” in Proceedings
+of the 25th ACM SIGKDD International Conference on Knowledge
+Discovery & Data Mining , 2019, pp. 627–635.
+[14] J. H. Block and R. B. Burns, “Mastery learning,” Review of Research
+in Education, vol. 4, no. 1, pp. 3–49, 1976.
+[15] H. Cen, K. Koedinger, and B. Junker, “Learning factors analysis–a
+general method for cognitive model evaluation and improvement,” in
+International Conference on Intelligent Tutoring Systems . Springer,
+2006, pp. 164–175.
+[16] P. I. Pavlik Jr, H. Cen, and K. R. Koedinger, “Performance factors
+analysis–a new alternative to knowledge tracing.” Online Submission ,
+2009.
+[17] R. J. Williams and D. Zipser, “A learning algorithm for continually
+running fully recurrent neural networks,” Neural computation, vol. 1,
+no. 2, pp. 270–280, 1989.
+
+--- PAGE 19 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 19
+[18] C. Piech, J. Bassen, J. Huang, S. Ganguli, M. Sahami, L. J. Guibas,
+and J. Sohl-Dickstein, “Deep knowledge tracing,” inneural information
+processing systems, 2015, pp. 505–513.
+[19] H. Nakagawa, Y . Iwasawa, and Y . Matsuo, “Graph-based knowledge
+tracing: Modeling student proficiency using graph neural network,” in
+2019 IEEE/WIC/ACM International Conference on Web Intelligence
+(WI). IEEE, 2019, pp. 156–163.
+[20] S. Pandey and G. Karypis, “A self-attentive model for knowledge
+tracing,” arXiv preprint arXiv:1907.06837 , 2019.
+[21] A. Ghosh, N. Heffernan, and A. S. Lan, “Context-aware attentive
+knowledge tracing,” in Proceedings of the 26th ACM SIGKDD Inter-
+national Conference on Knowledge Discovery & Data Mining , New
+York, NY , USA, 2020, p. 2330–2339.
+[22] R. Schmucker, J. Wang, S. Hu, and T. M. Mitchell, “Assessing the
+performance of online students–new data, new approaches, improved
+accuracy.” Journal of Educational Data Mining , vol. 14, no. 1, pp.
+1–45, 2022.
+[23] G. Abdelrahman, Q. Wang, and B. Nunes, “Knowledge tracing: A
+survey,” ACM Computing Surveys , vol. 55, no. 11, pp. 1–37, 2023.
+[24] L. Razzaq, J. Patvarczki, S. F. Almeida, M. Vartak, M. Feng, N. T.
+Heffernan, and K. R. Koedinger, “The assistment builder: Supporting
+the life cycle of tutoring system content creation,” IEEE Transactions
+on Learning Technologies, vol. 2, no. 2, pp. 157–166, 2009.
+[25] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N.
+Gomez, Ł. Kaiser, and I. Polosukhin, “Attention is all you need,” in
+Advances in neural information processing systems , 2017, pp. 5998–
+6008.
+[26] Y . Choi, Y . Lee, J. Cho, J. Baek, B. Kim, Y . Cha, D. Shin, C. Bae, and
+J. Heo, “Towards an appropriate query, key, and value computation for
+knowledge tracing,” ser. L@S ’20, 2020, p. 341–344.
+[27] D. Shin, Y . Shim, H. Yu, S. Lee, B. Kim, and Y . Choi, “Saint+: Integrat-
+ing temporal features for ednet correctness prediction,” in LAK2021:
+11th International Learning Analytics and Knowledge Conference , apr
+2021.
+[28] S. Shen, E. Chen, Q. Liu, Z. Huang, W. Huang, Y . Yin, Y . Su,
+and S. Wang, “Monitoring student progress for learning process-
+consistent knowledge tracing,” IEEE Transactions on Knowledge and
+Data Engineering, 2022.
+[29] J. Zhu, X. Ma, and C. Huang, “Stable knowledge tracing using causal
+inference,” IEEE Transactions on Learning Technologies , pp. 1–11,
+2023.
+[30] R. Pel ´anek, “Bayesian knowledge tracing, logistic models, and beyond:
+an overview of learner modeling techniques,”User Modeling and User-
+Adapted Interaction, vol. 27, no. 3-5, pp. 313–350, 2017.
+[31] X. Song, J. Li, T. Cai, S. Yang, T. Yang, and C. Liu, “A survey on
+deep learning based knowledge tracing,” Knowledge-Based Systems ,
+vol. 258, p. 110036, 2022.
+[32] T. Liu, “Knowledge tracing: A bibliometric analysis,” Computers and
+Education: Artificial Intelligence , p. 100090, 2022.
+[33] A. Zanellati, D. Di Mitri, M. Gabbrielli, and O. Levrini, “Hybrid
+models for knowledge tracing: a systematic literature review,” IEEE
+Transactions on Learning Technologies, 2024.
+[34] P. I. Pavlik, L. G. Eglington, and L. M. Harrell-Williams, “Logistic
+knowledge tracing: A constrained framework for learner modeling,”
+IEEE Transactions on Learning Technologies, vol. 14, no. 5, pp. 624–
+639, 2021.
+[35] T. K ¨aser, S. Klingler, A. G. Schwing, and M. Gross, “Dynamic bayesian
+networks for student modeling,” IEEE Transactions on Learning Tech-
+nologies, vol. 10, no. 4, pp. 450–462, 2017.
+[36] J.-J. Vie and H. Kashima, “Knowledge tracing machines: Factorization
+machines for knowledge tracing,” in Proceedings of the AAAI Confer-
+ence on Artificial Intelligence , vol. 33, 2019, pp. 750–757.
+[37] J. Zhang, X. Shi, I. King, and D.-Y . Yeung, “Dynamic key-value
+memory networks for knowledge tracing,” in Proceedings of the 26th
+International Conference on World Wide Web . International World
+Wide Web Conferences Steering Committee, 2017.
+[38] X. Huang, Q. Liu, C. Wang, H. Han, J. Ma, E. Chen, Y . Su,
+and S. Wang, “Constructing educational concept maps with multiple
+relationships from multi-source data,” in 2019 IEEE International
+Conference on Data Mining (ICDM) , 2019, pp. 1108–1113.
+[39] N. Thai-Nghe, L. Drumond, T. Horv ´ath, A. Krohn-Grimberghe,
+A. Nanopoulos, and L. Schmidt-Thieme, “Factorization techniques for
+predicting student performance,” in Educational recommender systems
+and technologies: Practices and challenges . IGI Global, 2012, pp.
+129–153.
+[40] N. Thai-Nghe, L. Drumond, T. Horv ´ath, and L. Schmidt-Thieme,
+“Using factorization machines for student modeling.” in International
+Conference on User Modeling, Adaptation, and Personalization , 2012.
+[41] S. Rendle, “Factorization machines,” in 2010 IEEE International Con-
+ference on Data Mining , 2010, pp. 995–1000.
+[42] M. Khajah, R. V . Lindsey, and M. C. Mozer, “How deep is knowledge
+tracing?” arXiv preprint arXiv:1604.02416 , 2016.
+[43] S. Hochreiter and J. Schmidhuber, “Long short-term memory,” Neural
+computation, vol. 9, no. 8, pp. 1735–1780, 1997.
+[44] C.-K. Yeung and D.-Y . Yeung, “Addressing two problems in deep
+knowledge tracing via prediction-consistent regularization,” arXiv
+preprint arXiv:1806.02180, 2018.
+[45] X. Xiong, S. Zhao, E. G. Van Inwegen, and J. E. Beck, “Going deeper
+with deep knowledge tracing.” Educational Data Mining , 2016.
+[46] A. Graves, G. Wayne, M. Reynolds, T. Harley, I. Danihelka,
+A. Grabska-Barwi ´nska, S. G. Colmenarejo, E. Grefenstette, T. Ra-
+malho, J. Agapiou et al. , “Hybrid computing using a neural network
+with dynamic external memory,” Nature, vol. 538, no. 7626, pp. 471–
+476, 2016.
+[47] G. Abdelrahman and Q. Wang, “Knowledge tracing with sequential
+key-value memory networks,” in Proceedings of the 42nd International
+ACM SIGIR Conference on Research and Development in Information
+Retrieval. ACM, jul 2019.
+[48] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, “BERT: Pre-
+training of deep bidirectional transformers for language understanding,”
+in Proceedings of the 2019 Conference of the North . Association for
+Computational Linguistics, 2019.
+[49] T. Brown, B. Mann, N. Ryder, M. Subbiah, J. D. Kaplan, P. Dhariwal,
+A. Neelakantan, P. Shyam, G. Sastry, A. Askell et al., “Language mod-
+els are few-shot learners,” Advances in neural information processing
+systems, vol. 33, pp. 1877–1901, 2020.
+[50] X. Wang, X. Mei, Q. Huang, Z. Han, and C. Huang, “Fine-grained
+learning performance prediction via adaptive sparse self-attention net-
+works,” Information Sciences, vol. 545, pp. 223–240, 2021.
+[51] J. Zhu, W. Yu, Z. Zheng, C. Huang, and G. P. C. Fung, Learning from
+Interpretable Analysis: Attention-Based Knowledge Tracing , 2020.
+[52] F. M. Lord, Applications of Item Response Theory to Practical Testing
+Problems. LAWRENCE ERLBAUM ASSCCIAATES, 1980.
+[53] S. Pu and L. Becker, “Self-attention in knowledge tracing: Why
+it works,” in International Conference on Artificial Intelligence in
+Education. Springer, 2022, pp. 731–736.
+[54] Y . Yin, L. Dai, Z. Huang, S. Shen, F. Wang, Q. Liu, E. Chen, and X. Li,
+“Tracing knowledge instead of patterns: Stable knowledge tracing with
+diagnostic transformer,” in Proceedings of the ACM Web Conference
+2023, 2023, pp. 855–864.
+[55] Z. Wu, S. Pan, F. Chen, G. Long, C. Zhang, and P. S. Yu, “A
+comprehensive survey on graph neural networks,” arXiv preprint
+arXiv:1901.00596, 2019.
+[56] K. Cho, B. Van Merri ¨enboer, C. Gulcehre, D. Bahdanau, F. Bougares,
+H. Schwenk, and Y . Bengio, “Learning phrase representations using rnn
+encoder-decoder for statistical machine translation,” ArXiv:1406.1078,
+2014.
+[57] Y . Lu, P. Chen, Y . Pian, and V . W. Zheng, “Cmkt: Concept map driven
+knowledge tracing,” IEEE Transactions on Learning Technologies ,
+vol. 15, no. 4, pp. 467–480, 2022.
+[58] S. Tong, Q. Liu, W. Huang, Z. Huang, E. Chen, C. Liu, H. Ma,
+and S. Wang, “Structure-based knowledge tracing: An influence prop-
+agation view,” in Proceedings of the The 19th IEEE International
+Conference on Data Mining , 2020.
+[59] Royer and M. James, “Theories of the transfer of learning,” Educational
+Psychologist, vol. 14, no. 1, pp. 53–69, 1979.
+[60] T. Long, Y . Liu, W. Zhang, W. Xia, Z. He, R. Tang, and Y . Yu,
+“Automatical graph-based knowledge tracing,” 2022.
+[61] Y . Lu, D. Wang, Q. Meng, and P. Chen, “Towards interpretable deep
+learning models for knowledge tracing,” in Artificial Intelligence in Ed-
+ucation: 21st International Conference, AIED 2020, Ifrane, Morocco,
+July 6–10, 2020, Proceedings, Part II 21. Springer, 2020, pp. 185–190.
+[62] G. Montavon, A. Binder, S. Lapuschkin, W. Samek, and K.-R. M ¨uller,
+“Layer-wise relevance propagation: an overview,” Explainable AI:
+interpreting, explaining and visualizing deep learning , pp. 193–209,
+2019.
+[63] W. Saeed and C. Omlin, “Explainable ai (xai): A systematic meta-
+survey of current challenges and future opportunities,” Knowledge-
+Based Systems, vol. 263, p. 110273, 2023.
+[64] Y . Lu, D. Wang, P. Chen, Q. Meng, and S. Yu, “Interpreting deep
+learning models for knowledge tracing,” International Journal of
+Artificial Intelligence in Education , vol. 33, no. 3, pp. 519–542, 2023.
+[65] Q. Liu, Y . Ge, Z. Li, E. Chen, and H. Xiong, “Personalized travel
+package recommendation,” in IEEE 11th International Conference on
+
+--- PAGE 20 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 20
+Data Mining. IEEE, 2011, pp. 407–416.
+[66] M. V . Yudelson, K. R. Koedinger, and G. J. Gordon, “Individualized
+bayesian knowledge tracing models,” in Lecture Notes in Computer
+Science. Springer Berlin Heidelberg, 2013, pp. 171–180.
+[67] Z. A. Pardos and N. T. Heffernan, “Modeling individualization in
+a bayesian networks implementation of knowledge tracing,” in User
+Modeling, Adaptation, and Personalization . Springer Berlin Heidel-
+berg, 2010, pp. 255–266.
+[68] J. I. Lee and E. Brunskill, “The impact on individualizing student
+models on necessary practice opportunities.” International Educational
+Data Mining Society , 2012.
+[69] Z. A. Pardos, S. Trivedi, N. T. Heffernan, and G. N. S´ark¨ozy, “Clustered
+knowledge tracing,” inInternational Conference on Intelligent Tutoring
+Systems, 2012, pp. 405–410.
+[70] S. Trivedi, Z. A. Pardos, and N. T. Heffernan, “Clustering students
+to generate an ensemble to improve standard test score predictions,”
+in International conference on artificial intelligence in education .
+Springer, 2011, pp. 377–384.
+[71] Y . Yang, F. Shen, Z. Huang, H. T. Shen, and X. Li, “Discrete
+nonnegative spectral clustering,” IEEE Transactions on Knowledge and
+Data Engineering, vol. 29, no. 9, pp. 1834–1845, 2017.
+[72] B. Jiang, J. Pei, Y . Tao, and X. Lin, “Clustering uncertain data based on
+probability distribution similarity,” IEEE Transactions on Knowledge
+and Data Engineering , vol. 25, no. 4, pp. 751–763, 2013.
+[73] S. Minn, Y . Yu, M. C. Desmarais, F. Zhu, and J.-J. Vie, “Deep
+knowledge tracing and dynamic student classification for knowledge
+tracing,” in 2018 IEEE International Conference on Data Mining
+(ICDM). IEEE, nov 2018.
+[74] S. Mao, J. Zhan, Y . Wang, and Y . Jiang, “Improving knowledge tracing
+via considering two types of actual differences from exercises and prior
+knowledge,” IEEE Transactions on Learning Technologies , vol. 16,
+no. 3, pp. 324–338, 2023.
+[75] Y . Zhao, H. Ma, W. Wang, W. Gao, F. Yang, and X. He, “Exploiting
+multiple question factors for knowledge tracing,” Expert Systems with
+Applications, vol. 223, p. 119786, 2023.
+[76] S. Shen, Q. Liu, E. Chen, H. Wu, Z. Huang, W. Zhao, Y . Su,
+H. Ma, and S. Wang, “Convolutional knowledge tracing: Modeling
+individualization in student learning process,” SIGIR ’20: The 43rd
+International ACM SIGIR conference on research and development in
+Information Retrieval Virtual Event China July, 2020 , pp. 1857–1860,
+2020.
+[77] Y . LeCun, Y . Bengio, and G. Hinton, “Deep learning,”nature, vol. 521,
+no. 7553, p. 436, 2015.
+[78] V . Trowler, “Student engagement literature review,” The higher educa-
+tion academy, vol. 11, no. 1, pp. 1–15, 2010.
+[79] R. M. Carini, G. D. Kuh, and S. P. Klein, “Student engagement and
+student learning: Testing the linkages,” Research in higher education ,
+vol. 47, no. 1, pp. 1–32, 2006.
+[80] C. Berka, D. J. Levendowski, M. N. Lumicao, A. Yau, G. Davis, V . T.
+Zivkovic, R. E. Olmstead, P. D. Tremoulet, and P. L. Craven, “Eeg
+correlates of task engagement and mental workload in vigilance, learn-
+ing, and memory tasks,” Aviation, space, and environmental medicine ,
+vol. 78, no. 5, pp. B231–B244, 2007.
+[81] Y . Xu, K.-m. Chang, Y . Yuan, and J. Mostow, “Eeg helps knowledge
+tracing!” in Workshop on Utilizing EEG Input in Intelligent Tutoring
+Systems (ITS2014 WSEEG) , 2014, p. 43.
+[82] S. Schultz and I. Arroyo, “Tracing knowledge and engagement in
+parallel in an intelligent tutoring system,” in Educational Data Mining,
+2014.
+[83] S. E. Schultz and I. Arroyo, “Modeling the interplay between knowl-
+edge and affective engagement in students,” International Journal of
+People-Oriented Programming (IJPOP), vol. 3, no. 2, pp. 56–74, 2014.
+[84] K. Mongkhonvanit, K. Kanopka, and D. Lang, “Deep knowledge
+tracing and engagement with moocs,” in Proceedings of the 9th
+International Conference on Learning Analytics & Knowledge , 2019,
+pp. 340–342.
+[85] S. Markovitch and P. D. Scott, “The role of forgetting in learning,” in
+Machine Learning Proceedings 1988 . Elsevier, 1988, pp. 459–465.
+[86] Y . Chen, Q. Liu, Z. Huang, L. Wu, E. Chen, R. Wu, Y . Su, and
+G. Hu, “Tracking knowledge proficiency of students with educational
+priors,” The 26th ACM International Conference on Information and
+Knowledge Management (CIKM’2017), pp. 989–998, 2017.
+[87] Z. Huang, Q. Liu, Y . Chen, L. Wu, K. Xiao, E. Chen, H. Ma, and
+G. Hu, “Learning or forgetting? a dynamic approach for tracking the
+knowledge proficiency of students,” ACM Transactions on Information
+Systems (TOIS), vol. 38, no. 2, pp. 1–33, 2020.
+[88] Y . Qiu, Y . Qi, H. Lu, Z. A. Pardos, and N. T. Heffernan, “Does time
+matter? modeling the effect of time with bayesian knowledge tracing.”
+in Educational Data Mining , 2011, pp. 139–148.
+[89] P. Nedungadi and M. Remya, “Incorporating forgetting in the per-
+sonalized, clustered, bayesian knowledge tracing (pc-bkt) model,” in
+2015 International Conference on cognitive computing and information
+processing (CCIP). IEEE, 2015, pp. 1–5.
+[90] G. R. Loftus, “Evaluating forgetting curves.” Journal of Experimental
+Psychology: Learning, Memory, and Cognition , vol. 11, no. 2, p. 397,
+1985.
+[91] R. Pel ´anek, J. Papou ˇsek, and V . Stanislav, “Adaptive practice of facts
+in domains with varied prior knowledge,” in Proceedings of the 7th
+International Conference on Educational Data Mining . London,
+United Kingdom: International Educational Data Mining Society, 2014,
+pp. 6–13.
+[92] R. Pel ´anek, “Application of time decay functions and elo system in
+student modeling,” in Educational Data Mining , 2014.
+[93] R. Pel ´anek, “Modeling students’ memory for application in adaptive
+educational systems.” International Educational Data Mining Society ,
+2015.
+[94] K. Nagatani, Q. Zhang, M. Sato, Y .-Y . Chen, F. Chen, and T. Ohkuma,
+“Augmenting knowledge tracing by considering forgetting behavior,”
+in The World Wide Web Conference. ACM, may 2019.
+[95] C. Wang, W. Ma, M. Zhang, C. Lv, F. Wan, H. Lin, T. Tang, Y . Liu,
+and S. Ma, “Temporal cross-effects in knowledge tracing,” ser. The
+International Conference on Web Search and Data Mining. New York,
+NY , USA: Association for Computing Machinery, 2021, p. 517–525.
+[96] Y . Wang and N. T. Heffernan, “Leveraging first response time into
+the knowledge tracing model.” International Educational Data Mining
+Society, 2012.
+[97] J. E. Beck, K.-m. Chang, J. Mostow, and A. Corbett, “Does help help?
+introducing the bayesian evaluation and assessment methodology,” in
+International Conference on Intelligent Tutoring Systems . Springer,
+2008, pp. 383–394.
+[98] M. Sao Pedro, R. Baker, and J. Gobert, “Incorporating scaffolding and
+tutor context into bayesian knowledge tracing to predict inquiry skill
+acquisition,” in Educational Data Mining , 2013.
+[99] C. Lin and M. Chi, “Intervention-bkt: incorporating instructional inter-
+ventions into bayesian knowledge tracing,” in International conference
+on intelligent tutoring systems . Springer, 2016, pp. 208–218.
+[100] J. Gonz ´alez-Brenes, Y . Huang, and P. Brusilovsky, “General features in
+knowledge tracing to model multiple subskills, temporal item response
+theory, and expert knowledge,” in The 7th International Conference on
+Educational Data Mining . University of Pittsburgh, 2014, pp. 84–91.
+[101] T. Berg-Kirkpatrick, A. Bouchard-C ˆot´e, J. DeNero, and D. Klein,
+“Painless unsupervised learning with features,” in The 2010 Annual
+Conference of the North American Chapter of the Association for
+Computational Linguistics, 2010, pp. 582–590.
+[102] L. Zhang, X. Xiong, S. Zhao, A. Botelho, and N. T. Heffernan, “In-
+corporating rich features into deep knowledge tracing,” in Proceedings
+of the Fourth (2017) ACM Conference on Learning@ Scale , 2017, pp.
+169–172.
+[103] Q. Liu, Z. Huang, Y . Yin, E. Chen, H. Xiong, Y . Su, and G. Hu, “EKT:
+Exercise-aware knowledge tracing for student performance prediction,”
+IEEE Transactions on Knowledge and Data Engineering, vol. 33, no. 1,
+pp. 100–115, 2021.
+[104] Z. Huang, Q. Liu, E. Chen, H. Zhao, M. Gao, S. Wei, Y . Su, and G. Hu,
+“Question difficulty prediction for reading problems in standard tests,”
+in Proceedings of the AAAI Conference on Artificial Intelligence, 2017.
+[105] Q. Liu, Z. Huang, Z. Huang, C. Liu, E. Chen, Y . Su, and G. Hu,
+“Finding similar exercises in online education systems,” inProceedings
+of the 24th ACM SIGKDD International Conference on Knowledge
+Discovery & Data Mining , 2018, pp. 1821–1830.
+[106] Y . Yin, Q. Liu, Z. Huang, E. Chen, W. Tong, S. Wang, and Y . Su,
+“Quesnet: A unified representation for heterogeneous test questions,”
+in Proceedings of the 25th ACM SIGKDD International Conference on
+Knowledge Discovery & Data Mining , 2019, pp. 1328–1336.
+[107] T. Mikolov, I. Sutskever, K. Chen, G. S. Corrado, and J. Dean,
+“Distributed representations of words and phrases and their composi-
+tionality,” in Advances in neural information processing systems, 2013,
+pp. 3111–3119.
+[108] W.-Y . Loh, “Classification and regression trees,”Wiley Interdisciplinary
+Reviews: Data Mining and Knowledge Discovery, vol. 1, no. 1, pp. 14–
+23, 2011.
+[109] L. P. Cheung and H. Yang, “Heterogeneous features integration in deep
+knowledge tracing,” inInternational Conference on Neural Information
+Processing. Springer, 2017, pp. 653–662.
+[110] H. Jung, J. Yoo, Y . Yoon, and Y . Jang, “Language proficiency enhanced
+
+--- PAGE 21 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 21
+knowledge tracing,” inInternational Conference on Intelligent Tutoring
+Systems. Springer, 2023, pp. 3–15.
+[111] Z. Liu, Q. Liu, J. Chen, S. Huang, B. Gao, W. Luo, and J. Weng, “En-
+hancing deep knowledge tracing with auxiliary tasks,” in Proceedings
+of the ACM Web Conference 2023 , 2023, pp. 4178–4187.
+[112] J. Kasurinen and U. Nikula, “Estimating programming knowledge with
+bayesian knowledge tracing,” ACM SIGCSE Bulletin, vol. 41, no. 3, pp.
+313–317, 2009.
+[113] L. Wang, A. Sy, L. Liu, and C. Piech, “Deep knowledge tracing on
+programming exercises,” in Proceedings of the fourth (2017) ACM
+conference on learning@ scale , 2017, pp. 201–204.
+[114] M. Zhu, S. Han, P. Yuan, and X. Lu, “Enhancing programming
+knowledge tracing by interacting programming skills and student code,”
+in LAK22: 12th International Learning Analytics and Knowledge
+Conference, 2022, pp. 438–443.
+[115] M. C. Desmarais and R. S. Baker, “A review of recent advances in
+learner and skill modeling in intelligent learning environments,” User
+Modeling and User-adapted Interaction, vol. 22, no. 1, pp. 9–38, 2012.
+[116] H. Wan, Z. Zhong, L. Tang, and X. Gao, “Pedagogical interventions
+in spocs: Learning behavior dashboards and knowledge tracing support
+exercise recommendation,” IEEE Transactions on Learning Technolo-
+gies, vol. 16, no. 3, pp. 431–442, 2023.
+[117] Z. Machardy, “Applications of Bayesian Knowledge Tracing to the
+Curation of Educational Videos,”Electrical Engineering and Computer
+Sciences University of California at Berkeley Technical , 2015.
+[118] Z. Huang, Q. Liu, C. Zhai, Y . Yin, and G. Hu, “Exploring multi-
+objective exercise recommendations in online education systems,” in
+The 28th ACM International Conference on Information and Knowl-
+edge Management, 2019.
+[119] S. Oxman and W. Wong, “White Paper: Adaptive Learning Systems,”
+DV X Innovations DeVry Education Group , no. February, pp. 1–30,
+2014.
+[120] G. N. Yannakakis, P. Spronck, D. Loiacono, and E. Andr ´e, “Player
+modeling,” Dagstuhl Follow Ups, 2013.
+[121] S. M. Fisch, R. Lesh, E. Motoki, S. Crespo, and V . F. Melfi, “Children’s
+mathematical reasoning in online games: Can data mining reveal
+strategic thinking?” Child Development Perspectives, vol. 5, no. 2, pp.
+88–92, 2011.
+[122] P. Kantharaju, K. Alderfer, J. Zhu, B. Char, B. Smith, and S. Onta ´on,
+“Tracing player knowledge in a parallel programming educational
+game,” 2019.
+[123] Y . Long and V . Aleven, “Educational game and intelligent tutoring
+system: A classroom study and comparative design analysis,” ACM
+Transactions on Computer-Human Interaction , vol. 24, no. 3, pp. 1–
+27, 2017.
+[124] Z. Wang, H. Sun, and T. Han, “Predicting crowdsourcing worker
+performance with knowledge tracing,” in Knowledge Science, En-
+gineering and Management: 13th International Conference, KSEM
+2020, Hangzhou, China, August 28–30, 2020, Proceedings, Part II 13 .
+Springer, 2020, pp. 352–359.
+[125] S. Abdi, H. Khosravi, and S. Sadiq, “Modelling learners in crowd-
+sourcing educational systems,” in Artificial Intelligence in Education:
+21st International Conference, AIED 2020, Ifrane, Morocco, July 6–10,
+2020, Proceedings, Part II 21 . Springer, 2020, pp. 3–9.
+[126] K. Crowston, C. Østerlund, T. K. Lee, C. Jackson, M. Harandi, S. Allen,
+S. Bahaadini, S. Coughlin, A. K. Katsaggelos, S. L. Larson, N. Rohani,
+J. R. Smith, L. Trouille, and M. Zevin, “Knowledge tracing to model
+learning in online citizen science projects,” IEEE Transactions on
+Learning Technologies, vol. 13, no. 1, pp. 123–134, 2020.
+[127] T.-Y . Zhao, M. Zeng, and J.-H. Feng, “An exercise collection auto-
+assembling framework with knowledge tracing and reinforcement
+learning,” Journal of Computer Science and Technology, vol. 37, no. 5,
+pp. 1105–1117, 2022.
+[128] Y . Shang, X. Luo, L. Wang, H. Peng, X. Zhang, Y . Ren, and K. Liang,
+“Reinforcement learning guided multi-objective exam paper genera-
+tion,” in Proceedings of the 2023 SIAM International Conference on
+Data Mining (SDM) . SIAM, 2023, pp. 829–837.
+[129] M. Feng, N. Heffernan, and K. Koedinger, “Addressing the assessment
+challenge with an online system that tutors as it assesses,” USER-
+ADAP, vol. 19, no. 3, pp. 243–266, 2009.
+[130] Y . Wang, N. T. Heffernan, and C. Heffernan, “Towards better affect
+detectors: Effect of missing skills, class features and common wrong
+answers,” in Proceedings of the Fifth International Conference on
+Learning Analytics And Knowledge , ser. LAK ’15. New York, NY ,
+USA: Association for Computing Machinery, 2015, p. 31–35.
+[131] H. Chang, H. Hsu, and K. Chen, “Modeling exercise relationships in
+e-learning: A unified approach,” in EDM. International Educational
+Data Mining Society (IEDMS), 2015, pp. 532–535.
+[132] Z. Wang, A. Lamb, E. Saveliev, P. Cameron, Y . Zaykov, J. M.
+Hern´andez-Lobato, R. E. Turner, R. G. Baraniuk, C. Barton, S. P. Jones,
+S. Woodhead, and C. Zhang, “Diagnostic questions: The neurips 2020
+education challenge,” arXiv preprint arXiv:2007.12061 , 2020.
+[133] “A data repository for the EDM community: The PSLC DataShop,” in
+Handbook of Educational Data Mining . CRC Press, 2010, pp. 65–78.
+[134] Y . Choi, Y . Lee, D. Shin, J. Cho, S. Park, S. Lee, J. Baek, C. Bae,
+B. Kim, and J. Heo, “Ednet: A large-scale hierarchical dataset in
+education,” 2019.
+[135] S. H. Edwards and K. P. Murali, “Codeworkout: short programming
+exercises with built-in data collection,” in Proceedings of the 2017
+ACM conference on innovation and technology in computer science
+education, 2017, pp. 188–193.
+[136] A. Ghosh, J. Raspat, and A. Lan, “Option tracing: Beyond correct-
+ness analysis in knowledge tracing,” in International Conference on
+Artificial Intelligence in Education . Springer, 2021, pp. 137–149.
+[137] Q. Li, X. Yuan, S. Liu, L. Gao, T. Wei, X. Shen, and J. Sun, “A genetic
+causal explainer for deep knowledge tracing,” IEEE Transactions on
+Evolutionary Computation, 2023.
+[138] S. Minn, J.-J. Vie, K. Takeuchi, H. Kashima, and F. Zhu, “Interpretable
+knowledge tracing: Simple and efficient student modeling with causal
+relations,” in Proceedings of the AAAI Conference on Artificial Intelli-
+gence, vol. 36, no. 11, 2022, pp. 12 810–12 818.
+[139] Y . Yang, J. Shen, Y . Qu, Y . Liu, K. Wang, Y . Zhu, W. Zhang, and Y . Yu,
+“Gikt: a graph-based interaction model for knowledge tracing,” in
+Machine Learning and Knowledge Discovery in Databases: European
+Conference, ECML PKDD 2020, Ghent, Belgium, September 14–18,
+2020, Proceedings, Part I . Springer, 2021, pp. 299–315.
+[140] S. Huang, Z. Liu, X. Zhao, W. Luo, and J. Weng, “Towards robust
+knowledge tracing models via k-sparse attention,” in Proceedings
+of the 46th International ACM SIGIR Conference on Research and
+Development in Information Retrieval , 2023, pp. 2441–2445.
+[141] X. Song, J. Li, Q. Lei, W. Zhao, Y . Chen, and A. Mian, “Bi-clkt: Bi-
+graph contrastive learning based knowledge tracing,”Knowledge-Based
+Systems, vol. 241, p. 108274, 2022.
+[142] H. Dai, Y . Yun, Y . Zhang, W. Zhang, and X. Shang, “Contrastive
+deep knowledge tracing,” in International conference on artificial
+intelligence in education . Springer, 2022, pp. 289–292.
+[143] W. Lee, J. Chun, Y . Lee, K. Park, and S. Park, “Contrastive learning
+for knowledge tracing,” in Proceedings of the ACM Web Conference
+2022, 2022, pp. 2330–2338.
+[144] N. Liu, Z. Wang, R. Baraniuk, and A. Lan, “Open-ended knowledge
+tracing for computer science education,” in Proceedings of the 2022
+Conference on Empirical Methods in Natural Language Processing ,
+2022, pp. 3849–3862.
+[145] E. Kasneci, K. Seßler, S. K ¨uchemann, M. Bannert, D. Dementieva,
+F. Fischer, U. Gasser, G. Groh, S. G ¨unnemann, E. H ¨ullermeier et al.,
+“Chatgpt for good? on opportunities and challenges of large language
+models for education,” Learning and individual differences , vol. 103,
+p. 102274, 2023.
+[146] E. Vasilyeva, S. Puuronen, M. Pechenizkiy, and P. Rasanen, “Feedback
+adaptation in web-based learning systems,” International Journal of
+Continuing Engineering Education and Life Long Learning , vol. 17,
+no. 4/5, p. 337, 2007.
+[147] M. Wang, Z. K. Yang, S. Y . Liu, H. N. H. Cheng, and Z. Liu,
+“Using feedback to improve learning: Differentiating between correct
+and erroneous examples,” in International Symposium on Educational
+Technology, 2015.
+[148] G. Fischer, “User modeling in human–computer interaction,” User
+Modeling and User-Adapted Interaction , vol. 11, no. 1-2, pp. 65–86,
+2001.
+[149] W. X. Zhao, K. Zhou, J. Li, T. Tang, X. Wang, Y . Hou, Y . Min,
+B. Zhang, J. Zhang, Z. Dong et al. , “A survey of large language
+models,” arXiv preprint arXiv:2303.18223 , 2023.
+[150] X. Pan, M. Zhang, S. Ji, and M. Yang, “Privacy risks of general-purpose
+language models,” in 2020 IEEE Symposium on Security and Privacy
+(SP). IEEE, 2020, pp. 1314–1331.
+[151] M. Wotto, “The future high education distance learning in canada, the
+united states, and france: Insights from before covid-19 secondary data
+analysis,” Journal of Educational Technology Systems , 2020.
+
+--- PAGE 22 ---
+JOURNAL OF LATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 22
+Shuanghong Shen recieved the B.E. degree from
+Wuhan University, Wuhan, China, in 2018. He is
+currently working toward the Ph.D. degree in the
+School of Computer Science and Technology, Uni-
+versity of Science and Technology of China. His
+main research interests include data mining, knowl-
+edge discovery, natural language processing and
+intelligent tutoring systems. He won the first prize in
+task 2 of the NeurIPS 2020 Education Challenge. He
+has published papers in referred conference proceed-
+ings, such as KDD2023, AAAI2022, SIGIR2022.
+Qi Liu (Member, IEEE) received the Ph.D. degree
+from University of Science and Technology of China
+(USTC), Hefei, China, in 2013. He is currently a
+Professor in the School of Computer Science and
+Technology at USTC. His general area of research
+is data mining and intelligent education. He has
+published prolifically in refereed journals and con-
+ference proceedings (e.g., TKDE, TOIS, KDD). He
+is an Associate Editor of IEEE TBD and Neuro-
+computing. He was the recipient of KDD’ 18 Best
+Student Paper Award and ICDM’ 11 Best Research
+Paper Award. He is a member of the Alibaba DAMO Academy Young Fellow.
+He was also the recipient of China Outstanding Youth Science Foundation in
+2019.
+Zhenya Huang (Member, IEEE) received the B.E.
+degree from Shandong University, in 2014 and the
+Ph.D. degree from USTC, in 2020. He is currently
+an associate researcher of the School of Computer
+Science and Technology, University of Science and
+Technology of China (USTC). His main research
+interests include data mining, knowledge discovery
+representation learning and intelligent tutoring sys-
+tems. He has published more than 30 papers in ref-
+ereed journals and conference proceedings including
+TKDE, TOIS, KDD, AAAI. He has served regularly
+in the program committees of a number of conferences, and is reviewers for
+the leading academic journals.
+Yonghe Zheng is the funding dean of Research
+Institute of Science Education in Beijing Normal
+University, Professor in Education Faculty of BNU,
+PhD Supervisor. Prof. Zheng is the Vice president of
+the 8th Council of China Association of Children’s
+Science Instructors and is the member of Teach-
+ing Guidance Committee of the Basic Education,
+the member of comprehensive group of the com-
+pulsory education curriculum revision committee,
+the science curriculum standard revision group; the
+General Secretary of the Awarding Scheme Council
+for outstanding computer teachers in Universities; the Vice director of the
+academic committee of Chinese society of Natural Science Museum; and
+former Director General of the Science Policy Bureau of National Natural
+Science Foundation of China. Prof. Zheng has engaged in project management
+of basic research and S&T policy research for a long time. More than 60
+articles have been published. And Zheng is the chief editor of Disciplinary
+and Interdisciplinary Science Education Research Journal. Prof. Zheng joined
+in Educational Faculty of Normal University in April, 2018, with specific
+research interests on science education and educational technology. Prof.
+Zheng established the Research Institute of Science Education of Beijing
+Normal University in November of 2019.
+Minghao Yin (Member, IEEE) received the B.S.
+and M.S. degrees from Northeast Normal Univer-
+sity, Changchun, China, in 2001 and 2004, respec-
+tively, and the Ph.D. degree from Jilin University,
+Changchun, China, in 2008, all in computer science.
+He is currently a professor, the dean of the School
+of Information Science and Information Technology
+at Northeast Normal University, and the director
+of the Key Laboratory of Intelligent Information
+Processing in Jilin Province Colleges and Univer-
+sities. He also contributes as the Associate Editor
+for the IEEE Transactions on Learning Technologies (TLT). He has published
+multiple papers in prestigious journals and conferences, including Artificial
+Intelligence, IEEE Transactions, ACM Transactions, JAIR, AAAI, IJCAI,
+and WWW. His research interests include heuristic search, data mining, and
+combinatorial optimization.
+Minjuan Wang (Member, IEEE) obtained her B.A.
+in Chinese literature from the Beijing/Peking Uni-
+versity in 1995, M.A. in comparative literature from
+Penn State University in 1997, and Ph.D. in in-
+formation science and learning technologies from
+University of Missouri-Columbia in 2001. She is
+a newly appointed Chair Professor of Emerging
+Technologies and Future Education at The Education
+University of Hong Kong. She has also been a
+professor and program chair of Learning design and
+technology at San Diego State University, California,
+USA since 2000. In addition, she serves as the Editor-in-Chief for the IEEE
+Transactions on Learning Technologies (TLT). Her research specialties are
+multidisciplinary, focusing on STEM education, new and emerging technolo-
+gies in various educational settings, Metaverse and immersive learning, and
+the design and implementation of artificial intelligence including AIGC for
+education and training. She is an internationally recognized scholar and has
+keynoted about 45 international conferences. She is recognized internationally
+for her research, publishing and dedicated service to IEEE and other scholarly
+communities. Dr. Wang is a member of IEEE and the IEEE Education Society.
+She also co-chairs the Education Society’s technical committee for immersive
+learning (TC-ILE).
+Enhong Chen (Fellow, IEEE) received the B.S. de-
+gree from Anhui University, Hefei, China, the M.S.
+degree from the Hefei University of Technology,
+Hefei, China, and the Ph.D. degree in computer sci-
+ence from the University of Science and Technology
+of China (USTC), Hefei, China, in 1989, 1992 and
+1996 respectively. He is currently a Professor and
+the Executive Dean of School of Data Science, the
+Director of Anhui Province Key Laboratory of Big
+Data Analysis and Application. He has published
+a number of papers on refereed journals and con-
+ferences, such as TKDE, TIST, TMC, KDD, ICDM, NIPS and CIKM. His
+current research interests include data mining and machine learning, social
+network analysis, and recommender system. Dr. Chen was a recipient of the
+National Science Fund for Distinguished Young Scholars of China, the Best
+Application Paper Award on KDD-2008, the Best Student Paper Award on
+KDD-2018 (Research), and the Best Research Paper Award on ICDM-2011.
+He is an IEEE Fellow and an ACM Distinguished Scientist.

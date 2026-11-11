@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth" data-type="software" data-site-kind="software">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="page-type" content="software">
+  <meta name="site-kind" content="software">
+  <title>LogiTrace — Dasbor Guru</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            canvas: '#090d10',
+            surface: '#11171d',
+            'surface-lit': '#172029',
+            border: '#1f2b37',
+            'border-light': '#2d3d4e',
+            accent: '#10b981',
+            ink: '#f0f3f6',
+            'ink-muted': '#8a99a8',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    body {
+      background-color: #090d10;
+      color: #f0f3f6;
+      font-family: "Plus Jakarta Sans", -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .striped-low-conf {
+      border: 1px dashed rgba(255, 255, 255, 0.45);
+      opacity: 0.85;
+    }
+    .modal-backdrop {
+      background-color: rgba(9, 13, 16, 0.85);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-emerald-500/20 selection:text-emerald-300">
+
+  <!-- TOP HEADER -->
+  <header class="bg-surface border-b border-border sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & School Identity -->
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-base text-white">
+          <i class="fa-solid fa-network-wired text-sm"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-bold text-base leading-tight tracking-tight text-ink">LogiTrace</h1>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-surface-lit text-emerald-400 border border-border">
+              Dasbor Guru
+            </span>
+          </div>
+          <p class="text-xs text-ink-muted font-mono">XI TKJ 1 &bull; 34 Siswa</p>
+        </div>
+      </a>
+
+      <!-- Controls, Timer & Actions -->
+      <div class="flex flex-wrap items-center gap-2">
+        
+        <!-- 35-min Timer Widget -->
+        <div class="hidden lg:flex items-center space-x-2 bg-surface-lit px-3 py-1.5 rounded-lg border border-border text-xs font-mono">
+          <i class="fa-solid fa-stopwatch text-emerald-400 text-xs"></i>
+          <span id="rotation-timer" class="font-bold text-ink">35:00</span>
+          <button onclick="toggleRotationTimer()" id="btn-timer-toggle" class="text-ink-muted hover:text-emerald-400 text-[10px] ml-1" title="Mulai / Jeda">
+            <i class="fa-solid fa-play"></i>
+          </button>
+          <button onclick="resetRotationTimer()" class="text-ink-muted hover:text-rose-400 text-[10px]" title="Reset 35 Menit">
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+        </div>
+
+        <!-- Session Selector Dropdown -->
+        <div class="flex items-center space-x-2 bg-surface-lit px-3 py-1.5 rounded-lg border border-border text-xs">
+          <span class="text-ink-muted text-[11px] font-semibold hidden md:inline">Sesi:</span>
+          <select id="teacher-session-select" onchange="onSessionDropdownChange(this.value)" class="bg-transparent text-ink font-medium focus:outline-none cursor-pointer max-w-[180px] sm:max-w-[240px] truncate text-xs font-mono">
+            <option value="" class="bg-surface text-ink">Memuat sesi...</option>
+          </select>
+        </div>
+
+        <!-- Ringkasan Sesi Modal Button -->
+        <button onclick="openSummaryModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-3 py-1.5 rounded-lg text-xs font-mono transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-file-lines text-xs"></i>
+          <span class="hidden sm:inline">Ringkasan Kelas</span>
+          <span class="sm:hidden">Ringkasan</span>
+        </button>
+
+        <!-- Kelola Tugas & Reset Modal Button -->
+        <button onclick="openManageModal()" class="bg-surface-lit hover:bg-border text-ink font-semibold px-3 py-1.5 rounded-lg text-xs font-mono border border-border transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-sliders text-emerald-400"></i>
+          <span class="hidden sm:inline">Kelola</span>
+        </button>
+
+        <!-- Status Pill -->
+        <div id="ws-status-pill" class="hidden sm:flex items-center space-x-2 bg-surface-lit px-3 py-1.5 rounded-lg border border-border text-xs font-mono">
+          <span id="ws-indicator" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span id="ws-status-text" class="text-ink-muted text-[11px]">Aktif</span>
+        </div>
+
+        <!-- Audit Export -->
+        <a href="/api/export/audit-logs" download="logitrace_audit_interactions.json" class="bg-surface-lit hover:bg-border text-ink-muted hover:text-ink px-2.5 py-1.5 rounded-lg text-xs font-mono border border-border transition flex items-center space-x-1.5" title="Unduh Riwayat Jawaban">
+          <i class="fa-solid fa-download text-xs text-emerald-400"></i>
+        </a>
+
+        <!-- Manual Refresh -->
+        <button onclick="refreshAmbientState()" class="bg-surface-lit hover:bg-border text-ink-muted hover:text-ink p-1.5 px-2.5 rounded-lg text-xs border border-border transition" title="Segarkan">
+          <i class="fa-solid fa-rotate"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN DASHBOARD CONTENT -->
+  <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 flex-1 space-y-5">
+
+    <!-- ACTIVE SESSION BANNER -->
+    <section class="bg-surface rounded-xl p-4 border border-border">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center space-x-2 mb-1">
+            <span id="banner-active-tag" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              SESI AKTIF
+            </span>
+            <span id="banner-session-code" class="text-xs font-mono text-ink-muted">Sesi 1</span>
+          </div>
+          <h2 id="banner-session-title" class="text-base font-bold text-ink">
+            Memuat sesi...
+          </h2>
+        </div>
+
+        <!-- Progress Distribution Badges & Quick Reset Button -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="px-2.5 py-1 rounded-lg bg-surface-lit border border-border flex items-center space-x-1.5 text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="text-emerald-300"><span id="badge-completed">0</span> Selesai</span>
+          </div>
+          <div class="px-2.5 py-1 rounded-lg bg-surface-lit border border-border flex items-center space-x-1.5 text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            <span class="text-amber-300"><span id="badge-in-progress">0</span> Mengerjakan</span>
+          </div>
+          <div class="px-2.5 py-1 rounded-lg bg-surface-lit border border-border flex items-center space-x-1.5 text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+            <span class="text-ink-muted"><span id="badge-not-started">34</span> Belum</span>
+          </div>
+
+          <button onclick="promptResetAllCurrentSession()" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 px-3 py-1 rounded-lg text-xs font-mono font-semibold transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-arrow-rotate-left text-xs"></i>
+            <span>Reset Kelas</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Segmented Progress Bar -->
+      <div class="w-full bg-surface-lit h-1.5 rounded-full mt-3 overflow-hidden flex border border-border">
+        <div id="progbar-completed" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
+        <div id="progbar-in-progress" class="bg-amber-400 h-full transition-all duration-300" style="width: 0%"></div>
+        <div id="progbar-not-started" class="bg-slate-700 h-full transition-all duration-300" style="width: 100%"></div>
+      </div>
+    </section>
+
+    <!-- KPI SUMMARY CARDS -->
+    <section class="grid grid-cols-3 gap-4">
+      
+      <div class="bg-surface rounded-xl p-4 border border-border flex items-center justify-between">
+        <div>
+          <p class="text-xs font-mono text-ink-muted">Total Siswa</p>
+          <h3 id="stat-active-students" class="text-xl font-mono font-bold text-ink mt-0.5">34</h3>
+        </div>
+        <i class="fa-solid fa-users text-emerald-400 text-lg"></i>
+      </div>
+
+      <div class="bg-surface rounded-xl p-4 border border-border flex items-center justify-between">
+        <div>
+          <p class="text-xs font-mono text-ink-muted">Rata-rata Penguasaan</p>
+          <h3 id="stat-avg-mastery" class="text-xl font-mono font-bold text-emerald-400 mt-0.5">0.250</h3>
+        </div>
+        <i class="fa-solid fa-chart-simple text-emerald-400 text-lg"></i>
+      </div>
+
+      <div class="bg-surface rounded-xl p-4 border border-border flex items-center justify-between">
+        <div>
+          <p class="text-xs font-mono text-ink-muted">Perlu Bantuan</p>
+          <h3 id="stat-stuck-count" class="text-xl font-mono font-bold text-amber-400 mt-0.5">0</h3>
+        </div>
+        <div id="stat-stuck-icon" class="text-amber-400 text-lg">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SECTION: TOP-3 STUCK STUDENTS -->
+    <section class="space-y-2.5">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-ink">Siswa yang Perlu Bantuan (Prioritas 1–3)</h2>
+        <span class="text-xs font-mono text-ink-muted hidden sm:inline">Berdasarkan kesalahan beruntun pada materi yang sama</span>
+      </div>
+
+      <div id="top-stuck-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- SECTION: 34 x 12 CLASS MASTERY HEATMAP -->
+    <section class="bg-surface rounded-xl border border-border p-4 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-sm font-bold text-ink">Peta Penguasaan Materi (34 Siswa × 12 Topik)</h2>
+        </div>
+
+        <!-- Legend -->
+        <div class="flex flex-wrap items-center gap-3 text-xs font-mono">
+          <div class="flex items-center space-x-1.5">
+            <span class="w-2.5 h-2.5 rounded-sm bg-rose-500 inline-block"></span>
+            <span class="text-ink-muted text-[11px]">&lt;0.35</span>
+          </div>
+          <div class="flex items-center space-x-1.5">
+            <span class="w-2.5 h-2.5 rounded-sm bg-amber-400 inline-block"></span>
+            <span class="text-ink-muted text-[11px]">0.35–0.70</span>
+          </div>
+          <div class="flex items-center space-x-1.5">
+            <span class="w-2.5 h-2.5 rounded-sm bg-emerald-500 inline-block"></span>
+            <span class="text-ink-muted text-[11px]">&gt;0.70</span>
+          </div>
+          <div class="flex items-center space-x-1.5">
+            <span class="w-2.5 h-2.5 rounded-sm bg-slate-700 striped-low-conf inline-block"></span>
+            <span class="text-ink-muted text-[11px]">Belum Diuji Langsung</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matrix Heatmap Table Wrapper -->
+      <div class="overflow-x-auto rounded-xl border border-border">
+        <table class="w-full text-center border-collapse">
+          <thead>
+            <tr class="border-b border-border text-[11px] font-mono font-bold text-ink-muted bg-surface-lit">
+              <th class="p-2.5 text-left sticky left-0 bg-surface-lit z-10 w-28 border-r border-border">Siswa</th>
+              <th class="p-2.5" title="WLAN_STANDARDS: Standar 802.11 b/g/n/ac/ax">KC-01</th>
+              <th class="p-2.5" title="WLAN_TOPOLOGY_BSS: Ad-Hoc vs Infrastructure">KC-02</th>
+              <th class="p-2.5" title="IP_PEER_CONFIG: Pengalamatan IPv4 & Subnetting">KC-03</th>
+              <th class="p-2.5" title="WLAN_FREQ_CHANNEL: Alokasi Kanal Non-Overlapping">KC-04</th>
+              <th class="p-2.5" title="WLAN_SECURITY_AUTH: WPA2-PSK / WPA3-SAE">KC-05</th>
+              <th class="p-2.5" title="WLAN_HOST_HARDENING: MAC Filter & Firewall">KC-06</th>
+              <th class="p-2.5" title="WLAN_SIGNAL_PROP: Redaman & RSSI dBm">KC-07</th>
+              <th class="p-2.5" title="WLAN_ROAMING_PROB: Roaming & Hysteresis">KC-08</th>
+              <th class="p-2.5" title="WLAN_CHANNEL_COLLISION: Collision & Kepadatan">KC-09</th>
+              <th class="p-2.5" title="ICMP_CONNECTIVITY: Ping & RTT">KC-10</th>
+              <th class="p-2.5" title="ICMP_TROUBLE_DHU: Destination Host Unreachable">KC-11</th>
+              <th class="p-2.5" title="ICMP_TROUBLE_RTO: Request Timed Out">KC-12</th>
+              <th class="p-2.5 border-l border-border bg-surface font-extrabold text-ink">m̄ Siswa</th>
+              <th class="p-2.5 border-l border-border bg-surface-lit text-[10px] font-bold text-ink-muted">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="heatmap-body" class="divide-y divide-border/60 text-xs font-mono">
+            <!-- Rows rendered dynamically via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: KELOLA TUGAS & RESET -->
+  <div id="modal-manage" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-surface rounded-2xl border border-border w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-surface-lit text-ink flex items-center justify-between border-b border-border">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-ink">Kelola Sesi & Reset</h3>
+            <p class="text-xs text-ink-muted font-mono">XI TKJ 1 &bull; 34 Siswa</p>
+          </div>
+        </div>
+        <button onclick="closeManageModal()" class="text-ink-muted hover:text-ink p-1.5 rounded-lg transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Tabs -->
+      <div class="flex border-b border-border bg-surface text-xs font-mono font-bold text-ink-muted px-6 pt-2">
+        <button id="tab-btn-reset" onclick="switchModalTab('reset')" class="py-2.5 px-4 border-b-2 border-emerald-500 text-emerald-400 transition">
+          <i class="fa-solid fa-arrow-rotate-left mr-1.5"></i>Reset Siswa
+        </button>
+        <button id="tab-btn-create" onclick="switchModalTab('create')" class="py-2.5 px-4 border-b-2 border-transparent hover:text-ink transition">
+          <i class="fa-solid fa-plus-circle mr-1.5"></i>Sesi Baru
+        </button>
+        <button id="tab-btn-list" onclick="switchModalTab('list')" class="py-2.5 px-4 border-b-2 border-transparent hover:text-ink transition">
+          <i class="fa-solid fa-list-check mr-1.5"></i>Daftar Sesi
+        </button>
+        <button id="tab-btn-labeler" onclick="switchModalTab('labeler')" class="py-2.5 px-4 border-b-2 border-transparent hover:text-ink transition">
+          <i class="fa-solid fa-tags mr-1.5"></i>Cek Topik Soal
+        </button>
+      </div>
+
+      <!-- Modal Content Area -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-5">
+
+        <!-- TAB 1: RESET -->
+        <div id="tab-content-reset" class="space-y-4">
+          <div class="bg-surface-lit rounded-xl p-4 border border-border">
+            <h4 class="font-bold text-sm text-ink mb-1">Reset Seluruh Kelas (34 Siswa)</h4>
+            <p class="text-xs text-ink-muted mb-3">
+              Mengembalikan seluruh siswa ke Soal 1. Riwayat jawaban sebelumnya tetap tersimpan.
+            </p>
+            <button onclick="promptResetAllCurrentSession()" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-2.5 px-4 rounded-lg text-xs font-mono transition flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+              <span>Mulai Ulang Seluruh Siswa ke Soal 1</span>
+            </button>
+          </div>
+
+          <div class="bg-surface-lit rounded-xl p-4 border border-border">
+            <h4 class="font-bold text-sm text-ink mb-1">Reset Satu Siswa</h4>
+            <p class="text-xs text-ink-muted mb-3">
+              Pilih siswa yang diizinkan mengulang dari Soal 1:
+            </p>
+            <div class="flex gap-2">
+              <select id="modal-select-student" class="flex-1 bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-ink focus:outline-none">
+                <option value="">-- Pilih Kode Siswa (std_01 s.d std_34) --</option>
+              </select>
+              <button onclick="resetSelectedStudent()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-lg text-xs font-mono transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>Reset</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: BUAT SESI BARU -->
+        <div id="tab-content-create" class="hidden space-y-4">
+          <form id="form-create-session" onsubmit="handleCreateSession(event)" class="space-y-3.5">
+            <div>
+              <label class="block text-xs font-mono font-bold uppercase text-ink-muted mb-1">Judul Sesi</label>
+              <input type="text" id="create-title" required placeholder="Contoh: Sesi 2: Perawatan Jaringan Nirkabel" class="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs text-ink focus:outline-none">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-mono font-bold uppercase text-ink-muted mb-1">Nomor Sesi</label>
+                <input type="number" id="create-session-num" min="1" max="10" value="2" required class="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-ink focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-mono font-bold uppercase text-ink-muted mb-1">Jumlah Soal</label>
+                <input type="number" id="create-max-items" min="6" max="50" value="20" required class="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-ink focus:outline-none">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-mono font-bold uppercase text-ink-muted mb-1">Kelas</label>
+              <input type="text" id="create-rombel" value="XI TKJ 1" readonly class="w-full bg-surface-lit border border-border rounded-lg px-3 py-2 text-xs text-ink-muted font-mono">
+            </div>
+
+            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-lg text-xs font-mono transition flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-plus-circle"></i>
+              <span>Simpan & Aktifkan Sesi</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- TAB 3: DAFTAR SESI -->
+        <div id="tab-content-list" class="hidden space-y-3">
+          <div id="modal-session-cards" class="space-y-2.5">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- TAB 4: CEK TOPIK SOAL -->
+        <div id="tab-content-labeler" class="hidden space-y-4">
+          <form id="form-test-label" onsubmit="handleTestItemLabel(event)" class="bg-surface-lit p-4 rounded-xl border border-border space-y-3">
+            <div>
+              <label class="block text-xs font-mono font-bold uppercase text-ink-muted mb-1">Teks Soal</label>
+              <textarea id="label-test-prompt" rows="3" required placeholder="Masukkan teks soal jaringan..." class="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs text-ink focus:outline-none"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <input type="text" id="label-opt-a" placeholder="Pilihan A" class="bg-surface border border-border rounded-lg px-3 py-1.5 text-xs text-ink font-mono focus:outline-none" value="Menggunakan kanal 1, 6, dan 11">
+              <input type="text" id="label-opt-b" placeholder="Pilihan B" class="bg-surface border border-border rounded-lg px-3 py-1.5 text-xs text-ink font-mono focus:outline-none" value="Menggunakan kanal 2, 3, dan 4 berurutan">
+              <input type="text" id="label-opt-c" placeholder="Pilihan C" class="bg-surface border border-border rounded-lg px-3 py-1.5 text-xs text-ink font-mono focus:outline-none" value="Memperlebar kanal menjadi 80 MHz">
+              <input type="text" id="label-opt-d" placeholder="Pilihan D" class="bg-surface border border-border rounded-lg px-3 py-1.5 text-xs text-ink font-mono focus:outline-none" value="Mengaktifkan mode ad-hoc">
+            </div>
+
+            <button type="submit" id="btn-submit-label" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-lg text-xs font-mono transition flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-tags"></i>
+              <span>Klasifikasikan Soal</span>
+            </button>
+          </form>
+
+          <div id="label-result-card" class="hidden p-4 bg-surface rounded-xl border border-border space-y-3 font-mono text-xs">
+            <!-- Rendered via JS -->
+          </div>
+
+          <div class="border-t border-border pt-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <h5 class="text-xs font-mono font-bold text-ink">Antrean Tinjauan Soal</h5>
+              <button type="button" onclick="loadReviewQueue()" class="text-[11px] text-ink-muted hover:text-ink font-mono">
+                <i class="fa-solid fa-rotate text-[10px] mr-1"></i>Segarkan
+              </button>
+            </div>
+            <div id="review-queue-container" class="space-y-2 max-h-48 overflow-y-auto">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 bg-surface-lit border-t border-border flex justify-end">
+        <button onclick="closeManageModal()" class="bg-surface hover:bg-border text-ink-muted hover:text-ink font-bold px-4 py-2 rounded-lg text-xs font-mono border border-border transition">
+          Tutup
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: RINGKASAN KELAS & TUTOR SEBAYA -->
+  <div id="modal-summary" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-surface rounded-2xl border border-border w-full max-w-4xl overflow-hidden flex flex-col max-h-[92vh]">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-surface-lit text-ink flex items-center justify-between border-b border-border">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-file-lines"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h3 class="font-bold text-base text-ink">Ringkasan Kelas & Tutor Sebaya</h3>
+              <span id="summary-source-pill" class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-surface text-emerald-400 border border-border">
+                Ringkasan
+              </span>
+            </div>
+            <p class="text-xs text-ink-muted font-mono">Evaluasi Akhir Sesi &bull; XI TKJ 1</p>
+          </div>
+        </div>
+        <button onclick="closeSummaryModal()" class="text-ink-muted hover:text-ink p-1.5 rounded-lg transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-5">
+        
+        <div id="summary-loading" class="py-12 flex flex-col items-center justify-center space-y-3">
+          <div class="w-8 h-8 border-2 border-emerald-500/30 border-t-emerald-400 rounded-full animate-spin"></div>
+          <p class="text-xs font-mono text-ink-muted">Menyusun ringkasan kelas...</p>
+        </div>
+
+        <div id="summary-content" class="hidden space-y-5">
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-surface-lit p-4 rounded-xl border border-border">
+            <div>
+              <span class="text-[10px] font-mono text-ink-muted uppercase block">Rerata Penguasaan</span>
+              <span id="sum-avg-mastery" class="text-lg font-mono font-bold text-emerald-400">0.000</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-mono text-ink-muted uppercase block">Jawaban Benar</span>
+              <span id="sum-accuracy" class="text-lg font-mono font-bold text-teal-400">0.0%</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-mono text-ink-muted uppercase block">Siswa Selesai</span>
+              <span id="sum-completion" class="text-lg font-mono font-bold text-ink">0 / 34</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-mono text-ink-muted uppercase block">Soal Terjawab</span>
+              <span id="sum-total-resp" class="text-lg font-mono font-bold text-amber-400">0 butir</span>
+            </div>
+          </div>
+
+          <div class="bg-surface-lit p-4 rounded-xl border border-border space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-mono font-bold text-emerald-400 uppercase">Catatan Hasil Belajar Kelas</h4>
+              <span id="sum-latency-pill" class="text-[10px] font-mono text-ink-muted">0 ms</span>
+            </div>
+            <div id="sum-narrative-text" class="text-xs text-ink/90 font-sans leading-relaxed space-y-3 whitespace-pre-line">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-surface-lit border border-border space-y-2.5">
+              <h5 class="text-xs font-mono font-bold text-emerald-400">Topik Paling Dikuasai</h5>
+              <div id="sum-strengths-list" class="space-y-2"></div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-surface-lit border border-border space-y-2.5">
+              <h5 class="text-xs font-mono font-bold text-rose-400">Topik Perlu Penguatan</h5>
+              <div id="sum-bottlenecks-list" class="space-y-2"></div>
+            </div>
+          </div>
+
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-mono font-bold text-ink uppercase">Pasangan Belajar (Tutor Sebaya)</h4>
+              <span class="text-[11px] font-mono text-ink-muted">Siswa mahir membantu rekan yang kesulitan</span>
+            </div>
+            <div id="sum-peer-tutoring-cards" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 bg-surface-lit border-t border-border flex flex-wrap items-center justify-between gap-2">
+        <span class="text-[11px] font-mono text-ink-muted">Ringkasan Evaluasi Sesi</span>
+        <div class="flex items-center space-x-2">
+          <button onclick="copySummaryText()" class="bg-surface hover:bg-border text-ink font-semibold px-3 py-1.5 rounded-lg text-xs font-mono border border-border transition">
+            Salin Teks
+          </button>
+          <button onclick="downloadSummaryFile()" class="bg-surface hover:bg-border text-emerald-400 font-semibold px-3 py-1.5 rounded-lg text-xs font-mono border border-border transition">
+            Unduh (.txt)
+          </button>
+          <button onclick="closeSummaryModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-1.5 rounded-lg text-xs font-mono transition">
+            Tutup
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- FOOTER -->
+  <footer class="py-4 text-center text-xs font-mono text-ink-muted border-t border-border bg-surface">
+    LogiTrace &bull; Dasbor Guru &bull; SMK Negeri 4 Bandung
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    const API_BASE = window.location.origin;
+    const WS_URL = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}/api/teacher/ws/ambient`;
+
+    const KC_KEYS = [
+      "WLAN_STANDARDS",
+      "WLAN_TOPOLOGY_BSS",
+      "IP_PEER_CONFIG",
+      "WLAN_FREQ_CHANNEL",
+      "WLAN_SECURITY_AUTH",
+      "WLAN_HOST_HARDENING",
+      "WLAN_SIGNAL_PROP",
+      "WLAN_ROAMING_PROB",
+      "WLAN_CHANNEL_COLLISION",
+      "ICMP_CONNECTIVITY",
+      "ICMP_TROUBLE_DHU",
+      "ICMP_TROUBLE_RTO"
+    ];
+
+    let ws = null;
+    let fallbackPollTimer = null;
+    let pingTimer = null;
+    let currentSessionId = null;
+    let sessionsList = [];
+
+    // Station Rotation 35-minute Timer Logic
+    let timerSeconds = 35 * 60;
+    let timerInterval = null;
+    let isTimerRunning = false;
+
+    function toggleRotationTimer() {
+      const btn = document.getElementById("btn-timer-toggle");
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        btn.innerHTML = `<i class="fa-solid fa-play"></i>`;
+      } else {
+        isTimerRunning = true;
+        btn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+        timerInterval = setInterval(() => {
+          if (timerSeconds > 0) {
+            timerSeconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            btn.innerHTML = `<i class="fa-solid fa-play"></i>`;
+            showToast("Waktu 35 Menit Selesai! Saatnya pergantian zona Station Rotation.", "success");
+          }
+        }, 1000);
+      }
+    }
+
+    function resetRotationTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      timerSeconds = 35 * 60;
+      updateTimerDisplay();
+      document.getElementById("btn-timer-toggle").innerHTML = `<i class="fa-solid fa-play"></i>`;
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(timerSeconds / 60);
+      const s = timerSeconds % 60;
+      document.getElementById("rotation-timer").textContent = 
+        `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    // Helper: Escape HTML to prevent injection
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Toast Notification Helper (Safe DOM creation)
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      const bg = type === "success" ? "bg-emerald-600" : type === "error" ? "bg-rose-600" : "bg-slate-800";
+      const icon = type === "success" ? "fa-circle-check" : type === "error" ? "fa-circle-xmark" : "fa-circle-info";
+      
+      toast.className = `${bg} text-white px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-2.5 text-xs font-mono pointer-events-auto transform transition-all duration-300 border border-white/10`;
+      
+      const iconEl = document.createElement("i");
+      iconEl.className = `fa-solid ${icon} text-sm`;
+      const textEl = document.createElement("span");
+      textEl.textContent = String(message || "");
+
+      toast.appendChild(iconEl);
+      toast.appendChild(textEl);
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-y-2");
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Modal Visibility & Tab Control
+    function openManageModal() {
+      document.getElementById("modal-manage").classList.remove("hidden");
+      populateStudentOptions();
+      loadSessions();
+    }
+
+    function closeManageModal() {
+      document.getElementById("modal-manage").classList.add("hidden");
+    }
+
+    function switchModalTab(tab) {
+      const resetTab = document.getElementById("tab-content-reset");
+      const createTab = document.getElementById("tab-content-create");
+      const listTab = document.getElementById("tab-content-list");
+      const labelerTab = document.getElementById("tab-content-labeler");
+
+      const btnReset = document.getElementById("tab-btn-reset");
+      const btnCreate = document.getElementById("tab-btn-create");
+      const btnList = document.getElementById("tab-btn-list");
+      const btnLabeler = document.getElementById("tab-btn-labeler");
+
+      resetTab.classList.add("hidden");
+      createTab.classList.add("hidden");
+      listTab.classList.add("hidden");
+      if (labelerTab) labelerTab.classList.add("hidden");
+
+      btnReset.className = "py-2.5 px-4 border-b-2 border-transparent hover:text-ink transition";
+      btnCreate.className = "py-2.5 px-4 border-b-2 border-transparent hover:text-ink transition";
+      btnList.className = "py-2.5 px-4 border-b-2 border-transparent hover:text-ink transition";
+      if (btnLabeler) btnLabeler.className = "py-2.5 px-4 border-b-2 border-transparent hover:text-ink transition";
+
+      if (tab === "reset") {
+        resetTab.classList.remove("hidden");
+        btnReset.className = "py-2.5 px-4 border-b-2 border-emerald-500 text-emerald-400 transition";
+      } else if (tab === "create") {
+        createTab.classList.remove("hidden");
+        btnCreate.className = "py-2.5 px-4 border-b-2 border-emerald-500 text-emerald-400 transition";
+      } else if (tab === "list") {
+        listTab.classList.remove("hidden");
+        btnList.className = "py-2.5 px-4 border-b-2 border-emerald-500 text-emerald-400 transition";
+        renderSessionCardsInModal();
+      } else if (tab === "labeler") {
+        if (labelerTab) labelerTab.classList.remove("hidden");
+        if (btnLabeler) btnLabeler.className = "py-2.5 px-4 border-b-2 border-emerald-500 text-emerald-400 transition";
+        loadReviewQueue();
+      }
+    }
+
+    // Agent T3 Summary Modal Handlers
+    let currentSummaryData = null;
+
+    async function openSummaryModal() {
+      const modal = document.getElementById("modal-summary");
+      modal.classList.remove("hidden");
+      document.getElementById("summary-loading").classList.remove("hidden");
+      document.getElementById("summary-content").classList.add("hidden");
+
+      try {
+        const url = currentSessionId 
+          ? `${API_BASE}/api/teacher/session-summary?session_id=${encodeURIComponent(currentSessionId)}`
+          : `${API_BASE}/api/teacher/session-summary`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Gagal mengambil ringkasan sesi");
+        currentSummaryData = await res.json();
+        renderSessionSummary(currentSummaryData);
+      } catch (err) {
+        showToast("Gagal memuat ringkasan sesi: " + err.message, "error");
+        document.getElementById("summary-loading").innerHTML = `
+          <div class="text-center text-rose-400 p-4">
+            <i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i>
+            <p class="font-bold">Gagal menghasilkan ringkasan sesi</p>
+            <p class="text-xs text-ink-muted mt-1 font-mono">${escapeHtml(err.message)}</p>
+          </div>
+        `;
+      }
+    }
+
+    function closeSummaryModal() {
+      document.getElementById("modal-summary").classList.add("hidden");
+    }
+
+    function renderSessionSummary(data) {
+      document.getElementById("summary-loading").classList.add("hidden");
+      document.getElementById("summary-content").classList.remove("hidden");
+
+      // Source indicator pill
+      const pill = document.getElementById("summary-source-pill");
+      if (data.source === "rag_llm") {
+        pill.className = "px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-surface text-teal-300 border border-border";
+        pill.textContent = "Ringkasan AI";
+      } else {
+        pill.className = "px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-surface text-emerald-400 border border-border";
+        pill.textContent = "Ringkasan Otomatis";
+      }
+
+      // Latency
+      document.getElementById("sum-latency-pill").textContent = `Latensi: ${data.latency_ms} ms`;
+
+      // Telemetry
+      document.getElementById("sum-avg-mastery").textContent = data.class_avg_mastery.toFixed(3);
+      document.getElementById("sum-accuracy").textContent = `${(data.accuracy_rate * 100).toFixed(1)}%`;
+      document.getElementById("sum-completion").textContent = `${data.completed_students} / ${data.total_students}`;
+      document.getElementById("sum-total-resp").textContent = `${data.total_responses} butir`;
+
+      // Narrative 3 Paragraphs
+      const narrativeBox = document.getElementById("sum-narrative-text");
+      narrativeBox.innerHTML = "";
+      const paragraphs = data.narrative_summary.split(/\n\n+/);
+      paragraphs.forEach(p => {
+        if (p.trim()) {
+          const pEl = document.createElement("p");
+          pEl.className = "leading-relaxed text-ink/90";
+          pEl.textContent = p.trim();
+          narrativeBox.appendChild(pEl);
+        }
+      });
+
+      // Strengths List
+      const strBox = document.getElementById("sum-strengths-list");
+      strBox.innerHTML = "";
+      if (data.strengths && data.strengths.length > 0) {
+        data.strengths.forEach(s => {
+          const item = document.createElement("div");
+          item.className = "p-2.5 rounded-xl bg-surface border border-emerald-500/20 flex items-center justify-between";
+          item.innerHTML = `
+            <div>
+              <p class="font-bold text-xs text-ink">${escapeHtml(s.kc_name)}</p>
+              <p class="text-[10px] font-mono text-emerald-400">${s.kc_id}</p>
+            </div>
+            <div class="text-right">
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                m̄ = ${s.avg_mastery.toFixed(2)}
+              </span>
+              <span class="block text-[10px] font-mono text-ink-muted mt-0.5">${s.mastered_count} mahir</span>
+            </div>
+          `;
+          strBox.appendChild(item);
+        });
+      } else {
+        strBox.innerHTML = `<p class="text-xs text-ink-muted font-mono">Belum ada data penguasaan tercatat.</p>`;
+      }
+
+      // Bottlenecks List
+      const btnBox = document.getElementById("sum-bottlenecks-list");
+      btnBox.innerHTML = "";
+      if (data.bottlenecks && data.bottlenecks.length > 0) {
+        data.bottlenecks.forEach(b => {
+          const item = document.createElement("div");
+          item.className = "p-2.5 rounded-xl bg-surface border border-rose-500/20 flex items-center justify-between";
+          item.innerHTML = `
+            <div>
+              <p class="font-bold text-xs text-ink">${escapeHtml(b.kc_name)}</p>
+              <p class="text-[10px] font-mono text-rose-400">${b.kc_id}</p>
+            </div>
+            <div class="text-right">
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                m̄ = ${b.avg_mastery.toFixed(2)}
+              </span>
+              <span class="block text-[10px] font-mono text-amber-400 mt-0.5">${b.struggling_count} butuh bimbingan</span>
+            </div>
+          `;
+          btnBox.appendChild(item);
+        });
+      } else {
+        btnBox.innerHTML = `<p class="text-xs text-ink-muted font-mono">Tidak ada materi teridentifikasi kritis.</p>`;
+      }
+
+      // Peer-Tutoring Recommendations
+      const peerBox = document.getElementById("sum-peer-tutoring-cards");
+      peerBox.innerHTML = "";
+      if (data.peer_tutoring_recommendations && data.peer_tutoring_recommendations.length > 0) {
+        data.peer_tutoring_recommendations.forEach(pt => {
+          const card = document.createElement("div");
+          card.className = "p-3.5 bg-surface rounded-2xl border border-border hover:border-emerald-500/40 transition space-y-2.5 shadow-sm";
+          const menteeBadges = pt.mentee_student_codes.map(c => 
+            `<span class="px-1.5 py-0.5 rounded bg-surface-lit text-amber-300 border border-amber-500/30 font-mono text-[11px] font-semibold">${c}</span>`
+          ).join(" ");
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-ink">${escapeHtml(pt.kc_name)}</span>
+              <span class="text-[10px] font-mono text-emerald-400">${pt.kc_id}</span>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-2 text-xs font-mono bg-surface-lit p-2 rounded-xl border border-border">
+              <div>
+                <span class="text-[10px] text-ink-muted block">Tutor Sebaya:</span>
+                <span class="font-bold text-emerald-400">${pt.tutor_student_code} (m=${pt.tutor_mastery.toFixed(2)})</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-ink-muted block">Rekan Belajar:</span>
+                <div class="flex flex-wrap gap-1 mt-0.5">${menteeBadges}</div>
+              </div>
+            </div>
+
+            <div class="text-[11px] text-ink-muted bg-surface-lit/60 p-2 rounded-lg border border-border/60">
+              <span class="font-mono font-bold text-[10px] text-emerald-400 block mb-0.5">Fokus Intervensi:</span>
+              <p class="leading-relaxed">${escapeHtml(pt.action_guidance)}</p>
+            </div>
+          `;
+          peerBox.appendChild(card);
+        });
+      } else {
+        peerBox.innerHTML = `
+          <div class="col-span-2 p-4 bg-surface rounded-xl border border-border text-center text-xs font-mono text-ink-muted">
+            Belum ada rekomendasi kelompok tutor sebaya yang diperlukan pada sesi ini.
+          </div>
+        `;
+      }
+    }
+
+    function copySummaryText() {
+      if (!currentSummaryData) return;
+      const text = 
+        `=== LOGITRACE — RINGKASAN SESI EVALUASI (AGEN T3) ===\n` +
+        `Sesi: ${currentSummaryData.session_title} (${currentSummaryData.class_rombel})\n` +
+        `Rata-rata Penguasaan (m): ${currentSummaryData.class_avg_mastery.toFixed(3)}\n` +
+        `Akurasi Respons: ${(currentSummaryData.accuracy_rate * 100).toFixed(1)}%\n` +
+        `Selesai: ${currentSummaryData.completed_students} dari ${currentSummaryData.total_students} siswa\n\n` +
+        `--- REFLEKSI DINAMIKA KELAS ---\n` +
+        `${currentSummaryData.narrative_summary}\n\n` +
+        `--- REKOMENDASI PEER-TUTORING ROTASI BERIKUTNYA ---\n` +
+        currentSummaryData.peer_tutoring_recommendations.map(pt => 
+          `• Topik: ${pt.kc_name} (${pt.kc_id})\n  Tutor: ${pt.tutor_student_code} (m=${pt.tutor_mastery.toFixed(2)})\n  Rekan: ${pt.mentee_student_codes.join(', ')}\n  Panduan: ${pt.action_guidance}`
+        ).join("\n\n");
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Catatan refleksi berhasil disalin ke clipboard!", "success");
+      }).catch(() => {
+        showToast("Gagal menyalin teks ke clipboard.", "error");
+      });
+    }
+
+    function downloadSummaryFile() {
+      if (!currentSummaryData) return;
+      const text = 
+        `=== LOGITRACE — RINGKASAN SESI EVALUASI (AGEN T3) ===\n` +
+        `Sesi: ${currentSummaryData.session_title} (${currentSummaryData.class_rombel})\n` +
+        `Waktu Ekspor: ${new Date().toLocaleString('id-ID')}\n` +
+        `Rata-rata Penguasaan (m): ${currentSummaryData.class_avg_mastery.toFixed(3)}\n` +
+        `Akurasi Respons: ${(currentSummaryData.accuracy_rate * 100).toFixed(1)}%\n` +
+        `Selesai: ${currentSummaryData.completed_students} dari ${currentSummaryData.total_students} siswa\n\n` +
+        `--- REFLEKSI DINAMIKA KELAS ---\n` +
+        `${currentSummaryData.narrative_summary}\n\n` +
+        `--- REKOMENDASI PEER-TUTORING ROTASI BERIKUTNYA ---\n` +
+        currentSummaryData.peer_tutoring_recommendations.map(pt => 
+          `• Topik: ${pt.kc_name} (${pt.kc_id})\n  Tutor: ${pt.tutor_student_code} (m=${pt.tutor_mastery.toFixed(2)})\n  Rekan: ${pt.mentee_student_codes.join(', ')}\n  Panduan: ${pt.action_guidance}`
+        ).join("\n\n");
+
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `LogiTrace_Refleksi_${currentSummaryData.session_id}.txt`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast("Laporan refleksi berhasil diunduh!", "success");
+    }
+
+    // Agent T1 Semantic Labeling Handlers
+    async function handleTestItemLabel(e) {
+      e.preventDefault();
+      const promptText = document.getElementById("label-test-prompt").value.trim();
+      const optA = document.getElementById("label-opt-a").value.trim();
+      const optB = document.getElementById("label-opt-b").value.trim();
+      const optC = document.getElementById("label-opt-c").value.trim();
+      const optD = document.getElementById("label-opt-d").value.trim();
+
+      if (!promptText) return;
+
+      const btn = document.getElementById("btn-submit-label");
+      btn.disabled = true;
+      btn.innerHTML = `<div class="w-4 h-4 border-2 border-canvas border-t-transparent rounded-full animate-spin inline-block mr-2"></div> Menganalisis...`;
+
+      try {
+        const payload = {
+          prompt_text: promptText,
+          options: { A: optA, B: optB, C: optC, D: optD }
+        };
+        const res = await fetch(`${API_BASE}/api/teacher/items/label`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error("Gagal mengklasifikasikan butir soal");
+        const data = await res.json();
+        renderLabelResult(data);
+      } catch (err) {
+        showToast("Gagal analisis label: " + err.message, "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i><span>Analisis & Labelkan Butir Soal (Agen T1)</span>`;
+      }
+    }
+
+    function renderLabelResult(data) {
+      const card = document.getElementById("label-result-card");
+      card.classList.remove("hidden");
+
+      const isHighConf = data.confidence >= 0.60;
+      const confBadge = isHighConf
+        ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Keyakinan Tinggi: ${(data.confidence * 100).toFixed(0)}%</span>`
+        : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Butuh Review: ${(data.confidence * 100).toFixed(0)}%</span>`;
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between border-b border-border pb-2">
+          <span class="font-bold text-ink">Hasil Klasifikasi Agen T1</span>
+          ${confBadge}
+        </div>
+        
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <span class="text-ink-muted text-[10px] block">Primary KC:</span>
+            <span class="font-bold text-emerald-400">${escapeHtml(data.primary_kc_name)}</span>
+            <span class="text-[10px] text-ink-muted block font-mono">${data.primary_kc_id}</span>
+          </div>
+          <div>
+            <span class="text-ink-muted text-[10px] block">Dimensi TOLT:</span>
+            <span class="font-bold text-teal-300">${escapeHtml(data.tolt_dimension)}</span>
+            <span class="text-[10px] text-ink-muted block">Kesulitan Nominal: Level ${data.nominal_difficulty}</span>
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-surface-lit border border-border text-[11px] text-ink-muted leading-relaxed">
+          <p><strong class="text-ink">Rasional:</strong> ${escapeHtml(data.rationale)}</p>
+          <p class="text-[10px] text-ink-muted mt-1 font-mono">Sumber: ${data.source} &bull; Latensi: ${data.latency_ms} ms</p>
+        </div>
+      `;
+    }
+
+    async function loadReviewQueue() {
+      const container = document.getElementById("review-queue-container");
+      container.innerHTML = `<p class="text-[11px] font-mono text-ink-muted">Memuat antrean bank soal...</p>`;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/teacher/items/review-queue`);
+        if (!res.ok) throw new Error("Gagal mengambil antrean");
+        const queue = await res.json();
+        container.innerHTML = "";
+
+        if (queue.length === 0) {
+          container.innerHTML = `<p class="text-[11px] font-mono text-ink-muted">Semua butir soal telah terverifikasi penuh.</p>`;
+          return;
+        }
+
+        queue.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "p-2.5 rounded-xl bg-surface border border-border flex items-center justify-between text-xs font-mono";
+          
+          const textDiv = document.createElement("div");
+          textDiv.className = "flex-1 mr-3 truncate";
+          textDiv.innerHTML = `
+            <span class="font-bold text-ink block truncate">${escapeHtml(item.prompt_text)}</span>
+            <span class="text-[10px] text-ink-muted">${escapeHtml(item.item_id)} &bull; ${escapeHtml(item.current_primary_kc_id)} &bull; ${escapeHtml(item.current_tolt_dimension)} &bull; Diff: ${item.current_difficulty}</span>
+          `;
+
+          const btn = document.createElement("button");
+          btn.className = "bg-emerald-500 hover:bg-emerald-400 text-canvas px-2.5 py-1 rounded-lg text-[11px] font-bold transition active:scale-95 whitespace-nowrap";
+          btn.textContent = "Verifikasi";
+          btn.onclick = () => approveReviewItem(item.item_id, item.current_primary_kc_id, item.current_tolt_dimension, item.current_difficulty);
+
+          div.appendChild(textDiv);
+          div.appendChild(btn);
+          container.appendChild(div);
+        });
+      } catch (err) {
+        container.innerHTML = `<p class="text-[11px] font-mono text-rose-400">Gagal memuat antrean: ${escapeHtml(err.message)}</p>`;
+      }
+    }
+
+    async function approveReviewItem(itemId, kcId, tolt, diff) {
+      try {
+        const payload = {
+          primary_kc_id: kcId,
+          tolt_dimension: tolt,
+          difficulty_nominal: diff,
+          teacher_notes: "Disetujui melalui Antrean Tinjauan Guru"
+        };
+        const res = await fetch(`${API_BASE}/api/teacher/items/${itemId}/approve-label`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error("Gagal memverifikasi label");
+        showToast(`Butir soal ${itemId} berhasil diverifikasi!`, "success");
+        loadReviewQueue();
+      } catch (err) {
+        showToast("Gagal: " + err.message, "error");
+      }
+    }
+
+    // Populate std_01 .. std_34 in modal select
+    function populateStudentOptions() {
+      const sel = document.getElementById("modal-select-student");
+      if (sel.options.length > 1) return; // already populated
+      for (let i = 1; i <= 34; i++) {
+        const code = `std_${String(i).padStart(2, '0')}`;
+        const opt = document.createElement("option");
+        opt.value = code;
+        opt.textContent = `Siswa ${code} (No. Urut ${i})`;
+        sel.appendChild(opt);
+      }
+    }
+
+    // Load Sessions from LMS backend
+    async function loadSessions() {
+      try {
+        const res = await fetch(`${API_BASE}/api/sessions?class_rombel=XI%20TKJ%201`);
+        if (!res.ok) throw new Error("Gagal mengambil data sesi");
+        sessionsList = await res.json();
+
+        const select = document.getElementById("teacher-session-select");
+        select.innerHTML = "";
+
+        if (sessionsList.length === 0) {
+          select.innerHTML = `<option value="">Belum ada tugas</option>`;
+          return;
+        }
+
+        if (!currentSessionId) {
+          const active = sessionsList.find(s => s.is_active);
+          currentSessionId = active ? active.id : sessionsList[0].id;
+        }
+
+        sessionsList.forEach(s => {
+          const opt = document.createElement("option");
+          opt.value = s.id;
+          opt.className = "bg-surface text-ink";
+          opt.textContent = `${s.title} ${s.is_active ? '★ (Aktif)' : ''}`;
+          if (s.id === currentSessionId) opt.selected = true;
+          select.appendChild(opt);
+        });
+
+        renderSessionCardsInModal();
+      } catch (err) {
+        console.error("Error loading sessions:", err);
+      }
+    }
+
+    function onSessionDropdownChange(sessionId) {
+      if (!sessionId) return;
+      currentSessionId = sessionId;
+      refreshAmbientState();
+    }
+
+    // Render session cards inside modal Tab 3
+    function renderSessionCardsInModal() {
+      const container = document.getElementById("modal-session-cards");
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (sessionsList.length === 0) {
+        container.innerHTML = `<p class="text-xs text-ink-muted font-mono">Tidak ada sesi ditemukan.</p>`;
+        return;
+      }
+
+      sessionsList.forEach(s => {
+        const card = document.createElement("div");
+        const isCurrent = (s.id === currentSessionId);
+        const safeTitle = escapeHtml(s.title);
+        card.className = `p-3.5 rounded-2xl border transition flex items-center justify-between gap-3 ${
+          s.is_active ? 'bg-surface-lit border-emerald-500/40' : 'bg-surface border-border'
+        }`;
+
+        card.innerHTML = `
+          <div class="flex-1">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold text-ink">${safeTitle}</span>
+              ${s.is_active ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500 text-canvas">AKTIF</span>' : ''}
+              ${isCurrent && !s.is_active ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-border text-ink">DIPILIH</span>' : ''}
+            </div>
+            <div class="flex items-center space-x-3 text-[11px] font-mono text-ink-muted mt-1">
+              <span>Maks: <strong>${s.max_items} Soal</strong></span>
+              <span>&bull;</span>
+              <span class="text-emerald-400 font-semibold">${s.completed_count} Selesai</span>
+              <span>&bull;</span>
+              <span class="text-amber-400 font-semibold">${s.in_progress_count} Mengerjakan</span>
+              <span>&bull;</span>
+              <span>${s.not_started_count} Belum</span>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 font-mono">
+            ${!s.is_active ? `
+              <button onclick="activateSession('${s.id}')" class="bg-emerald-500 hover:bg-emerald-400 text-canvas px-2.5 py-1.5 rounded-xl text-xs font-semibold transition active:scale-95" title="Jadikan tugas utama kelas">
+                Aktifkan
+              </button>
+            ` : ''}
+            <button onclick="selectAndCloseSession('${s.id}')" class="bg-surface-lit hover:bg-border text-ink px-2.5 py-1.5 rounded-xl text-xs font-semibold border border-border transition active:scale-95">
+              Buka di Dasbor
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function selectAndCloseSession(sessionId) {
+      currentSessionId = sessionId;
+      const select = document.getElementById("teacher-session-select");
+      if (select) select.value = sessionId;
+      closeManageModal();
+      refreshAmbientState();
+    }
+
+    // Activate session as main class assignment
+    async function activateSession(sessionId) {
+      try {
+        const res = await fetch(`${API_BASE}/api/sessions/${sessionId}/activate`, { method: "POST" });
+        if (!res.ok) throw new Error("Gagal mengaktifkan sesi");
+        const data = await res.json();
+        showToast(data.message || "Tugas berhasil diaktifkan untuk kelas!", "success");
+        currentSessionId = sessionId;
+        await loadSessions();
+        await refreshAmbientState();
+      } catch (err) {
+        showToast("Gagal mengaktifkan sesi: " + err.message, "error");
+      }
+    }
+
+    // Create New Session
+    async function handleCreateSession(e) {
+      e.preventDefault();
+      const title = document.getElementById("create-title").value.trim();
+      const session_number = parseInt(document.getElementById("create-session-num").value) || 2;
+      const max_items = parseInt(document.getElementById("create-max-items").value) || 20;
+
+      if (!title) return;
+
+      try {
+        const payload = {
+          title: title,
+          session_number: session_number,
+          max_items: max_items,
+          class_rombel: "XI TKJ 1"
+        };
+        const res = await fetch(`${API_BASE}/api/sessions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error("Gagal membuat tugas baru");
+        const data = await res.json();
+        showToast("Tugas baru berhasil dibuat dan didistribusikan ke 34 siswa!", "success");
+        currentSessionId = data.session_id;
+        document.getElementById("create-title").value = "";
+        await loadSessions();
+        await refreshAmbientState();
+        switchModalTab("reset");
+      } catch (err) {
+        showToast("Gagal membuat tugas: " + err.message, "error");
+      }
+    }
+
+    // Reset All Students for Current Session
+    async function promptResetAllCurrentSession() {
+      if (!currentSessionId) {
+        showToast("Silakan pilih sesi terlebih dahulu.", "error");
+        return;
+      }
+      const confirmReset = confirm(
+        "PERINGATAN RESET KELAS:\n\n" +
+        "Apakah Anda yakin ingin me-reset seluruh 34 siswa pada sesi ini?\n" +
+        "- Seluruh siswa akan memulai kembali dari Soal 1.\n" +
+        "- Nilai estimasi kognitif dikembalikan ke baseline awal (0.25).\n" +
+        "- Log interaksi sebelumnya tetap aman di tabel audit append-only."
+      );
+      if (!confirmReset) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/sessions/${currentSessionId}/reset-all`, { method: "POST" });
+        if (!res.ok) throw new Error("Gagal me-reset sesi");
+        const data = await res.json();
+        showToast(data.message || "Seluruh kelas berhasil di-reset ke Soal 1!", "success");
+        closeManageModal();
+        await loadSessions();
+        await refreshAmbientState();
+      } catch (err) {
+        showToast("Gagal me-reset sesi: " + err.message, "error");
+      }
+    }
+
+    // Reset Selected Individual Student
+    async function resetSelectedStudent() {
+      const studentCode = document.getElementById("modal-select-student").value;
+      if (!studentCode) {
+        showToast("Pilih kode siswa terlebih dahulu.", "error");
+        return;
+      }
+      if (!currentSessionId) {
+        showToast("Pilih sesi terlebih dahulu.", "error");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/sessions/${currentSessionId}/reset-student/${studentCode}`, { method: "POST" });
+        if (!res.ok) throw new Error("Gagal me-reset siswa");
+        const data = await res.json();
+        showToast(data.message || `Siswa ${studentCode} berhasil di-reset ke Soal 1!`, "success");
+        await loadSessions();
+        await refreshAmbientState();
+      } catch (err) {
+        showToast("Gagal me-reset siswa: " + err.message, "error");
+      }
+    }
+
+    // Quick Reset directly from Table or Stuck Card
+    async function quickResetStudent(studentCode) {
+      if (!currentSessionId) return;
+      const c = confirm(`Reset pengerjaan siswa ${studentCode} kembali ke Soal 1?`);
+      if (!c) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/sessions/${currentSessionId}/reset-student/${studentCode}`, { method: "POST" });
+        if (!res.ok) throw new Error("Gagal me-reset siswa");
+        showToast(`Siswa ${studentCode} berhasil di-reset ke Soal 1!`, "success");
+        await loadSessions();
+        await refreshAmbientState();
+      } catch (err) {
+        showToast("Gagal: " + err.message, "error");
+      }
+    }
+
+    // Heatmap Color Interpolator (0.02 Red -> 0.50 Amber -> 0.98 Emerald)
+    function getMasteryColor(m) {
+      if (m < 0.35) {
+        return "bg-rose-500 text-white";
+      } else if (m < 0.55) {
+        return "bg-amber-400 text-slate-950 font-bold";
+      } else if (m < 0.75) {
+        return "bg-emerald-500/80 text-white font-bold";
+      } else {
+        return "bg-emerald-500 text-canvas font-bold";
+      }
+    }
+
+    // Connect to Ambient WebSocket
+    function connectWebSocket() {
+      try {
+        ws = new WebSocket(WS_URL);
+
+        ws.onopen = () => {
+          console.log("[LogiTrace Ambient] WebSocket connected.");
+          setConnectionStatus(true, "Tersambung");
+          if (fallbackPollTimer) {
+            clearInterval(fallbackPollTimer);
+            fallbackPollTimer = null;
+          }
+          if (pingTimer) clearInterval(pingTimer);
+          pingTimer = setInterval(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+              ws.send("ping");
+            }
+          }, 20000);
+        };
+
+        ws.onmessage = (event) => {
+          if (event.data === "pong") return;
+          try {
+            const data = JSON.parse(event.data);
+            if (!currentSessionId || !data.session_id || data.session_id === currentSessionId) {
+              renderAmbientState(data);
+            }
+          } catch (e) {
+            console.error("Error parsing WebSocket JSON:", e);
+          }
+        };
+
+        ws.onclose = () => {
+          console.warn("[LogiTrace Ambient] WebSocket disconnected. Reconnecting in 3s...");
+          setConnectionStatus(false, "Mode Polling");
+          startPollingFallback();
+          setTimeout(connectWebSocket, 3000);
+        };
+
+        ws.onerror = (err) => {
+          console.error("[LogiTrace Ambient] WebSocket error:", err);
+          ws.close();
+        };
+
+      } catch (err) {
+        console.error("Failed to initiate WebSocket:", err);
+        startPollingFallback();
+      }
+    }
+
+    function setConnectionStatus(connected, text) {
+      const ind = document.getElementById("ws-indicator");
+      const label = document.getElementById("ws-status-text");
+      if (connected) {
+        ind.className = "w-2 h-2 rounded-full bg-emerald-400";
+        label.textContent = text;
+      } else {
+        ind.className = "w-2 h-2 rounded-full bg-amber-400";
+        label.textContent = text;
+      }
+    }
+
+    function startPollingFallback() {
+      if (!fallbackPollTimer) {
+        refreshAmbientState();
+        fallbackPollTimer = setInterval(refreshAmbientState, 5000);
+      }
+    }
+
+    // Manual or Poll Refresh via REST
+    async function refreshAmbientState() {
+      try {
+        const url = currentSessionId 
+          ? `${API_BASE}/api/teacher/ambient?session_id=${encodeURIComponent(currentSessionId)}` 
+          : `${API_BASE}/api/teacher/ambient`;
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error("Gagal mengambil status ambient");
+        const data = await resp.json();
+        renderAmbientState(data);
+      } catch (err) {
+        console.error("Error refreshing ambient state:", err);
+      }
+    }
+
+    // Render Ambient State to Dashboard
+    function renderAmbientState(state) {
+      // 1. Session Banner & Progress
+      if (state.session_title) {
+        document.getElementById("banner-session-title").textContent = state.session_title;
+        document.getElementById("banner-session-code").textContent = `Sesi ${state.session_number || 1}`;
+      }
+      
+      const comp = state.completed_count || 0;
+      const inProg = state.in_progress_count || 0;
+      const notStart = state.not_started_count !== undefined ? state.not_started_count : 34;
+      const total = comp + inProg + notStart || 34;
+
+      document.getElementById("badge-completed").textContent = comp;
+      document.getElementById("badge-in-progress").textContent = inProg;
+      document.getElementById("badge-not-started").textContent = notStart;
+
+      const pComp = Math.round((comp / total) * 100);
+      const pInProg = Math.round((inProg / total) * 100);
+      const pNotStart = Math.max(0, 100 - pComp - pInProg);
+
+      document.getElementById("progbar-completed").style.width = `${pComp}%`;
+      document.getElementById("progbar-in-progress").style.width = `${pInProg}%`;
+      document.getElementById("progbar-not-started").style.width = `${pNotStart}%`;
+
+      // 2. KPI Stats
+      document.getElementById("stat-active-students").textContent = state.active_students_count || 34;
+      document.getElementById("stat-avg-mastery").textContent = (state.class_average_mastery || 0.25).toFixed(3);
+      
+      const stuckCount = state.top_stuck_students ? state.top_stuck_students.length : 0;
+      document.getElementById("stat-stuck-count").textContent = stuckCount;
+
+      // 3. Top-3 Stuck Students Cards
+      renderTopStuck(state.top_stuck_students || []);
+
+      // 4. Class 34x12 Heatmap
+      renderHeatmap(state.heatmap || []);
+    }
+
+    // Render Top Stuck Priority Cards with Quick Intervention Action
+    function renderTopStuck(stuckStudents) {
+      const container = document.getElementById("top-stuck-container");
+      container.innerHTML = "";
+
+      if (stuckStudents.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-3 bg-surface border border-border rounded-xl p-5 text-center text-emerald-400">
+            <i class="fa-solid fa-circle-check text-xl text-emerald-400 mb-1.5"></i>
+            <h4 class="font-bold text-sm text-ink">Semua Siswa Lancar</h4>
+            <p class="text-xs text-ink-muted mt-0.5 font-mono">Belum ada siswa yang mengalami kesulitan berulang.</p>
+          </div>
+        `;
+        return;
+      }
+
+      stuckStudents.forEach((s, idx) => {
+        const card = document.createElement("div");
+        card.className = "bg-surface rounded-xl p-4 border border-rose-500/40 flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30">
+                Prioritas #${idx + 1}
+              </span>
+              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-surface-lit text-ink border border-border">
+                ${s.student_code}
+              </span>
+            </div>
+
+            <h4 class="font-bold text-sm text-ink leading-tight mb-0.5">
+              ${s.stuck_kc_name}
+            </h4>
+            <p class="text-[11px] font-mono text-emerald-400 mb-2.5">${s.stuck_kc_id}</p>
+
+            <div class="grid grid-cols-2 gap-2 text-xs font-mono mb-2.5 bg-surface-lit p-2 rounded-lg border border-border">
+              <div>
+                <span class="text-ink-muted block text-[10px]">Penguasaan:</span>
+                <span class="font-bold text-rose-400">${s.current_mastery.toFixed(2)}</span>
+              </div>
+              <div>
+                <span class="text-ink-muted block text-[10px]">Salah Beruntun:</span>
+                <span class="font-bold text-amber-400">${s.consecutive_errors}x</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 bg-surface-lit border border-border rounded-lg text-xs text-ink space-y-1">
+              <p class="font-mono font-bold text-[10px] text-emerald-400 uppercase">Saran Bantuan:</p>
+              <p class="text-[11px] text-ink-muted leading-relaxed">${s.recommended_action}</p>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2.5 border-t border-border flex items-center justify-end">
+            <button onclick="quickResetStudent('${s.student_code}')" class="text-[11px] font-mono text-rose-400 hover:text-rose-300 font-bold flex items-center space-x-1 transition" title="Reset siswa ini ke Soal 1">
+              <i class="fa-solid fa-rotate-left text-[10px]"></i>
+              <span>Reset Siswa</span>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Render 34x12 Heatmap
+    function renderHeatmap(heatmapCells) {
+      const tbody = document.getElementById("heatmap-body");
+      tbody.innerHTML = "";
+
+      // Group cells by student_code
+      const studentMap = {};
+      heatmapCells.forEach(cell => {
+        if (!studentMap[cell.student_code]) {
+          studentMap[cell.student_code] = {};
+        }
+        studentMap[cell.student_code][cell.kc_id] = cell;
+      });
+
+      // Sort student codes std_01 to std_34
+      const studentCodes = Object.keys(studentMap).sort();
+
+      studentCodes.forEach(stdCode => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-surface-lit transition border-b border-border/40";
+
+        // Student Code Header Column
+        let rowHtml = `
+          <td class="p-2.5 text-left font-bold text-ink text-xs font-mono sticky left-0 bg-surface border-r border-border z-10">
+            ${stdCode}
+          </td>
+        `;
+
+        let studentSum = 0;
+        let count = 0;
+
+        KC_KEYS.forEach(kc => {
+          const cell = studentMap[stdCode] ? studentMap[stdCode][kc] : null;
+          const m = cell ? cell.mastery : 0.25;
+          const conf = cell ? cell.confidence : "low";
+          studentSum += m;
+          count++;
+
+          const colorClass = getMasteryColor(m);
+          const lowConfClass = (conf === "low") ? "striped-low-conf" : "";
+
+          rowHtml += `
+            <td class="p-1">
+              <div class="h-7 w-full rounded flex items-center justify-center font-bold text-[11px] font-mono ${colorClass} ${lowConfClass} shadow-xs cursor-pointer hover:ring-2 hover:ring-emerald-400 transition" 
+                   title="${stdCode} • ${kc}: m = ${m.toFixed(2)} (${conf === 'low' ? 'Estimasi Prasyarat' : 'Terkonfirmasi'})">
+                ${m.toFixed(2)}
+              </div>
+            </td>
+          `;
+        });
+
+        const stdAvg = count > 0 ? (studentSum / count).toFixed(2) : "0.25";
+        rowHtml += `
+          <td class="p-2.5 font-mono font-bold text-xs border-l border-border bg-surface text-ink">${stdAvg}</td>
+          <td class="p-1 border-l border-border bg-surface-lit">
+            <button onclick="quickResetStudent('${stdCode}')" class="p-1.5 text-ink-muted hover:text-rose-400 transition active:scale-90" title="Reset siswa ${stdCode} ke Soal 1">
+              <i class="fa-solid fa-arrow-rotate-left text-xs"></i>
+            </button>
+          </td>
+        `;
+
+        tr.innerHTML = rowHtml;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Initialization
+    loadSessions();
+    connectWebSocket();
+    refreshAmbientState();
+  </script>
+</body>
+</html>

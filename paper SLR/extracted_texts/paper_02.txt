@@ -1,0 +1,669 @@
+--- PAGE 1 ---
+Adapting DAS3H Model for a Personalized Distributed Practice
+Schedule to Improve Long-Term Memorization in Designing an
+Intelligent Programming Language Tutor
+Mary Jane C. Samonte
+School of Information Technology,
+Mapúa University, Philippines
+mjcsamonte@yahoo.com
+Renee Charlene B. Evangelista
+School of Information Technology,
+Mapúa University, Philippines
+rcbevangelista@mymail.mapua.edu.ph
+Denise Nicole B. Marcelo
+School of Information Technology,
+Mapúa University, Philippines
+dnbmarcelo@mymail.mapua.edu.ph
+ABSTRACT
+Intelligent Tutoring Systems (ITS) are digital learning environments
+employing Artificial Intelligence (AI) in the form of knowledge trac-
+ing (KT) to craft personalized learning plans for students. Learning
+the basics of programming language directs the students to write
+instructions to perform tasks. With this, educational tools like
+Intelligent Tutoring Systems (ITS) have been developed to aid edu-
+cators and students. This study introduces the DAS3H model and
+Case-based Reasoning to assist students in mastering programming
+language by accurately identifying learners’ difficulties and Mod-
+eling Student Learning and Forgetting for Optimally Scheduling
+Distributed Practice Skills. Through rigorous literature analysis,
+this paper aims to propose an Intelligent Programming Tutor (IPT)
+to improve the efficiency of studying introductory programming
+courses. Additionally, the paper outlines several knowledge-tracing
+algorithms and models, along with feedback tools. The critical anal-
+ysis of previous studies helped to understand the flexible approach
+to learning materials, including spaced repetition, digital flash-
+cards, and diverse study modes that cater to individual learning
+preferences. Additionally, including Case-Based Reasoning (CBR)
+in the expert model improves programming skills and enhances
+problem-solving abilities.
+CCS CONCEPTS
+• : Applied Computing → Education; Interactive learning envi-
+ronments.
+KEYWORDS
+Intelligent Tutoring Systems, Intelligent Programming Tutor,
+DAS3H model, Case-Based Reasoning, Computer Programming,
+Knowledge Tracing
+ACM Reference Format:
+Mary Jane C. Samonte, Renee Charlene B. Evangelista, and Denise Nicole
+B. Marcelo. 2024. Adapting DAS3H Model for a Personalized Distributed
+Practice Schedule to Improve Long-Term Memorization in Designing an
+Intelligent Programming Language Tutor. In 2024 the 9th International
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for components of this work owned by others than the
+author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or
+republish, to post on servers or to redistribute to lists, requires prior specific permission
+and/or a fee. Request permissions from permissions@acm.org.
+ICDEL 2024, June 14–17, 2024, Guangzhou, China
+© 2024 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+ACM ISBN 979-8-4007-1680-5/24/06
+https://doi.org/10.1145/3675812.3675854
+Conference on Distance Education and Learning (ICDEL 2024), June 14–17,
+2024, Guangzhou, China. ACM, New York, NY, USA, 8 pages. https://doi.
+org/10.1145/3675812.3675854
+1 INTRODUCTION
+The evolution of technology over the decades has led to a growing
+demand for individuals possessing technical skills. Educational
+institutions globally have adapted their curricula to impart knowl-
+edge and expertise in STEM subjects, with a particular focus on
+computer programming [1]. Since mastering the fundamentals of
+programming is pivotal, the Introduction to Computer Program-
+ming course plays a critical role in shaping students’ abilities and
+ensuring their success in an ever-evolving technological landscape
+[2]. To this end, educational tools like Intelligent Tutoring Systems
+(ITS) have been developed to aid both educators and students.
+Intelligent Tutoring Systems (ITS) are digital learning environ-
+ments employing Artificial Intelligence (AI) in the form of knowl-
+edge tracing (KT) to craft personalized learning plans for students
+[3][4]. These systems aim to mimic human tutoring in digital set-
+tings, supporting students as they acquire knowledge and skills in
+various fields, including computer programming [ 5]. In the context
+of this paper, we will use ”Intelligent Programming Tutors (IPTs)”
+instead of ”Intelligent Tutoring Systems (ITSs)” since IPTs are ITSs
+that are focused on programming, but essentially has the same struc-
+ture [6][7]. However, despite the availability of numerous methods
+and tools designed to assist programming students, there remains
+a substantial dropout rate in introductory programming courses
+[8]. Consequently, further enhancements in IPTs are essential to
+bolster the learning experience.
+Intelligent Programming Tutors (IPTs) typically consist of four
+primary components: a student model, a knowledge domain model,
+an expert model, and a user interface model [9][10]. The knowledge
+domain model encompasses relevant information about the subject
+being taught, while the expert model provides feedback based on
+students’ responses. The student model represents students’ goals,
+needs, and knowledge, adapting in response to the system’s intelli-
+gence. The user interface model serves as the bridge, facilitating
+seamless interaction between the learner and the system. While
+the student model is a crucial element, precisely assessing whether
+a student has grasped a concept remains challenging, underscoring
+the importance of creating an effective student model within the
+system [ 9][10][11][12]. Consequently, this paper would like to
+propose an IPT using an effective student model to improve the
+efficiency of these systems in studying introductory programming
+courses.
+75
+
+--- PAGE 2 ---
+ICDEL 2024, June 14–17, 2024, Guangzhou, China Mary Jane Samonte et al.
+Table 1: Selection Process
+Database Studies Found Studies Filtered Studies Chosen
+Google Scholar 21 11 5
+IEEE Xplore 12 9 2
+Research Gate 3 2 1
+Cornell University arXiv 5 5 2
+ACM 4 4 2
+Wiley Online Library 3 1 1
+Science Direct 7 4 1
+Springer Link 6 4 2
+Total 61 40 16
+This study seeks to answer the questions, “What knowledge
+tracing model will best identify and predict the knowledge level
+and academic performance of the students?” and “What feedback
+provision tool will best give personalized feedback to students based
+on their interactions with the system?”. The main aim of the study is
+to propose an Intelligent Programming Tutor (IPT) for the learning
+enhancement of programming students. Specifically, the objectives
+of the study are: To review existing literature related to intelligent
+tutoring systems (ITS); To identify a knowledge tracing model that
+handles multiple skills given in a programming question, and; To
+identify an effective feedback tool for personalized feedback to
+students
+The scope of this study encompasses an in-depth examination of
+Intelligent Programming Tutors (IPTs) and their role in enhancing
+the learning experience of students, particularly in the domain of
+computer programming. It delves into the architecture of IPTs,
+the use of knowledge tracing models for predicting student perfor-
+mance, and feedback provision methods. This study draws from a
+selection of research papers obtained from reputable online sources
+to provide a comprehensive overview of the subject. The study also
+focused on knowledge tracing algorithms and models that involve
+multiple skills since programming assessments or practice involve
+multiple skills.
+The study does not include practical implementations or empiri-
+cal data from the use of the proposed system. Additionally, while a
+comprehensive literature review was conducted to select relevant
+studies, the selection process is based on abstracts and titles, which
+may not capture all relevant research in the field. Moreover, the
+proposed system’s effectiveness and its impact on student learning
+outcomes have not been empirically tested. Further research is
+needed to validate the practical implications of the proposed sys-
+tem and its impact on students’ programming skills and knowledge
+acquisition. Lastly, the study is limited to a few research papers
+due to time constraints.
+2 METHODOLOGY
+The research papers used for this study were taken from vari-
+ous online sources such as Google Scholar, IEEE Xplore (ieeex-
+plore.ieee.org), Research Gate, Cornell University arXiv (arXiv.org),
+ACM Digital Library (dl.acm.org), Wiley Online Library, Science
+Direct and Springer Link are shown in Table 1. A selection criterion
+was used to identify relevant studies that will be used in this study.
+A total sixty-one (61) studies were gathered and fourty (40) studies
+fit the criteria according to their abstract and title after the filtering
+process. Among those, only sixteen (16) was chosen as they were
+the most relevant to the study. Keywords such as “Intelligent Tutor-
+ing System”, “Intelligent Tutoring System for Programming”, and
+“Knowledge tracing models” were typed on the search bar. Then,
+the search results were filtered to the years 2018 to 2023, as indi-
+cated in Table 2. Studies that were selected were placed in a studies
+list and filtered according to their title and abstract, as displayed in
+Table 3. Lastly, the studies were chosen according to how well they
+can answer the research question of the current study.
+3 ANALYSIS, RESULTS AND UNDERSTANDING
+The purpose of this literature review is to comprehend the design of
+an intelligent tutoring system, recognize the algorithms employed
+for knowledge tracing, and the tools used to create personalized
+feedback for students based on their inputs, interactions, knowl-
+edge level, and other attributes. While prior research presents
+various algorithms and models for knowledge tracing and feedback
+mechanisms, there are some limitations. First, there is a scarcity of
+studies on student models capable of handling the multiple skills
+necessary for programming tasks. Existing models struggle when
+students need to apply several concepts simultaneously. Second,
+the accuracy of these models heavily relies on student data, which
+can be challenging in smaller settings. Lastly, while fuzzy logic
+and case-based reasoning are used for feedback, there is a need to
+explore alternative methods to offer a broader range of personalized
+student support.
+3.1 INTELLIGENT TUTORING SYSTEM
+ARCHITECTURE
+Intelligent Tutoring Systems (ITS) are computer-based learning
+environments that uses Knowledge Tracing (KT) - algorithms that
+helps predict student performance, for designing and scheduling
+personalized learning plans for learners [ 3]. Through the different
+capabilities of Artificial Intelligence (AI), these systems have con-
+tinuously evolved through the combination of various knowledge
+gathered from observing the techniques of human tutors [ 13]. The
+main aim of these systems is to imitate the role of human tutors in
+the life of the students and enhance the learning journey of students
+by offering customized learning experiences.
+76
+
+--- PAGE 3 ---
+Adapting DAS3H Model for a Personalized Distributed Practice Schedule to Improve Long-Term Memorization in
+Designing an Intelligent Programming Language Tutor ICDEL 2024, June 14–17, 2024, Guangzhou, China
+Table 2: Year of Publication of the Chosen Studies
+Year Number of Studies References
+2018 7 [5], [6], [7], [13], [14], [18], [19]
+2019 3 [16], [17], [20]
+2020 2 [9], [10]
+2021 3 [3], [11], [15]
+2022 1 [12]
+Table 3: Related Studies on Intelligent Tutoring System Development
+Reference Title of the study Feedback Tool Used Objective
+Eryılmaz and Adabashi
+(2020)
+Development of an Intelligent Tutoring System
+Using Bayesian Networks and Fuzzy Logic for a
+Higher Student Academic Performance
+Fuzzy Logic To design and propose an ITS
+that combines Fuzzy Logic
+and Bayesian Network to
+support student learning
+Karaci (2018) Intelligent tutoring system model based on fuzzy
+logic and constraint-based student model.
+Fuzzy Logic To propose an ITS model that
+uses Fuzzy Logic and a
+constraint-based student
+model to teach Turkish
+punctuation use.
+Dutt et al. (2021) An intelligent tutoring system architecture based on
+Fuzzy Neural Network (FNN) for special education
+of learning disabled learners.
+Fuzzy Logic To design an ITS using fuzzy
+to help identify those with
+learning disabilities
+Sharma and Harikshan
+(2022)
+Designing an intelligent tutoring system for
+computer programing in the Pacific
+CBR To design an ITS for the
+enhancement of the learning
+and teaching process in
+programming topics for
+students.
+Schweta et al. (2018) Agent-based distributed intelligent tutoring system
+using case-based reasoning.
+CBR To propose an agent-based
+distributed ITS using CBR for
+an enhanced learning
+environment
+Salem (2019) A Proposed Model for Smart Tutoring System for
+Biological Sciences.
+CBR To discuss an ITS model that
+uses CBR for biological
+sciences
+ITSs play a pivotal role in helping students acquire mastery in
+specific subject areas, with applications spanning diverse fields, in-
+cluding information technology [5]. A study by Mousavinasab et al.
+[6] revealed that 37.73% of ITS implementations are concentrated in
+the realm of computer science. Given the considerable overlap be-
+tween computer science and information technology, ITSs designed
+for computer science can be effectively leveraged by information
+technology students. Computer programming is a common area
+of interest between these two disciplines, and numerous ITSs have
+been developed to facilitate computer programming instruction [ 7].
+Through these systems, students can engage in focused practice
+and skill development, ultimately equipping them with valuable
+expertise that benefits their future careers.
+The architecture of ITSs is composed of 4 main components: a
+student model, a knowledge domain model, a pedagogical or expert
+model, and a user interface model [9][10].
+The architecture of an Intelligent Tutoring Systems (ITS) in Fig-
+ure 1 shows how each of these components interacts with one
+another. The knowledge domain or domain model contains rele-
+vant knowledge concerning the particular area the ITS is designed
+to teach. This may also include the lecture materials prepared for
+teaching the topic, such as notes, questions, quizzes, and more. This
+model presents the knowledge of experts qualitatively and may
+also represent the methods they use to solve problems. This model
+evaluates whether the students’ answers are correct [ 9][12]. In
+some studies, the expert or pedagogical model presents the domain
+model’s contents in a way that satisfies the student’s preference,
+generating appropriate feedback to the users based on their re-
+sponses. This feedback may determine whether the students are
+correct or incorrect, providing the right answers or showing hints
+[9][11].
+The student model within the system serves as a vital component,
+encapsulating each student’s goals, needs, and knowledge. This
+77
+
+--- PAGE 4 ---
+ICDEL 2024, June 14–17, 2024, Guangzhou, China Mary Jane Samonte et al.
+Figure 1: Architecture of an ITS from Rekhawi and Awni [9]
+model meticulously assesses the current state of students’ knowl-
+edge by analyzing their responses and behavioral patterns. It then
+provides this knowledge to other system components, influencing
+the customization of feedback for users. Continual monitoring of
+students’ knowledge states is a core feature underpinned by the
+dynamic adaptation of the model through the application of Artifi-
+cial Intelligence (AI). Nonetheless, the challenge lies in accurately
+gauging a student’s grasp of the concepts imparted by the system,
+emphasizing the critical importance of developing an effective stu-
+dent model to address the inherent uncertainties associated with
+the student modeling process in the system [9][10][11][12].
+Lastly, the user interface model allows all of these models to
+be accessed by the user. Through the user interface, the student
+can freely interact with the different features of the system, which
+then affects the information stored in the student model, affecting
+the domain model, and the expert model. These interconnected
+components synergize to provide a smooth and cohesive learning
+experience for the student.
+3.2 KNOWLEDGE TRACING ALGORITHMS
+Knowledge Tracing (KT) is implemented using Artificial Intelli-
+gence (AI) algorithms in Intelligent Tutoring Systems to predict the
+performance of the students by identifying their current knowledge
+states. Several algorithms were used in the selected studies.
+Bayesian Network - Bayesian network serves as a model-
+ing tool for representing interdependencies among different con-
+cepts within a specific domain, utilizing a probability distribution.
+Bayesian networks have proven valuable as a probabilistic frame-
+work in addressing the dynamic management and continuous up-
+dating of student models. It utilizes nodes to represent certain
+topics, and is mainly used due to its ability to use probabilities to
+deal with uncertainties. This algorithm is used by Eryılmaz and
+Adabashi [10].
+Neural Network (NN) - Neural networks, due to their capacity
+to effectively analyze and identify relationships among multiple
+inputs through interconnected nodes, serve as a powerful algorithm
+for addressing complex problems and generating a wide range
+of outcomes. Neural networks leverage learning techniques that
+reduce the complexities associated with handling multiple input
+layers, enabling effective decision-making. This algorithm was
+utilized by Dutt et al. [11] in conjunction with Fuzzy logic.
+Factorization Machines (FM) - Factorization machines (FMs)
+are a versatile regression or classification model, and they can be
+seen as a unifying framework that encompasses various established
+models within the educational literature. They can accurately and
+efficiently estimate students’ knowledge and excel even in situations
+where student data is lacking. They are also adept at handling
+additional contextual information, such as multiple knowledge
+components and the number of attempts at the item or skill level.
+This is utilized by Vie and Kashima [16], and Choffin et al. [17].
+3.3 KNOWLEDGE TRACING MODELS
+Since KT is implemented using several algorithms as mentioned in
+the previous section, several models have been created to enhance
+the effect of the algorithm and to further increase the accuracy of
+student performance prediction. These models are used in student
+models, and were created based on these algorithms, but the ones
+enumerated below are those who focused on the students’ inter-
+actions with questions involving multiple skills or concepts since
+programming questions involves multiple concepts, especially if
+the questions involve writing code [ 14]. DAS3H model combines
+the prediction of student performance in practical questions of EKT
+and the use of factorization machines using KTM and was chosen
+as the model for the proposed sytem.
+Exercise-aware Knowledge Tracing (EKT) - proposed by
+Liu et al. [ 15] that uses a knowledge state matrix instead of a
+Recurrent Neural Network for tracking the state of the learner’s
+knowledge in multiple concepts by adding to the knowledge topics
+that were already present in each exercise given to the students.
+This allows the measurement of how much each exercise can affect
+students’ comprehension of various knowledge concepts while they
+are exercising.
+Knowledge Tracing Machines (KTM) - This was introduced
+by Vie and Kashima [ 16] as a family of models that includes es-
+tablished models in the EDM literature as specific instances for
+addressing knowledge tracing classification problems. The model
+allows side information like multiple skills to be included in student
+models. Through the use of various datasets, the research reveals
+that these machines can accurately estimate user and item param-
+eters, even when data is limited. Furthermore, they outperform
+existing models, including deep neural networks, in predictive ac-
+curacy. KTMs serve as a versatile platform for experimenting with
+78
+
+--- PAGE 5 ---
+Adapting DAS3H Model for a Personalized Distributed Practice Schedule to Improve Long-Term Memorization in
+Designing an Intelligent Programming Language Tutor ICDEL 2024, June 14–17, 2024, Guangzhou, China
+new data combinations, such as response times and the number of
+attempts at the item level.
+Difficulty, studentAbility, Skill, and Student Skill practice
+History (DAS3H) Model - Choffin et al. [17] introduced a learning
+and forgetting student model that factors in memory decay and
+recognizes the benefits of practice when questions span multiple
+types of knowledge. This model, the DAS3H, builds upon the DASH
+model, considering multiple skills and incorporating Knowledge
+Tracing Machines (KTM). DAS3H is an extension of additive factor
+models that introduces a representation of the temporal patterns
+of past skill practice. Notably, DAS3H enables distinct learning
+and forgetting curves for individual skills, offering a more nuanced
+approach.
+3.4 FEEDBACK PROVISION TOOLS
+Feedback is an essential aspect in Intelligent Programming Tutors
+(IPTs) as it gives insight to students on what topics they should
+improve on based on their responses to questions. Immediate feed-
+back and providing hints are provided by the expert model to help
+students progress further in their learning path. Hence, the study
+identified two (2) methods which helps the expert model provide
+appropriate feedback.
+Fuzzy Logic - Fuzzy logic is used in solving the uncertainty that
+comes with an e-learning system that adapts to the students’ needs.
+This method mirrors human thinking by allowing for gradations
+between traditional binary assessments such as yes or no, big or
+small, high or low, true or false, offering a more flexible and human-
+like decision-making framework. This method is integrated by
+Eryılmaz and Adabashi [ 10], Karaci [ 18], and Dutt et al. [ 11] in
+their developed ITSs.
+Case-Based Reasoning (CBR) - Case-Based Reasoning (CBR)
+follows a four-step procedure: initial retrieval of relevant cases, sub-
+sequent adaptation of past cases to address the current situation,
+potential adjustment of prior solutions, and, if deemed suitable,
+preservation of the new case within a case foundation. This ap-
+proach allows the system to utilize both historical cases and the
+current experiences of students in the creation of tailored solutions.
+This method is used by the system to solve a given problem, and
+can offer personalized insights and feedback based on the retrieved
+past cases. This method was used by Sharma and Harikshan [ 12],
+Shweta et al. [19], and Salem [20] in developing an ITS.
+4 PROPOSED SYSTEM
+In this study, the proposed system is a web-based application de-
+signed to enhance students’ mastery of fundamental programming
+concepts, skills, and terminology. The application incorporates
+various features and techniques to optimize the learning process.
+One of the core elements of the web application is the integration
+of digital flashcards and diverse study modes. The system incorpo-
+rates knowledge tracing, a method for tracking students’ progress
+over time. By monitoring their performance and understanding of
+the subject matter, the application can tailor content and questions
+to each student’s individual learning pace and needs.
+This study aims to design an Intelligent Tutoring System (ITS)
+based on the DAS3H Model for the Learning Enhancement of Pro-
+gramming Students. Specifically, the objectives of the study are as
+follows:
+• To develop a user-friendly interface for students to access
+the course materials.
+• To develop quizzes that will assess the students’ learning,
+taking into account the time it took to accomplish, the diffi-
+culty of the task, and the correctness of their responses.
+• To apply the DAS3H model for selecting the appropriate task
+difficulty for each student
+• To use Case-Based Reasoning (CBR) to provide personalized
+feedback on the student’s work
+• To evaluate the system by comparing the pretest and posttest
+scores of students who used the system and those who used
+traditional learning.
+Lastly, the DAS3H model, a machine learning algorithm gaining
+popularity in educational technology, and Cased-Based Reasoning
+(CBR) will be integrated into the application. This model utilizes
+multiple factors to predict student performance and offers personal-
+ized recommendations based on their learning history. In a recent
+study conducted by Choffin et al. [ 17], it was demonstrated that
+the DAS3H model significantly amplifies the efficacy of spaced
+repetition as a learning strategy, extending its utility beyond con-
+ventional memorization tasks to a broader range of educational
+contexts, particularly those involving the application of multiple
+skills. Sharma and Harikshan [ 12] used CBR as a means to provide
+feedback and solutions in an ITS. Using these two techniques will
+help provide students with tailored recommendations and tests and
+personalized feedback, optimizing their mastery of programming
+concepts, skills, and terminology.
+The proposed process flow shown in Figure 2 of the current
+proposed system based on an existing process flow by Sharma and
+Harkishan [12]. The IPT’s primary focus is on aiding students in
+crafting more efficient and effective code, emphasizing how the
+system manages student responses. It initiates with the student
+inputting their code solution to a given problem, which the sys-
+tem subsequently evaluates. If the student’s code fails to run, the
+system offers feedback through suggestions or hints, allowing the
+student to revise their answer. Upon successfully parsing the code,
+the system compiles and executes it. The system then compares
+the student’s solution with cases stored in the Case-Based Reason-
+ing (CBR) Library and provides relevant feedback. If the problem
+is solved, it updates the domain and student models, storing in-
+puts, performance, and student behavior. Additionally, it saves
+the new case in the CBR library for future use. The student and
+domain models are updated with information crucial for assessing
+the student’s knowledge state, including interactions, feedback, and
+performance, and the system selects a new problem adjusted to the
+student’s appropriate difficulty level based on the updated student
+model.
+This new process flow underscores the integral role of Case-
+Based Reasoning (CBR) and DAS3H in the system’s functioning,
+illustrating the overall system flow following the provision of suit-
+able learning materials to the student. The system is expressly
+designed to enhance student learning through iterative practice, a
+79
+
+--- PAGE 6 ---
+ICDEL 2024, June 14–17, 2024, Guangzhou, China Mary Jane Samonte et al.
+Figure 2: Proposed Process Flow
+Figure 3: Proposed System Architecture
+facet strengthened by DAS3H, which considers memory decay and
+the multiple skills encompassed in each item. Students can refine
+their programming skills through consistent practice, tackling prob-
+lems tailored to their proficiency level, which gradually escalates
+with their commitment. The system meticulously tracks the user’s
+progress and provides feedback on their improvement, solidifying
+the proposed IPT as an invaluable tool for aspiring programmers
+at all skill levels.
+The system architecture, shown in Figure 3 of the proposed IPT,
+which is based on the original architecture of an ITS explained by
+Rekhawi and Awni [ 9] and the proposed system architecture of
+Eryılmaz and Adabashi [10]. This system will be able to personalize
+the learning path of the students based on the information gathered
+on their interactions, assessments, and more, which ultimately
+identifies their knowledge level. The system will be able to update
+the knowledge level of the students, which will be the basis of the
+content that will be shown to them.
+The knowledge domain model includes the learning materials
+that will be shown to the students such as notes, videos, flash-
+cards, and practice questions that will be provided by the system
+according to the Computer Programming 1 (CS126-8) syllabus of
+Mapua Univeristy. This course focuses on using flowcharts and
+pseudocodes to formulate logic to solve problems. Additionally,
+it provides an introductory overview of structured programming,
+encompassing topics such as procedural syntax, program flow de-
+piction, variables and data types, as well as programming constructs
+related to selection and iteration. When the system tries to assess
+the student’s level of knowledge and identify how well the student
+had comprehended a certain topic, assessments and quizzes are
+displayed.
+80
+
+--- PAGE 7 ---
+Adapting DAS3H Model for a Personalized Distributed Practice Schedule to Improve Long-Term Memorization in
+Designing an Intelligent Programming Language Tutor ICDEL 2024, June 14–17, 2024, Guangzhou, China
+The expert model involves gathering information to generate the
+appropriate feedback, and as such, Case-Based Reasoning (CBR) will
+be utilized since this technique specializes in providing feedback
+based on previous cases. Meanwhile, the student model stores
+the gathered information about the user or learner [ 9][12]. This
+includes the information they have provided in the user profile, and
+also their interactions with the system and their knowledge level.
+This model will be utilizing the algorithm of the DAS3H model
+to track the changes of the student’s knowledge level based on
+their past practices, memory decay, and the multiple skills tagged
+onto the test questions. This will also allow the student model to
+provide the materials or tests appropriate to the identified level of
+the learner’s knowledge.
+5 IMPLICATION AND CONCLUSION
+In conclusion, the proposed Intelligent Programming Tutor (IPT)
+represents a significant advancement in the field of programming
+education. Based on the chosen studies, DAS3H and Case-Based
+Reasoning (CBR) will be utilized to offer a personalized and effective
+learning experience to programming students. The proposed system
+addresses the challenges associated with programming education,
+including high dropout rates, by providing targeted feedback and re-
+sources to students. Through DAS3H, the system addresses the crit-
+ical issue of memory decay and considers the nuances of multiple
+skills, effectively predicting student performance and knowledge
+level, making it a valuable tool for learners at various proficiency
+levels. The system’s flexible approach to learning materials, includ-
+ing spaced repetition, digital flashcards, and diverse study modes,
+caters to individual learning preferences.
+Additionally, the inclusion of Case-Based Reasoning (CBR) in
+the expert model adds an extra layer of sophistication to the feed-
+back and guidance provided to students, ensuring that they receive
+relevant and tailored assistance. This approach not only improves
+programming skills but also enhances problem-solving abilities.
+The IPT’s flexible learning materials, adaptability to different learn-
+ing styles, and comprehensive knowledge domain model align with
+the needs of modern programming students. This tool has the po-
+tential to reduce dropout rates and equip learners with the skills and
+knowledge needed for success in the continuously evolving field of
+technology. The integration of advanced AI techniques and educa-
+tional models paves the way for more effective and personalized
+programming education.
+6 LIMITATION AND FUTURE RESEARCH
+The limitations of this study should be considered to guide future
+research in the field of Intelligent Programming Tutors (IPTs) and
+educational technology. Firstly, this study primarily focuses on the
+conceptual design of an IPT with an emphasis on using the DAS3H
+model and Case-Based Reasoning (CBR) for feedback provision.
+The effectiveness and feasibility of this proposed system need to be
+empirically evaluated through extensive testing and user studies
+to validate its impact on students’ learning outcomes. In terms of
+knowledge tracing models, while the DAS3H model is highlighted,
+future research could explore the comparative effectiveness of dif-
+ferent knowledge tracing models, including those not covered in
+this study, to determine which model best suits the needs of pro-
+gramming education. Given the constraints of time, the range of
+research papers investigated in this study has been limited. To
+facilitate comprehensive insights, future research endeavors should
+expand their scope by exploring a wider array of online databases
+and incorporating additional studies. This approach would enable
+a more thorough examination of diverse possibilities and avenues
+for investigation. Lastly, further development is needed for this
+study since it only included models.
+REFERENCES
+[1] Rodrigo Pessoa Medeiros, Geber Lisboa Ramalho, and Taciana Pontual Falcao.
+2019. A systematic literature review on teaching and learning introductory pro-
+gramming in Higher Education. IEEE Transactions on Education 62, 2 (2019),
+77–90. https://doi.org/10.1109/te.2018.2864133
+[2] José Figueiredo and Francisco José García-Peñalvo. 2021. Intelligent Tutoring
+Systems approach to Introductory Programming Courses. In Eighth Interna-
+tional Conference on Technological Ecosystems for Enhancing Multiculturality
+(TEEM’20). Association for Computing Machinery, New York, NY, USA, 34–39.
+https://doi.org/10.1145/3434780.3436614
+[3] Zefeng Lai, Lei Wang, and Qiang Ling. 2021. Recurrent knowledge tracing ma-
+chine based on the knowledge state of students. Expert Systems 38, 8 (2021).
+http://dx.doi.org/10.1111/exsy.12782
+[4] Tongxi Liu. 2022. Knowledge tracing: A bibliometric analysis. Computers and
+Education: Artificial Intelligence 3 (2022), 100090. http://dx.doi.org/10.1016/j.
+caeai.2022.100090
+[5] Arthur C. Graesser, Xiangen Hu, and Robert Sottilare. 2018. Intelligent Tutoring
+Systems. In Frank Fischer, Cindy E. Hmelo-Silver, Susan R. Goldman, and Peter
+Reimann, International Handbook of the Learning Sciences. New York, NY:
+Routledge, 269–278. https://doi.org/10.4324/9781315617572
+[6] Elham Mousavinasab, Nahid Zarifsanaiey, Sharareh R. Niakan Kalhori, Mahnaz
+Rakhshan, Leila Keikha, and Marjan Ghazi Saeedi. 2018. Intelligent tutoring
+systems: A systematic review of characteristics, applications, and evaluation
+methods. Interactive Learning Environments 29, 1 (2018), 142–163. https://doi.
+org/10.1080/10494820.2018.1558257
+[7] Tyne Crow, Andrew Luxton-Reilly, and Burkhard Wuensche. 2018b. Intelligent
+tutoring systems for Programming Education: A Systematic Review. Proceedings
+of the 20th Australasian Computing Education Conference (2018), 53–63. http:
+//dx.doi.org/10.1145/3160489.3160492
+[8] Erum Mehmood, Adnan Abid, Muhammad Shoaib Farooq, and Naeem A. Nawaz.
+2020. Curriculum, teaching and learning, and assessments for introductory pro-
+gramming course. IEEE Access 8 (2020), 125961–125981. http://dx.doi.org/10.
+1109/access.2020.3008321
+[9] Al Rekhawi and Hazem Awni. 2020. Android Applications Development intelli-
+gent tutoring System. Retrieved from https://www.researchgate.net/publication/
+369019340_Android_Applications_Development_Intelligent_Tutoring_System.
+[10] Meltem Eryılmaz and Afaf Adabashi. 2020. Development of an Intelligent Tu-
+toring System Using Bayesian Networks and Fuzzy Logic for a Higher Stu-
+dent Academic Performance. Applied Sciences 10, 19 (September 2020), 6638.
+https://doi.org/10.3390/app10196638
+[11] Sarthika Dutt, Neelu Jyothi Ahuja, and Manoj Kumar. 2021. An intelligent tutoring
+system architecture based on Fuzzy Neural Network (FNN) for special education
+of learning disabled learners. Education and Information Technologies 27, 2
+(2021), 2613–2633. https://doi.org/10.1007/s10639-021-10713-x
+[12] Priynka Sharma and Mayuri Harkishan. 2022. Designing an intelligent tutoring
+system for computer programing in the Pacific. Education and Information
+Technologies 27, 5 (2022), 6197–6209. https://doi.org/10.1007/s10639-021-10882-9
+[13] Ali Alkhatlan, and Jugal Kalita. 2018. Intelligent Tutoring Systems: A Compre-
+hensive Historical Survey with Recent Developments. arXiv (Cornell University).
+Retrieved from: https://doi.org/10.48550/arxiv.1812.09628.
+[14] Andrew Luxton-Reilly, Simon, Ibrahim Albluwi, Brett A. Becker, Michail Gi-
+annakos, Amruth N. Kumar, Linda Ott, James Paterson, Michael James Scott,
+Judy Sheard, Claudia Szabo. 2018. Introductory programming: A systematic
+literature review. Proceedings Companion of the 23rd Annual ACM Confer-
+ence on Innovation and Technology in Computer Science Education (2018).
+https://doi.org/10.1145/3293881.3295779
+[15] Qi Liu et al. 2021. Ekt: Exercise-aware knowledge tracing for student performance
+prediction. IEEE Transactions on Knowledge and Data Engineering 33, 1 (2021),
+100–115. https://doi.org/10.1109/TKDE.2019.2924374.
+[16] Jill-Jenn Vie and Hisashi Kashima. 2019. Knowledge Tracing Machines: Factoriza-
+tion machines for Knowledge Tracing. Proceedings of the AAAI Conference on
+Artificial Intelligence 33, 01 (2019), 750–757. https://doi.org/10.1609/aaai.v33i01.
+3301750
+81
+
+--- PAGE 8 ---
+ICDEL 2024, June 14–17, 2024, Guangzhou, China Mary Jane Samonte et al.
+[17] Benoît Choffin, Fabrice Popineau, Yolaine Bourda, and Jill-Jênn Vie. 2019. DAS3H:
+Modeling student learning and forgetting for optimally scheduling distributed
+practice of skills. arXiv.org. Retrieved from https://arxiv.org/abs/1905.06873.
+[18] Abdulkadir Karaci. 2018. Intelligent tutoring system model based on fuzzy logic
+and constraint-based student model. Neural Computing and Applications 31, 8
+(2018), 3619–3628. https://doi.org/10.1007/s00521-017-3311-2
+[19] Shweta, Praveen Dhyani, and O.P. Rishi. 2018. Agent-based distributed intelligent
+tutoring system using case-based reasoning. Intelligent Systems (2018), 901–928.
+https://doi.org/10.4018/978-1-5225-5643-5.ch037
+[20] Dalia A.M. Salem. 2019. A Proposed Model for Smart Tutoring System for Bio-
+logical Sciences. Egyptian Computer Science Journal 43, 2 (May 2019). Retrieved
+From http://ecsjournal.org/archive/Volume43/Issue2/11.pdf.
+82

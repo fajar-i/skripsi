@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LogiTrace — Latihan Jaringan yang Menyesuaikan Kemampuanmu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
+            serif: ['"Newsreader"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            paper: '#F7F6F2',
+            surface: '#FFFFFF',
+            subtle: '#EFECE6',
+            line: '#DFDCD4',
+            ink: '#121417',
+            muted: '#575E66',
+            brand: '#059669',
+            'brand-dark': '#047857',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #F7F6F2;
+      color: #121417;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-brand/15 selection:text-ink">
+
+  <!-- TOP NAVIGATION -->
+  <header class="border-b border-line bg-paper sticky top-0 z-40">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center space-x-2.5">
+        <div class="w-8 h-8 rounded-lg bg-ink text-white flex items-center justify-center font-mono font-bold text-xs">
+          LT
+        </div>
+        <span class="font-bold text-base tracking-tight text-ink">LogiTrace</span>
+      </a>
+
+      <nav class="flex items-center space-x-2 sm:space-x-3">
+        <a href="#cara-kerja" class="text-xs font-medium text-muted hover:text-ink px-2.5 py-1.5 hidden sm:inline-block">
+          Cara Kerja
+        </a>
+        <a href="/teacher/" class="text-xs font-semibold text-ink border border-line bg-surface hover:bg-subtle px-3.5 py-2 rounded-lg transition">
+          Panel Guru
+        </a>
+        <a href="/student/" class="bg-brand hover:bg-brand-dark text-white font-semibold px-4 py-2 rounded-lg text-xs transition">
+          Mulai Latihan
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1">
+
+    <!-- HERO SECTION: STUDENT PERSPECTIVE & KT-RAG VALUE PROPOSITION -->
+    <section class="py-14 sm:py-20 border-b border-line">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+
+          <!-- Left Column: Minimalist Student Pitch -->
+          <div class="lg:col-span-6 space-y-6">
+            <div class="inline-block px-2.5 py-1 rounded border border-line bg-surface text-[11px] font-mono text-muted">
+              XI TKJ 1 &bull; Teknologi Jaringan Kabel &amp; Nirkabel
+            </div>
+
+            <h1 class="font-serif text-4xl sm:text-5xl font-semibold tracking-tight text-ink leading-[1.1]">
+              Belajar jaringan sesuai kecepatanmu sendiri.
+            </h1>
+
+            <p class="text-sm sm:text-base text-muted leading-relaxed">
+              Tidak perlu lagi mengerjakan soal yang terlalu mudah atau bikin buntu. Tingkat kesulitan soal otomatis menyesuaikan pemahamanmu, lengkap dengan petunjuk langkah demi langkah saat kamu butuh bantuan.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-3 pt-1">
+              <a href="/student/" class="bg-ink hover:bg-zinc-800 text-white font-semibold px-5 py-3 rounded-lg text-sm transition inline-flex items-center space-x-2">
+                <span>Masuk sebagai Siswa</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </a>
+              <a href="/teacher/" class="bg-surface hover:bg-subtle text-ink border border-line font-semibold px-5 py-3 rounded-lg text-sm transition">
+                Buka Panel Guru
+              </a>
+            </div>
+
+            <!-- 3 Simple Student Benefits -->
+            <div class="grid grid-cols-3 gap-4 pt-6 border-t border-line text-xs">
+              <div>
+                <span class="font-mono font-semibold text-ink text-sm block">Pas di Levelmu</span>
+                <span class="text-muted text-[11px]">Soal mengikuti kemampuan</span>
+              </div>
+              <div>
+                <span class="font-mono font-semibold text-ink text-sm block">3 Level Petunjuk</span>
+                <span class="text-muted text-[11px]">Bantuan saat kamu buntu</span>
+              </div>
+              <div>
+                <span class="font-mono font-semibold text-ink text-sm block">1 Siswa 1 PC</span>
+                <span class="text-muted text-[11px]">Giliran praktik lab utuh</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Clean Interactive Preview of KT + RAG -->
+          <div class="lg:col-span-6">
+            <div class="bg-surface rounded-xl border border-line p-5 sm:p-6 space-y-5">
+
+              <!-- Top Bar: Knowledge Tracing Indicator -->
+              <div class="flex items-center justify-between pb-3 border-b border-line text-xs">
+                <span class="font-mono font-medium text-muted">Soal 7 dari 20 &bull; Frekuensi Wi-Fi</span>
+                <span class="px-2 py-0.5 rounded bg-subtle text-ink font-mono text-[11px]">
+                  Level Menyesuaikan
+                </span>
+              </div>
+
+              <!-- Question -->
+              <p class="text-sm font-medium text-ink leading-relaxed">
+                Tiga Access Point dipasang berdekatan pada frekuensi 2.4 GHz. Kombinasi kanal mana yang mencegah sinyal saling bertabrakan?
+              </p>
+
+              <!-- Options -->
+              <div class="space-y-2 text-xs">
+                <div class="p-3 rounded-lg border border-line bg-paper flex items-center space-x-3 text-muted">
+                  <span class="w-6 h-6 rounded bg-surface border border-line flex items-center justify-center font-mono font-semibold text-ink">A</span>
+                  <span>Kanal 1, 2, dan 3</span>
+                </div>
+                <div class="p-3 rounded-lg border-2 border-brand bg-surface flex items-center justify-between">
+                  <div class="flex items-center space-x-3">
+                    <span class="w-6 h-6 rounded bg-brand text-white flex items-center justify-center font-mono font-semibold">B</span>
+                    <span class="text-ink font-semibold">Kanal 1, 6, dan 11</span>
+                  </div>
+                  <i class="fa-solid fa-check text-brand text-xs"></i>
+                </div>
+                <div class="p-3 rounded-lg border border-line bg-paper flex items-center space-x-3 text-muted">
+                  <span class="w-6 h-6 rounded bg-surface border border-line flex items-center justify-center font-mono font-semibold text-ink">C</span>
+                  <span>Kanal 2, 4, dan 6</span>
+                </div>
+              </div>
+
+              <!-- RAG Hint Preview Box -->
+              <div class="p-3.5 rounded-lg bg-paper border border-line space-y-1.5">
+                <div class="flex items-center justify-between text-[11px] font-mono">
+                  <span class="font-semibold text-brand-dark">
+                    <i class="fa-regular fa-lightbulb mr-1"></i>Petunjuk Level 1
+                  </span>
+                  <span class="text-muted">Memandu cara berpikir</span>
+                </div>
+                <p class="text-xs text-muted leading-relaxed">
+                  Ingat jarak antar kanal di 2.4 GHz: pilih nomor kanal yang berselisih minimal 5 angka agar frekuensinya tidak saling tumpang-tindih.
+                </p>
+              </div>
+
+              <!-- KT Mastery Progress Bar -->
+              <div class="pt-2 border-t border-line flex items-center justify-between text-xs">
+                <span class="text-muted">Penguasaan materimu naik:</span>
+                <span class="font-mono font-semibold text-brand-dark">48% &rarr; 63%</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: CORE SELLING POINTS OF KT-RAG -->
+    <section id="cara-kerja" class="py-14 sm:py-16 border-b border-line bg-surface">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-muted block mb-1">Fungsi Utama</span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-ink">
+            Bagaimana sistem ini membantumu paham lebih cepat?
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Feature 1: Knowledge Tracing (KT) -->
+          <div class="p-6 rounded-xl border border-line bg-paper space-y-3">
+            <div class="w-8 h-8 rounded-lg bg-ink text-white font-mono text-xs font-bold flex items-center justify-center">
+              01
+            </div>
+            <h3 class="text-base font-bold text-ink">
+              Soal Otomatis Mengikuti Pemahamanmu (Knowledge Tracing)
+            </h3>
+            <p class="text-xs sm:text-sm text-muted leading-relaxed">
+              Setiap kali kamu menjawab, sistem menghitung penguasaanmu pada 12 materi jaringan. Jika kamu sudah paham dasar Wi-Fi, sistem langsung memberikan soal studi kasus. Jika belum, kamu diberi soal penguatan dasar lebih dulu.
+            </p>
+          </div>
+
+          <!-- Feature 2: RAG Socratic Hints -->
+          <div class="p-6 rounded-xl border border-line bg-paper space-y-3">
+            <div class="w-8 h-8 rounded-lg bg-brand text-white font-mono text-xs font-bold flex items-center justify-center">
+              02
+            </div>
+            <h3 class="text-base font-bold text-ink">
+              Petunjuk Bertahap Saat Kamu Buntu (Bantuan RAG)
+            </h3>
+            <p class="text-xs sm:text-sm text-muted leading-relaxed">
+              Lupa rumus subnet atau penyebab gagal <em>ping</em>? Tekan tombol petunjuk untuk membuka 3 tingkat bantuan singkat dari materi kelas. Kamu dibimbing menemukan solusi sendiri tanpa langsung diberi tahu jawabannya.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: 3-STEP STUDENT FLOW IN LAB -->
+    <section class="py-14 sm:py-16">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <span class="text-xs font-mono uppercase tracking-wider text-muted block mb-1">Alur di Laboratorium</span>
+            <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-ink">
+              Tiga langkah selama jam praktik.
+            </h2>
+          </div>
+          <a href="/student/" class="text-xs font-semibold text-brand-dark hover:underline inline-flex items-center space-x-1">
+            <span>Langsung mulai latihan</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div class="bg-surface p-5 rounded-xl border border-line space-y-2">
+            <span class="font-mono text-xs font-semibold text-muted">Langkah 1</span>
+            <h3 class="text-sm font-bold text-ink">6 Soal Pemetaan Awal</h3>
+            <p class="text-xs text-muted leading-relaxed">
+              Jawab 6 soal singkat di awal sesi agar sistem tahu materi mana yang sudah kamu kuasai.
+            </p>
+          </div>
+
+          <div class="bg-surface p-5 rounded-xl border border-line space-y-2">
+            <span class="font-mono text-xs font-semibold text-muted">Langkah 2</span>
+            <h3 class="text-sm font-bold text-ink">14 Soal Latihan &amp; Petunjuk</h3>
+            <p class="text-xs text-muted leading-relaxed">
+              Kerjakan soal yang menyesuaikan levelmu lewat HP. Gunakan petunjuk atau panggil guru jika butuh diskusi.
+            </p>
+          </div>
+
+          <div class="bg-surface p-5 rounded-xl border border-line space-y-2">
+            <span class="font-mono text-xs font-semibold text-muted">Langkah 3</span>
+            <h3 class="text-sm font-bold text-ink">Giliran Praktik PC 1:1</h3>
+            <p class="text-xs text-muted leading-relaxed">
+              Setelah selesai di meja kuis, bertukar tempat ke komputer lab untuk praktik mandiri 1 siswa 1 PC.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MINIMAL FOOTER -->
+  <footer class="border-t border-line py-6 bg-surface text-xs text-muted">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-4">
+      <span>LogiTrace &bull; SMK Negeri 4 Bandung</span>
+      <div class="flex items-center space-x-4 font-mono text-[11px]">
+        <a href="/student/" class="hover:text-ink">Latihan Siswa</a>
+        <a href="/teacher/" class="hover:text-ink">Panel Guru</a>
+        <a href="/documentation/" class="hover:text-ink">Dokumentasi</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

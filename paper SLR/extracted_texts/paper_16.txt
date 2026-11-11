@@ -1,0 +1,1411 @@
+--- PAGE 1 ---
+1390 IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES, VOL. 17, 2024
+Modeling Student Performance Using Feature
+Crosses Information for Knowledge Tracing
+Lixiang Xu , Member , IEEE, Zhanlong Wang , Suojuan Zhang ,X i nY u a n , Member , IEEE,
+Minjuan Wang , Member , IEEE, and Enhong Chen , Fellow, IEEE
+Abstract—Knowledge tracing (KT) is an intelligent educational
+technology used to model students’ learning progress and mas-
+tery in adaptive learning environments for personalized educa-
+tion. Despite utilizing deep learning models in KT, current ap-
+proaches often oversimplify students’ exercise records into knowl-
+edge sequences, which fail to explore the rich information within
+individual questions. In addition, existing KT models tend to
+neglect the complex, higher order relationships between ques-
+tions and latent concepts. Therefore, we introduce a novel model
+called feature crosses information-based KT (FCIKT) to explore
+the intricate interplay between questions, latent concepts, and
+question difﬁculties. FCIKT utilizes a fusion module to perform
+feature crosses operations on questions, integrating information
+from our constructed multirelational heterogeneous graph using
+graph convolutional networks. We deployed a multihead attention
+mechanism, which enriches the static embedding representations
+of questions and concepts with dynamic semantic information to
+simulate real-world scenarios of problem-solving. We also used
+gated recurrent units to dynamically capture and update the stu-
+dents’ knowledge state for ﬁnal prediction. Extensive experiments
+demonstrated the validity and interpretability of our proposed
+model.
+Index Terms —Graph neural network (GNN), intelligent
+education, knowledge tracing (KT), recurrent neural network
+(RNN).
+Manuscript received 25 December 2023; revised 8 March 2024; accepted
+16 March 2024. Date of publication 22 March 2024; date of current version
+14 August 2024. This work was supported in part by the National Natural
+Science Foundation of China under Grant 62176085, Grant 62172458, and
+Grant 62207031, and in part by the Intelligent Computing and Information
+Processing Key Laboratory of the Ministry of Education under Grant 2021A001.
+(Corresponding author: Enhong Chen.)
+Lixiang Xu is with the School of Artiﬁcial Intelligence and Big Data,
+Hefei University, Hefei 230601, China, and also with the School of Artiﬁcial
+Intelligence, Hefei Institute of Technology, Hefei 238076, China (e-mail: xlxi-
+ang@ustc.edu.cn).
+Zhanlong Wang is with the School of Artiﬁcial Intelligence and Big Data,
+Hefei University, Hefei 230601, China (e-mail: wamreus@163.com).
+Suojuan Zhang is with the School of Computer Science and Technology,
+University of Science and Technology of China, Hefei 230026, China (e-mail:
+sjzsj@ustc.edu.cn).
+Xin Y uan is with the School of Electrical and Mechanical Engi-
+neering, University of Adelaide, Adelaide, SA 5005, Australia (e-mail:
+xin.yuan@adelaide.edu.au).
+Minjuan Wang is with the Education University of Hong Kong, Hong Kong,
+SAR 999077, China, and also with San Diego State University, San Diego, CA
+92182 USA (e-mail: mwang@sdsu.edu).
+Enhong Chen is with the Anhui Province Key Laboratory of Big Data
+Analysis and Application, School of Data Science and School of Computer
+Science and Technology, University of Science and Technology of China, Hefei
+230026, China, and also with the State Key Laboratory of Cognitive Intelligence,
+University of Science and Technology of China, Hefei 230026, China (e-mail:
+cheneh@ustc.edu.cn).
+Digital Object Identiﬁer 10.1109/TLT.2024.3381045
+NOMENCLA TURE
+Description of Some Important Notations
+Notations Descriptions.
+χ Student’s history response sequence of question.
+qi,cj ith question and the jth latent concept.
+ed
+i Question difﬁculty corresponding to qi.
+Q, C Set of questions and the set of latent concepts.
+eq
+i,ec
+j Embedding of the ith question and jth latent con-
+cept.
+yt Response of the student corresponding to qt.
+rt Probability of correctly response the question at time
+step t.
+MRHG Multirelational heterogeneous graph.
+ht Knowledge state of student.
+I. I NTRODUCTION
+E
+DUCA TORS employ teaching to effectively introduce and
+impart knowledge of novel concepts, theories, and prac-
+tices to students, facilitating comprehensive understanding and
+mastery. The central aspect of teaching activities is the ability
+of educators to monitor and assess students’ real-time progress.
+This monitoring is crucial allowing for timely adjustments to
+teaching strategies, pacing, and materials, thereby optimizing
+the growth of knowledge and the enhancement of competence
+in students [1]. Traditionally, educators primarily relied on di-
+rect classroom interaction and conventional teaching methods.
+However, advancements in artiﬁcial intelligence technology, the
+proliferation of massive open online courses [2], and the rapid
+development of smart education have signiﬁcantly transformed
+traditional educational approaches[3]. For instance, the COVID-
+19 pandemic shifted in this landscape, in which conventional
+ofﬂine education rapidly transitioned to online platforms. This
+shift forced educational institutions, businesses, and individuals
+to embrace online education and expedite the digital transfor-
+mation of the education sector [4]. Consequently, the utilization
+of educational data mining has become increasingly prominent
+in enhancing education systems. These techniques monitor stu-
+dents’ knowledge mastery by analyzing data from their previous
+exercise records, enabling more effective assessment of learning
+outcomes and personalized learning plans [5], [6]. This process
+is commonly referred to as knowledge tracing (KT) [7].
+KT was ﬁrst introduced in the domain of cognitive mod-
+eling and intelligent tutoring by Corbett and Anderson [8].
+Subsequently, this ﬁeld has evolved, producing a diverse range
+1939-1382 © 2024 IEEE. Personal use is permitted, but republication/redistribution requires IEEE permission.
+See https://www.ieee.org/publications/rights/index.html for more information.
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 2 ---
+XU et al.: MODELING STUDENT PERFORMANCE USING FEA TURE CROSSES INFORMA TION FOR KNOWLEDGE TRACING 1391
+Fig. 1. Example illustrating the beneﬁts of cross-features for KT.
+of methods and models, and focused on assessing students’
+comprehension of knowledge concepts (KCs) [9]. The earliest
+model, Bayesian KT (BKT) [10], which often relied on sim-
+pliﬁcations of the model’s assumptions, such as assuming a
+single concept for each question. Recently, the advent of deep
+learning has signiﬁcantly enhanced in KT research, leveraging
+its remarkable capability in feature extraction, feature represen-
+tation, and the exploration of intricate structures. Piech et al.[11]
+pioneered this line of research and revealed the power of deep
+learning techniques for KT. They introduced the deep KT (DKT)
+model, which employs recurrent neural networks (RNNs) [12]
+to capture temporal knowledge states within the sequence of
+student–question–answer interactions. Long et al. [13] intro-
+duced collaborative KT (CoKT), a novel model that incorporates
+both intrastudent and interstudent information for KT tasks.
+The interstudent information is gathered by retrieving students
+who share similar question answering experiences using a se-
+quence retrieval mechanism. Subsequently, various variants of
+the KT model have emerged [14], considering diverse proper-
+ties inherent in the learning sequences, leading to promising
+outcomes.
+While the RNN-based model demonstrates proﬁciency in
+handling sequential data, it predominantly emphasizes the stu-
+dents’ latest exercise records, disregarding their performance on
+earlier questions. In accordance with pedagogical conventions,
+it is recognized that students may initially provide an incorrect
+response to a question. However, with subsequent repetitions of
+the same question, they acquire the ability to respond correctly,
+indicating an improved level of knowledge mastery compared
+with their initial correct response. As it is plausible to expect
+that students will retain their prior experience when attempting
+the question a second time. Graph-based KT (GKT) emerged.
+Nakagawa et al. [15] proposed GKT to potentially structure a
+question as a graph, where the requirements for mastering the
+question are divided into KCs, called nodes of the graph, and
+these KCs have certain dependencies, called edges. It is widely
+recognized that integrating a priori knowledge concerning the
+graph-based structure of data [16] into a model enhances both
+its performance and interpretability. Therefore, the integration of
+graph-structured data that amalgamate questions and concepts
+has the potential to enhance the effectiveness of KT models.
+Despite the success of previous work, there are still some
+important limitations. First, GKT does not speciﬁcally analyze
+what types of graphs are more suitable as inputs to the model.
+The similarity calculation employed by the retrieval mechanism
+in CoKT is relatively simplistic, focusing solely on the students’
+historical exercise sequences. This approach may overlook es-
+sential contextual information, such as question difﬁculty and in-
+teractions between different concepts. In addition, certain GKT
+methods in existence lack comprehensive consideration of the
+relationships between questions and KCs. When students engage
+in real-world problem solving, it becomes evident that questions
+and KCs exhibit a stronger “and” relationship rather than an “or”
+relationship. Higher order feature crosses can precisely realize
+the extraction of “and” relationship information between con-
+cepts. As illustrated in Fig.1, we analyzed the exercise sequences
+of three students. Bill successfully completed three questions
+related to multiplication and division but encountered an error on
+a trigonometry question. It is reasonable to conclude that the like-
+lihood of Bill correctly answering Q5 is low, given the absence
+of assurance regarding his mastery of trigonometry. In contrast,
+Tom demonstrated the ability to answer questions pertaining
+to multiplication, division, and trigonometry correctly, despite
+initially getting Q9 (a division question) wrong. Thus, we can
+hypothesize that Tom is more likely to provide a correct response
+to Q17. Andy, on the other hand, made errors in questions
+related to multiplication, division, and trigonometry, indicating
+potential challenges in mastering all the three concepts. This
+observation suggests that students who lack proﬁciency in mul-
+tiplication and division typically struggle with trigonometry as
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 3 ---
+1392 IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES, VOL. 17, 2024
+well. Comparing students proﬁcient in both multiplication and
+division, as well as trigonometry with those proﬁcient in only
+one of these areas, the former combination more effectively
+underscores the importance of feature crosses[17]. To the best of
+the authors’ knowledge, trigonometry problems invariably entail
+mathematical operations, such as multiplication and division.
+The application of the feature crosses operation extracts more
+comprehensive features from both questions and KCs. Models
+lacking higher order feature crosses struggle to uncover the intri-
+cate relationships between questions and underlying educational
+concepts in data, thus hindering the ability to provide precise
+prediction.
+In light of the preceding considerations, in this article, we
+proposed a method called feature crosses information-based KT
+(FCIKT), which introduces higher order crosses information
+between the questions and the latent concepts to the previous
+GKT. To be speciﬁc, we employ graph convolutional networks
+(GCNs) [18], [19] to derive embedding representations of ques-
+tions and latent concepts from multirelational heterogeneous
+graphs (MRHGs) that encompass students, questions, and latent
+concepts. Subsequently, we combine the difﬁculty information
+of questions with the previously extracted embeddings to per-
+form feature crosses operation, yielding richer higher order
+information. In addition, we employ multiheads attention [20]
+with a forgetting mechanism to enhance the modeling of ques-
+tions and latent concepts. We integrate the higher order crosses
+information with the gated recurrent units (GRUs) as a clue to
+trace the students’ knowledge state and assess their likelihood
+of answering the new question correctly. We benchmark our
+method against seven existing KT models on three publicly
+available datasets. The experimental results demonstrate the
+efﬁcacy and superiority of our proposed method in various
+aspects.
+In a nutshell, the main contributions of this article are sum-
+marized as follows.
+1) We introduce an innovative method to enhance the perfor-
+mance of modeling students’ knowledge states by incor-
+porating higher order feature crosses information into KT.
+This approach also facilitates a more robust exploration of
+correlations between questions and latent concepts.
+2) We designed an effective mechanism that utilizes MRHG
+and multihead attention based on forgetting to simu-
+late more realistic scenarios of students responding to
+questions. This mechanism offers a more efﬁcient GKT
+approach.
+3) Comprehensive experiments conducted on three real-
+world datasets show that FCIKT outperforms the state-
+of-the-art models. Additional investigations afﬁrm the
+efﬁciency of our approach in enhancing the performance
+of KT models.
+II. R ELA TEDWORK
+A. Knowledge Tracing
+KT, a widely studied area in educational technology, fo-
+cuses on modeling and understanding the process of knowledge
+acquisition by learners. KT models typically consist of three key
+modules: the knowledge representation module, the modeling
+module, and the inference module.
+Bayesian networks were employed for modeling and predict-
+ing students’ cognitive states, termed as BKT. The model em-
+ploys the hidden Markov model (HMM) [21] to associate con-
+cepts with binary knowledge states (i.e., learned or unlearned).
+It assumes that each question corresponds to a single concept,
+rendering it incapable of addressing questions involving multiple
+concepts or representing dependencies among different con-
+cepts. DKT, which applies temporally “deep” ﬂexible long short
+term memory networks (LSTM) [22] to KT tasks. This model
+employs a multitude of artiﬁcial “neurons” to represent latent
+knowledge states and their temporal dynamics, facilitating the
+learning of a latent variable representation of student knowledge
+from the data. In response to identiﬁed limitations in the DKT
+model, Y eung and Y eung [23] highlighted two main issues: a
+reconstruction problem and the volatility of prediction results
+for the input sequence. Then, they propose an enhanced version
+of the DKT model called DKT+, achieved by increasing the cor-
+responding regularization term. Wang et al.[5] proposed a novel
+framework for dynamic cognitive diagnosis, which integrates
+educational priors from cognitive diagnosis (such as question
+attributes and interaction functions) into deep learning-based KT
+models. Liu et al. [24] proposed exercise-aware KT, exploring
+both student’s exercise records and the content of exercises for
+student performance prediction.
+The DKT-based study exhibits superior performance when
+compared with traditional probabilistic models, yet it also high-
+lights signiﬁcant shortcomings, particularly in terms of inter-
+pretability. This led to the birth of the most iconic dynamic
+key–value memory networks (DKVMN) [25] for KT. DKVMN
+introduces an external memory module [26] to store the knowl-
+edge and update the student’s knowledge mastery accordingly.
+It also provides speciﬁc information about students’ knowledge
+states across various KCs. Sun et al. [7] proposed DKVMN
+with rich features for KT. This approach incorporates students’
+behavioral features and dynamic learning abilities into the deep
+memory network framework, aiming to strike a balance between
+personalized learning capacities and behavioral characteristics.
+Building upon the transformer architecture [27], numerous
+studies have endeavored to integrate an attention mechanism
+into the KT model. The central idea revolves around learning
+the attention weights of questions during a series of interactions,
+enabling the prediction of the probability of correctly answering
+the subsequent question, with due consideration to the questions’
+relative importance. The pioneering work in this area is self-
+attentive KT [28], which introduced an attention mechanism
+into the KT models. It employs the scaled dot-product attention
+mechanism originally proposed by V aswani et al.[27] to acquire
+attention matrices through multiple attention heads.
+All the aforementioned approaches substantially enhance the
+performance of the KT task. These methods all treat the students’
+exercise records as sequential data to be fed into the model. To
+the best of the authors’ knowledge, various relational structures
+frequently emerge in daily exercise records, including similari-
+ties between KCs, similarities between questions, containment
+relationships between questions and KCs, and so on. From a data
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 4 ---
+XU et al.: MODELING STUDENT PERFORMANCE USING FEA TURE CROSSES INFORMA TION FOR KNOWLEDGE TRACING 1393
+structure standpoint, a natural graph structure exists between
+these KCs and questions.
+B. Graph-Based KT
+Graph neural networks (GNNs) [29] excel in processing
+graph-structured data by effectively capturing and leveraging the
+relational dependencies between nodes to make predictions or
+perform tasks. This capability has diverse applications, spanning
+social network analysis, recommendation systems, and knowl-
+edge graphs.
+Nakagawa et al.[15] proposed GKT. This marked the pioneer-
+ing integration of GNNs, known for their robust graph-structured
+data representation capabilities, into the KT task. GKT con-
+ceptualizes the underlying graph structure of KCs as graph
+G =( V,E ), where the node V = {V1,V2,...,V n} denotes the
+set of all KCs, and the edgeE ⊆V ×V denotes the relationship
+of these KCs. Rethinking the KT task, they cast it as a time-
+series node-level classiﬁcation task, leveraging conventional
+graph learning techniques, such as message-passing GNNs for
+resolution. Recently, to further explore the information em-
+bedded in knowledge structures, Tong et al. [30] proposed
+structure-based KT, it aims to capture multiple relationships
+among knowledge structures, such as similarity and precedence
+relationships, and to model the propagation of inﬂuence among
+KCs. Xia et al. [31] proposed a novel multivariate graph KT
+(MVGKT) framework based on GNNs. MVGKT incorporates
+GCN and graph Fourier transform to capture both temporal
+dependence and interstudent correlation for predicting student
+performance.
+To enhance the extraction of valuable higher order infor-
+mation pertaining to questions and concepts, Y ang et al. [32]
+proposed graph-based interaction model for KT (GIKT), which
+constructs a question–concept bipartite graph and utilizes GCN
+to integrate question–concept correlations through embedding
+propagation. To address the challenge of sparse student data,
+Lu et al. [9] proposed concept map driven KT. This approach
+explicitly incorporates intrinsic information from instructional
+concept maps, including educational relations and topological
+information.
+C. Feature Crosses
+The concept of feature crosses initially emerged in recom-
+mender systems [33]. It is employed to integrate users’ personal
+information, behavioral data, and attributes of items to improve
+recommendation accuracy and personalization. Feature crosses,
+also known as feature combination, accomplishe a nonlinear
+transformation of the sample space by multiplying two or more
+features, enhancing the model’s nonlinear capabilities. Essen-
+tially, feature crosses involve mapping samples from the original
+space to a high-dimensional feature space through a nonlinear
+mapping function, similar to the kernel trick [34] in machine
+learning.
+In the context of temporal dynamics, an earlier classical model
+for learning feature combinations is factorization machines
+(FM) [35]. FM extracts feature combinations through the inner
+product of hidden vectors between feature pairs. It is capable of
+estimating reliable parameters for prediction even when dealing
+with highly sparse data. Factorisation-machine supported neural
+networks (FNN) [36] was derived on top of FM, which ﬁrst
+proposed an idea to enhance FM by initializing MLP [37] with
+the hidden vectors learned from the FM model.
+To capture both low-order features and high-order features,
+Guo et al. [38] proposed DeepFM. The model comprises two
+components: FM (responsible for fusing low-order features) and
+deep neural networks (DNN) (responsible for fusing high-order
+features), enhancing the accuracy of click-through-rate (CTR)
+prediction. The Wide & Deep [39] model, the core implemen-
+tation involves combining a linear model (Wide) and a deep
+neural network (Deep) to capture both memorization and gen-
+eralization, resulting in improved performance for large-scale
+recommender systems.
+III. P ROBLEM FORMULA TION
+In this section, we brieﬂy describe the relevant notations
+included in the KT task used in this article. We summarize
+them in the Nomenclature. KT task is typically formalized as
+a supervised sequence prediction problem with two primary
+components: 1) modeling a student’s knowledge state through
+his or her exercise sequence records and 2) predicting whether
+the student will answer future question correctly or incorrectly.
+Let Q = {q1,...,q n} represents the set of all distinct ques-
+tions in the dataset. Each qi ∈Q may possess an unspeciﬁed
+level of difﬁculty. The embedding of qi is represented by
+eq
+i ∈Rdq . When a student engages with the questions in Q,w e
+can observe a sequence of interactions χ= {x1,x2,...,x t−1},
+where xt =( qt,yt) consisting of a question qt and answer yt.
+Here, qt denotes the question answered by the student at time
+step t. The binary variable yt represents the student’s response
+corresponding to question qt
+yt =
+{
+1, if the student’s answer is right
+0, otherwise. (1)
+In the KT task, the questions in Q correspond to multiple
+latent concepts C = {c1,c2,...,c n}, and the corresponding
+embedding of latent concept cj is represented by ec
+j ∈Rdc .
+Therefore, a vital aspect of addressing the KT task involves
+acquiring effective representations (i.e., embeddings), as well
+as to trace the students’ knowledge state about latent concepts
+(i.e., their mastery levels).
+For the purpose of obtaining the probability of student’s
+correct response to qt, we deﬁne the following terminologies.
+Deﬁnition 3.1 (KT): Given an interaction sequence χ, which
+includes the student’s past question-answering history, the KT
+problem involves predicting the probability rt of correctly an-
+swering a new question qt at the time step t, i.e., rt =( yt =1 |
+qt,χ).
+Deﬁnition 3.2 (MRHG): Given that we are engaged in KT
+based on graph structures, heterogeneous graphs that include
+multiple relationships between students, questions, and latent
+concepts are embedded in the exercise records of students. An
+MRHG is deﬁned as ˆG = {ˆV, ˆE}, where ˆV is the set of all
+entity types (students, questions, or latent concepts). ˆE is the
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 5 ---
+1394 IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES, VOL. 17, 2024
+Fig. 2. Overall architecture of the proposed FCIKT method. The MRHG embedding module constructs an MRHG utilizing student exercise records to extrac t
+embeddings for both questions and concepts. The feature crosses fusion module conducts feature crosses for questions, concepts, and difﬁculty embe ddings. The
+knowledge state evolution module is employed to acquire and update students’ knowledge state. Ultimately, all the gathered information is fused and employed
+for prediction.
+set of multiple relationships that may exist between entities,
+and ˆE = {ℓa,ℓc}. ℓa denotes the answered relationship and ℓc
+denotes the contained relationship (i.e., a student has answered
+a question, and a question contains some latent concepts).
+Deﬁnition 3.3 (Knowledge State): As students answer ques-
+tions, their knowledge states are evolving. The students’ knowl-
+edge state represents their mastery level of concepts. The knowl-
+edge state at step t is denoted by a dh dimensional vector
+ht ∈Rdh .
+Deﬁnition 3.4 (Question Difﬁculty): The difﬁculty ed
+i corre-
+sponding to questionqi is deﬁned as the ratio of correct response,
+computed from the training set. All question difﬁculties are
+formulated as a vector ˆd =[ ed
+i ] ∈R|Q|.
+IV . PROPOSED METHOD
+Previous GKT models have primarily focused on capturing
+higher order interactions between questions and latent concepts,
+neglecting to incorporate question difﬁculty information within
+the exercise sequences. In addition, these models have not ef-
+fectively captured high-quality embeddings between question
+features and latent concept features. To address this gap, this
+section provides a detailed introduction to our proposed model,
+termed FCIKT. The FCIKT model incorporates the feature
+crosses higher order information between questions and latent
+concepts into the KT task, augmenting the acquisition of stu-
+dents’ knowledge states with question difﬁculty information.
+An overview of the framework is presented in Fig. 2.T h e
+main modules are MRHG embedding module, feature crosses
+fusion module, knowledge state evolution module, and predic-
+tion module. Importantly, the process of acquiring the student’s
+knowledge state is trained in conjunction with the prediction
+module, where question and concept embeddings dynamically
+originate from the MRHG module. The details of FCIKT are
+described in the following sections.
+A. MRHG Embedding Module
+Similar to previous approaches, FCIKT predicts student re-
+sponses based on knowledge states and question representations.
+Formally, the raw data features need to be transformed into de-
+sired embedded information through the embedding layer. Our
+FCIKT model utilizes embeddings to represent questions, latent
+concepts, and student responses for each question in the exercise
+records. These embeddings are denoted as: eq ∈R|Q|×d, ec ∈
+R|C|×d, andey ∈R2×d, where|Q| and|C| represent the number
+of questions and latent concepts, respectively, andd denotes the
+embedding size. Departing from traditional single-relationship
+graphs, we incorporate multiple relationships among students
+and questions, questions and concepts, and concepts themselves,
+forming an MRHG. Higher order interaction information be-
+tween question and concept nodes is extracted by aggregating
+node features using GCN’s multilayer message passing mecha-
+nism.
+We preprocess the original dataset accordingly to construct
+an MRHG, as shown in Deﬁnition 3.2. On top of that, we
+establish three metapath relationships as follows. Questions are
+considered neighbors if they are either answered by the same
+student (Q-S-Q) or cover the same latent concept ( Q-C-Q).
+Likewise, latent concepts are neighbors if they are implied by
+the question that is the source of that latent concept ( C-Q-C).
+These three metapath relationships guide the utilization of the
+constructed MRHG data as input, enabling the GCN model to
+generate node embeddings within the MRHG. The embedding
+layer in this module exclusively emphasizes the state infor-
+mation of questions and latent concepts, treating students as
+the bridge connecting questions. Thus, the question–question
+relationship matrix and question–concept relationship matrix
+play essential roles in the message passing process of GCN.
+Following the GCN aggregation, we obtain the embeddings
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 6 ---
+XU et al.: MODELING STUDENT PERFORMANCE USING FEA TURE CROSSES INFORMA TION FOR KNOWLEDGE TRACING 1395
+for questions and latent concepts that incorporate higher order
+information features: eq,ec.
+GCN is exquisitely designed to extract features from graph
+data by combining and stacking multiple graph convolutional
+layers to encode higher order neighbor information. Equation(2)
+depicts the process by which GCN layers aggregate representa-
+tions from neighboring nodes and update the representations of
+target nodes. Γl
+i denotes the representation of node i in MRHG
+at the lth layer and Ni denotes the set of neighbors of node i.
+For example, when considering a question as the target node,
+other questions and concepts are potential source nodes. Γl
+i can
+represent either the question embedding eq
+i or the latent concept
+embedding ec
+j
+Γ(l)
+i = σ
+⎛
+⎝ 1
+| Ni |
+∑
+j∈Ni
+W(l)Γ(l−1)
+j +b(l)
+⎞
+⎠. (2)
+W(l) and b(l) are the aggregation weights and biases that can
+be learned at the lth GCN layer, respectively.σis the nonlinear
+aggregation function. The rectiﬁed linear unit (ReLU) [40] acti-
+vation function is chosen due to its ability to compute activation
+values using only a threshold, thus enhancing computational
+efﬁciency. Following the utilization of the MRHG embedding
+module, we are able to obtain embeddings for both questions
+and latent concepts, separately.
+B. Feature Crosses Fusion Module
+The MRHG lacks feature on question difﬁculty, which pre-
+vents the full extraction of higher order information from ex-
+ercise records. Vie and Kashima [41] employ FM to encode
+side information and investigate feature crosses in the student
+modeling task. To ensure the richness of questions and latent
+concepts features aggregated by GCN, we draw inspiration
+from the CTR prediction task in recommendation scenarios
+and propose using the “product” operation for examining local
+dependencies among features from various domains, rather than
+the “sum” operation. We individually adopt the product layer of
+the product-based neural networks[42] to perform the “product”
+operation on the output of the MRHG module to obtain more
+comprehensive cross-feature information.
+Speciﬁcally, we acquire the question difﬁculty feature ˆd from
+the primary dataset. The embedding dimension matches that of
+eq and ec. The outputs of the MRHG module, encompassing
+the question embedding eq , latent concept embedding ec, and
+the question difﬁculty features are aggregated to produce lin-
+ear information U and quadratic information M . The speciﬁc
+formulas are presented as follows:
+U =( u1,u2,u3)
+Δ
+=( eq,ec, ˆd) (3)
+M =[ mij] ∈R3×3 (4)
+wheremij = z(ui,uj) denotes the pairwise feature interaction.
+We apply the fundamental idea of kernel function [16] to non-
+linearly map the vectoru into a high-dimensional feature space,
+denoted as the Hilbert space, using the mapping function z.T h e
+kernel function requires to satisfy positive deﬁniteness, with
+its expression formulated as the inner product of two vectors
+ui and uj in their eigenspaces z(ui) and z(uj), speciﬁcally
+z(ui,uj)= <z (ui),z(uj) >. Then, we can quantify the inter-
+action strength between all pairs of features in a principled way
+within our framework.
+We now turn to the product layer, which aggregates the two
+information matrices into single vectors lu and lm. The layer
+applies the following transformations:
+l(k)
+u = W(k)
+u ⊙U =
+3∑
+i=1
+d∑
+j=1
+(ω(k)
+u )ijuij (5)
+l(k)
+m = W(k)
+m ⊙M =
+3∑
+i=1
+3∑
+j=1
+(ω(k)
+m )ijmij (6)
+where k ∈[1,... ˜d]. ⊙ denotes elementwise multiplication of
+two matrices, then the result of this multiplication is summed up
+to obtain a scalar. ˜d is the dimension of the transformation of lu
+andlm. W(k)
+u andW(k)
+m are the weights of the product layer.
+Based on the deﬁnition of M and the commutative prop-
+erty in vector inner product, both M and W(k)
+m are expected
+to be symmetric. Therefore, employing matrix factorization
+can mitigate the time complexity. We introduce assumptions
+W(k)
+m = φ(k)φ(k)T
+andφ(k) ∈R3 to facilitate the simpliﬁcation
+of the formula l(k)
+m as follows:
+W(k)
+m ⊙M =
+3∑
+i=1
+3∑
+j=1
+φ(k)
+i φ(k)
+j <z (ui),z(uj) >. (7)
+We can, then, compute the question embedding that incorporates
+the difﬁculty information, which can be expressed as
+δ=R e L U (lu +lm +ε) (8)
+where lu, lm, and bias vector b ∈R˜d, and lu =( l(1)
+u ,l(2)
+u ,...,
+l(˜d)
+u ) andlm =( l(1)
+m ,l(2)
+m ,...,l (˜d)
+m ).
+C. Knowledge State Evolution Module
+This module seeks to model the entirety of students’ exercise
+process, taking into account the historical progression of student
+performance. It aims to uncover the invisible representation of a
+student’s knowledge state at various stages of question solving.
+FCIKT assumes that student’s knowledge state is inﬂuenced by
+both the questions and their corresponding answers.
+Along this line, we utilize an RNN with the students’ exer-
+cise process χ= {(q1,y1),(q2,y2),..., (qt−1,yt−1)} as input.
+Speciﬁcally, at each time step, the network receives a combinato-
+rial encoding containing both the question and its corresponding
+answer embedding. Correct (i.e., yt =1 ) or incorrect answers
+(i.e.,yt =0 ) to the same question actually reﬂect different states
+of knowledge acquisition. Consequently, we must identify an ap-
+propriate method to differentiate these situations for individual
+students.
+Methodologywise, we ﬁrst concatenate and map the previ-
+ously learned question embedding δand answer embedding
+ey into d-dimensional exercise representations via a nonlinear
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 7 ---
+1396 IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES, VOL. 17, 2024
+transformation function
+eε
+t =R e L U (W(∗)(δ⊕eyt)+ b(∗)) (9)
+where ⊕ is the operation of aggregating two vectors, i.e., an
+elementwise addition. It can reﬂect accurate and inaccurate
+responses pertaining to a particular question for an individual
+student’s exercise sessions. This process naturally models the
+student’s learning behavior to obtain his or her knowledge state.
+With the student’s exercise representation, the hidden student
+state (i.e., knowledge state) ht ∈Rdh at time step t is updated
+based on the current input eε
+t and the previous state ht−1 in the
+recursive formula. The process is formulated as
+ht = RNN(eε
+t,ht−1;θh). (10)
+Numerous variants of RNNs exist in the academic litera-
+ture [24]. In this article, considering the relatively modest size of
+the processed student’s exercise datasets and aiming to improve
+computational efﬁciency, we have implemented (10) above
+by the sophisticated GRU form, i.e., ht = GRU(eε
+t,ht−1;θh),
+which could preserve more long-term dependency in the
+sequence
+μt = σ(Wμ[eε
+t,ht−1]+ bμ) (11)
+λt = σ(Wλ [eε
+t,ht−1]+ bλ) (12)
+ηt =t a n h (Wη[eε
+t, λt ⊙ht−1]+ bη) (13)
+ht =( 1−μt)⊙ht−1 +μt ⊙ηt (14)
+whereWμ,Wλ, andWηare transformation matrices, andbμ,bλ,
+and bηare bias vectors to be learned. ⊙ denotes the Hadamard
+product,σ(·) and tanh(·) [43] denote the sigmoid and hyperbolic
+tangent activation functions, respectively. ht−1 summarizes the
+student’s past history of questions solving. eε
+t and ht−1 are
+concatenated and transformed into an update gate uk and a
+reset gate λk, respectively. The former (11) decides the extent
+to which past information is retained and combined with the
+current input at a speciﬁc time step. While the latter(12) controls
+how much past information needs to be forgotten. The current
+memory content ηt (13) represents the new information to be
+added to ht, and is computed based on the reset gate and the
+connection between the previous hidden state after the transition
+and the current input. The result of the computation generates
+the candidate activation through the tanh(·) activation function.
+Finally,ht is computed by combining the previous hidden state
+ht−1 with the candidate activation ηt (14). μt is viewed as a
+balancing factor in this process.
+D. Multiheads Attention Mechanism With F orgetting
+Self-attention mechanism is a technique employed to model
+relationships among elements within sequential data, enabling
+the effective handling of long-term dependencies and the acqui-
+sition of comprehensive global information. Although we exe-
+cuted feature crosses operation on the question, latent concept
+and difﬁculty embeddings to enhance the richness of features in
+MRHG. However, this fundamentally represents an embedding
+of the static relationship between questions and latent concepts.
+Inspired by transformer model, we are able to better model
+Fig. 3. Example illustrating the beneﬁts of multiheads attention mechanism
+with forgetting.
+questions and latent concepts by stacking multiple self-attention
+layers to learn dynamic semantic information in students’ exer-
+cise and response behaviors. To highlight the importance of the
+multiheads attention forgetting mechanism in simulating real-
+world student questioning, we examine the learning scenario, as
+illustrated in Fig. 3.
+The student received a series of questions selected from the
+set {q1,q2,q3} and was tasked with providing answers. These
+questions encompass various KCs {c1,c2,c3}, with the stu-
+dent’s mastery level of each concept continually evolving (i.e.,
+knowledge state). It is widely recognized that students’ learning
+behaviors exhibit dynamic changes, and the multiheads attention
+mechanism facilitates access to dynamic semantic information
+in the historical sequence. At the same time, students’ forgetting
+behavior may result in a decline in their mastery level of KCs.
+Therefore, our approach integrates a forgetting function into the
+multiheads attention mechanism to simulate a realistic scenario
+of question answering.
+We designed the global answered questions of the student
+R = {eq
+i|i ∈[1,2,...,t −1]} throughout the exercise records.
+The student’s answer state is obtained through a self-attention
+mechanism. This process is formulated as
+P = Softmax
+(
+(RWQ)(RWK)
+T
+√
+dk
+)
+(RWV ) (15)
+where WQ,W K, andWV ∈Rd×d are projection matrices for
+query, key, and value space, respectively.R∈ R2d×d, and
+√
+dk
+is the scaling factor. Scaling by dk serves the purpose of pre-
+venting excessively large dot products. An excessively large dot
+product results in small gradients through the Softmax function.
+In pursuit of enhanced support for parallel calculation while
+learning various aspects of attention in different subspaces, we
+calculate the attention weights for H (set to 5) heads as follows:
+Multi−Head(WQ,W K,W V )
+= Concat(head1,..., headH)WO
+headi = P(WQ
+i ,W K
+i ,W V
+i ),1 ≤i ≤H (16)
+where the projection is a parameter matrix Wo ∈Rdk×Hd .
+Simultaneously, it is imperative to consider that students’ actual
+question solving process may lead to a deterioration of their
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 8 ---
+XU et al.: MODELING STUDENT PERFORMANCE USING FEA TURE CROSSES INFORMA TION FOR KNOWLEDGE TRACING 1397
+knowledge state over time. In this regard, we introduce a for-
+getting mechanism, such as [44], which can be formulated as
+follows:
+F =
+{
+gi(ξ1 × exp−ξ2Δτi) | i ∈[1,2,...,t −1]
+}
+(17)
+wheregi ∈P , and Δτi denotes the time-step intervals between
+theith time-step and the initial moment.gi is the vector obtained
+by (15) based on the aggregation of the elements insideR at each
+time-step.
+E. Student Performance Prediction Module
+For the KT task, the goal we are aiming for is response
+prediction. In this module, in contrast to previous KT methods
+that primarily rely on interactions between student knowledge
+statesht and exercise representations ˆq, we consider the follow-
+ing interactions: 1) mastery of the target question <h t,eq
+t >
+and the related latent concept <h t,ec
+j > and 2) the impact of
+the student’s experience in answering the exercise record on
+the target question is deﬁned as<e ε
+i,eq
+t >, and the impact of the
+experience of the associated latent concept on the target question
+is deﬁned as <e ε
+i,ec
+j >, where answered question embeddings
+are eq
+t ∈Ψt, latent concepts embedding are ec
+j ∈Φt, and Φt
+denotes neighbor latent concept embeddings that question qt
+has already aggregated. These interactions undergo processing
+within an attention network to determine their individual weights
+and the sum of these weights is computed for prediction
+Θi,j = Softmaxi,j(WT[∂i,∂j]+ b) (18)
+rt =
+∑
+∂i∈Ψt∪{ht}
+∑
+∂j∈Φt∪{ec
+j}
+Θi,jf(∂i,∂j) (19)
+wherert is the probability that the learner will be able to answer
+the next question correctly. The function f is deployed using
+the inner product. Similar to the selection of neighbors in the
+MRHG, we set a ﬁxed number of Ψt and Φt by sampling from
+both sets.
+The ﬁnal objective function is to minimize the negative log-
+likelihood of predicted rt and true labels yt. Speciﬁcally, the
+cross-entropy loss function is used to backpropagate for the
+gradient, which can be formulated as
+L = −
+t∑
+i=1
+(yi logri +(1 −yi)log(1 −ri)). (20)
+V. E XPERIMENTS
+In this section, we ﬁrst introduce the datasets. Then, perfor-
+mance of FCIKT is compared with several baselines. Following
+that, we conduct the corresponding ablation study. At the same
+time, we perform the sensitivity analysis on relevant hyperpa-
+rameters of the model. Finally, we show the interpretability of
+FCIKT by a case study and the visualizations of question nodes
+embeddings on latent concepts.
+TABLE I
+STA TISTICS OF THE EDUCA TIONALDA TASETS
+A. Overview of Datasets
+We evaluate performance of FCIKT and several baseline KT
+models on predicting students’ response using three datasets.
+Detailed statistics for these datasets are given in Table I.
+ASSIST 09 was collected from the ASSISTments online edu-
+cation platform1 during the 2009–2010 academic year. Recog-
+nizing that the original dataset’s reliability has been questioned
+in [25], we favor the updated “skill-builder” version, 2 which
+resolves data modeling issues and eliminates duplicated records.
+As a result, this dataset contains 3852 students, 123 latent
+concepts, and 17 737 questions.
+ASSIST 12 3 is the most expansive version of the ASSIST-
+ments datasets consisting of data collected for one year (from
+September 2012 to October 2013). In this dataset, each question
+is associated with a single latent concept, but a latent concept
+is still related to multiple questions. We performed the same
+data processing as in A TTIST 09. The dataset contains 27 485
+students, 53 065 questions, and 265 latent concepts.
+EdNet4 was compiled by Choi et al. [45], consisted of a
+substantial dataset. To make data manageable, we randomly
+selected 5000 students that contain 189 latent concepts and
+12 161 questions.
+It is essential to highlight that, for each dataset, our exper-
+iments focused on sequences with a maximum length of 3,
+as shorter sequences lack meaningful information. The student
+exercise sequences of each dataset were split into training and
+test sets at an 8:2 ratio. Model performance was evaluated using
+the area under the curve (AUC)-receiver operating characteristic
+(ROC) curve, a standard binary classiﬁcation metric. The AUC
+quantiﬁes how accurately a KT model distinguishes correct
+versus incorrect answers [4].
+B. Baselines
+To assess the performance of FCIKT, we used seven current
+representative KT models as benchmarks for comparison, as
+detailed below.
+Traditional models: These methods predict students’ re-
+sponses considering the factors that inﬂuence learning.
+1[Online]. Available: https://www.assistments.org/
+2[Online]. Available: https://sites.google.com/site/assistmentsdata/home/
+assistment-2009-2010-data
+3[Online]. Available: https://sites.google.com/site/assistmentsdata/home/
+2012-13-school-data-with-affect
+4[Online]. Available: https://github.com/riiid/ednet
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 9 ---
+1398 IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES, VOL. 17, 2024
+TABLE II
+CHARACTERISTICS OF THE COMPARISON METHODS
+BKT: BKT is an HMM speciﬁcally designed to model a
+student’s latent knowledge state as a set of dichotomous vari-
+ables in a sequence of exercises. The BKT model assumes that
+once knowledge is acquired, it is retained, while accounting for
+factors, such as guessing and slipping.
+KTM: Knowledge tracing machines (KTM) [41] is a state-of-
+the-art factor analysis model that leverages FM to interact with
+various features for prediction, making it capable of handling
+a wide range of feature types. To ensure experimental fairness,
+only questions, latent concepts, and answers are used as side
+information for comparison.
+Multistate methods: These methods maintain one vector for
+each concept to represent students’ knowledge states.
+DKVMN: DKVMN has the capacity to utilize relationships
+between latent concepts and directly output a learner’s pro-
+ﬁciency level for each concept. DKVMN comprises a static
+matrix referred to as the “key” for storing latent concepts and a
+dynamic matrix called the “value” for storing and updating the
+corresponding concept mastery levels.
+Single-state methods: These methods maintain one vector to
+represents a student’s knowledge state.
+DKT: DKT employs an RNN model to analyze exercise
+sequences and model students’ proﬁciency in latent concepts.
+In addition, DKT holds the distinction of being the pioneering
+model to apply deep learning to KT.
+DKT+: Proposed by Y eung and Y eung[23], this is an extended
+variant based on DKT. DKT+ redeﬁnes the loss function of
+original DKT model by introducing three regularization terms,
+improving the consistency of its prediction performance over
+time-steps. The problem that DKT cannot reconstruct the ob-
+served inputs is additionally addressed.
+GIKT: GIKT represents the relationship between questions
+and KCs as a graph to learn valuable embeddings for answer
+prediction. GIKT assumes that a KC can be related to more
+than one question, and a question can correspond to more than
+one KC. GNNs aggregate embeddings from questions and KCs
+based on their relationships in the graph. These embeddings for
+each question in the sequence of interactions are then fed into
+an RNN model for predicting the student’s response to the next
+question.
+GAKT: Graph attention knowledge tracing (GAKT) is a
+variant of exercise-enhanced RNN with attention mechanism
+(EERNNA) model [24]. Given that EERNNA relies on question
+textual descriptions, which are often unavailable from public
+datasets. Therefore, we utilize the input question embeddings
+obtained through GCN aggregation as inputs to EERNNA and
+compare them according to its framework design.
+CoKT: CoKT [13] retrieves sequences of peer students with
+analogous question-answering experiences, extracting interstu-
+dent information. This information is then amalgamated with
+intrastudent data to track students’ knowledge states and predict
+their question-answering accuracy.
+For better explanation, we summarize the characteristics of
+the adopted baseline model in Table II, where BN is an abbre-
+viation for Bayesian network, KVMN for key–value memory
+network, and MSA for multihead self-attention mechanism or
+variants.
+C. Implementation Details
+Comparative experiments involving different model ap-
+proaches were conducted within the tensorﬂow framework. The
+embedding size for questions, latent concepts, and answers were
+uniformly set at 100. The student’s knowledge state, represented
+as a vector, was sized at 100. The initial learning rate is set
+to 0.00025. In order to solve the problem that the loss of the
+training set cannot be reduced to a certain level, we set the
+learning rate decay rate to 0.92, so that the learning rate will
+gradually decay as the training progress. During the embedding
+propagation process, a maximum of three aggregation layers
+were used, and a dropout rate of 0.8 was employed to prevent
+overﬁtting. Extensive experiments demonstrated that the optimal
+performance was achieved with a batch size of 6. All models
+are trained on a Linux server equipped with a 2.90 GHz Intel
+Xeon Gold 6226R CPU and an NVIDIA GeForce RTX 3090
+GPU.
+FCIKT also considers the higher order feature relationships
+between questions and latent concepts. In the construction of the
+attention network, our experiments revealed that considering the
+similarity between questions is more effective than considering
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 10 ---
+XU et al.: MODELING STUDENT PERFORMANCE USING FEA TURE CROSSES INFORMA TION FOR KNOWLEDGE TRACING 1399
+Fig. 4. Results of student performance prediction on three public datasets and the improvement on different types of models.
+the similarity between latent concepts. We established the simi-
+larity constraint (Sim_C) parameter at 0.7 to ﬁlter out irrelevant
+embeddings in the attention network.
+D. Experiment Results
+We measure AUC metric to evaluate the performance of the
+model, with higher AUC values signifying superior predictive
+capabilities in predicting student’s responses. Fig. 4 illustrates
+the performance of our model relative to the baseline model on
+three public datasets.
+According to Fig. 4, we can observe that our method outper-
+forms all seven baselines and achieves the best performance.
+On ASSIST 09, our model surpasses the top baseline (GIKT) in
+AUC by 0.31%. On ASSIST 12, considering that this dataset
+has the most interaction information among students, ques-
+tions, and latent concepts, interaction information, the nonlinear
+transformation of the sample space is achieved by introducing
+feature crosses, which improves the nonlinear capability of the
+model. This leads to a remarkable 3.01% improvement in AUC
+compared with the best baseline (GIKT). On EdNet, our model
+surpasses the top baseline in AUC by 0.59% (GIKT). Notably,
+our model outperforms GIKT, even though our approach shares
+a basic framework with it. This implies that the incorporation of
+feature crosses and multihead attention modules in KT signiﬁ-
+cantly contributes to enhanced performance.
+It is evident that deep learning-based methods generally sur-
+pass traditional methods in most instances. Nonetheless, tradi-
+tional methods exhibit comparable or even superior performance
+in speciﬁc cases. For instance, in the context of EdNet, KTM
+outperforms DKT and DKT+. Overall, there is no substantial
+disparity in performance between multistate and single-state
+methods.
+We also compare our method’s performance with leading
+methods in different groups, as illustrated in Fig.4(d). In contrast
+to multistate methods, our approach utilizes a single vector for
+representing students’ knowledge states across all concepts, yet
+it surpasses them by outperforming the DKVMN method by
+3.62%–7.37% in AUC. Compared with single-state methods,
+our approach consistently delivers superior performance, with a
+notable improvement, especially in the case of ASSIST12, where
+it enhances AUC by 3.01%. However, the improvement is less
+pronounced for ASSIST09 and ASSIST12, where it outperforms
+these methods by 0.31%–0.59% in AUC. This difference may
+be attributed to the task’s relative ease in ASSIST09 compared
+with other datasets.
+E. Ablation Study
+In this section, we perform ablation studies to investigate the
+effectiveness of two vital components in our proposed model:
+1) multihead attention mechanism and 2) feature crosses that
+integrate question difﬁculty. We set up three comparison settings
+and the details are shown below.
+1) Remove multihead attention (RMHA) does not consider
+dynamic semantic information in students’ question solv-
+ing behavior.
+2) Remove feature crosses (RFC) indicates that there is no
+feature crosses operation for question, latent concept, and
+difﬁculty embeddings.
+3) Remove both multihead attention and feature crosses
+(RBMF) directly concatenates eq,ec and ey as the ex-
+ercise representation instead of using feature crosses and
+multihead attention.
+Except for the aforementioned modiﬁcations, the remain-
+ing aspects of the models and experimental settings remain
+identical.
+We visualize the performance of these settings in Fig. 5.
+We can observe that the performance of FCIKT consistently
+deteriorates when any module of the model is removed. This
+suggests the importance of all these modules to performance.
+Notably, the removal of feature crosses from FCIKT has a more
+pronounced impact on performance compared to the removal of
+multihead attention. This observation leads to the hypothesis that
+feature crosses, which incorporates information about question
+difﬁculty, contribute more to feature acquisition, while multi-
+head attention primarily inﬂuences the student’s knowledge state
+in response to the question. Hence, the absence of the multihead
+attention module has a milder effect on performance. It is also
+worth noting that removing both multihead attention and feature
+crosses during training signiﬁcantly impairs the performance of
+FCIKT, providing further evidence that both of our proposed key
+modules are crucial for enhancing the model’s performance.
+F . Sensitivity Analysis
+1) Parameter Sensitivity: As mentioned earlier, in the
+FCIKT model, higher order information from questions and
+latent concepts is combined and the similarity constraint is
+also employed to ﬁlter irrelevant embeddings in the attention
+network. To determine the most suitable size for this parameter,
+we conducted an evaluation of different sizes of Sim_C and as-
+sessed their impact on model performance. The experiment was
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 11 ---
+1400 IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES, VOL. 17, 2024
+Fig. 5. Contribution of different modules for different datasets.
+Fig. 6. Inﬂuence of Sim_C.
+conducted on the datasets ASSIST09, ASSIST12, and EdNet,
+respectively.
+We set Sim_C values from 0.1 to 1 in intervals of 0.1,
+keeping other hyperparameters constant. The performance eval-
+uation metrics were AUC and Accuracy (ACC). As depicted in
+Fig. 6, for the ASSIST09 dataset and the ASSIST12 dataset,
+the curves for AUC and ACC performance metrics exhibit some
+differences, but both reach their peak performance at Sim_C
+= 0.7. However, for the EdNet dataset, the performance metric
+curves follow a similar trend, and the optimal performance is
+also achieved at a Sim_C of 0.7. These ﬁndings underscore the
+importance of appropriately controlling the coefﬁcients for irrel-
+evant embeddings in the attention network, which signiﬁcantly
+enhances prediction accuracy.
+2) F orgetting Function: The multiheads attention mecha-
+nism adeptly captures diverse aspects of questions by adjust-
+ing attention weights across different subspaces. Nonetheless,
+accurately tracking students’ knowledge mastery solely based
+on the latest questions while disregarding dynamic changes in
+the historical exercise sequence presents challenges. To address
+this, we incorporate a forgetting mechanism to model the phe-
+nomenon of students gradually forgetting old knowledge over
+time. Speciﬁcally, each attention head learns a decaying forget-
+ting function, with early questions exerting the greatest inﬂuence
+on the knowledge state. This differentiation effectively discerns
+the varying importance of questions over time and mitigates the
+limitations of multiheads attention processing sequences. The
+forgetting mechanism facilitates deep integration of historical
+interactions, enabling long-term dependent learning.
+Fig. 7 illustrates the performance comparison between FCIKT
+and remove forgetting mechanism (RFM) on three public
+Fig. 7. Beneﬁts of forgetting within the multiattention mechanism.
+datasets, evaluated using the AUC metric. RFM signiﬁes the
+exclusion of the forgetting function in the multiattention mech-
+anism, while maintaining other settings unchanged. It is evident
+that the performance of RFM has signiﬁcantly declined, substan-
+tiating the importance of the forgetting function in the FCIKT
+model.
+G. Case Study
+To assess the interpretability of our proposed model, we
+conducted a case study. Fig. 8 illustrates the comprehensive
+results. On the left-hand side of the ﬁgure, the ﬁrst column
+represents the student’s initial knowledge mastery level without
+any practice (i.e., T= 1), with varying levels of mastery for each
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 12 ---
+XU et al.: MODELING STUDENT PERFORMANCE USING FEA TURE CROSSES INFORMA TION FOR KNOWLEDGE TRACING 1401
+Fig. 8. Visualization of a student’s prediction results on FCIKT. An example of the knowledge mastery level tracking of a certain student on ﬁve concep ts during
+his 30 exercising steps, which is painted in the middle matrix. Left-hand side shows all concepts, which are marked in different colors. Top line recor ds his or her
+performance on the 30 questions. Right radar ﬁgure shows his or her knowledge mastery levels [in the range (0, 1)] on ﬁve concepts before (T = 1) and after (T =
+30) exercising.
+Fig. 9. t-SNE visualizations of question nodes embeddings on four latent concepts. (a) ASSIST 09. (b) ASSIST 12. (c) EdNet.
+of the ﬁve latent concepts. Then, he or she worked on each of
+the 30 questions related to these concepts. Meanwhile, his or her
+mastery state (output by FCIKT) of these latent concepts evolved
+gradually during the training process. Dynamically monitoring
+students’ mastery of concepts is a crucial determinant for assess-
+ing the model’s strengths and weaknesses, as well as its capacity
+to effectively extract and leverage intricate educational data.
+Speciﬁcally, when he or she answers a question correctly
+(incorrectly), his or her knowledge state of the corresponding
+latent concept increases (decreases). For example, he or she ac-
+quires knowledge of the concept “multiplication and division of
+fractions” after successfully completing the question in the third
+exercise step. Subsequent questions reveal a gradual grasp of this
+concept, contrasting with a lack of understanding of “factors
+and highest common factor.” Because he or she completed all
+the questions on “multiplication and division of fractions”, but
+skipped some related to “factors and highest common factor.”
+However, an inconsistency arises: in the third exercise step,
+despite answering the questions correctly, his or her mastery
+of “factors and highest common factor” decreased slightly. This
+discrepancy is due to the model’s inability to trace the student
+accurately, especially when there are limited exercise records
+at the beginning. Improved performance could be achieved if
+the student accumulates more exercise records over subsequent
+steps.
+Based on the student’s responses to 30 questions, we can con-
+clude that he or she has ﬁnally achieved a strong understanding
+of the concept of “multiplication and division of fractions” and
+partially mastered “exponential function,” “general equation,”
+and “eccentricity,” but failed on “factors and highest common
+factor,” as illustrated in the right radar ﬁgure.
+H. Embedding Visualization Analysis
+In this section, we aim to verify the graph-based approach’s
+capability to uncover high-order semantic associations between
+question nodes and latent concept nodes. Our proposed FCIKT
+captures the relationships between questions and concepts by
+constructing a graph structure representation of the raw se-
+quential data. We analyze the feature representations learned
+by FCIKT from MRHG in the clustering analysis of node
+embeddings. Speciﬁcally, we use the t-distributed Stochastic
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 13 ---
+1402 IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES, VOL. 17, 2024
+Neighbor Embedding (t-SNE) [46] to reduce the dimension of
+the node embeddings and visualize them in the 2-D space. To
+comprehensively validate the learned feature representations,
+we intentionally select questions covering each of the four latent
+concepts (“absolute value,” “inequality,” “operation of rational
+numbers,” and “Pythagorean theorem”). We then assign differ-
+ent colors to the question nodes corresponding to each latent
+concept.
+Fig. 9 shows the compressed 2-D embeddings of question
+nodes on the three datasets. Notably, question nodes related
+to the same latent concept tend to cluster together in the 2-D
+space. This result suggests that, despite the absence of direct
+edges connecting question nodes in MRHG, the graph-based
+approach effectively extracts higher order semantic information
+between question and concept nodes from the graph structure.
+We speculate that GNNs, acting as feature extractors (e.g.,
+GCNs), can capture intricate information from the network
+topology between the question and concept nodes. This infor-
+mation is then integrated into the vector representations of the
+nodes and visualized through dimension reduction to derive the
+associations distribution of question among the latent concepts.
+Real-world educational data encompasses intricate relationships
+among questions and diverse concepts. FCIKT is strategically
+poised to grasp these high-order interactions for achieving pre-
+cision in modeling students’ cognitive states and performance
+prediction.
+VI. C ONCLUSION
+In this article, we introduce a novel model to address the
+KT problem. The model utilizes a feature crosses approach to
+integrate questions, latent concepts, and question difﬁculty in
+a sequence of student exercises. This enhances the richness of
+the embedding representations extracted using GCN, surpass-
+ing previous GKT methods. At the same time, the multihead
+attention mechanism, which integrates the forgetting behav-
+ior, is also used to add dynamic semantic information to the
+static embedding to simulate more realistic question answering
+scenarios. Therefore, it can better predict students’ learning
+performance based on both rich embedding representation and
+dynamic knowledge state. We compare the performance of
+our proposed model with the state-of-the-art KT model on
+three public datasets. The results demonstrate the superiority
+and interpretive effectiveness in modeling student performance,
+validating its potential to be applied in real-world educational
+settings. In the future work, we plan to improve and analyze the
+model by using optimization ideas on node feature engineering.
+REFERENCES
+[1] H. Ma, Z. Huang, W. Tang, H. Zhu, H. Zhang, and J. Li, “Predicting
+student performance in future exams via neutrosophic cognitive diagnosis
+in personalized E-learning environment,” IEEE Trans. Learn. Technol. ,
+vol. 16, no. 5, pp. 680–693, Oct. 2023.
+[2] C.-A. Lee, N.-F. Huang, J.-W. Tzeng, and P .-H. Tsai, “AI-based diagnostic
+assessment system: Integrated with knowledge map in MOOCs,” IEEE
+Trans. Learn. Technol., vol. 16, no. 5, pp. 873–886, Oct. 2023.
+[3] K. Ahmad et al., “Data-driven artiﬁcial intelligence in education: A com-
+prehensive review,”IEEE Trans. Learn. Technol., vol. 17, pp. 12–31, Jan.
+2024.
+[4] G. Abdelrahman, Q. Wang, and B. Nunes, “Knowledge tracing: A survey,”
+ACM Comput. Surv., vol. 55, no. 11, pp. 1–37, 2023.
+[5] F. Wang et al., “Dynamic cognitive diagnosis: An educational priors-
+enhanced deep knowledge tracing perspective,” IEEE Trans. Learn. Tech-
+nol., vol. 16, no. 3, pp. 306–323, Jun. 2023.
+[6] S. Wang, H. Wu, J. H. Kim, and E. Andersen, “Adaptive learning material
+recommendation in online language education,” in Proc. 20th Int. Conf.
+Artif. Intell. Educ., 2019, pp. 298–302.
+[7] X. Sun, X. Zhao, B. Li, Y . Ma, R. Sutcliffe, and J. Feng, “Dynamic key-
+value memory networks with rich features for knowledge tracing,” IEEE
+Trans. Cybern., vol. 52, no. 8, pp. 8239–8245, Aug. 2022.
+[8] A. T. Corbett and J. R. Anderson, “Knowledge tracing: Modeling the ac-
+quisition of procedural knowledge,” User Model. User-Adapted Interact.,
+vol. 4, pp. 253–278, 1994.
+[9] Y . Lu, P . Chen, Y . Pian, and V . W. Zheng, “CMKT: Concept map
+driven knowledge tracing,” IEEE Trans. Learn. Technol. , vol. 15, no. 4,
+pp. 467–480, Aug. 2022.
+[10] M. V . Y udelson, K. R. Koedinger, and G. J. Gordon, “Individualized
+Bayesian knowledge tracing models,” in Proc. 16th Int. Conf. Artif. Intell.
+Educ., 2013, pp. 171–180.
+[11] C. Piech et al., “Deep knowledge tracing,” in Proc. Int. Conf. Adv. Neural
+Inf. Process. Syst., 2015, pp. 505–513.
+[12] Y . Y u, X. Si, C. Hu, and J. Zhang, “A review of recurrent neural networks:
+LSTM cells and network architectures,” Neural Comput., vol. 31, no. 7,
+pp. 1235–1270, 2019.
+[13] T. Long et al., “Improving knowledge tracing with collaborative infor-
+mation,” in Proc. 15th ACM Int. Conf. Web Search Data Mining , 2022,
+pp. 599–607.
+[14] A. Zanellati, D. D. Mitri, M. Gabbrielli, and O. Levrini, “Hybrid models
+for knowledge tracing: A systematic literature review,”IEEE Trans. Learn.
+Technol., vol. 17, pp. 1021–1036, Mar. 2024.
+[15] H. Nakagawa, Y . Iwasawa, and Y . Matsuo, “Graph-based knowledge
+tracing: Modeling student proﬁciency using graph neural network,” in
+Proc. IEEE/WIC/ACM Int. Conf. Web Intell., 2019, pp. 156–163.
+[16] L. Xu et al., “Multiple graph kernel learning based on GMDH-type neural
+network,” Inf. Fusion, vol. 66, pp. 100–110, 2021.
+[17] F. Li et al., “Explicit semantic cross feature learning via pre-trained graph
+neural networks for CTR prediction,” in Proc. 44th Int. ACM SIGIR Conf.
+Res. Develop. Inf. Retrieval , 2021, pp. 2161–2165.
+[18] T. N. Kipf and M. Welling, “Semi-supervised classiﬁcation with graph
+convolutional networks,” in Proc. 5th Int. Conf. Learn. Representations ,
+2017, arXiv:1609.02907.
+[19] Z. Chen, J. Xu, T. Peng, and C. Y ang, “Graph convolutional network-
+based method for fault diagnosis using a hybrid of measurement and
+prior knowledge,” IEEE Trans. Cybern. , vol. 52, no. 9, pp. 9157–9169,
+Sep. 2022.
+[20] Z. Niu, G. Zhong, and H. Y u, “A review on the attention mechanism of
+deep learning,” Neurocomputing, vol. 452, pp. 48–62, 2021.
+[21] B. Mor, S. Garhwal, and A. Kumar, “A systematic review of hidden Markov
+models and their applications,” Arch. Comput. Methods Eng. , vol. 28,
+pp. 1429–1448, 2021.
+[22] A. Sherstinsky, “Fundamentals of recurrent neural network (RNN) and
+long short-term memory (LSTM) network,” Physica D: Nonlinear Phe-
+nomena, vol. 404, 2020, Art. no. 132306.
+[23] C.-K. Y eung and D.-Y . Y eung, “Addressing two problems in deep knowl-
+edge tracing via prediction-consistent regularization,” in Proc. 5th Annu.
+ACM Conf. Learn. Scale , 2018, pp. 1–10.
+[24] Q. Liu et al., “EKT: Exercise-aware knowledge tracing for student per-
+formance prediction,” IEEE Trans. Knowl. Data Eng. , vol. 33, no. 1,
+pp. 100–115, Jan. 2021.
+[25] J. Zhang, X. Shi, I. King, and D.-Y . Y eung, “Dynamic key-value memory
+networks for knowledge tracing,” inProc. 26th Int. Conf. World Wide Web,
+2017, pp. 765–774.
+[26] A. Graves et al., “Hybrid computing using a neural network with dynamic
+external memory,” Nature, vol. 538, no. 7626, pp. 471–476, 2016.
+[27] A. V aswani et al., “Attention is all you need,” in Proc. Int. Conf. Adv.
+Neural Inf. Process. Syst., 2017, vol. 30, pp. 6000–6010.
+[28] S. Pandey and G. Karypis, “A self-attentive model for knowledge tracing,”
+in Proc. 12th Int. Conf. Educ. Data Mining Soc. , 2019, pp. 384–389.
+[29] Z. Wu, S. Pan, F. Chen, G. Long, C. Zhang, and P . S. Y u, “A comprehensive
+survey on graph neural networks,” IEEE Trans. Neural Netw. Learn. Syst.,
+vol. 32, no. 1, pp. 4–24, Jan. 2021.
+[30] S. Tong et al., “Structure-based knowledge tracing: An inﬂuence
+propagation view,” in Proc. IEEE Int. Conf. Data Mining , 2020,
+pp. 541–550.
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 
+
+--- PAGE 14 ---
+XU et al.: MODELING STUDENT PERFORMANCE USING FEA TURE CROSSES INFORMA TION FOR KNOWLEDGE TRACING 1403
+[31] Z. Xia, N. Dong, J. Wu, and C. Ma, “Multi-variate knowledge tracking
+based on graph neural network in assistments,” IEEE Trans. Learn. Tech-
+nol., vol. 17, pp. 32–43, Aug. 2023.
+[32] Y . Y ang et al., “GIKT: A graph-based interaction model for knowledge
+tracing,” in Proc. Mach. Learn. Knowl. Discov. Databases: Eur . Conf. ,
+2021, pp. 299–315.
+[33] S. Wu, F. Sun, W. Zhang, X. Xie, and B. Cui, “Graph neural networks
+in recommender systems: A survey,” ACM Comput. Surv., vol. 55, no. 5,
+pp. 1–37, 2022.
+[34] L. Xu, L. Bai, X. Jiang, M. Tan, D. Zhang, and B. Luo, “Deep Rényi
+entropy graph kernel,” Pattern Recognit., vol. 111, 2021, Art. no. 107668.
+[35] S. Rendle, “Factorization machines,” in Proc. IEEE Int. Conf. Data Mining,
+2010, pp. 995–1000.
+[36] W. Zhang, T. Du, and J. Wang, “Deep learning over multi-ﬁeld categorical
+data:–A case study on user response prediction,” in Proc. 38th Eur . Conf.
+IR Res. Adv. Inf. Retrieval, 2016, pp. 45–57.
+[37] Z. Wang, W. Jiang, Y . M. Zhu, L. Y uan, Y . Song, and W. Liu, “DynaMixer:
+A vision MLP architecture with dynamic mixing,” inProc. Int. Conf. Mach.
+Learn., 2022, pp. 22691–22701.
+[38] H. Guo, R. Tang, Y . Y e, Z. Li, and X. He, “DeepFM: A factorization-
+machine based neural network for CTR prediction,” in Proc. 26th Int.
+Joint Conf. Artif. Intell., 2017, pp. 1725–1731.
+[39] H.-T. Cheng et al., “Wide & deep learning for recommender systems,” in
+Proc. 1st Workshop Deep Learn. Recommender Syst. , 2016, pp. 7–10.
+[40] H. C. Jung, J. Maly, L. Palzer, and A. Stollenwerk, “Quantized compressed
+sensing by rectiﬁed linear units,” IEEE Trans. Inf. Theory , vol. 67, no. 6,
+pp. 4125–4149, Jun. 2021.
+[41] J.-J. Vie and H. Kashima, “Knowledge tracing machines: Factorization
+machines for knowledge tracing,” in Proc. AAAI Conf. Artif. Intell., 2019,
+vol. 33, pp. 750–757.
+[42] Y . Qu et al., “Product-based neural networks for user response prediction,”
+in Proc. IEEE 16th Int. Conf. Data Mining , 2016, pp. 1149–1154.
+[43] S. R. Dubey, S. K. Singh, and B. B. Chaudhuri, “Activation functions in
+deep learning: A comprehensive survey and benchmark,” Neurocomput-
+ing, vol. 503, pp. 92–108, 2022.
+[44] L. Li and Z. Wang, “Knowledge relation rank enhanced heterogeneous
+learning interaction modeling for neural graph forgetting knowledge trac-
+ing,” 2023, arXiv:2304.03945.
+[45] Y . Choi et al., “EdNet: A large-scale hierarchical dataset in education,” in
+Proc. 21st Int. Conf. Artif. Intell. Educ. , 2020, pp. 69–73.
+[46] L. V an der Maaten and G. Hinton, “Visualizing data using t-SNE,”J. Mach.
+Learn. Res., vol. 9, no. 11, pp. 2579–2605, 2008.
+Lixiang Xu (Member, IEEE) received the B.Sc. de-
+gree in applied mathematics from Fuyang Normal
+University, Fuyang, China, in 2005, the M.Sc. degree
+in applied mathematics from the Harbin University of
+Science and Technology, Harbin, China, in 2008, and
+the Ph.D. degree in computer science and technology
+from Anhui University, Hefei, China, in 2017.
+In 2008, he worked at Huawei Technologies Com-
+pany Ltd., before joining Hefei University, Hefei, in
+the following year. He is currently a Professor with
+the Hefei University. From 2019 to 2022, he did Post-
+doctoral Research at the University of Science and Technology of China, Hefei.
+His current research interests include structural pattern recognition, data mining
+and machine learning, social network analysis, and recommender systems.
+Dr. Xu was the recipient of a scholarship to pursue his study in Germany as
+a joint Ph.D. student from 2015 to 2017.
+Zhanlong Wang is currently working toward the
+master’s degree in electronic information with the
+School of Artiﬁcial Intelligence and Big Data, Hefei
+University, Hefei, China.
+His research interests include graph neural net-
+works, data mining and knowledge discovery, and
+intelligent education systems.
+Suojuan Zhang received the Ph.D. degree in soft-
+ware engineering from the Army Engineering Uni-
+versity of PLA, Nanjing, China, in 2022.
+She is currently a Postdoctoral Fellow with the
+School of Computer Science, University of Science
+and Technology of China, Hefei, China. Her research
+interests include machine learning, data mining, and
+intelligent education.
+Xin Yuan (Member, IEEE) received the B.E. and
+Ph.D. degrees in electronic engineering from the Uni-
+versity of Adelaide, Adelaide, SA, Australia, in 2016
+and 2021, respectively.
+He is currently undertaking research with the Uni-
+versity of Adelaide, where his research interests in-
+clude discovering new approaches for the cognitive
+agent-based systems with artiﬁcial general intelli-
+gence and their applications in autonomous and con-
+trol systems.
+Minjuan Wang (Member, IEEE) received the B.A.
+degree in Chinese literature from the Beijing/Peking
+University, Beijing, China, in 1995, the M.A. degree
+in comparative literature from Penn State University,
+State College, PA, USA, in 1997, and the Ph.D.
+degree in information science and learning tech-
+nologies from the University of Missouri-Columbia,
+Columbia, MO, USA, in 2001.
+Since 2000, she has been a Professor and a Program
+Chair of learning design and technology with San
+Diego State University, San Diego, CA, USA. She
+is a newly appointed Chair Professor of emerging technologies and future
+education with the Education University of Hong Kong, Hong Kong. She is
+an internationally recognized Scholar and has keynoted about 45 international
+conferences. Her research interests include STEM education, new and emerging
+technologies in various educational settings, metaverse and immersive learning,
+and the design and implementation of artiﬁcial intelligence, including AIGC for
+education and training.
+Dr. Wang is a Member of IEEE Education Society. She also co-chairs the Ed-
+ucation Society’s Technical Committee for Immersive Learning. In addition, she
+is the Editor-in-Chief for IEEE T RANSACTIONS ON LEARNING TECHNOLOGIES.
+She is recognized internationally for her research, publishing, and dedicated
+service to IEEE and other scholarly communities.
+Enhong Chen (Fellow, IEEE) received the Ph.D.
+degree in computer science from the University of
+Science and Technology of China (USTC), Hefei,
+China, in 1996.
+He is currently a Professor and the Vice Dean with
+the School of Computer Science, USTC. He has au-
+thored or coauthored more than 200 papers in refereed
+conferences and journals, including IEEE T RANS-
+ACTIONS ON KNOWLEDGE AND DATA ENGINEERING,
+IEEE TRANSACTIONS ON MOBILE COMPUTING, ACM
+SIGKDD Conference on Knowledge Discovery and
+Data Mining (KDD) ,a n d Conference on Neural Information Processing Sys-
+tems. His current research interests include data mining and machine learning,
+social network analysis, and recommender systems.
+Dr. Chen was the recipient of the Best Application Paper Award on KDD-2008,
+Best Research Paper Award on ICDM-2011, and Best of SIAM International
+Conference on Data Mining (SDM) -2015. He is an Associate Editor for IEEE
+TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING.
+Authorized licensed use limited to: Universitaet Muenster. Downloaded on December 09,2024 at 08:24:34 UTC from IEEE Xplore.  Restrictions apply. 

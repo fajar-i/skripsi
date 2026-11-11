@@ -1,0 +1,2031 @@
+--- PAGE 1 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 1
+Data Augmentation for Sparse Multidimensional
+Learning Performance Data Using Generative AI
+Liang Zhang , Jionghao Lin , John Sabatini , Conrad Borchers , Daniel Weitekamp , Meng Cao , John
+Hollander , Xiangen Hu , Arthur C. Graesser
+Abstract—Learning performance data, such as correct or
+incorrect answers and problem-solving attempts in Intelligent
+Tutoring Systems (ITSs), facilitate the assessment of knowledge
+mastery and the delivery of effective instructions. However, these
+data tend to be highly sparse (80% ∼90% missing observations)
+in most real-world applications. This data sparsity presents
+challenges to using learner models to effectively predict learners’
+future performance and explore new hypotheses about learning.
+This article proposes a systematic framework for augmenting
+learning performance data to address data sparsity. First, learn-
+ing performance data can be represented as a 3-Dimensional
+(3D) tensor with dimensions corresponding to learners, ques-
+tions, and attempts, effectively capturing longitudinal knowledge
+states during learning. Second, a tensor factorization method
+is used to impute missing values in sparse tensors of collected
+learner data, thereby grounding the imputation on knowledge
+tracing tasks that predict missing performance values based
+on real observations. Third, data augmentation using Genera-
+tive Artificial Intelligence (GenAI) models, including Generative
+Adversarial Network, specifically Vanilla Generative Adversarial
+Networks (GAN), and Generative Pretrained Transformers (GPT,
+specifically GPT-4o), generate data tailored to individual clusters
+of learning performance. We tested this systemic framework
+on adult literacy datasets from AutoTutor lessons developed
+for Adult Reading Comprehension (ARC). We found that: (1)
+tensor factorization outperformed baseline knowledge tracing
+techniques in tracing and predicting learning performance,
+demonstrating higher fidelity in data imputation, and 2) the
+Vanilla GAN-based augmentation demonstrated greater overall
+stability across varying sample sizes, whereas GPT-4o based
+augmentation exhibited higher variability, with occasional cases
+showing closer fidelity to the original data distribution. This
+framework facilitates the effective augmentation of learning
+performance data, enabling controlled, cost-effective approach
+for the evaluation and optimization of ITS instructional designs
+in both online and offline environments prior to deployment,
+and supporting advanced educational data mining and learning
+Manuscript submitted on August 4, 2024. First revision on Nov. 23, 2024;
+Second revision on Dec. 31, 2024. Accepted on Jan.2, 2025.
+Liang Zhang, John Sabatini, and Arthur C. Graesser are with the
+Institute for Intelligent Systems, University of Memphis, Memphis,
+TN 38152, USA (e-mail: lzhang13@memphis.edu, jpsbtini@memphis.edu,
+art.graesser@gmail.com).
+John Hollander is with Arkansas State University, Jonesboro, AR, 72401,
+USA (e-mail: jhollander@astate.edu).
+Conrad Borchers, Daniel Weitekamp, and Meng Cao are with the
+Human-Computer Interaction Institute, Carnegie Mellon University, Pitts-
+burgh, PA, 15213, USA (e-mail: cborcher@cs.cmu.edu, weitekamp@cmu.edu,
+mengc2@andrew.cmu.edu).
+Jionghao Lin is with the Faculty of Education, The University of Hong
+Kong, Hong Kong, PR China, also with the Human-Computer Interaction
+Institute, Carnegie Mellon University, Pittsburgh, PA, 15213, USA, and also
+with the Centre for Learning Analytics, Faculty of Information Technology,
+Monash University, Clayton, VIC 3800, Australia (e-mail: jionghao@hku.hk).
+Xiangen Hu is with the Department of Applied Social Sciences,
+Hong Kong Polytechnic University, Hong Kong, PR China (e-mail: xian-
+gen.hu@polyu.edu.hk).
+analytics.
+Index T erms —Data Augmentation, Learning Performance
+Data, Data Sparsity, Intelligent Tutoring System, Generative
+Artificial Intelligence
+I. Introduction
+T
+HE integration of AI-based educational technologies into
+e-learning platforms, combined with advanced pedagogi-
+cal strategies, represents a landmark advance in modern educa-
+tion [1]. This integration has profoundly transformed learning
+and teaching strategies, making educational systems more
+adaptive for personalized learning, flexible for remote access,
+scalable for resource distribution, and effective in improving
+educational outcomes [2]. An exemplary prototype of this
+advancement is Intelligent Tutoring Systems (ITSs), which
+provide personalized and adaptive instructions through hints,
+prompts, and other adaptive feedback to improve learner per-
+formance [3]. The effectiveness of ITSs has been demonstrated
+with considerable success in diverse areas such as science,
+technology, engineering, and mathematics, as well as in fields
+like reading and language learning [3]. Learning performance
+data, which include records of correct or incorrect answers
+and problem-solving attempts from learners using the ITS,
+are crucial for evaluating knowledge mastery, self-regulation,
+and other characteristics that support adaptive instructions [4],
+[5]. For instance, learners’ correct and incorrect responses can
+be leveraged within the learner model component of ITSs
+to facilitate learner modeling [6], [7]. This process involves
+tracking historical performance and predicting future outcomes
+based on knowledge components and concepts, a methodology
+referred to as Knowledge Tracing (KT) [8]. The ITS can tailor
+adaptive instructions, such as dialogue-based feedback, based
+on predictions and assessments, offering targeted support with
+specific hints and prompts, especially when learners struggle
+or experience wheel-spinning [3].
+In real-world educational practices, learning performance
+data often suffers from data sparsity issues. Fig. 1 shows
+how learners interact with an ITS, where their answers and
+attempts at questions are recorded. The data matrix reveals
+many missing entries, indicated by the symbol “ ?”, high-
+lighting the sparsity of the data. The real sparse scenarios
+demonstrate inconsistent and incomplete data patterns, as
+shown by the different colors within a single bar, representing
+various biased and unevenly distributed patterns. In contrast,
+a well-structured and comprehensive dataset is expected to
+encompass diverse scenarios, with each pattern maintaining
+arXiv:2409.15631v3  [cs.LG]  3 Jan 2025
+
+--- PAGE 2 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 2
+Fig. 1: Data sparsity issues in learning performance data in Intelligent Tutoring Systems.
+relative quantities. This ensures a balanced and thorough
+representation of the data, facilitating more robust analysis
+and modeling. Data sparsity is typically divided into two
+categories: (1) unobserved data resulting from unpresented
+items (i.e., questions, problems) and limited learner responses
+or attempts [9], [10], and (2) insufficient learning performance
+patterns in the available empirical data [11], [12]. Insufficient
+learning performance patterns specifically refer to the lack
+of quantity in the observed data required to model learning
+processes effectively in this study. These patterns are often
+defined by key learner-specific factors, such as initial learning
+ability (e.g., a learner’s baseline knowledge or proficiency
+before engaging with new content) and learning rate (e.g., the
+rate at which a learner improves accuracy or mastery through
+repeated attempts) [12], [13]. These characteristics not only
+help distinguish individual or group learning trajectories but
+also reveal underlying trends, such as whether high-performing
+learners exhibit slower incremental gains or if low-performing
+learners make rapid improvements due to starting from a
+lower baseline. By capturing and analyzing these patterns,
+learner modeling can identify clusters of learners with similar
+performance characteristics, thereby enabling more precise and
+adaptive instructional strategies. Various reasons contribute
+to these data sparsity issues, including participant dropout
+from learning tasks [14], learner disengagement due to off-
+task behavior [15] or gaming system [16], random data loss
+from design and operation errors [17], and potential bias in
+the experimental groups [18]. These challenges are typical in
+real-world settings.
+Data sparsity issues adversely affect the accurate modeling
+of learning processes and assessment of learners’ knowledge
+states, which in turn may compromise effective instructional
+support to learners, particularly those at risk [9], [11]. Specif-
+ically, data sparsity could lead to biased or over-fitted KT
+models, resulting in potentially misleading predictions of
+learners’ future performance. Moreover, the insufficiency of
+learning performance data across a limited range of diverse
+patterns restricts the potential to comprehensively test and fine-
+tune ITSs, particularly in cases where certain pre-designed
+instructional conditions have not been thoroughly explored
+[19]. Therefore, addressing data sparsity is crucial for avoiding
+biased modeling, enabling more comprehensive evaluations
+of the learning process, and improving effective instructional
+support in ITSs.
+Addressing data sparsity within ITSs represents a practical
+yet challenging research area. Informed by advancements in
+machine learning field [20], [21], tackling this issue typically
+involves two interconnected and sequential strategies: data
+imputation and data augmentation . Data imputation focuses
+on filling the gaps in missing data, thereby creating a more
+complete dataset, which is crucial for accurate analysis and
+decision-making [22]. On the other hand, data augmentation
+not only enriches datasets where learning performance patterns
+are rarely presented but also enhances the robustness of
+analysis, modeling, and testing in ITSs, helping to mitigate
+the effects of sparsity on learner performance prediction [11].
+Despite the critical need, systematic efforts to address these
+data sparsity issues in the ITSs remain limited, with few studies
+focusing on the comprehensive management of sparse data [9],
+[22].
+Effective handling of missing data remains a challenge in
+educational data analysis. Even though general data imputation
+methods (e.g., indicator or mean imputation [23], regression
+imputation [24], and multiple imputation [25]) have proven
+effective in the literature, they offer a cost-effective solution
+that avoids labor-intensive experiments by leveraging observed
+data to estimate unobserved data. These methods capitalize on
+underlying patterns and characteristics [26], but they address
+the missing data in a straightforward manner that fails to
+capture the full complexity of the data structure. For example,
+indicator or mean imputation replaces missing values with a
+specified indicator or the mean of observed values. However,
+this method may introduce bias by oversimplifying the com-
+plexities of missing data [23]. Regression imputation predicts
+missing values based on other observed data using regres-
+sion models. Despite its utility, it often fails to capture the
+full spectrum of the underlying data structure [24]. Multiple
+imputation generates multiple datasets by imputing missing
+
+--- PAGE 3 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 3
+values with a range of plausible values and then averaging the
+results [25]. Yet, it may not adequately address complex, high-
+dimensional correlations. Furthermore, data sparsity could in-
+fluence model prediction of learner performance. When using
+some KT models in ITSs to predict learning outcomes, such as
+Performance Factor Analysis (PFA) and Bayesian Knowledge
+Tracing (BKT), use logistic regression and Bayesian networks,
+respectively, to predict learning outcomes [27], [28]. However,
+these models themselves are vulnerable to data sparsity and
+cannot account for the sequence effect of learning events,
+though partially addressing data sparsity issues [9], [11].
+Therefore, to effectively address data sparsity and fully
+capture the data’s complexity, and improve the prediction of
+learner performance, more effective computational approaches
+that offer deeper insights are needed. In ITS research, tensor
+factorization, originating from recommendation techniques,
+has been used to recommend missing performance data based
+on existing learner records [22]. This method leverages mul-
+tidimensional relationships to enhance predictions and knowl-
+edge representation by integrating three dimensions: learners,
+items (e.g., questions or learning materials), and temporal
+factors (e.g., time or attempts) [22], [29]. Another source of
+inspiration stems from the advancements of GenAI models,
+which are capable of generating new data based on patterns
+during training and have revolutionized data augmentation
+methodologies by being more flexible and powerful [30].
+One prototype is Generative Adversarial Networks (GANs),
+which can proficiently learn from existing data distributions
+and generate varied samples that extend beyond the original
+dataset [31]. Since its development, the base architecture of
+GAN, known as Vanilla GAN [32], has inspired numerous
+variants, such as Deep Convolutional GAN (DCGAN), Con-
+ditional GAN (cGAN), and Wasserstein GAN (WGAN). These
+variants have been widely embraced for their ability to improve
+stability, handle specific types of data, and generate more
+realistic samples, making them highly adaptable to various
+application domains. Another is the Generative Pre-trained
+Transformer (GPT), which possesses reasoning abilities for
+learning data distributions and can use both computational
+and heuristic models to help sample larger datasets that align
+with the original data distribution [33]. The evolution of GPT
+models, from the initial versions such as GPT-2 and GPT-
+3 to more advanced iterations like GPT-4o and GPT o-1,
+has brought increasingly sophisticated capabilities, including
+enhanced contextual understanding and greater fidelity in data
+generation. These advancements highlight the potential of
+GPT models to revolutionize data augmentation in domains
+requiring highly accurate and scalable solutions. Successful
+applications of GenAI models for data augmentation in ITSs
+include enriching mathematics student learning datasets with
+multiple-choice questions [34], generating extensive student
+behavioral data via GANs, from MOOC learning platforms
+[35], and augmenting sparse learning performance data in
+reading comprehension [12]. Additionally, leveraging the GPT
+model has shown significant improvements in selecting ap-
+propriate machine learning models and fine-tuning them for
+predicting learning performance [36]. Building on the success
+of GenAI models in ITSs, these models could become highly
+effective tools for data augmentation, tailored to specific
+learning needs.
+The present study develops a systematic augmentation
+framework that integrates multidimensional modeling using
+tensor factorization for data imputation and GenAI models
+for data augmentation. This framework generates extensive
+learning performance data tailored to specific learning per-
+formance patterns, enhancing both data imputation and data
+augmentation capabilities based on model-derived patterns
+from real-world experimental datasets. The framework will be
+tested with learning performance data from an example ITS
+for adult literacy, using AutoTutor lessons for ARC [37]. Our
+investigation is guided by the overarching Research Question:
+“How can we develop a data augmentation framework to
+enhance sparse learning performance data and improve the
+scalability of learning performance data in the AutoTutor
+ARC?” This is explored through the following sub-questions:
+• RQ1: How does tensor factorization perform in imputing
+learner performance data in ARC, particularly in compar-
+ison to baseline methods such as PFA, BKT, and Sparse
+Factor Analysis Lite (SPARFA-Lite)?
+• RQ2: How can GenAI models, including GAN specif-
+ically Vanilla GAN) and GPT specifically GPT-4o), be
+effectively and reliably utilized for data augmentation to
+tailor individual performance patterns?
+This study clarifies the selection of two fundamental types
+of GenAI models as the basis for initializing data augmentation
+for sparse learning performance data. By employing both
+GAN-based and GPT-based approaches, we aim to explore
+how these models can be utilized for data augmentation in
+learning engineering. Furthermore, we conduct a comparative
+analysis of these two types of GenAI models to address the
+challenges posed by data sparsity.
+This proposed systematic augmentation framework has the
+potential to emerge as a powerful tool for enhancing data
+richness and reliability. Firstly, it can perform data impu-
+tation for sparse learning performance data, thereby enrich-
+ing the data representation for more comprehensive learner
+modeling. Secondly, the generative models can increase the
+diversity of individualized learner performance data, which
+is essential for enriching learner modeling and ITS train-
+ing. Practically, this study can lead to improved adaptation
+and responsiveness within ITS environments by providing a
+broader dataset to fine-tune instructional feedback and in-
+terventions. Enhanced data reliability and richness also en-
+able ITSs to make more accurate predictions of individual
+learner needs, ultimately contributing to personalized learning
+paths, optimized feedback loops, and better overall learning
+outcomes. By augmenting a wider range of learner behav-
+iors, the framework supports the continuous improvement
+of ITS instructional functions, ensuring these ITSs remain
+adaptable and effective across diverse learner profiles. Our
+code and some results can be found at the following GitHub
+link:https://github.com/LiangZhang2017/3DGAI.
+
+--- PAGE 4 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 4
+II. Related Work
+A. Intelligent Tutoring Systems for Adult Reading Comprehen-
+sion
+Adult Reading Comprehension (ARC), essential for aca-
+demic success and lifelong learning, can be enhanced through
+AI-based technologies that provide adaptive and personalized
+solutions [37]. These AI-based technologies leverage educa-
+tional data mining and learning analytics to assess student
+performance (e.g., learner modeling), and to provide person-
+alized instruction tailored to individual learners (e.g., tutoring
+feedback, hints, nudges, and tailored recommendations for
+reading materials and comprehension exercises) [38], [39]. For
+instance, the latest advances in natural language processing
+and machine learning have enabled digital textbooks to use
+their content and structure as a knowledge base for “smart”
+functionalities like automated knowledge compilation, adaptive
+navigation and presentation, and targeted content recommen-
+dations [40]. Another instance is the AutoTutor developed for
+ARC, which is investigated in the present study [37]. The
+AutoTutor ARC employs the trialogue design, which includes
+one human learner and two computer agents (virtual tutor
+and virtual companion) [37]. This system facilitates interactive
+learning through a three-party conversation that assesses learn-
+ers’ responses, provides feedback, and corrects misconcep-
+tions based on an Expectation-Misconception Tailored (EMT)
+mechanism that attempts to cover good answers (called expec-
+tations) and correct bad answers (called misconceptions) [41].
+The tutoring session concludes once all lesson expectations are
+met. Other ITSs, such as DSCoV AR for vocabulary learning
+[42], and ITSS for reading comprehension instruction through
+structure strategy training [43], are also noteworthy but are not
+detailed here.
+Recently, ITSs for ARC have increasingly incorporated ad-
+vanced AI technologies, particularly GenAI. Large Language
+Models (LLMs) have already been used to develop summary
+grading models for intelligent textbooks that provide real-time
+formative feedback and assess comprehension [44]. GenAI
+models, including GAN and GPT, have been used to tackle
+sparse data challenges in reading comprehension, thereby
+enhancing personalized educational technology in ITSs [12].
+Furthermore, the use of LLMs to generate high-quality, per-
+sonalized reading materials underscores the potential for future
+ITS designs to improve reading comprehension skills [45],
+[46]. These AI advancements have revolutionized ITS devel-
+opment from their design and creation to learning analytics
+and modeling in ARC.
+B. Tensor-based Imputation for Sparse Performance Data
+The increasing prevalence of sparse learning performance
+data from ITSs necessitates robust imputation methods to han-
+dle missing information effectively. Tensor-based imputation
+has emerged as an important technique due to its ability to
+maintain the multi-dimensional nature of learning data and
+to preserve intrinsic relationships across dimensions such as
+learners, questions, time or attempts [13], [22], [29].
+Pioneering implementations of tensor-based methods in-
+clude Thai-Nghe et al. (2011), who extended matrix factoriza-
+tion with tensor factorization to incorporate temporal effects,
+which significantly enhanced the accuracy of learner perfor-
+mance predictions [22], [47]. Similarly, Sahebi et al. (2016)
+introduced Feedback-Driven Tensor Factorization (FDTF) to
+integrate sequences of students, quizzes, and attempts within
+a tensor framework, which again improved knowledge rep-
+resentation and performance predictions [29]. Doan and Sa-
+hebi (2019) developed the Ranked-Based Tensor Factorization
+(RBTF) model that uses tensor factorization to accommo-
+date occasional forgetting of concepts and integrate biases
+related to students, problems, and time, thereby supporting
+a predominantly positive learning trajectory [48]. Over time,
+various tensor factorization techniques have been developed
+to enhance the prediction accuracy and impute sparse data in
+educational settings [49], [50]. These developments underscore
+the capability of tensor factorization to not only enhance
+prediction accuracy but also perform tensor-based imputation,
+effectively filling in missing values in sparse tensors. Tensor-
+based of learning performance data preserves the “natural
+representation” of synchronous and sequential learning events,
+which is essential for accurately tracing and predicting learner
+performance and for improving the imputation of missing
+values [51]. This process also allows for the efficient decom-
+position of interactions across different dimensions, enabling
+deeper analysis and further enriching the dataset’s utility
+[48]. The method’s alignment with recommendation systems
+highlights its utility in identifying performance similarities and
+dependencies among learning events, making it a cornerstone
+in educational data mining.
+C. Generative AI for Augmenting Sparse Educational Data
+The advent of GenAI technologies has revolutionized the
+field of data augmentation, particularly in domains burdened
+by sparse and imbalanced datasets [52]. GenAI models have
+provided groundbreaking ways to synthesize realistic and exist-
+ing data by capturing complex intrinsic patterns, distributions
+and characteristics, effectively enhancing dataset robustness
+for training machine learning models [32]. At this point,
+GenAI effectively addresses scalability challenges in both high
+and low-dimensional simulation data. It can simulate data
+on a larger scale and generate tailored scenarios, facilitating
+informed decision-making under uncertainty conditions arising
+from sparse datasets [53]. Many successful applications in
+other fields have also exemplified the potential for educational
+data. Mariani et al. utilized GANs to balance imbalanced im-
+age classification datasets [54], while Frid-Adar et al. increased
+the size and diversity of medical imaging datasets through
+synthetic data augmentation [55]. Huang et al. transformed
+images for image-translation tasks, including day-to-night and
+vice versa, using GANs [56]. In educational settings, GANs
+have synthesized additional data from sparse datasets in open
+university learning analytics [57], illustrating their broad po-
+tential for improving learning performance data in ITSs.
+The GPT is a state-of-the-art GenAI model known for its ex-
+ceptional ability in human-like text generation and performing
+reasoning tasks with unprecedented accuracy [58]. ChatGPT
+represents a significant advancement in AI, driving revolu-
+tionary shifts in its application within education. It has been
+
+--- PAGE 5 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 5
+TABLE I: Summary of the AutoTutor ARC Lessons Dataset.
+Lesson Topic Difficulty Level #Transactions #Learners #Questions #Max. Attempt
+Lesson 1 Persuasive Text
+Medium 1160 107 10 9
+Easy — — — —
+Hard 854 96 11 8
+Lesson 2 Cause and Effect
+Medium 1527 118 9 9
+Easy 450 48 10 5
+Hard 838 64 10 9
+Lesson 3 Problems and Solutions
+Medium 1444 140 11 5
+Easy — — — —
+Hard 891 124 8 5
+Lesson 4 Inferences from Texts
+Medium 442 46 10 7
+Easy 102 16 9 2
+Hard 235 25 10 7
+instrumental in enhancing instructional feedback [59], [60],
+boosting student engagement [61], generating questions [62],
+simulating learning scenarios [63], and providing personalized
+learning experiences [45]. In parallel, recent work highlights
+ChatGPT’s effectiveness in fostering self-regulated learning
+[64], GPT o-1’s potential for advancing higher-order thinking
+in education [65], and GPT-based methods that underpin
+dialogue-driven ITSs [46]. Notably, there has been tremendous
+progress in data augmentations in ITSs. For instance, Liu
+et al. [66] employed ChatGPT to enrich open-ended student
+responses in computer science with knowledge-guided code
+for short programming tasks. Zhang et al. [12] demonstrated
+ChatGPT’s capability in learning the distribution of learning
+performance data tailored to individual patterns and selecting
+appropriate machine learning models for data augmentation
+in reading comprehension. Further studies have confirmed
+that ChatGPT can predict learning performance by encoding
+datasets, selecting and fine-tuning models, and decoding out-
+puts as estimated probability-based learning performance [36].
+All these related works demonstrate the potential of GenAI
+models for data augmentation in ITSs. By generating synthetic
+yet realistic examples, these models can significantly expand
+the depth and breadth of learning performance data, making it
+more comprehensive and representative. This enables a more
+accurate assessment of learners’ progress and more robust
+training of AI systems that can adapt to various educational
+challenges and learner profiles.
+III. Dataset
+Four lesson datasets 1 were selected from a total of 29
+AutoTutor ARC lessons used in an adult literacy intervention
+program involving 252 participants. The intervention program
+spanned from January 2015 to December 2016, with each in-
+tervention lasting approximately four months. Ethical approval
+was obtained from the Institutional Review Board (IRB) under
+the approval number H15257. As illustrated in Table I, the four
+lessons sourced from the “ Stories and Texts” series within the
+adult reading comprehension program cover topics including
+“Persuasive Texts” (Lesson 1), “Cause and Effect” (Lesson 2),
+“Problems and Solutions ” (Lesson 3), and “ Inferences from
+1AutoTutor Moodel Website: https://sites.autotutor.org/; Adult Literacy and
+Adult Education Website: https://adulted.autotutor.org/
+Texts” (Lesson 4). Each lesson includes 8 to 11 multiple-
+choice questions to test learners’ reading comprehension skills.
+Learners start with medium (M) difficulty level materials, then,
+depending on their performance, either progress to the hard
+(H) level or move down to the easy (E) level. The “Max.
+Attempt” column in Table I defines the baseline setting for
+the maximum number of attempts across all selected question
+records. For example, a sample learning record from the topic
+“Persuasive Texts” involve a anonymous learner identified as
+“CSU00032” (marked as Anon.Student.Id). When asked the
+question “What is the topic of the article?” regarding the main
+idea of a provided passage, the learner selected the option
+“Minimum wage” by clicking the choice button and received
+a “CORRECT” assessment (as evaluated by AutoTutor) on the
+first attempt. The “Transactions” column in each lesson dataset
+records the total number of observations, serving as the sample
+size for each lesson. Note that: 1) It is rare for learners to
+engage with the easy level in Lesson 1 and 3, since the majority
+can advance to the hard level; and 2) There are instances of
+dropout among learners during transitions. For further details
+on the experiments conducted, see the reference paper [67].
+IV . Methods
+This section describes our data augmentation framework to
+enhance the learning performance data for AutoTutor ARC as
+well as the procedural methods used for its construction.
+A. The Systematic Augmentation Framework
+The systematic augmentation framework, shown in Fig. 2
+integrates the construction of a 3D tensor to represent learning
+performance data with subsequent tensor-based imputation and
+augmentation, effectively enriching these data. Initially, the
+framework structures learning performance data from real-
+world learner-ITS interactions into a three dimensional tensor,
+encompassing learners, questions, and attempts. The entries in
+this tensor represent learning performance values, quantified
+as binary values (1 for correct and 0 for incorrect). As depicted
+in Fig. 2, the 3D tensor includes filled cubes that repre-
+sent recorded learning performance values and transparent
+cubes that indicate sparse or missing values. Subsequently,
+tensor-based imputation using Tensor Factorization converts
+the sparse tensor into a densified form. The densified tensor
+provides invaluable insights into diverse learning performance
+
+--- PAGE 6 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 6
+Fig. 2: The systematic augmentation framework for learning performance in Intelligent Tutoring System.
+patterns, enabling the segmentation of the tensor into sub-
+tensors based on these distinct patterns (this will be detailed in
+subsequent sections). GenAI models, such as GAN and GPT,
+are then used to simulate additional data samples, enriching
+the original dataset based on specific learning performance
+patterns. This scalable simulation process ultimately generates
+a more comprehensive dataset that incorporates both imputed
+and augmented data.
+The workflow framework can be formalized as follows:
+logslearning → T sparse → T dense → T augmented (1)
+where logslearning represents the logs of learning performance (in-
+cluding learner, questions, attempts, and actual learning performance
+values). These logs are structured into sparse tensor T sparse. This
+sparse tensor is then processed through tensor-based imputation
+techniques to yield T dense, a densified tensor that hat fills in missing
+or sparse values to create a more complete dataset. The densified
+tensor is then used to further augment the tensor into T augmented,
+scaling datas sample by individualized learning performance patterns.
+B. Construction of 3D Tensor for Learning Performance Data
+Consider the data produced by a population of learners working
+in an ITS. The data consist of a set of U learners, represented by
+{l1, l2, l3, · · · , lU }, who engages with a sequence of N questions,
+denoted by {q1, q2, q3, · · · , qN }. Each question in this sequence
+permits up to M attempts, represented by {t1, t2, t3, · · · , tM },
+allowing individual learners multiple opportunities to respond. The
+T sparse ∈ RU ×N ×M captures these interactions, where the entry
+τuij in T sparse records the performance of learner lu on question qi
+at the attempt aj, where the u ∈ (1, 2, · · · , U), i ∈ (1, 2, · · · , N),
+j ∈ (1, 2, · · · , M). Within the AutoTutor ARC context, the entry
+variable τ uij = {0, 1, N aN}, where 1 indicates a correct answer, 0
+signifies an incorrect answer, and N aN donates unobserved values.
+The construction of the 3D tensor is guided theoretically by the
+following assumptions: (a) Hierarchical Knowledge Representation:
+Each question involves distinct knowledge components or concepts,
+including both procedural and declarative types; these knowledge
+components may also be shared across different questions [49], [68].
+(b) Latent Knowledge Relations: The specific knowledge embedded
+within each question is crucial for mastery, and the unique yet
+interconnected knowledge across questions create a comprehensive
+network of logic and procedures during the knowledge acquisition
+process [8], [50]. (c) Sequence Effects in Performance Interactions:
+Learners’ sequential interaction with questions affects their under-
+standing, comprehension, and performance; for example, one question
+might facilitate comprehension and performance of a subsequent
+question [69], [70] and there may be recency effects where perfor-
+mance in recent items may be weighted higher on learner mastery
+[50], [71]. (d) Maximum Attempt Assumption : Assume a theoretical
+maximum number of attempts a learner might need, highlighting
+the importance of evaluating comprehensive learning states through
+repeated attempts. (e) Similarity in Learning for Individual Learn-
+ers: Assuming a common relevance and utility in the mode of
+knowledge acquisition among learners, it becomes possible to predict
+knowledge mastery based on similarities in their individual learning
+pathways [51]. (f) Probability-based Prediction : Predicted learning
+performance is represented as a probability from 0 to 1, indicating
+the likelihood of knowledge mastery.
+C. Tensor-based Imputation
+We model the sparse tensor T sparse through factorization into two
+lower dimensional components: (1) a factor matrix U of size U × K,
+which captures the latent learning-related features of U learners, such
+as initial learning abilities and learning rates, where K is the total
+number of these features; and 2) a latent tensor V of size K ×M ×N,
+representing learner knowledge in terms of K latent features across
+M attempts on N questions. The approximated tensor T dense is is
+computed as follows:
+T dense ≈ U × V + bl + ba + bq + ε (2)
+where bl, bq, and ba represent the biases from learners, questions,
+and attempts, respectively, and ε denotes a global bias. During
+tensor factorization, the sigmoid function is applied to normalize the
+output of estimated performance values, ensuring outputs are bounded
+between 0 and 1. The model also incorporates a rank-based constraint,
+which promotes a trend of monotonic knowledge acquisition across
+successive attempts by learners, while still allowing for potential
+forgetting or slipping [48]. The objective function includes terms for
+mean squared error to measure the discrepancy between observed
+values and predictions, and regularization terms for the decomposed
+components (the learner feature matrix U and the latent tensor V
+and various biases) to mitigate overfitting, along with a rank-based
+constraint. Optimization is carried out using stochastic gradient de-
+scent to minimize the objective function, iterating until convergence.
+Ultimately, the resulting T dense functions as a probability-based
+filled tensor.
+The Tensor Factorization method thus enables us to construct and
+assess different multidimensional models for learning performance
+
+--- PAGE 7 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 7
+that facilitate data imputation for comprehensive modeling of the
+learning process. We explored three different baseline models that
+will ultimately be compared with our proposed model. (a) Bayesian
+Knowledge Tracing (BKT): BKT uses a Hidden Markov Model to
+dynamically assess and predict a learner’s knowledge state (repre-
+sented as binary states of “known” and “unknown”), with adjustments
+based on their responses to questions while considering probabilities
+of learning, guessing and slipping [72]; here, it also initially integrates
+both student-specific and skill-specific parameters to effectively ac-
+count for individual learner variability and the hierarchical nature
+of skills [28], [72]. (b) Performance Factor Analysis (PFA): PFA
+utilizes logistic regression to estimate the probability of the learner’s
+performance on the question, factoring in individual learning ability,
+skill-related features (e.g., difficulty), and the learner’s previous
+success and failures [27]. (c) Sparse Factor Analysis Lite (SPARFA-
+Lite): SPARFA-Lite, a streamlined version of Sparse Factor Analysis,
+uses matrix completion techniques to efficiently analyze graded
+learner responses and predict performance by determining the optimal
+number of knowledge components, offering enhanced computational
+speed over the initial Sparse Factor Analysis [73]. The choice of
+these baseline models was guided by two primary criteria. First, we
+prioritized interpretability. Complex deep knowledge tracing models,
+while potentially more accurate, were excluded due to their lack
+of transparency, which could hinder clear explanation and analysis
+of results. Second, although prediction accuracy was an important
+consideration, it was not our primary focus. This study emphasizes
+addressing data sparsity issues, aiming to provide actionable insights
+into effectively handling sparse data. While alternative methods may
+enhance prediction accuracy, many do so by relying on sparse data
+without directly addressing the underlying sparsity challenges, which
+falls outside the scope of this investigation.
+V . Identification of Learning Performance Patterns by
+Clustering
+To make data augmentation adaptive to individual learning perfor-
+mance patterns, we first identify these patterns by clustering based on
+the similarity of each learner’s performance across different attempts
+at specific questions.
+The matrix slice Ωqn, extracted from the T dense, encapsulates the
+probability-based knowledge states associated with the performance
+on the nth question qn, for all U learners over M attempts. Eq. 3
+illustrates our approach to identifying learning performance patterns
+within Ωqn. The matrix can be represented as a sequence of vectors
+{L1, L2, L3, · · · , Ln}, where each Lu aggregates the uth learner’s
+performance across all attempts for the specified question. The
+performance distribution for each learner vector is assumed to be
+modeled by function G(·), with the associated set of parameter
+vectors depicted as {ϑ1, ϑ2, ϑ3, · · · , ϑM }. The fluctuations in these
+model parameters indeed reflect individual differences in learning
+performance patterns by quantifying the uncertainties within the
+evolving knowledge states for each learner.
+Ωqn =
+
+
+
+L1
+L2
+L3
+...
+LU
+
+
+
+⇒
+
+
+
+G1(L1)
+G2(L2)
+G3(L3)
+...
+GC (LU )
+⇒
+
+
+
+ϑ1
+ϑ2
+ϑ3
+...
+ϑU
+⇒
+
+
+
+Cluster 1
+Cluster 2
+Cluster 3
+...
+Cluster C
+(3)
+In this study, we employed a power law function for G(·) to
+model the relationship between learners’ performance values and
+their number of attempts, drawing on the learning curve theory
+proposed by Newell and Rosenbloom [74]. This theory links error
+rates to practice amounts and supports the power law’s use [74].
+The power law learning curve is particularly valued for its robust
+fit and interpretable parameters, which has been widely recognized
+in educational and training research [75]. In the power-law formula
+Y = aX b, Y represents learning performance, quantified as the
+probability of producing correct answers, while X denotes the
+number of attempts to respond to the current question. The parameter
+a indicates the learner’s initial learning ability or prior knowledge,
+and b quantifies the rate at which the learner acquires knowledge
+through practice. We then utilized K-means++ algorithm [76] to
+cluster the distribution of these parameters ( a and b) among learners,
+which assists in identifying distinct individual learning performance
+patterns.
+VI. Data Augmentation based on Generative Models
+We investigated two generative AI models, GAN and GPT, to
+generate learner data that manifests particular performance patterns,
+and thereby enable scalable sampling.
+Generative Adversarial Networks. In this study, we employ
+the Vanilla Generative Adversarial Network (GAN) [32], which
+represents the foundational architecture in the GAN family. It consists
+of two complementary networks: a generator ( G) and a discriminator
+(D), both implemented using fully connected (dense) layers [31],
+[32]. The generator is designed to produce simulated data samples
+from initialized random noise, typically sourced from a Gaussian
+distribution. Its output is crafted to be compatible with the input from
+the individualized learning performance pattern as synthetic sample
+data. The discriminator’s role is to determine whether the augmented
+data samples are real or synthetic by comparing them with actual data
+samples (original learning performance distribution). Concurrently,
+the G(·) is trained to progressively reduce the difference between
+the distributions of the real and augmented data through iterative
+tuning. The training costs for both D(·) and G(·) are dictated by the
+objective function V (G, D), defined as follows [32]:
+max
+D
+min
+G
+V (G, D) = Esimulate[logD(T real, T simulate)]+
+Enoise[log(1 − D(G(Random N oise)))]
+(4)
+where the T real represents the real performance sample input to
+G(·), and T simulate denotes the output G(·), simulating real data for
+assessment by D(·). The term Esimulate[·] calculates the expectation
+of log-probability that D(·) correctly identifies whether data is real or
+simulated, while Enoise[·] measures the expectation of log-probability
+that D(·) correctly rejects generated data as fake. In practical imple-
+mentations, this Vanilla GAN-based augmentation approach takes the
+matrix slice Ωqn, which represents the probability-based learning
+performance for learners across all attempts for the nth question
+qn, as the real T real. By training the Vanilla GAN on the learner-
+based vectors data from Ωqn, the learner dimension can be scaled,
+enabling synthetic augmentation of the existing data. The Vanilla
+GAN undergoes training over multiple epochs (N=3,000), alternating
+updates between the generator and discriminator. Each epoch begins
+with noise input for the generator, which produces synthetic data at a
+predefined sample size for learners. The discriminator is then trained
+first on real data, labeled as 1, and then on synthetic data, labeled as 0,
+with an average loss calculated to assess its accuracy in distinguishing
+real from synthetic samples. Subsequently, the generator is trained by
+propagating the gradient from the discriminator back to the generator.
+Specifically, the generator takes a random noise vector as input and
+generates synthetic data, which is then fed to the discriminator. The
+discriminator evaluates this synthetic data and assigns a probability
+score indicating whether the data is real or fake. The generator’s loss
+is computed based on how effectively it “fools” the discriminator into
+classifying the synthetic data as real. This is achieved by minimizing
+the discriminator’s output loss for the synthetic data. Using this
+loss, the generator’s parameters are updated via backpropagation
+using gradient descent. Over successive epochs, the generator learns
+to produce increasingly realistic data that aligns closely with the
+statistical patterns of the real learner performance data. Ultimately,
+the finely tuned generator produces scalable augmented sample data.
+Generative Pre-trained Transformer. This study highlights the
+use of GPT-4o for data augmentation, which involves capturing
+the actual data distribution and generating simulated data samples
+through a strategic, prompt-based process. This process, also de-
+tailed in Zhang et al. [12], [36], involves three main procedures:
+encoding, which converts numerical learning performance values into
+
+--- PAGE 8 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 8
+TABLE II: Example prompt strategy for augmenting sparse learning performance using GPT-4o.
+User Input GPT-4o Output
+User: Hello ChatGPT, your expertise as an AI language model makes you ideal for
+assisting me in generating synthetic learning performance data for individual learners.
+The primary task involves a thorough analysis of the existing learner-attempts matrix,
+where each value indicates the probability of a learner correctly answering a specific
+question on a particular attempt. We want to scale this data to accommodate more
+learners.
+(Provides relevant reading material, question information, and sample JSON.)
+...
+GPT-4o: To generate synthetic learning performance data for individual
+learners, we will:
+• Analyze the current distribution of probabilities in the
+learner-attempts matrix.
+• Define parameters to mimic real-world performance patterns (e.g.,
+power-law distributions).
+• Generate the new, larger synthetic dataset that retains the original
+data’s statistical properties.
+...
+User: {You can ask some questions to test if GPT-4o truly understands the information
+provided.}
+GPT-4o: {Present the results based on your testing query. }
+User: The current learners-attempts matrix, partially shown as:
+
+
+0.99759290 0 .99975013 0 .99962294 . . .
+0.99932609 0 .99996001 0 .99990710 . . .
+0.99705196 0 .99976564 0 .99956506 . . .
+...
+...
+...
+. . .
+
+
+corresponds to the question “What is the topic of the article?” (choices: [“Sports”,
+“Exercising”, “Skydiving”], correct answer: “Exercising”). Each matrix cell indicates the
+probability (ranging from 0 to 1) of a learner correctly answering on each attempt.
+These probabilities follow a power-law function with increasing attempts. In addition, the
+matrix uses the k-means++ algorithm to categorize learners by their fitted power-law
+parameters, although all learners fell into one cluster due to similar performance patterns.
+Please learn from this matrix and generate a new, augmented set of 1000 learners (i.e.,
+1000 rows) with 9 attempts (i.e., 9 columns). In doing so: 1) Use your computational
+capability to simulate the augmented matrix. 2) Present the final result as a complete
+matrix in NumPy array format. 3) Avoid including instructions, explanations, or extra
+text in the output. 4) Provide the entire matrix as a downloadable CSV file. ...
+GPT-4o: The augmented learners-attempts matrix for a population size of
+1000 learners has been generated and saved as a CSV file. ...
+User: Can you provide details about the model and setup you used for generating the
+synthetic data? ...
+GPT-4o: For generating the synthetic learners-attempts matrix, I
+employed the following model and setup:
+• Model details and parameters
+• Software libraries and environment
+• Key assumptions or constraints
+Upon executing the code, the synthetic learners-attempts matrix was
+successfully generated. ...
+User: How can I fine-tune the model to achieve more realistic augmented data? ... GPT-4o: To fine-tune the sampling model for data augmentation and
+increase the realism and variability of the synthetic data, consider:
+• Introducing learner-level parameter variations
+• Adjusting sampling distributions to match observed performance
+trends
+• Incorporating noise or slight randomization to replicate real-world
+fluctuations
+These enhancements ensure that the generated data more closely reflects
+authentic learner behavior. ...
+User: ... GPT-4o: ...
+contextual prompts; an LLM component that involves prompting
+an augmentation method that capitalizes on GPT’s reasoning and
+understanding capabilities; and decoding, which entails generating
+the simulated data along with interpretations. In this study, we used
+GPT-4o, and all further references to GPT indicate this version. As
+for the aforementioned matrix slice Ωqn that represents the learners
+and questions for learning performance, it can be formalized as
+GP T(Ωqn ), which scales the size of the learner’s data. Specifi-
+cally, inputs such as individualized learning performance values are
+contextualized with detailed information about questions, answers,
+and attempts, including descriptions of their format and content.
+Subsequently, a simulation request prompts GPT-4o to seamlessly
+integrate this numerical and textual data, driving the execution of a
+simulation. During this process, sampling mathematical models can
+be searched, selected, and fine-tuned by GPT-4o to enhance the data
+augmentation process. The prompts are iteratively refined to yield
+results that align with our specifications. Additionally, the Chain-of-
+Thought (CoT) prompting technique [77] is incorporated, which uses
+guiding sentences such as “Can you explain your understanding of
+this data?” , “Can you suggest potential machine learning methods
+for augmenting the data, particularly concerning sample size of ...
+?”, and “Could you provide the results and settings of the model?” .
+These prompts are designed to facilitate a more structured simulation
+process by encouraging GPT-4o to think through each step system-
+atically. Table II shows a sample conversation that demonstrates the
+step-by-step augmentation process for learning performance data. By
+embedding numerical data in carefully crafted prompts and drawing
+upon GPT-4o’s CoT, we iteratively generate an expanded learners-
+attempts matrix that retains critical statistical features. This approach
+underscores the flexibility and adaptability of GPT-based methods in
+capturing subtle learning patterns. Furthermore, prompt refinements
+and domain-specific guidance allow GPT-4o to introduce appropriate
+variability while preserving the core behaviors of the original dataset.
+As a result, the method offers a robust way to scale data for broader
+analyses without compromising fidelity.
+VII. Experimental Setup and Evaluation
+The experimental setup is designed and optimized according to
+the framework’s workflow, allowing for thorough evaluation through
+detailed procedures.
+• (a) Measurement of Sparsity Levels: The evaluation of sparsity
+levels is conducted by calculating the missing rate, defined as
+the percentage of missing values relative to the total entries in
+the tensor of learning performance data [78].
+
+--- PAGE 9 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 9
+• (b) Latent Features from Tensor Factorization: The number of
+latent features can range from 1 to 20, and the optimal setting
+is identified through a grid search method that involves iterative
+optimization of Tensor Factorization in data modeling.
+• (c) Question-level Knowledge Component Configurations: The
+BKT and PFA models utilize two distinct assumptions for
+setting KCs: “Single KC”, where all questions are attributed to
+one common knowledge component, and “Unique KC”, which
+assumes a one-to-one correspondence between questions and
+knowledge components.
+• (d) Cross-Validation for Running Data Imputation Models: For
+Tensor Factorization and other baseline models in the data
+imputation stage, training and testing consistently follow a 5-
+fold cross-validation strategy to ensure reliable results, with all
+models evaluated by averaging these outcomes or through five
+independent runs for enhanced robustness.
+• (e) Evaluation of Predictive Accuracy for Data Imputation: As
+referenced in other peer research [28], [48], [50], [79], both
+Mean Absolute Error ( M AE) and Root Mean Square Error
+(RM SE) are employed to quantify the performance of the
+models.
+• (f) Significance of Model Performance by ANOVA Analysis:
+ANOV A analysis is employed to assess the statistical signifi-
+cance of model performance, using MAE and RMSE to critically
+evaluate and compare the effectiveness of tensor factorization
+against other models.
+• (g) Scaling Sample Size: Varying sample sizes for data augmen-
+tation are compared between Vanilla GAN and GPT-4o models
+to examine their effects on variance and bias in parameter
+estimates fitted to augmented learner performance datasets.
+Sample sizes increase in increments of 1,000, ranging from
+1,000 to 20,000.
+• (h) Divergence Measurement: The Earth Mover’s Distance
+(EMD) metric [80], [81] is employed to quantify divergence
+by measuring the distance between parameters of the power-
+law functions fitted to augmented and original data distributions
+separately, and to assess the reliability of data augmentation
+across varying sample sizes. Before computing EMD, the pa-
+rameters are normalized within each sample size group to ensure
+comparability, as normalization scales the distributions to sum
+to 1, removing biases due to differences in magnitude or sample
+size. In this study, we use this normalization method to scale
+values while preserving their relative proportions. Instead of
+considering other methods like Min-Max normalization, which
+may distort the distribution’s shape, or Z-Score normalization,
+which is unsuitable for probability-based comparisons, we chose
+this approach to ensure the data remains a valid probability
+distribution. EMD measures the minimum cost of transforming
+one distribution into another, reflecting the amount of work
+needed. Smaller EMD values indicate closer similarity between
+distributions, while larger values indicate greater divergence.
+This EMD metric effectively captures how changes in simula-
+tion sample size influence divergence from the original data.
+This procedure is formalized as follows. Firstly, normalize the
+original distribution ˆoi = oiPn
+j=1 oj
+, ∀i ∈ {1, . . . , n}, and the
+augment distribution ˆsi = siPm
+j=1 sj
+, ∀i ∈ { 1, . . . , m}. Next,
+compute the EMD using the following equations:
+C ˆO(i) =
+iX
+j=1
+ˆoj, C ˆS(i) =
+iX
+j=1
+ˆsj (5)
+W1(O, S) =
+nX
+i=1
+|C ˆO(i) − C ˆS(i)| · di (6)
+where the di represents the distance between successive points
+(often assumed to be 1 if indices correspond to bins or pa-
+rameters), and C ˆO(i) and C ˆS(i) are the cumulative sums of
+the normalized vectors up to index i, ensuring an accurate
+calculation of the EMD.
+• (h) Evaluations of Parameters Distributions Characteristics: To
+comprehensively evaluate the augmented datasets, we employed
+supplementary measures, including visualization techniques (vi-
+olin plots) and quantitative metrics like the Interquartile Range
+(IQR) [82] and Bimodality Coefficient (BC) [83], alongside the
+EMD for divergence measurement. Violin plots were utilized
+to illustrate the distribution shapes and spread of parameters
+a and b, providing detailed insights into central tendencies
+and variability in both Vanilla GAN and GPT-4o augmented
+data relative to the original dataset. The IQR, defined as the
+range between the 25th percentile (first quartile) and the 75th
+percentile (third quartile) of a distribution, was calculated as a
+robust, nonparametric measure of spread. Unlike standard devi-
+ation, the IQR effectively captures variability while reducing the
+influence of outliers, making it particularly suited for comparing
+distributions with differing levels of skewness or kurtosis. The
+BC was calculated based on the skewness and kurtosis of the
+parameter distributions to quantitatively assess their modality.
+Additionally, the BC was employed to quantitatively assess the
+modality of the distributions, The formula for BC is:
+BC = g2 + 1
+k + 3(n−1)2
+(n−2)(n−3)
+(7)
+where g represents the skewness, k is the kurtosis, and n
+is the sample size. The threshold for bimodality was set at
+BC = 0 .555, with values above this threshold generally
+indicating bimodality, while values below suggest unimodality.
+This coefficient integrates asymmetry and peakedness to provide
+a comprehensive measure of the distribution’s modality. By
+integrating these supplementary measures, we performed a
+rigorous analysis of the structural fidelity and variability of the
+augmented data, enabling a comprehensive assessment of the
+augmentation models’ performance.
+To achieve optimal models’ performance, it’s essential to fine-
+tune the parameters of each model during the optimization process.
+For the BKT, the four key parameters ( P (L0), P (S), P (G) and
+P (T )) start with initial values within a range of 0.05 to 0.95. The
+optimization process tailors these parameters to each specific KC,
+demonstrating their adaptability to the unique characteristics of each
+KC. The PFA model using the generalized linear mixed model with
+individual learners as random effects for each KC (under “Unique
+KC” mode) emphasizes the consideration of individual differences
+among different learners and their related skills for acquiring KCs
+in the learning process. SPARFA-Lite derives its original matrix
+by averaging performance across multiple attempts, a method that
+simplifies the data preparation step. The Tensor Factorization, which
+is applied to various AutoTutor ARC lessons, necessitates a different
+set of tuning parameters, including λ, λ1, λ2, η, K (as detailed in
+Table V), and learning rate lr. In our experiments, λ was adjusted
+from 10−1 to 10−6, λ1 and λ2 ranged from 10−4 to 10−9, and lr
+varied from 0.5 to 10−2.
+VIII. Results
+A. Sparsity Measurement and Latent Features Obtained by
+Tensor Factorization
+Here, to answer the RQ1, we present the results about the sparsity
+levels for the learning performance data and the latent feature K
+obtained from the Tensor Factorization computing process for various
+lessons and their corresponding difficulty levels. This analysis aims to
+understand the extent of missing data and to determine the number of
+latent features required to accurately represent the underlying patterns.
+Table V presents the measured sparsity levels and the number of latent
+features K derived via tensor factorization. The sparsity levels across
+the dataset predominately fall within the 80% to 90% range, except
+for Lesson 4 (E), which stands at 64.58%. Higher sparsity levels
+indicate a greater proportion of missing values in the dataset, and
+vice versa. The values of latent features K exhibit variation across
+
+--- PAGE 10 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 10
+TABLE III: Comparative analysis of model prediction accuracy in AutoTutor ARC lesson dataset using RM SE. Bold values
+represent the lowest values.
+Dataset BKT (Single KC) BKT (Unique KC) PFA (Single KC) PFA (Unique KC) SPARFA-Lite Tensor Factorization
+Lesson 1 (M) 0.4790 0.4331 0.4733 0.4550 0.6287 0.4328
+Lesson 1 (H) 0.4178 0.4011 0.4315 0.4152 0.4850 0.3973
+Lesson 2 (M) 0.4575 0.3957 0.4557 0.4390 0.5691 0.3840
+Lesson 2 (E) 0.4261 0.4118 0.4415 0.4389 0.4969 0.4085
+Lesson 2 (H) 0.4512 0.3861 0.4490 0.4358 0.5449 0.3715
+Lesson 3 (M) 0.4077 0.3936 0.4227 0.4098 0.4644 0.3911
+Lesson 3 (H) 0.4768 0.4004 0.4782 0.4704 0.5826 0.3948
+Lesson 4 (M) 0.4766 0.4583 0.4775 0.4799 0.6008 0.4438
+Lesson 4 (E) 0.4929 0.4750 0.4989 0.4939 0.5789 0.4457
+Lesson 4 (H) 0.4968 0.4605 0.5154 0.5027 0.6544 0.4545
+TABLE IV: Comparative analysis of model prediction accuracy in AutoTutor ARC lesson dataset using M AE. Bold values
+represent the lowest values.
+Dataset BKT (Single KC) BKT (Unique KC) PFA (Single KC) PFA (Unique KC) SPARFA-Lite Tensor Factorization
+Lesson 1 (M) 0.4623 0.3777 0.4500 0.4071 0.3954 0.3806
+Lesson 1 (H) 0.3535 0.3347 0.3340 0.3350 0.2387 0.3178
+Lesson 2 (M) 0.4252 0.3257 0.4150 0.3806 0.3245 0.2740
+Lesson 2 (E) 0.3731 0.3461 0.3666 0.3507 0.2503 0.3052
+Lesson 2 (H) 0.4184 0.3141 0.4003 0.3595 0.2979 0.2904
+Lesson 3 (M) 0.3330 0.3175 0.3293 0.3256 0.2158 0.2805
+Lesson 3 (H) 0.4588 0.3275 0.4446 0.4380 0.3400 0.3030
+Lesson 4 (M) 0.4598 0.4106 0.4437 0.4487 0.3625 0.3494
+Lesson 4 (E) 0.4819 0.4304 0.4789 0.4806 0.3583 0.3372
+Lesson 4 (H) 0.4945 0.3998 0.4914 0.4815 0.4287 0.3832
+different lessons and their corresponding difficulty levels, typically
+requiring between 4 to 7 latent features to accurately represent the
+underlying patterns in the learning performance data.
+TABLE V: The sparsity levels and obtained latent features by
+tensor factorization.
+Dataset Sparsity Levels K (Latent Features)
+Lesson 1 (M) 84.94% 6
+Lesson 1 (H) 89.89% 7
+Lesson 2 (M) 84.02% 6
+Lesson 2 (E) 81.25% 4
+Lesson 2 (H) 85.45% 6
+Lesson 3 (M) 81.25% 5
+Lesson 3 (H) 82.04% 6
+Lesson 4 (M) 86.27% 6
+Lesson 4 (E) 64.58% 6
+Lesson 4 (H) 86.57% 5
+Notes: The table summarizes the sparsity levels and the number of latent
+features (K) obtained from tensor factorization across various datasets. The
+datasets are divided by lesson and categorized as M (Medium), H (Hard), and
+E (Easy). Higher sparsity levels indicate a greater proportion of missing values
+in the dataset. The number of latent features K represents the dimensionality
+of the latent space resulting from the factorization process.
+B. Predictive Accuracy for Data Imputation
+As demonstrated by the predictive accuracy results based on the
+two metrics, RMSE and MAE, which address RQ1, the following
+analysis provides insights into model performance.
+Table III demonstrates that Tensor Factorization consistently
+achieves the lowest RMSE values across all lessons and difficulty
+levels (medium, easy, and hard), highlighting its superior predic-
+tion accuracy (with the lowest RMSE values bolded in the table).
+This indicates that Tensor Factorization is particularly effective in
+predicting performance compared to the other three KT models,
+including BKT, PFA, and SPARFA-Lite. The superior performance of
+Tensor Factorization in learner modeling also reflects its accuracy in
+predicting missing data through its mathematical imputation methods,
+addressing a critical need for data imputation in adult literacy. Among
+the RMSE values of Tensor Factorization across all lessons and
+difficulty levels, the model achieves the lowest RMSE in Lesson 2
+(H) with 0.3715 and the highest RMSE in Lesson 4 (H) with 0.4545,
+indicating that its prediction accuracy is best in Lesson 2 (H) and
+less effective in Lesson 4 (H). Additionally, the RMSE from the
+BKT (unique KC) model is quite close to Tensor Factorization and
+outperforms other models in several instances. For example, in Lesson
+1 (M), BKT (unique KC) achieves an RMSE of 0.4331 compared
+to Tensor Factorization’s 0.4328, and in Lesson 3 (H), BKT (unique
+KC) achieves an RMSE of 0.4004 compared to Tensor Factorization’s
+0.3948. This trend is also observed in other lessons, including Lesson
+1 (H), Lesson 2 (M), Lesson 2 (E), Lesson 2 (H), Lesson 3 (M),
+Lesson 4 (M), Lesson 4 (E), and Lesson 4 (H). These trends reflect
+the relatively higher accuracy of BKT compared to the other models,
+except for Tensor Factorization.
+Table IV presents a comparison of MAE values across various
+models and lessons, with the lowest values highlighted in bold.
+Notably, Tensor Factorization frequently achieves the lowest MAE
+values, signaling its robustness in closely estimating actual learning
+performance. Nonetheless, some models such as SPARFA-Lite exhibit
+exceptional performance in specific lessons including Lesson 1 (H)
+with an MAE of 0.2387, Lesson 2 (E) with an MAE of 0.2503, and
+Lesson 3 (M) with an MAE of 0.2158, with BKT (Unique KC) also
+excelling in Lesson 1 (M) with an MAE of 0.3777, indicating their
+potential effectiveness under specific conditions.
+To determine if the MAE values obtained by Tensor Factorization
+are significantly lower than those from other models, an ANOV A
+analysis was conducted using MAE as the dependent variable and
+a binary factor indicating Tensor Factorization as the independent
+variable. During the ANOV A analysis, the two degrees of freedom
+are as follows: d fbetween = 5 for between groups, and d fwithin = 54
+for within groups. The F-value is calculated to be 7.2003, with a
+corresponding p-value of 3.164 × 10−5, which is less than 0.05. This
+indicates statistically significant differences in MAE between Tensor
+Factorization and the other models.
+In conclusion, Tensor Factorization allows for highly accurate
+
+--- PAGE 11 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 11
+(a) Distribution of parameter a and b.
+ (b) Curve fitting of learning performance along attempt
+Fig. 3: Estimates of parameter estimates a and b and identification of learning performance patterns through clustering.
+prediction of missing performance data based on the existing data
+distribution, enabling a comprehensive dataset for data imputation.
+C. Identification of Individualized Learning Performance Pat-
+terns
+To address RQ2, this section presents the results of identifying
+individualized learning performance patterns through clustering anal-
+ysis. By leveraging a dense 3-dimensional tensor representation of
+data imputed from Tensor Factorization, we analyze distinct learning
+performance clusters.
+Fig. 3 illustrates distinct learning performance patterns identified
+through clustering, based on a dense 3D tensor representation of data
+imputed from Tensor Factorization, using the 6th question of Lesson
+2 (M) as a case study. It identifies five distinct clusters based on
+fluctuations in parameter a and b from power-law function fitting
+on the learners-attempts matrix data (as mentioned before) for the
+6th question, each depicted in different colors as shown in Fig. 3a.
+From Cluster 1 to Cluster 5, the a value decreases, starting largest
+in Cluster 1 and gradually reducing through to Cluster 5. Conversely,
+the b value increases across the clusters from Cluster 1 to Cluster 5,
+indicating an inverse relationship between a and b among different
+clusters.
+Fig. 3b displays the clustering results using identical color coding
+for the five clusters and shows that predicted learning performance
+(probability-based) generally increases monotonically with the num-
+ber of attempts, approaching or reaching a performance level of
+around 1 ( y-axis value). This trend persists across all clusters,
+although at varying rates. Specifically, most fitting curves approach
+around 1 within seven attempts, indicating that the majority of
+learners likely do not need more than seven attempts to achieve
+theoretical complete mastery, a pattern also observed in other cases
+not shown. Note that the fitting curves express the overall trend, while
+scatter points represent the actual performance data.
+D. Results of Scalable Data Augmentation
+This subsection presents the data augmentation results based on
+GenAI models with scalable sampling, addressing RQ2. The analysis
+highlights how these models effectively enhance data diversity and
+volume, thereby boosting the robustness of subsequent machine
+learning applications. Furthermore, a detailed comparison between
+Vanilla GAN and GPT-4o based augmentation methods highlights
+which approach offers greater stability across varying sample sizes.
+Fig. 4 illustrates the EMD measurement results for divergence in
+power-law fitting parameters, comparing augmented learning perfor-
+mance data to original data. It covers the full scope of parameter a
+and b across five clusters for the example 6th question of Lesson
+2(M). In both models (Vanilla GAN and GPT-4o), the parameters
+a and b generally exhibit stable and relatively low EMD (mostly
+below 0.10) across increasing sample sizes (from 1,000 to 20,000) for
+most clusters. However, exceptions are observed in GPT-4o Cluster
+5, where the EMD remains around 0.5 for both parameters a and b
+across all sample sizes. This generally demonstrates that both Vanilla
+GAN and GPT-4o models can generate stable augmented data by
+effectively learning the original data distributions, even as the sample
+size scales. Fig. 5 presents the mean EMD values across all clusters.
+The mean EMD values for Vanilla GAN and GPT-4o across both
+parameters are nearly identical, except for parameter b in Cluster 3,
+where Vanilla GAN has a slightly lower value (0.050 compared to
+GPT’s 0.055). The overall mean EMD values across all six clusters
+are 0.137 for Vanilla GAN and 0.138 for GPT-4o, indicating closely
+aligned performance between the two generative models. This simi-
+larity suggests that both Vanilla GAN and GPT-4o exhibit comparable
+accuracy in capturing the data distributions across clusters, with
+minimal divergence between them. In the exceptional case of GPT-4o
+Cluster 5, however, we hypothesize that the observed differences stem
+from the model’s challenge in capturing this cluster’s specific data
+distribution, likely due to its high sparsity with data from only two
+users, as shown in Fig. 3). In conclusion, while both Vanilla GAN and
+GPT-4o models generally produce augmented data that aligns closely
+with the original data across varying conditions, including quantified
+learning features, parameters a and b, and expanded sample sizes,
+Vanilla GAN demonstrates slightly better performance in certain
+clusters, specifically the Cluster 3 for parameter b, where its where its
+EMD values are marginally lower. Overall, both models exhibit stable
+and reliable performance, with Vanilla GAN performing slightly
+better than GPT-4o in certain scenarios, and minimal divergence from
+the original data distributions in most cases.
+To further investigate these observations, we now examine the
+detailed distribution patterns of parameters a and b obtained from the
+augmented datasets, as illustrated in Fig. 6. This figure presents the
+unnormalized distributions of parameters a and b obtained through
+power-law fitting on the augmented learning performance dataset,
+using both Vanilla GAN and GPT-4o based augmentation. For clarity,
+Cluster 3 of the 6th question from Lesson 2 (M) is used as an
+example to highlight the differences in greater detail. By focusing
+on unnormalized data, we aim to preserve the original scale of the
+parameters and directly compare their raw distributions. Note that
+the grey color represents the original data distribution. Moreover, the
+IQR, depicted in Fig. 7, supplements this analysis by providing a
+refined measure of distribution spread. The combined insights from
+these two figures are summarized in the following paragraphs.
+
+--- PAGE 12 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 12
+Fig. 4: EMD measurement for scalable sampling by data augmentation. The original sample size is 20, and the augmentations
+are shown in increments of 1,000, with total sizes ranging from 1,000 to 20,000.
+Fig. 5: Comparison of EMD measurement for data augmentation between Vanilla GAN and GPT-4o.
+(a) Distribution of parameter a
+ (b) Distribution of parameter b
+Fig. 6: Distributions of parameters in augmented learning performance data.
+
+--- PAGE 13 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 13
+(a) Interquartile range of parameter a
+ (b) Interquartile range of parameter b
+Fig. 7: Variance comparison of parameters in augmented learning performance data.
+(a) Bimodality coefficient of parameter a
+ (b) Bimodality coefficient of parameter b
+Fig. 8: Comparison of the bimodality coefficient of parameters in augmented learning performance data.
+Fig. 6a illustrates the distribution of parameter a for Vanilla GAN
+and GPT-4o models. The following observations can be made. First,
+the parameter distribution of a obtained from Vanilla GAN-based
+augmentation generally falls within the range of the original data, with
+a slightly extended tail beyond the original maximum value. Com-
+pared to the original distribution, the Vanilla GAN-based distributions
+maintain a similar shape with a concentrated and narrower central
+region in the violin plots, indicating that the Vanilla GAN model
+effectively captures the core characteristics of the original data while
+introducing minimal variability. The IQR values for Vanilla GAN, as
+shown in Fig. 7a, remain consistently stable with minimal fluctuations
+across all sample sizes, reflecting reliable behavior and closely align-
+ing with the original data’s variability. This consistent performance
+in terms of parameter a highlights the stability and dependability
+of Vanilla GAN-based augmentation in preserving the structure and
+core characteristics of the original distribution. In contrast, the GPT-
+4o-based augmentation exhibits considerably broader parameter a
+distributions for most sample sizes, suggesting higher variability. This
+variability is particularly pronounced for certain sample sizes, such as
+1,000 to 9,000, and 15,000 to 16,000, where the GPT-4o distributions
+display elongated tails and exhibit distinctly different central regions.
+Compared to the original distribution, these central regions are not
+only wider but also shifted, indicating significant deviations in both
+dispersion and centrality from the original data’s core characteristics.
+This higher variability in parameter a is further evidenced by the
+fluctuating IQR values for GPT-4o-based augmentation in Fig. 7a.
+However, for specific sample sizes, including 10,000, 12,000, 13,000,
+14,000, and 17,000 to 20,000, the GPT-4o-based distributions exhibit
+relatively smaller ranges closer to the original data, which is also
+reflected in lower IQR values for these cases, though they still
+extend beyond the original distribution. These observations show
+that GPT-4o-based augmentation has high variability and inconsistent
+performance in approximating the original distribution, capturing its
+core characteristics only occasionally. In contrast, Vanilla GAN-based
+augmentation exhibits consistently lower variability, with stable IQR
+values, highlighting its reliability in preserving the original data’s
+structure and variability.
+Fig. 6b shows the distribution of parameter b for Vanilla GAN-
+based augmentation. First, the parameter distribution of obtained
+from Vanilla GAN-based augmentation also generally aligns with the
+original data, particularly in terms of maximum and minimum values.
+The distributions exhibit a similar shape, with slightly extended tails
+beyond the original range but no significant deviations. The IQR
+values for Vanilla GAN, as shown in Fig. 7b, remain consistently
+stable across all sample sizes, reflecting Vanilla GAN’s stable and
+reliable performance in data augmentation. This consistent behavior
+in parameter b highlights the Vanilla GAN model’s effectiveness in
+preserving the structure and variability of the original distribution
+with minimal distortion. In contrast, the GPT-4o-based augmentation
+exhibits significantly higher variability for parameter b, as evidenced
+by the broader distributions and elongated tails across most sample
+sizes, as shown in Fig. 6b. The GPT-4o distributions display marked
+deviations from the original data, particularly for sample sizes be-
+tween 1,000 and 9,000 and again at 15,000 to 16,000, where the
+
+--- PAGE 14 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 14
+tails become elongated. The dispersion is further reflected in the
+fluctuating IQR values for GPT-4o, as seen in Fig. 7b. However, there
+is occasional alignment with the original data for specific sample
+sizes, such as 10,000 to 14,000 and 17,000 to 20,000. In these cases,
+the distributions are relatively closer to the original data compared
+to other sample sizes, as observed in both Fig. 6b and Fig. 7b.
+These observations indicate that, for parameter b, Vanilla GAN-based
+augmentation demonstrates consistent and reliable performance, ef-
+fectively capturing the original distribution’s structure and variability.
+In contrast, GPT-4o-based augmentation exhibits greater variability
+and inconsistency, with fluctuations in alignment and dispersion
+that make it less reliable for preserving the original distribution’s
+characteristics.
+As indicated by the distribution shape, we analyze the parameters
+a and b through BC, which provides a quantitative measure of
+bimodality, as illustrated in Fig. 8. The threshold BC = 0 .555,
+marked in the Fig. 8, indicates that values exceeding this threshold
+generally signify bimodality, while lower values suggest unimodality.
+The original data distribution for Cluster 3 exhibits bimodality for
+both parameter a and b, as evidenced by BC values greater than
+0.555, represented by the dark dot labeled “Original” in the figure.
+As shown in Fig. 8, the Vanilla GAN-generated data predominantly
+exhibits unimodality across all sample sizes for both parameters, with
+BC values remaining below the 0.555 threshold. On the other hand,
+the GPT-4o-generated data generally exhibits unimodality, although
+it transitions to bimodality in specific cases. Notably, unimodality
+is observed at sample sizes of 12,000, 14,000, 17,000, 18,000, and
+19,000 for both parameters a and b. The Vanilla GAN show stable
+though that distribution shape are different original data, the GPT-
+4o is high variant but some cases distribution shape more closer
+to original data distributions shape. These findings indicate that the
+Vanilla GAN model consistently generates unimodal distributions,
+which, while stable, deviate from the original data’s bimodal charac-
+teristics. In contrast, the GPT-4o model exhibits greater variability in
+its distributions. In specific instances, the distributions generated by
+GPT-4o align more closely with the original data’s bimodal structure,
+suggesting that GPT-4o has the potential to better capture certain
+features of the original data under specific conditions.
+IX. Discussion
+This study proposes a systematic augmentation framework integrat-
+ing multidimensional learner modeling with generative AI models,
+specifically Vanilla GANs and GPT-4o, to address the critical issue
+of data sparsity in ITSs. Our primary objective was to enhance the
+quality and scalability of learning performance data in adult reading
+comprehension using tensor factorization for data imputation and
+generative models for data augmentation. Guided by the research
+questions on the effectiveness of tensor factorization for imputing
+student performance data and the utilization of GenAI models for
+tailored data augmentation, our findings reveal that tensor factor-
+ization outperforms traditional modeling methods, providing higher
+predictive accuracy and more effective handling of missing values.
+Building on the densified 3D tensor-based learning performance
+data, individual learning performance patterns were identified through
+clustering, and both Vanilla GAN and GPT-4o models were employed
+to augment learning performance data tailored to these patterns.
+Results demonstrate that augmented datasets from both Vanilla GAN
+and GPT-4o align closely with the original data distribution, as
+evidenced by divergence measurements using the EMD. However,
+key differences between the models were observed: Vanilla GAN-
+generated data consistently produces stable, unimodal distributions
+with lower variability and divergence, whereas GPT-4o generated data
+exhibits higher variability and occasional bimodality, aligning more
+closely with the original data’s structure under specific sample sizes.
+These complementary strengths underscore Vanilla GAN’s reliability
+and GPT-4o’s potential to replicate complex patterns, highlighting
+their utilities for enhancing learning performance data.
+High sparsity levels in the dataset, as highlighted in Table V, sig-
+nificantly impact modeling and analytics, leading to challenges such
+as modeling bias, reduced performance, and difficulties in knowledge
+tracing [10], [17]. Other research has also highlighted similar high
+sparsity levels in educational datasets. For example, Saarela’s research
+[17] on student performance data notes sparsity levels ranging from
+30% to 74% in the PISA 2012 dataset, and Thai-Nghe’s study [84]
+on the Algebra dataset reports extreme sparsity, with rates reaching
+up to 99.81%. The latent features captured through tensor factor-
+ization quantitatively reflect learner-specific characteristics, such as
+learning abilities and personalities. These characteristics of learners
+remain stable over time in the reading comprehension context. The
+number of features identified, averaging around six, closely aligns
+with Graesser-McNamara’s multi-level theoretical framework [85]
+for reading comprehension, which includes six levels: word, explicit
+textbase, referential situation model, discourse genre and rhetorical
+structure, and pragmatic communication level [86]. However, further
+research is needed to verify this alignment and explore the potential
+connections.
+Constructing a 3D tensor of learning performance data provides
+a foundation for analyzing patterns across learners, questions, and
+attempts. Tensor factorization captures complex interactions among
+these dimensions and estimates missing values for unattempted
+questions. This approach builds on successful applications of tensor
+methods in learning performance analysis, as shown in prior studies
+[13], [48], [78]. By integrating this modeling technique, we can more
+accurately impute missing data, thereby enhancing the robustness of
+the analysis and providing deeper insights into learner behavior and
+performance trends in ITSs.
+The identification of different learning performance patterns across
+various clusters highlights the importance of variations in initial
+learning performance and learning rate as key differentiators among
+learners. The observed inverse relationship between these two quan-
+tified features ( a and b) reveals a notable learning phenomenon:
+learners with higher initial abilities are closer to complete mastery
+and exhibit slower knowledge acquisition, while those with lower
+initial abilities achieve faster knowledge gains due to their lower
+starting points. While other past work has found such aptitude-
+treatment interactions, several other data sets, broader evidence finds
+that learning rates are largely independent of ability, with exceptions
+often lying in language learning domains (such as the domain of this
+study) where individual learning differences can be compensated for
+less by tailored instructions [87].
+In terms of EMD measurements, both Vanilla GAN and GPT-4o
+models demonstrate stable performance in data augmentation across
+varying sample sizes, with Vanilla GAN showing slightly better
+results than GPT-4o in certain scenarios and exhibiting minimal diver-
+gence from the original data distributions in most cases. While Vanilla
+GAN demonstrates more consistent and stable performance across all
+conditions, GPT-4o generated data exhibits higher variability and oc-
+casional bimodality, allowing it to align more closely with the original
+data’s structure under specific sample sizes. These observations are
+further validated through evaluations of the distribution characteristics
+of parameters a and b, using visualization techniques (violin plots)
+and quantitative metrics such as IQR and BC metric. The Vanilla
+GAN model, with its advanced neural network architecture and
+thousands of parameters, outperforms traditional statistical methods in
+capturing the original data distribution, making it a dependable choice
+for scenarios requiring consistent augmentation across varied condi-
+tions. On the other hand, GPT-4o based augmentation closely aligns
+with the original data distribution, suggesting high fidelity. GPT-4o’s
+capability to understand context-based numerical values and execute
+self-driven tasks including self-analysis, self-programming, and self-
+computing during data augmentation [12] highlights its potential
+for generating complex data patterns. These capabilities, especially
+when combined with advanced computational techniques, underscore
+GPT-4o’s promise for data augmentation tasks requiring nuanced
+contextual understanding and adaptability.
+When deciding between the two type of models, the choice should
+be scenario-based and goal-driven, aligning with the specific context
+and objectives of the task. This study provides a foundational method-
+
+--- PAGE 15 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 15
+ology for employing GenAI models, including generative computing
+models exemplified by GAN and LLMs represented by GPT-4o, while
+acknowledging that alternative GenAI models could also be applied,
+with performance varying based on testing and context. A scenario-
+based approach involves analyzing the context in which the model
+will be used, such as favoring Vanilla GAN for applications requiring
+stability and consistency, or GPT-4o for replicating complex, nuanced
+data patterns. A goal-driven perspective focuses on aligning the
+model’s strengths with the intended outcomes, such as using Vanilla
+GAN to generate data with minimal variability and bias, or GPT-4o
+to mimic intricate structures and support diversity. The performance
+in augmenting learning performance data may vary depending on
+the specific model chosen, but the complementary strengths of GAN
+(stability) and GPT-4o (complexity) highlight their utility for different
+contexts and goals.
+Further, Vanilla GAN-derived parameter estimates exhibited desir-
+able properties for both parameters a and b: lower variance compared
+to the original parameter distribution at the cost of small bias in
+parameter estimates. Lower variance is desirable as it indicates a
+higher accuracy with which a can be estimated (in the absence
+of statistical bias, which was minimal compared to the original
+parameter distribution). Importantly, this desirable property of Vanilla
+GAN augmentation is not dependent on the total augmented sample
+size, suggesting consistent performance irrespective of the degree of
+data augmentation applied. In contrast, GPT-4o derived parameter
+estimates demonstrate greater variability compared to the original
+distribution, indicating less stability in replicating specific parameter
+characteristics. However, GPT-4o’s high fidelity in preserving the
+original data’s structural features in certain occasional cases high-
+lights its potential for generating complex and nuanced data patterns.
+Future research exploring self-driven procedural prompts, such as
+self-searching, self-programming, and self-computing for numerical
+value augmentation, may further enhance GPT-4o’s capabilities and
+improve upon the baseline performance reported in this study.
+The systematic augmentation framework that integrates multidi-
+mensional learner modeling through tensor factorization and GenAI
+models effectively addresses data sparsity issues in ITSs and enables
+the augmentation of large-scale learning performance data. This
+approach captures the complexity of human learning performance
+with greater accuracy than traditional machine learning methods,
+thereby enhancing predictive capabilities and providing deeper in-
+sights into learners’ progress. As a result, ITSs can offer more precise
+recommendations and interventions, leading to personalized and
+adaptive learning experiences. By generating high-quality augmented
+data, the framework supports more comprehensive and equitable
+analysis, reducing biases and enabling more inclusive educational
+research and practice. This, in turn, helps educators and policymakers
+make more informed decisions based on robust, large-scale evidence.
+Additionally, the ability to conduct extensive analyses with augmented
+data mitigates biases such as group or data selection biases, leading
+to fairer and more generalizable findings in educational research.
+Ultimately, this innovative framework significantly contributes to the
+advancement of AI-driven educational tools, fostering better and
+more effective instructions and recommendations, and improving
+educational outcomes for all learners.
+X. Limitations and Future Works
+This study addresses the significant challenge of data sparsity in
+ITSs through a systematic augmentation framework that integrates
+multidimensional learner modeling and GenAI models. However,
+despite the promising results, there are several limitations that need
+to be addressed. Firstly, the datasets used in this study were limited
+to adult reading comprehension cases from the AutoTutor ARC. This
+restricts the generalizability of our findings to other domains of ITSs,
+where the characteristics and patterns of learner performance data
+might differ. Future research should aim to apply this framework to
+diverse ITSs and learning contexts to validate its applicability and
+effectiveness. Secondly, the study focused on specific versions of
+GenAI models, particularly Vanilla GAN and GPT-4o. Our experi-
+ments with GPT-4o demonstrated improved performance, particularly
+in terms of Earth Mover’s Distance (EMD) and visual analyses,
+compared to GPT-4. However, a more detailed exploration of various
+GPT versions, such as GPT o-1, is needed to fully understand the
+specific improvements and differences they offer. Similarly, while
+we employed the base GAN architecture, Vanilla GAN, for data
+augmentation, advanced GAN variants like Deep Convolutional
+GAN (DCGAN), Conditional GAN (cGAN), and Wasserstein GAN
+(WGAN) could potentially enhance the augmentation process. Future
+work should investigate how these different versions of GAN and
+GPT influence performance metrics and learning outcomes, thereby
+improving the framework’s robustness, scalability, and adaptability
+across diverse ITS datasets. Additionally, we highlight that other
+open-source LLMs, such as Llama, Grok, and others, offer valuable
+opportunities for testing, whether through interface-based implemen-
+tations or API versions. Secondly, the tensor-based data imputation
+and augmentation methods, although effective in this study, might
+not capture all nuances of learner behavior and performance. Tensor
+factorization models assume that learners at similar knowledge levels
+exhibit comparable performance patterns, which may not always hold
+true, especially in cases of highly individualized learning processes.
+Given the remarkable success of generative deep learning models,
+such as Generative Adversarial Imputation Networks (GAIN) [88],
+[89] and Autoencoders (AE) [90] for data imputation through re-
+construction mechanism, future work should explore their potential
+in handling data sparsity and capturing more complex patterns
+underlying learning performance data in ITSs. Thirdly, our study
+prioritizes the application of methodology over model optimization,
+examining how GenAI can enhance data augmentation. Although
+emerging advanced models, such as the GPT o-1, present promising
+avenues for further testing [65], limitations in file processing and
+project costs mean that a more extensive analysis is beyond the
+current scope and deferred to future work. Additionally, the broad
+scope of our systematic framework presents certain limitations, as
+it extends beyond a focused investigation of specific aspects such
+as multidimensional interactions, latent feature exploration in tensor
+factorization, and the verification of augmented data for real-world
+learner modeling. These areas may not have been explored in suf-
+ficient depth, limiting the granularity of insights. Lastly, while this
+framework focuses on augmenting learning performance data, it does
+not directly provide strategies for integrating the proposed framework
+with comprehensive learner modeling in ITSs to gain a more nuanced
+understanding of learner behavior and enhance adaptive instruction.
+Future research should aim to address these gaps, enabling more
+effective personalization and support for learners within ITSs.
+XI. Conclusions
+The present study presented a novel framework for augmenting
+learning performance data in ITSs by integrating multidimensional
+learner modeling (specifically tensor factorization) with GenAI mod-
+els. The presented empirical evaluation suggests that this framework
+effectively densifies sparse learning performance data. We specifically
+addressed the challenge of learning performance data sparsity issues
+in ITSs using AutoTutor ARC as a case study, leveraging tensor
+factorization for data imputation and GenAI models, including Vanilla
+GAN and GPT-4o, for data augmentation. Our findings highlighted
+the superior predictive accuracy of tensor factorization over baseline
+methods, such as BKT, PFA and SPARFA-Lite, across four different
+AutoTutor ARC lessons across different difficulty levels. Furthermore,
+Vanilla GAN-based augmentations demonstrated desirable properties
+such as lower variance in parameter estimates. These improvements
+were largely reliable across different augmented sample sizes. Vanilla
+GAN-based augmentations exhibited desirable properties, including
+lower variance in parameter estimates, ensuring stable and reliable
+performance regardless of the total augmented sample size. In con-
+trast, GPT-4o based augmentation demonstrated higher variability
+but occasionally showed closer alignment with the original data
+distribution, particularly in cases where bimodality was observed.
+
+--- PAGE 16 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 16
+These results underscore the complementary strengths of Vanilla
+GAN and GPT-4o: Vanilla GAN provides relatively reliable aug-
+mentation, while GPT-4o, though highly variable, offers the potential
+for replicating complex data structures and enhancing data diversity.
+The systematic augmentation framework effectively addresses data
+sparsity issues in ITSs, enhancing predictive capabilities and pro-
+viding deeper insights into learners’ progress. This framework has
+the potential to mitigate group and data selection biases that often
+occur during the collection of learning performance data in real-
+world experiments. The framework shows promise for enhancing ITSs
+through safe and cost-effective augmentation, enabling comprehensive
+data modeling by mitigating the impact of data sparsity, facilitating
+virtual evaluations of instructional designs, and paving the way for
+informed real-world applications to improve learners’ outcomes in
+AI-driven education.
+Acknowledgments
+Our study was supported by the Institute of Education Sciences,
+U.S. Department of Education, through Grant R305A200413 and
+R305A190522 to The University of Memphis. The opinions expressed
+are those of the authors and do not represent views of the Institute
+or the U.S. Department of Education. We also extend our sincere
+gratitude to Prof. Philip I. Pavlik Jr. from the University of Memphis
+and Prof. Shaghayegh Sahebi from the University at Albany - SUNY
+for their expert guidance on the tensor factorization method. We
+also thank Prof. Mohammed Yeasin from the University of Memphis
+for his critical suggestions on the divergence measurement method
+used in this study. Additionally, we express our heartfelt thanks
+to Prof. Kenneth R. Koedinger of Carnegie Mellon University for
+his invaluable insights on knowledge tracing and simulations, which
+significantly enriched this study.
+References
+[1] T. Dom ´ınguez-Bola˜no, V. Barral, C. J. Escudero, and J. A. Garc ´ıa-Naya,
+“An IoT system for a smart campus: Challenges and solutions illustrated
+over several real-world use cases,”Internet of Things, vol. 25, p. 101099,
+2024.
+[2] B. Tabuenca, M. Uche-Soria, W. Greller, D. Hern ´andez-Leo, P. Balcells-
+Falgueras, P. Gloor, and J. Garbajosa, “Greening smart learning environ-
+ments with Artificial Intelligence of Things,” Internet of Things, vol. 25,
+p. 101051, 2024.
+[3] A. C. Graesser, X. Hu, and R. Sottilare, “Intelligent tutoring systems,”
+in International handbook of the learning sciences . Routledge, 2018,
+pp. 246–255.
+[4] A. C. Graesser, S. Lu, G. T. Jackson, H. H. Mitchell, M. Ventura,
+A. Olney, and M. M. Louwerse, “Autotutor: A tutor with dialogue in nat-
+ural language,” Behavior Research Methods, Instruments, & Computers,
+vol. 36, pp. 180–192, 2004.
+[5] K. R. Koedinger, A. Corbett et al., Cognitive tutors: Technology bringing
+learning sciences to the classroom . na, 2006.
+[6] P. I. Pavlik Jr and L. Zhang, “Using autoKC and Interactions in Logistic
+Knowledge Tracing,” Grantee Submission, 2022.
+[7] L. G. Eglington and P. I. Pavlik Jr, “How to optimize student learning
+using student models that adapt rapidly to individual differences,”
+International Journal of Artificial Intelligence in Education , vol. 33,
+no. 3, pp. 497–518, 2023.
+[8] K. R. Koedinger, A. T. Corbett, and C. Perfetti, “The Knowledge-
+Learning-Instruction framework: Bridging the science-practice chasm to
+enhance robust student learning,” Cognitive science, vol. 36, no. 5, pp.
+757–798, 2012.
+[9] S. Pandey and G. Karypis, “A self-attentive model for knowledge
+tracing,” arXiv preprint arXiv:1907.06837, 2019.
+[10] W. Lee, J. Chun, Y. Lee, K. Park, and S. Park, “Contrastive learning for
+knowledge tracing,” in Proceedings of the ACM Web Conference 2022 ,
+2022, pp. 2330–2338.
+[11] X. Wang, S. Zhao, L. Guo, L. Zhu, C. Cui, and L. Xu, “GraphCA: Learn-
+ing from Graph Counterfactual Augmentation for Knowledge Tracing,”
+IEEE/CAA Journal of Automatica Sinica, vol. 10, no. 11, pp. 2108–2123,
+2023.
+[12] L. Zhang, J. Lin, C. Borchers, M. Cao, and X. Hu, “3DG: A Framework
+for Using Generative AI for Handling Sparse Learner Performance Data
+From Intelligent Tutoring Systems,” arXiv preprint arXiv:2402.01746 ,
+2024.
+[13] L. Zhang, P. I. Pavlik Jr, X. Hu, J. L. Cockroft, L. Wang, and G. Shi,
+“Exploring the Individual Differences in Multidimensional Evolution of
+Knowledge States of Learners,” in International Conference on Human-
+Computer Interaction. Springer, 2023, pp. 265–284.
+[14] G. Psathas, T. K. Chatzidaki, and S. N. Demetriadis, “Predictive Mod-
+eling of Student Dropout in MOOCs and Self-Regulated Learning,”
+Computers, vol. 12, no. 10, p. 194, 2023.
+[15] R. S. Baker, “Modeling and understanding students’ off-task behavior in
+intelligent tutoring systems,” in Proceedings of the SIGCHI conference
+on Human factors in computing systems , 2007, pp. 1059–1068.
+[16] R. S. Baker, A. T. Corbett, and K. R. Koedinger, “Detecting student
+misuse of intelligent tutoring systems,” in Intelligent Tutoring Systems:
+7th International Conference, ITS 2004, Macei´o, Alagoas, Brazil, August
+30-September 3, 2004. Proceedings 7 . Springer, 2004, pp. 531–540.
+[17] M. Saarela, “Automatic knowledge discovery from sparse and large-
+scale educational data: case finland,” Ph.D. dissertation, University of
+Jyv¨askyl¨a, 2017.
+[18] J. Greer and M. Mark, “Evaluation methods for intelligent tutoring
+systems revisited,” International Journal of Artificial Intelligence in
+Education, vol. 26, no. 1, pp. 387–392, 2016.
+[19] M. Baudin, A. Dutfoy, B. Iooss, and A.-L. Popelin, “Openturns: An
+industrial software for uncertainty quantification in simulation,” in
+Handbook of uncertainty quantification . Springer, 2017, pp. 2001–
+2038.
+[20] C. Shorten and T. M. Khoshgoftaar, “A survey on image data augmen-
+tation for deep learning,” Journal of big data , vol. 6, no. 1, pp. 1–48,
+2019.
+[21] T. Emmanuel, T. Maupong, D. Mpoeleng, T. Semong, B. Mphago, and
+O. Tabona, “A survey on missing data in machine learning,” Journal of
+Big Data, vol. 8, no. 1, pp. 1–37, 2021.
+[22] N. Thai-Nghe, L. Drumond, T. Horv ´ath, A. Krohn-Grimberghe,
+A. Nanopoulos, and L. Schmidt-Thieme, “Factorization techniques for
+predicting student performance,” in Educational recommender systems
+and technologies: Practices and challenges . IGI Global, 2012, pp.
+129–153.
+[23] A. R. T. Donders, G. J. Van Der Heijden, T. Stijnen, and K. G. Moons, “A
+gentle introduction to imputation of missing values,” Journal of clinical
+epidemiology, vol. 59, no. 10, pp. 1087–1091, 2006.
+[24] Z. Zhang, “Missing data imputation: focusing on single imputation,”
+Annals of translational medicine , vol. 4, no. 1, 2016.
+[25] D. B. Rubin, “Multiple imputations in sample surveys-a phenomenolog-
+ical Bayesian approach to nonresponse,” in Proceedings of the survey
+research methods section of the American Statistical Association , vol. 1.
+American Statistical Association Alexandria, V A, USA, 1978, pp. 20–34.
+[26] ——, “Assignment to treatment group on the basis of a covariate,”
+Journal of educational Statistics , vol. 2, no. 1, pp. 1–26, 1977.
+[27] P. I. Pavlik Jr, H. Cen, and K. R. Koedinger, “Performance Factors
+Analysis–A New Alternative to Knowledge Tracing,”Online Submission,
+2009.
+[28] M. V. Yudelson, K. R. Koedinger, and G. J. Gordon, “Individualized
+bayesian knowledge tracing models,” in Artificial Intelligence in Edu-
+cation: 16th International Conference, AIED 2013, Memphis, TN, USA,
+July 9-13, 2013. Proceedings 16 . Springer, 2013, pp. 171–180.
+[29] S. Sahebi, Y.-R. Lin, and P. Brusilovsky, “Tensor Factorization for
+Student Modeling and Performance Prediction in Unstructured Domain,”
+International Educational Data Mining Society , 2016.
+[30] M. Jovanovic and M. Campbell, “Generative Artificial Intelligence:
+Trends and Prospects,” Computer, vol. 55, no. 10, pp. 107–112, 2022.
+[31] I. Goodfellow, J. Pouget-Abadie, M. Mirza, B. Xu, D. Warde-Farley,
+S. Ozair, A. Courville, and Y. Bengio, “Generative Adversarial Net-
+works,” Communications of the ACM , vol. 63, no. 11, pp. 139–144,
+2020.
+[32] ——, “Generative Adversarial Nets,” Advances in neural information
+processing systems, vol. 27, 2014.
+[33] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez,
+ L. Kaiser, and I. Polosukhin, “Attention is all you need,” Advances in
+neural information processing systems , vol. 30, 2017.
+[34] P. Morales-Alvarez, W. Gong, A. Lamb, S. Woodhead, S. Peyton Jones,
+N. Pawlowski, M. Allamanis, and C. Zhang, “Simultaneous missing
+value imputation and structure learning with groups,” Advances in
+Neural Information Processing Systems , vol. 35, pp. 20 011–20 024,
+2022.
+
+--- PAGE 17 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 17
+[35] Z. Li, L. Shi, J. Wang, A. I. Cristea, and Y. Zhou, “Sim-GAIL: A
+generative adversarial imitation learning approach of student modelling
+for intelligent tutoring systems,” Neural Computing and Applications ,
+vol. 35, no. 34, pp. 24 369–24 388, 2023.
+[36] L. Zhang, J. Lin, C. Borchers, J. Sabatini, J. Hollander, M. Cao, and
+X. Hu, “Predicting Learning Performance with Large Language Models:
+A Study in Adult Literacy,” arXiv preprint arXiv:2403.14668, 2024.
+[37] A. C. Graesser, Z. Cai, W. O. Baer, A. M. Olney, X. Hu, M. Reed,
+and D. Greenberg, “Reading comprehension lessons in AutoTutor for
+the Center for the Study of Adult Literacy,” in Adaptive educational
+technologies for literacy instruction . Routledge, 2016, pp. 288–293.
+[38] A. C. Graesser, Z. Cai, B. Morgan, and L. Wang, “Assessment with
+computer agents that engage in conversational dialogues and trialogues
+with learners,” Computers in Human Behavior , vol. 76, pp. 607–616,
+2017.
+[39] J. Sabatini, A. C. Graesser, J. Hollander, and T. O’Reilly, “A framework
+of literacy development and how AI can transform theory and practice,”
+British Journal of Educational Technology , vol. 54, no. 5, pp. 1174–
+1203, 2023.
+[40] P. Brusilovsky, S. Sosnovsky, and K. Thaker, “The return of intelligent
+textbooks,” AI Magazine, vol. 43, no. 3, pp. 337–340, 2022.
+[41] A. C. Graesser, X. Hu, and D. S. McNamara, “Computerized Learn-
+ing Environments That Incorporate Research in Discourse Psychology,
+Cognitive Science, and Computational Linguistics,” 2005.
+[42] G. A. Frishkoff, K. Collins-Thompson, S. Nam, L. Hodges, and S. A.
+Crossley, “Dynamic Support of Contextual Vocabulary Acquisition for
+Reading (DSCoV AR): An intelligent tutor for contextual word learning,”
+in Adaptive educational technologies for literacy instruction. Routledge,
+2016, pp. 69–81.
+[43] B. J. Meyer and K. K. Wijekumar, “Intelligent tutoring of the structure
+strategy: A reading strategy tutor,” in Adaptive educational technologies
+for literacy instruction . Routledge, 2016, pp. 82–103.
+[44] W. Morris, S. Crossley, L. Holmes, C. Ou, M. Dascalu, and D. McNa-
+mara, “Formative Feedback on Student-Authored Summaries in Intelli-
+gent Textbooks Using Large Language Models,” International Journal
+of Artificial Intelligence in Education , pp. 1–22, 2024.
+[45] C. Xiao, S. X. Xu, K. Zhang, Y. Wang, and L. Xia, “Evaluating reading
+comprehension exercises generated by LLMs: A showcase of ChatGPT
+in education applications,” in Proceedings of the 18th Workshop on
+Innovative Use of NLP for Building Educational Applications (BEA
+2023), 2023, pp. 610–625.
+[46] L. Zhang, J. Lin, Z. Kuang, S. Xu, and X. Hu, “SPL: A Socratic
+Playground for Learning Powered by Large Language Mode,” arXiv
+preprint arXiv:2406.13919, 2024.
+[47] N. T. Nghe and L. Schmidt-Thieme, “Factorization forecasting approach
+for user modeling,” Journal of Computer Science and Cybernetics ,
+vol. 31, no. 2, pp. 133–148, 2015.
+[48] T.-N. Doan and S. Sahebi, “Rank-based tensor factorization for student
+performance prediction,” in 12th International Conference on Educa-
+tional Data Mining (EDM) , 2019.
+[49] S. Zhao, C. Wang, and S. Sahebi, “Modeling knowledge acquisition from
+multiple learning resource types,” arXiv preprint arXiv:2006.13390 ,
+2020.
+[50] C. Wang, S. Sahebi, S. Zhao, P. Brusilovsky, and L. O. Moraes,
+“Knowledge tracing for complex problem solving: Granular rank-based
+tensor factorization,” in Proceedings of the 29th ACM conference on
+user modeling, adaptation and personalization , 2021, pp. 179–188.
+[51] N. Thai-Nghe, T. Horv ´ath, L. Schmidt-Thieme et al. , “Factorization
+Models for Forecasting Student Performance,” in EDM. Eindhoven,
+2011, pp. 11–20.
+[52] A. Antoniou, A. Storkey, and H. Edwards, “Data augmentation genera-
+tive adversarial networks,” arXiv preprint arXiv:1711.04340, 2017.
+[53] A. Aggarwal, M. Mittal, and G. Battineni, “Generative adversarial
+network: An overview of theory and applications,” International Journal
+of Information Management Data Insights, vol. 1, no. 1, p. 100004, 2021.
+[54] G. Mariani, F. Scheidegger, R. Istrate, C. Bekas, and C. Malossi,
+“BAGAN: Data Augmentation with Balancing GAN,” arXiv preprint
+arXiv:1803.09655, 2018.
+[55] M. Frid-Adar, E. Klang, M. Amitai, J. Goldberger, and H. Greenspan,
+“Synthetic data augmentation using GAN for improved liver lesion clas-
+sification,” in 2018 IEEE 15th international symposium on biomedical
+imaging (ISBI 2018) . IEEE, 2018, pp. 289–293.
+[56] S.-W. Huang, C.-T. Lin, S.-P. Chen, Y.-Y. Wu, P.-H. Hsu, and S.-H. Lai,
+“AugGAN: Cross Domain Adaptation with GAN-based Data Augmen-
+tation,” in Proceedings of the European Conference on Computer Vision
+(ECCV), 2018, pp. 718–731.
+[57] K. Hemachandran, P. Verma, P. Pareek, N. Arora, K. V. R. Kumar, T. A.
+Ahanger, A. A. Pise, and R. Ratna, “Artificial Intelligence: A Universal
+Virtual Tool to Augment Tutoring in Higher Education,” Computational
+Intelligence and Neuroscience, vol. 2022, 2022.
+[58] J. Achiam, S. Adler, S. Agarwal, L. Ahmad, I. Akkaya, F. L. Aleman,
+D. Almeida, J. Altenschmidt, S. Altman, S. Anadkat et al. , “GPT-4
+Technical Report,” arXiv preprint arXiv:2303.08774, 2023.
+[59] W. Dai, J. Lin, H. Jin, T. Li, Y.-S. Tsai, D. Ga ˇsevi´c, and G. Chen, “Can
+Large Language Models Provide Feedback to Students? A Case Study
+on ChatGPT,” in 2023 IEEE International Conference on Advanced
+Learning Technologies (ICALT). IEEE, 2023, pp. 323–325.
+[60] S. C. E. Fung, M. F. Wong, and C. W. Tan, “Automatic Feedback
+Generation on K-12 Students’ Data Science Education by Prompting
+Cloud-based Large Language Models,” in Proceedings of the Eleventh
+ACM Conference on Learning@ Scale , 2024, pp. 255–258.
+[61] C. W. Tan, “Large Language Model-Driven Classroom Flipping: Em-
+powering Student-Centric Peer Questioning with Flipped Interaction,”
+arXiv preprint arXiv:2311.14708, 2023.
+[62] C. N. Hang, C. W. Tan, and P.-D. Yu, “MCQGen: A Large Language
+Model-Driven MCQ Generator for Personalized Learning,”IEEE Access,
+2024.
+[63] J. M. Markel, S. G. Opferman, J. A. Landay, and C. Piech, “GPTeach:
+Interactive TA Training with GPT-based Students,” in Proceedings of
+the tenth acm conference on learning@ scale , 2023, pp. 226–236.
+[64] D. T. K. Ng, C. W. Tan, and J. K. L. Leung, “Empowering student
+self-regulated learning and science education through ChatGPT: A
+pioneering pilot study,” British Journal of Educational Technology ,
+2024.
+[65] E. Latif, Y. Zhou, S. Guo, Y. Gao, L. Shi, M. Nayaaba, G. Lee, L. Zhang,
+A. Bewersdorff, L. Fang et al. , “A Systematic Assessment of OpenAI
+o1-Preview for Higher Order Thinking in Education,” arXiv preprint
+arXiv:2410.21287, 2024.
+[66] N. Liu, Z. Wang, R. Baraniuk, and A. Lan, “Open-ended Knowledge
+Tracing for Computer Science Education,” in Proceedings of the 2022
+Conference on Empirical Methods in Natural Language Processing ,
+2022.
+[67] J. Hollander, J. Sabatini, A. Graesser, D. Greenberg, T. O’Reilly, and
+J. Frijters, “Importance of learner characteristics in intelligent tutoring
+for adult literacy,” Discourse Processes, vol. 60, no. 4-5, pp. 397–409,
+2023.
+[68] A. T. Corbett and J. R. Anderson, “Knowledge tracing: Modeling the
+acquisition of procedural knowledge,” User modeling and user-adapted
+interaction, vol. 4, pp. 253–278, 1994.
+[69] C. M. Conway and M. H. Christiansen, “Sequential learning in non-
+human primates,” Trends in cognitive sciences, vol. 5, no. 12, pp. 539–
+546, 2001.
+[70] M. Ramscar, “Learning and the replicability of priming effects,” Current
+Opinion in Psychology , vol. 12, pp. 80–84, 2016.
+[71] P. I. Pavlik, L. G. Eglington, and L. M. Harrell-Williams, “Logistic
+knowledge tracing: A constrained framework for learner modeling,”
+IEEE Transactions on Learning Technologies , vol. 14, no. 5, pp. 624–
+639, 2021.
+[72] Z. A. Pardos and N. T. Heffernan, “Modeling Individualization in a
+Bayesian Networks Implementation of Knowledge Tracing,” in Interna-
+tional conference on user modeling, adaptation, and personalization .
+Springer, 2010, pp. 255–266.
+[73] A. S. Lan, C. Studer, and R. G. Baraniuk, “Quantized matrix completion
+for personalized learning,” arXiv preprint arXiv:1412.5968, 2014.
+[74] A. Newell and P. S. Rosenbloom, “Mechanisms of skill acquisition and
+the law of practice.” CARNEGIE-MELLON UNIV PITTSBURGH PA
+DEPT OF COMPUTER SCIENCE, Tech. Rep., 1980.
+[75] R. DeKeyser, “Skill acquisition theory,” in Theories in second language
+acquisition. Routledge, 2020, pp. 83–104.
+[76] D. Arthur and S. Vassilvitskii, “K-means++ the advantages of careful
+seeding,” in Proceedings of the eighteenth annual ACM-SIAM sympo-
+sium on Discrete algorithms , 2007, pp. 1027–1035.
+[77] J. Wei, X. Wang, D. Schuurmans, M. Bosma, F. Xia, E. Chi, Q. V.
+Le, D. Zhou et al., “Chain-of-Thought Prompting Elicits Reasoning in
+Large Language Models,” Advances in Neural Information Processing
+Systems, vol. 35, pp. 24 824–24 837, 2022.
+[78] N. Thai-Nghe, N. Thai-Nghe et al. , “Predicting Student Performance
+in an Intelligent Tutoring System,” Ph.D. dissertation, University of
+Hildesheim, 2012.
+[79] L. Xiong, X. Chen, T.-K. Huang, J. Schneider, and J. G. Carbonell,
+“Temporal collaborative filtering with bayesian probabilistic tensor fac-
+torization,” in Proceedings of the 2010 SIAM international conference
+on data mining . SIAM, 2010, pp. 211–222.
+
+--- PAGE 18 ---
+JOURNAL OF IEEE TRANSACTIONS ON LEARNING TECHNOLOGIES 18
+[80] Y. Rubner, C. Tomasi, and L. J. Guibas, “The earth mover’s distance as
+a metric for image retrieval,” International journal of computer vision ,
+vol. 40, pp. 99–121, 2000.
+[81] O. Pele and M. Werman, “Fast and robust earth mover’s distances,” in
+2009 IEEE 12th international conference on computer vision . IEEE,
+2009, pp. 460–467.
+[82] X. Wan, W. Wang, J. Liu, and T. Tong, “Estimating the sample mean
+and standard deviation from the sample size, median, range and/or
+interquartile range,” BMC medical research methodology , vol. 14, pp.
+1–13, 2014.
+[83] R. Pfister, K. A. Schwarz, M. Janczyk, R. Dale, and J. B. Freeman,
+“Good things peak in pairs: a note on the bimodality coefficient,”
+Frontiers in psychology, vol. 4, p. 700, 2013.
+[84] T.-N. Nguyen, “Predicting student performance in an intelligent tutoring
+system,” Ph.D. dissertation, Stiftung Universit ¨at Hildesheim, 2011.
+[85] A. C. Graesser and D. S. McNamara, “Computational analyses of
+multilevel discourse comprehension,” Topics in cognitive science, vol. 3,
+no. 2, pp. 371–398, 2011.
+[86] G. Shi, P. Pavlik Jr, and A. Graesser, “Using an Additive Factor Model
+and Performance Factor Analysis to Assess Learning Gains in a Tutoring
+System to Help Adults with Reading Difficulties,” Grantee Submission,
+2017.
+[87] R. Liu and K. R. Koedinger, “Towards Reliable and Valid Measurement
+of Individualized Student Parameters,” International Educational Data
+Mining Society, 2017.
+[88] J. Yoon, J. Jordon, and M. Schaar, “GAIN: Missing data imputation us-
+ing generative adversarial nets,” in International conference on machine
+learning. PMLR, 2018, pp. 5689–5698.
+[89] L. Zhang, M. Yeasin, J. Lin, F. Havugimana, and X. Hu, “Generative
+Adversarial Networks for Imputing Sparse Learning Performance,”arXiv
+preprint arXiv:2407.18875, 2024.
+[90] D. Bank, N. Koenigstein, and R. Giryes, “Autoencoders,” Machine learn-
+ing for data science handbook: data mining and knowledge discovery
+handbook, pp. 353–374, 2023.
+Biography Section
+Liang Zhang is a PhD candidate in Computer
+Engineering at the Department of Electrical and
+Computer Engineering, University of Memphis. He
+currently serves as a research assistant at the Institute
+for Intelligent Systems (IIS) at University of Mem-
+phis and a visiting scholar at Educational Testing
+Service (ETS). He was an intern researcher at the
+Human-Computer Interaction Institute at Carnegie
+Mellon University from May to August 2023, and
+at the machine learning group at NEC Laboratories
+America from May to August 2024. His research
+focuses on human-computer interaction, including learning analytics, educa-
+tional data mining, and GenAI for data imputation and augmentation in AI-
+education. He received the Best Full Paper Award at HCII’24.
+Jionghao Lin is an Assistant Professor in the Fac-
+ulty of Education at the University of Hong Kong.
+Previously, he was a Postdoctoral Researcher at the
+Human-Computer Interaction Institute at Carnegie
+Mellon University, Pittsburgh, PA, USA, from 2023
+to 2025. He received his Ph.D. in Computer Science
+from Monash University, Clayton, VIC, Australia, in
+2023. His research interests include learning science,
+natural language processing, data mining, and appli-
+cations of generative artificial intelligence in edu-
+cation. His work has been published in international
+journals and conferences and recognized with awards, including the Best Paper
+Award at HCII’24, EDM’24, and ICMI’19, and the Best Demo Award at
+AIED’23.
+John Sabatini is a Distinguished Research Professor
+in the Department of Psychology and the Institute for
+Intelligent Systems at the University of Memphis.
+He was formerly a Principal Research Scientist at
+Educational Testing Service, specializing in read-
+ing literacy, assessment, cognitive psychology, and
+educational technology, with a focus on adults and
+adolescents.
+Conrad Borchers is a PhD student at the Human-
+Computer Interaction Institute (HCII) at Carnegie
+Mellon University’s School of Computer Science.
+He is broadly interested in studying the effectiveness
+of educational technologies and pathways through
+data science methods.
+Daniel Weitekamp is a recent PhD graduate from
+Carnegie Mellon’s Human-Computer Interaction In-
+stitute. Daniel studies simulations of human learning
+that can learn directly from educational technology
+or interactively from a human instructor. His re-
+search has been applied to building computational
+models of learning, and for interactive task learning
+applications where non-programmers build whole
+programs by interactively teaching an AI. Daniel’s
+recent dissertation work shows that untrained users
+can build 100% accurate intelligent tutoring systems
+in about 20 minutes by interactively teaching his AI, called AI2T.
+Meng Cao is a postdoctoral researcher in the
+Human-Computer Interaction Institute at Carnegie
+Mellon University, Pittsburgh, PA, USA. She re-
+ceived her Ph.D. in Experimental Psychology from
+the Department of Psychology at the University of
+Memphis. Her research interests include computa-
+tional modeling, optimal learning, adaptive learning,
+and category learning.
+John Hollander is an Assistant Professor in the De-
+partment of Psychology and Counseling at Arkansas
+State University. His research interests include psy-
+cholinguistics, computational semantics, and the sci-
+ence of reading.
+Xiangen Hu is Chair Professor of Learning Sci-
+ences and Technologies at Hong Kong Polytechnic
+University. He received his Doctor of Philosophy
+degree in Cognitive Psychology from the University
+of California, Irvine in 1991 and 1993 respectively.
+He took up an Assistant Professorship at The Uni-
+versity of Memphis in 1993 and was promoted to
+Associate Professor in 2000 and Professor in the
+Department of Psychology in 2009. Meanwhile, he
+has been appointed Prof and Dean of the School of
+Psychology in the Central China Normal University
+since 2016 on a visiting basis where he has established good connections
+with the Chinese mainland. He joined PolyU in Dec 2023 as Director of
+the Institute for Higher Education Research and Development. His research
+areas include Mathematical Psychology, Research Design and Statistics, and
+Cognitive Psychology.
+Arthur C. Graesser is a Distinguished University
+Professor in the Department of Psychology and the
+Institute of Intelligent Systems at the University of
+Memphis and is an Honorary Research Fellow in the
+Department of Education at the University of Ox-
+ford. He received his Ph.D. in psychology from the
+University of California at San Diego. Art’s primary
+research interests are in cognitive science, discourse
+processing, and the learning sciences. More specific
+interests include knowledge representation, question
+asking and answering, tutoring, text comprehen-
+sion, inference generation, conversation, reading, problem solving, memory,
+emotions, computational linguistics, artificial intelligence, human-computer
+interaction, and learning technologies with animated conversational agents.

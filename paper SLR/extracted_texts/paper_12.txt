@@ -1,0 +1,1332 @@
+--- PAGE 1 ---
+ 
+International Journal of Information and Communication
+Technology
+ 
+ISSN online: 1741-8070 - ISSN print: 1466-6642
+https://www.inderscience.com/ijict
+ 
+Knowledge tracing in mathematical problem-solving processes:
+a spatio-temporal graph neural network approach
+ 
+Xia Li
+ 
+DOI: 10.1504/IJICT.2026.10076456
+ 
+Article History:
+Received: 11 August 2025
+Last revised: 24 November 2025
+Accepted: 25 November 2025
+Published online: 05 March 2026
+Powered by TCPDF (www.tcpdf.org)
+Copyright © 2026 Inderscience Enterprises Ltd.
+
+--- PAGE 2 ---
+   
+  
+   
+   
+ 
+   
+   
+ 
+   
+   Int. J. Information and Communication Technology, Vol. 27, No. 14, 2026 23    
+ 
+   Copyright © The Author(s) 2026. Published by Inderscience Publishers Ltd. This is an Open Access Article 
+distributed under the CC BY license. (http://creativecommons.org/licenses/by/4.0/) 
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+Knowledge tracing in mathematical problem-solving 
+processes: a spatio-temporal graph neural network 
+approach 
+Xia Li 
+The Department of Public Courses, 
+City University of Wuhan, 
+Wuhan, 430083, China 
+Email: lixia888666@126.com 
+Abstract: A novel modelling method incorporating spatio-temporal graph 
+neural networks is proposed for the know ledge tracking problem in the process 
+of mathematical problem solving. In the spatial dimension, the complex 
+relationships among three types of node s, namely, students, exercises and 
+knowledge points, are integrated through a heterogeneous graph structure, and 
+a knowledge graph is dynamically cons tructed to capture the implicit 
+associations among concepts; in the te mporal dimension, a dual time encoder 
+and a memory gate mechanism are intr oduced to differentiate the semantic 
+differences between long and short time intervals, and a temporal sequential 
+convolution network is used to model th e cumulative evolution characteristics 
+of the problem solving sequences. It is experimentally demonstrated that the 
+prediction accuracy of this method  is improved by 5.3%–6.7%, which 
+significantly optimises the ability to track the dynamic changes of students’ 
+cognitive state and provides more robust decision support for personalised 
+learning path recommendation. 
+Keywords: mathematical prob lem-solving process; knowledge tracing;  
+spatio-temporal graph neural network; STGNN. 
+Reference to this paper should be made as  follows: Li, X. (2026) ‘Knowledge 
+tracing in mathematical problem-solving processes: a spatio-temporal graph 
+neural network approach’, Int. J. Information and Communication Technology , 
+Vol. 27, No. 14, pp.23–41. 
+Biographical notes:  Xia Li received her Master’s degree from Hubei 
+University, China. Currently, she works in City University of Wuhan. Her 
+research interests include higher mathematics ，linear algebra and probability 
+statistics. 
+ 
+1 Introduction 
+In the core area of intelligent education systems, knowledge tracking technology is 
+dedicated to diagnosing students’ dynamically changing knowledge mastery status in real 
+time and predicting their future problem solving performance by analysing their historical 
+learning behaviour sequences (Heng-yu et al., 2 019). This ability is crucial for realising 
+personalised learning recommendation, prec ise intervention and adaptive teaching in the 
+
+--- PAGE 3 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+   24 X. Li    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+true sense. Mathematics, with its rigorous  logical structure, progressive knowledge 
+system, and complex cognitive skills shown in the problem solving process, has become 
+one of the most challenging and valuable research objects for knowledge tracking 
+(Giroux and Taylor, 2002). Mathematical problem solving process is not a simple 
+application of isolated knowledge points, but a complex cognitive activity involving 
+conceptual understanding, skill transfer, strate gy selection and time factor. The state of 
+students’ knowledge in this process is essentially a high-dimensional dynamic system 
+that evolves in the spatial dimension of knowledge structure and is jointly shaped by 
+dynamic processes in the temporal dimension. 
+Traditional knowledge tracking models, in cluding classical sequence-based deep 
+learning approaches, although have made some progress in capturing temporal 
+dependencies, still face significant bottlenecks in accurately modelling the mathematical 
+problem solving process. On the one hand, these models tend to treat the knowledge 
+structure as a collection of discrete or implicit labels and lack explicit modelling of 
+complex correlations in the knowledge space. There are naturally strong logical 
+connections and hierarchical structures betw een mathematical knowledge points, and the 
+solution of a problem often requires the activ ation and coordination of multiple related 
+knowledge points. Neglecting this structured spatial correlation makes it difficult for the 
+model to accurately characterise the mechanism of synergistic activation and migration of 
+knowledge points in the problem solving process, limiting its ability to understand 
+students’ deep cognitive states (Broncano-Berrocal, 2018). On the other hand, the 
+fineness of time dynamic modelling is insufficient. Most of the existing models treat time 
+as a uniform sequence index, or adopt an oversimplified linear/exponential forgetting 
+function, which makes it difficult to effectiv ely differentiate and characterise the time 
+interval effects that are pr evalent in the mathematics l earning environment and have 
+different semantics: a classic example in the psychology of learning is the contrast 
+between two study approaches. Intensive practi ce in a short timeframe capitalises on the 
+brain’s focused engagement, leading to a swift knowledge consolidation effect where 
+information is temporarily held  in a readily accessible state. This is often mistaken for 
+mastery. In contrast, allowing long time intervals to pass between sessions initially 
+triggers a significant forgetting effect , as the memory trace weakens without 
+reinforcement. Paradoxically, this struggle is  beneficial. The mental effort required to 
+retrieve seemingly ‘forgotten’ information st rengthens the memory far more effectively 
+than repeated easy recall. Th erefore, while cramming may aid short-term performance, 
+distributed practice that embraces  some forgetting is vastly superior for genuine, long-
+term learning, a critical insight for designi ng effective curricula. The formation and 
+decline of mathematical problem solving ability does not follow a single, static pattern, 
+but is influenced by the nonlinear interaction of multiple factors such as the frequency of 
+practice, the distribution of intervals, and the difficulty of problems. In addition, the 
+process of mathematical problem solving involves multiple heterogeneous entities such 
+as students, exercises, and knowledge point s, as well as their complex interactions. 
+Traditional models usually focus only on th e student-exercise in teraction sequence, 
+failing to fully integrate and utilise the structured knowledge embedded in this rich 
+heterogeneous information, and limiting the model’s ability to generalise to sparse 
+interaction scenarios (Manierre, 2015). 
+To overcome the above challenges, a novel knowledge tracking framework that can 
+unify the modelling of spatial structural associations and temporal evolutionary dynamics 
+of knowledge is urgently needed. Graph neural networks provide a natural paradigm for 
+
+--- PAGE 4 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+    Knowledge tracing in mathematical problem-solving processes 25    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+explicitly portraying complex dependencies among knowledge points due to their 
+powerful ability to model graph-structured data. The development of spatio-temporal 
+graph neural networks (STGNNs) further provides a powerful technical tool for fusing 
+spatial structural information with temporal dynamic evolution, and has demonstrated 
+excellent performance in the fields of physics simulation and traffic prediction. However, 
+its direct application to the knowledge tracki ng of mathematical problem solving process 
+still requires in-depth adaptation and innovation for the unique needs of the field. 
+This paper proposes a spatiotemporal graph neural network for mathematical 
+knowledge tracing (STGNN-MKT). The core ob jective of this methodological approach 
+is to construct a unified and interpretable spatio-temporal coupling framework. This 
+initiative arises from the limitation of traditi onal analysis that often treats spatial 
+knowledge structure and its te mporal evolution in isolation. The proposed framework  
+is specifically designed to accurately capt ure the dynamic interplay within the  
+problem-solving process: it simultaneously delineates the spatial structural  
+evolution – referring to how conceptual components and their interrelations are organised 
+and reconfigured – and the temporal cumulative evolution – denoting the progressive, 
+step-by-step building and refinement of knowledge states. Ultimately, this model aims to 
+provide a holistic and mechanistic understanding  of learning trajectories in mathematics. 
+Specifically, in the spatial dimension, we break through the limitation of homogeneous 
+graphs and explicitly construct a heterogeneou s graph structure containing three types of 
+nodes: students, exercises, and knowledge points. This graph structure not only encodes 
+the attribution relationship between exercises and knowledge points, but also dynamically 
+integrates the historical interaction re cords between students and exercises. By 
+introducing the heterogeneous graph attention mechanism, the model can adaptively learn 
+the complex association weights among different types of nodes and generate 
+semantically rich node embeddings, so as to more comprehensively characterise the state 
+of the knowledge network in which the student  is located and its association with the 
+problem to be solved. In the temporal dimension, we design a dual temporal encoding 
+mechanism: on the one hand, we introduce fine-grained temporal gating units combined 
+with temporally gated convolutional netw orks, which focus on modelling short-term 
+dependencies and local patterns between neig hbouring steps in a dense problem solving 
+sequence; on the other hand, we design explicit forgetting-memory gating modules, 
+which incorporate a variety of features a ffecting forgetting behaviour, and explicitly 
+differentiate and quantify them using nonlin ear functions systematic forgetting due to 
+long-term intervals from the memory-reinforci ng effects created by short-term repetitive 
+practice. Particularly critical is that the repr esentation of spatial structure is not severed 
+from the modelling of temporal dynamics. Our model dynamically evolves the state of 
+knowledge nodes as the sequen ce of student interactions advances on the time axis 
+through an iterative message passing and state updating mechanism; at the same time, the 
+state of student nodes is updated by aggrega ting the spatio-temporal state information of 
+the exercises and their associat ed knowledge points from their historical interactions. 
+This close coupling and synergistic evolution of  spatio-temporal states is at the core of 
+the model’s ability to deeply understand the dynamic changes in students’ cognitive 
+states. 
+Through systematic experimental validatio n on authoritative mathematics education 
+datasets such as ASSISTments and KDDCup, the results show that compared with the 
+graph knowledge tracking baseline model and other advanced temporal knowledge 
+tracking models, STGNN-MKT achieves a signifi cant and consistent improvement in the 
+
+--- PAGE 5 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+   26 X. Li    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+key metrics of predicting students’ future performance in answering questions. More 
+importantly, the model demonstrated superior time-series dynamic modelling capabilities, 
+especially in capturing forgetting phenomena after long intervals and knowledge leaps 
+during periods of intensive practice; its heterogeneous graph structure also endowed the 
+model with a stronger basis for interpretability, which provides a potential basis for 
+understanding the correlation paths of students’ knowledge gaps. This study not only 
+provides a more powerful tool for the dynamic characterisation of knowledge states in the 
+mathematical problem solving process, but al so lays a solid algorithmic foundation for 
+the construction of a smarter and more cognitively attuned personalised learning system. 
+2 Related work 
+The core task of knowledge tracking is to dynamically assess students’ knowledge status 
+through their historical question-answer sequences, providing a decision basis for 
+individualised learning. Early studies mainly relied on probabilistic graphical models 
+such as Bayesian knowledge tracking (BKT). Zhang and Yao (2018) proposed a BKT 
+model with three learning states. We utilise the evaluation function of three-way decision 
+making to divide the learning process into three parts. Comparative experiments 
+demonstrate the advantages of this three-part approach over the traditional two-part 
+approach. Based on the trichotomy of the learning process, a three-learning state model is 
+constructed. However, the BKT assumes that the knowledge points are independent of 
+each other, which makes it difficult to capture the logical connections in the mathematical 
+knowledge system. Subsequent extensions to the model attempt to introduce multiple 
+knowledge point interactions, but are still lim ited by artificial feature engineering and 
+static structure assumptions. 
+The rise of deep learning knowledge tracking (DLKT) has significantly improved 
+temporal modelling capabilities: recurrent ne ural network-based DKT models capture 
+long-term dependencies through implicit state transfer (Kim et al., 2021); and models 
+driven by attentional mechanisms dynamically weight historical interactions to enhance 
+the perception of critical steps (Wang et al., 2023). To visualise the knowledge structure, 
+memory-enhanced models store the state of knowledge points through key-value matrices 
+and support dynamic updating (Chen et al., 2023). However, DLKT still has significant 
+limitations: most models treat knowledge points as discrete labels, ignoring hierarchical 
+relationships and logical dependencies between concepts. 
+The time interval effect is mostly redu ced to linear decay or static exponential 
+function, which is difficult to adapt to the nonlinear cognitive laws in math learning. 
+To model the spatial association of knowledge, graph-based knowledge tracking (KT) 
+has become an emerging direction. Wu et al. (2022) proposed a knowledge tracking 
+model based on practice learning graphs, known as learning graph-based knowledge 
+tracking (SGKT). This learning graph is used  to model the student’s question answering 
+process, and the relationship graph is used to model the relationship between practice and 
+skills. Then, use a gated graph neural network to extract the student’s knowledge state 
+from the learning graph and a graph convolutional network to extract the embedded 
+representations of the exercises and skills  in the relational graph. Next, multiple 
+interaction states consisting of knowledge  states and embedded representations are 
+obtained through the interaction mechanism. Th e attention mechanism is used to find the 
+focus from these states and make predicti ons. Cui et al. (2024) proposed a novel  
+
+--- PAGE 6 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+    Knowledge tracing in mathematical problem-solving processes 27    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+dual-graph integrated learning knowledge tracking method (DGEKT), which captures 
+heterogeneous practice-concept associations and interaction transitions by building a 
+dual-graph structure of student learning in teractions through hypergraph modelling and 
+directed graph modelling, respectively. In order to combine the dual-graph modelling, 
+they introduced an online knowledge distillation technique. This choice stems from the 
+observation that while the knowledge-tracking model aims at predicting students’ 
+responses to different concept-related exerci ses, it optimises the prediction accuracy for 
+only a single exercise at each step. With online knowledge refinement, the dual-graph 
+model can be adaptively combined to form a more powerful integrated teacher model that 
+uses its predictions for all exercises as additional supervision to improve modelling 
+capabilities. 
+The success of STGNN in areas such as tr affic prediction provides a new paradigm 
+for KT. Liu et al. (2025) proposed a knowledge tracking model that unifies  
+spatio-temporal information – spatio-tempo ral Fourier knowledge tracking. The model 
+solves the compatibility problem between the two by extracting information from 
+cognitive and behavioural perspectives, fusing  information in the temporal and spatial 
+dimensions to construct a spatio-tempora l map, and processing spatio-temporal 
+dependent features in the frequency domain through a Fourier map neural network to 
+capture complex spatio-temporal relationships and improve computational efficiency and 
+accurate modelling of spatio-temporal features. 
+However, the migration of existing methods to mathematical knowledge tracking still 
+faces challenges: traffic/video data nodes ar e homogeneous, whereas KT needs to model 
+three types of nodes: students, exercises, and knowledge points and their multi-order 
+relationships at the same time; and the cognitive evolution mechanism has not been 
+adapted: the update of students’ knowledge state needs to follow the cognitive law of 
+practice reinforcement-forgotten decay, wher eas the general-purpose STGNN lacks the 
+dedicated spatiotemporal state-transfer equations. 
+Based on the above analysis, this paper pr oposes the spatio-temporal graph neural 
+network knowledge tracking model, and the core innovation is reflected in three aspects: 
+1 Constructing a three-body heterogeneous graph of student-exercise-knowledge point, 
+as shown in Figure 1, to dynamically integrate the knowledge ontology relationship 
+and learning behaviour relationship. 
+2 Capturing the coherence of thinking in intensive practice with a time-sequence gated 
+convolutional network, and designing a forgetting-memory gate module, which 
+integrates the Hawkes process with a nonlinear decay function to explicitly quantify 
+the reinforcing effects of interval forgetting and repetitive practice. The module 
+integrates seven forgetting characteristics to realise the mathematical expression of 
+cognitive laws. 
+3 Knowledge node states are dynamically updated with question-answering sequences, 
+and student node states evolve by aggregating the spatio-temporal features of their 
+historical interactive exercises. A primary aim of our proposed model is to decisively 
+overcome the prevalent defect of spatio-temporal module fragmentation, a critical 
+limitation observed in existing models like DGEKT and TSKT. In these 
+architectures, the spatial structure of knowledge concepts and their temporal 
+evolution are often processed by separate, loosely connected modules. This 
+disconnection creates an analytical gap, preventing a genuine understanding of how 
+
+--- PAGE 7 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+   28 X. Li    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+knowledge dynamically transforms during problem-solving. Our framework directly 
+addresses this by designing an intrinsically coupled spatio-temporal mechanism, 
+ensuring that the spatial organisation of knowledge and its cumulative progression 
+over time are modelled as two inseparable facets of a unified process. This 
+integration is pivotal for constructing a more coherent and accurate representation of 
+the learning continuum. 
+Figure 1 Student-exercise-knowledge points of th e three-body isomorphic map (see online 
+version for colours) 
+S1
+P1 P2 P3 P4 P5
+K1 K2 K3
+Student Node
+Exercise Node
+Knowledge Points Node
+Learning Behavioral Relationships
+knowledge Ontology
+ 
+3 Theoretical analysis 
+3.1 Knowledge tracking foundation 
+The core task of Knowledge Tracing is to dynamically assess a student’s knowledge state 
+st ∈  ℝd and predict the probability of answ ering future questions correctly p(rt + 1 = 1 | 
+qt+1, ) based on his/her historical interaction sequence  = (q1, r1, t1),…, (qT, rT, tT) (Shen 
+et al., 2024). Where qt is the exercise identifier, rt ∈  0,1 denotes the answer result, and tt 
+is the timestamp. The problem can be formalised as a hidden state estimation problem: 
+() () 111,, ,
+ttt t t t qsf s x p g s e
++−+==  (1) 
+where [; ; Δ ]
+tqt tte rt=  is the input feature vector (cont aining exercise embedding, answer 
+results, and time interval), and f and g ar e the state transfer function and prediction 
+function, respectively. 
+The classical probabilistic model is repr esented by BKT (Guzman-Jimenez et al., 
+2025), which assumes that the knowledge state is a binary hidden variable zt ∈  0, 1 (0 not 
+mastered, 1 mastered), and its state transfer follows a Markov process: 
+
+--- PAGE 8 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+    Knowledge tracing in mathematical problem-solving processes 29    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+() 110tt l e a r nPz z p −== =  (2) 
+() 101tt f o r g e tPz z p −== =  (3) 
+() 11t t slipPr z p== =  (4) 
+() 00t t guessPr z p== =  (5) 
+where, parameter plearn, pforget, pslip, pguess is estimated by expectation maximisation 
+algorithm. The limitatio n of BKT is the assumption of knowledge point independence 
+and ignoring the logical connection between concepts (Holmqvist et al., 2023). 
+Deep learning models br eak through pr obabilistic model limitations through  
+end-to-end learning. Recurrent neural networks model knowledge states as hidden 
+vectors h
+t: 
+() 1th t x th tanh W h W x−=+  (6) 
+()ttp σ wh b=+   (7) 
+Long short-term memory netw orks introduce gating mechanisms to mitigate gradient 
+vanishing and enhance long sequence modelling.  Self-attentive models (e.g., SAKT), on 
+the other hand, dynamically compute histori cal interaction correlations via a weight 
+matrix Q, K, V: 
+(, ,) QKAttention Q K V softmax V
+dk
+= 
+
+
+ (8) 
+Such models, while enhancing temporal dependency capture, do not explicitly encode the 
+knowledge structure and the time interval Δtt is only used as a scalar input. 
+3.2 Fundamentals of spatio-temporal graphical neural networks 
+The STGNN aims to deal with the problem of joint modelling of spatial associations and 
+temporal evolution in graph-structured data (Jin et al., 2023). Its input is defined as a 
+spatio-temporal graph ST = ( , spa, tem): where  = v1,…,vN is the set of nodes and 
+spa ⊆   ×  is the spatial edges; tem = A(1),…,A(T) is a sequence of temporal edges. 
+The graph convolutional network updates the node representation through 
+neighbourhood aggregation (Skarding et al., 2021). For node vi, its l+1 layer embedding 
+(1 )l
+ih +  is computed as: 
+()1( )
+()
+() 1
+ˆˆ
+lll
+ij
+ji ij
+h σ Wh
+dd
++
+∈
+= 
+
+
+
+ (9) 
+where ˆ 1iidd=+  is the normalis ation degree and (i) is the set of neighbouring nodes. 
+Adaptive weights are further in troduced for graph attention networks (Jamshidiha et al., 
+2025): 
+
+--- PAGE 9 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+   30 X. Li    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+()()
+()1( )
+(
+(
+)
+) 1 ,
+ˆˆ
+lll
+ij
+ji ij
+ij j i j
+h σ Wh
+dd
+softmax LeakyReLU a Wh Wh
++
+∈
+= 
+= 
+
+α
+
+
+ (10) 
+where α ij is the attention coefficient of node j to i and a is the learnable vector. 
+4 Spatio-temporal graph neural ne twork knowledge tracking model 
+(STGNN-MKT) 
+The spatio-temporal graph neural network knowledge tracking model proposed in this 
+paper aims to address the dynamic evolutio n of knowledge states during mathematical 
+problem solving. The input of the model is a sequence of st udent history interactions  
+ = (q1, r1, t1), (q2, r2, t2),…,(qT, rT, tT), where qt denotes the exercise identifier, rt ∈  0,1 is 
+the binary answer result (1 for correct and 0 for incorrect), and tt is a time stamp accurate 
+to seconds. The output is the predicted probability of correctness of th e target exercise 
+qT+1. 1ˆ [0,1]Tp + ∈  the model realises high-precision dynamic tracking of knowledge state 
+through three core phases: heterogeneous spatio-temporal graph construction, dual 
+temporal encoding mechanism, and spatio -temporally coupled state evolution. The 
+modelling framework of the method is shown in Figure 2. 
+4.1 Heterogeneous spatio-t emporal graph construction 
+In order to explicitly  characterise th e multiple entities and thei r complex re lationships 
+involved in the math ematical problem solving process, this model constructs a 
+dynamically evolving spatio-temporal heterogeneous graph.  = ( t, t) the set of nodes 
+t contains three types of heterogeneous entities: 
+•  Student node s = s: represents a single student instance that is currently being 
+tracked, whose initial embedding (0) d
+sh ∈   is generated by the attributes of the 
+school register (e.g., grade level, historical average correctness) mapped through the 
+full connectivity layer. 
+•  Exercise node q = q1,q2,…,qN: the embedding of each exercise qi, eqi ∈  ℝd 
+incorporating the question text semantic vectors and structured attribute features, i.e., 
+MLP(BERT(text ) )
+iiq i ieq δ t=⊕ ⊕  where 9 denotes vector splicing. 
+•  Knowledge point node k = k1, k2,…,kM: The embedding ekj ∈  ℝd of each knowledge 
+point kj is initialised from the pre-constructed course knowledge graph and a 
+hierarchical encoder is introduced to capture the hierarchical relationships of the 
+knowledge domains (e.g., algebra, geometry) to which it belongs (Wan et al., 2025). 
+ 
+
+--- PAGE 10 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+    Knowledge tracing in mathematical problem-solving processes 31    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+Figure 2 Model framework diagram (see online version for colours) 
+Heterogeneous Space-Time Map Construction Layer
+Core Processing Layer
+Spatio-temporal graph convolutional networks
+Input Layer
+Output Layer
+ 
+Edge set t contains two semantic types: 
+•  Static knowledge edge qk = (qi, kj, wij): Describes the attribution relationship 
+between exercises and knowledge points, with weights wij ∈  [0, 1] labelled by 
+educational experts or automatically extracted based on exercise parsing (Ma et al., 
+2024). 
+•  Dynamic interaction edge (, , )t
+sqi i s qf= : Record the interaction behaviour of 
+student s on exercise qi at time ti, and feature vector fi = [ri; Δti; τi; ci] ∈  ℝ8 contains 
+the answer result ri, the time interval Δti = ti – ti–1 (seconds) with the previous 
+interaction, the time spent on answering τi (seconds), and the context features ci. 
+•  The graph structure is dynamically updated along with the solving sequences: when 
+a new interaction (qT, rT, tT) is added, an edge (s, qT, fT) is added to ,t
+sq  and the set 
+of knowledge points associated with this exercise is activated (qT) = kj | (qT, kj) ∈  
+qk. This design breaks through the limitation of traditional homogeneous graphs 
+and explicitly distinguishes entity types and relational semantics (Li et al., 2021). 
+4.2 Heteromorphic attentional coding 
+To aggregate heterogeneous neighbourhood information and preserve relational 
+semantics, metapath-aware graph attention networks are designed (Chang et al., 2024). 
+For any node i ∈  t and its neighbour nodes j ∈  (i), the computation of the attention 
+factor α ij depends on node type ϕ(i) and edge type ϕ(i, j): 
+
+--- PAGE 11 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+   32 X. Li    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+()( )
+()( )
+() ()
+() ( ) ( )
+() ()
+() ( ) ()
+,
+,( )
+ll
+ik i i j j
+ij ll
+kN i i j i i k k
+exp LeakyReLU a W h W h
+exp LeakyReLU a W h W h∈
+=
+
+φφ φ
+φφ φ
+α
+
+
+ (11) 
+where ϕ(⋅) is a type mapping function, ϕ(i) ∈  student, question, knowledge, Wϕ(⋅) ∈  ℝd′×d 
+are type-specific linear transformation matrices, aϕ(i, j) ∈  ℝ2d′ is a learnable relational 
+attention vector, and || deno tes a vector splicing operation (Song et al., 2024). The 
+embedding of node i at layer l+1 is updated by residual join: 
+() ( ) ( )
+()
+()
+1ll l
+ii j j j i
+jN i
+h σ Wh h+
+∈
+=+  φα  (12) 
+Through Lg layer graph attention propagation, student node 
+() gL
+sh  incorporates semantic 
+information from its historical interaction exercises and its associated knowledge points, 
+exercise node 
+() gL
+qh  enhances context-aware representation, and knowledge point node 
+() gL
+kh  dynamically reflects its current activation strength (Lin et al., 2025). 
+4.3 Dual time encoding mechanism 
+For dense practice sequences, gated temporal convolutional networks are used to capture 
+local solution patterns (Dong et al., 2021). Given the practice node embedding sequence 
+()() ()
+12[, , , ]
+ggg
+T
+LLL Td
+qhq hq h ′×…∈   for student s, the lth layer timing convolution operation 
+is defined as: 
+() () ())(1
+1Φll l
+dHR e L U H −=∗  (13) 
+()() 1 () ( )
+2Φll l
+dG σ H −=∗  (14) 
+() () ()ll l
+outH HG=   (15) 
+where * d denotes the null convolution with expansion factor d = 2 l–1, 
+()( ) in out
+12Φ , Φ
+llk d d ××∈   is the learnable co nvolution kernel, and   is the element-by-
+element multiplication. By stacking Lt layers, the TCN outputs the exercise temporal 
+feature matrix ()out , tL TdH ′′×∈   whose tth row vector tcn d
+thq ′′∈   encodes the evolution 
+of the solution pattern up to time t, effectively modelling th e coherence of thinking and 
+immediate feedback effect (Yao et al., 2018). 
+To quantify the systematic fo rgetting effect caused by time  intervals, the forgetting-
+memory gate module is proposed (Zhu et al., 2022). This module is fundamentally based 
+on the Ebbinghaus forgetting cu rve theory from co gnitive science, wh ich quantifies the 
+decline of memory retention over time. By  leveraging this pr inciple, the module 
+strategically schedules review and practice sessions to counteract  natural forgetting, 
+thereby actively promoting long-term knowledge consolidation and strengthening the 
+durability of learned ma terial, and maintains dynamic memory strength 
+[0,1]t
+jm ∈  for 
+each knowledge point kj: 
+
+--- PAGE 12 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+    Knowledge tracing in mathematical problem-solving processes 33    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+()
+1 1tt t t t
+j jj j jm γ m γ c−=⋅ + − ⋅  (16) 
+where [0,1]t
+jγ ∈  is the forgetting gating,  which controls the re tention of historical 
+memories, and [0,1]t
+jc ∈  is the reinforcement gating, which encodes the enhancement 
+effect of the current exercise on memory. Both are calculated as follows: 
+Δ
+1
+jt
+j
+j
+t
+γ exp η n
+=− ⋅  + β  (17) 
+( )
+() )(tL g L g
+j ck j q t t t cc sigmoid w h h r g b=+ 
+  (18) 
+where lastΔ j
+jtt t=−  denotes the time interval since knowledge point kj was last practiced, 
+nj is the cumulative number of times kj has been practiced, η > 0 and β > 0 are the 
+learnable decay coefficients, and gt = [ Δti; τi; onehot(envt)] is the temporal signature of 
+the current interaction. 
+Memory strength t
+jm  fuses the time interv al effect with the practice history in a 
+nonlinear decay function, and its output is spliced with the knowl edge point embedding 
+as an augmented representation 
+() 1[] . gL td
+jj jhk hk m ′+′ =∈   The core intelligence of this 
+mechanism lies in its explicit distinction of  the profound cognitive differences between 
+short-term repeated practice and long-term interr uptions. It recognises that short-term, 
+massed practice primarily enhances retrieval st rength and procedural fluency, creating a 
+sense of immediate mastery which is, however, often transient. In stark contrast, long-
+term interruptions, while induci ng a state of retrieval difficu lty and apparent forgetting, 
+engage the powerful effects of spaced repetition and desirable difficulties, which 
+fundamentally strengthen storage strength and promote durable consolidation. By 
+computationally modelling these divergent cognitive pathways, the mechanism can make 
+nuanced pedagogical decisions – such as capitalising on massed practice for initial skill 
+acquisition while strategically employing spaced intervals to transform fragile knowledge 
+into robust, long-term unde rstanding – therely orchestr ating a highly adaptive and 
+effective learning journey. 
+4.4 State evolution of spatio-temporal coupling 
+The updating of student knowledge state is r ealised by an iterative message passing-state 
+updating loop (Sun et al., 2019) with the following steps: 
+1 Time step t input: add new interaction ( qt, rt, tt), add edge t
+sq  to dynamic edge set 
+.t
+sq  
+2 Spatial graph convolution: perform Lg layer heterogeneous graph attention coding 
+and update all node embeddings ,.,ttt
+s qkhhh  
+
+--- PAGE 13 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+   34 X. Li    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+3 Temporal evolution: exercise node sequence 1[, , ]tt
+thq hq…  inputs Lt layers of Gated 
+TCN, generates short-time features tcn ,
+tqh  associates knowledge point sets (qt) 
+computes memory strength |( )t
+j jtmk q ∈   via FMGM, and updates its embedding 
+.
+jkh ′  
+4 Student state updating: fusion of spatio-t emporal features based on gated recurrent 
+unit: 
+()
+1t
+tz s t zz σ Wh u b−=+   (19) 
+()
+1t
+tr s t rr σ Wh u b−=+   (20) 
+()
+1tt
+s ht s t hht a n h W rhu b −=+    (21) 
+() 11tt t
+s tst shz h z h −=− +   (22) 
+ where tcn()jt j tut k q Wspahk Wtemhq ′=∈ +   is the spatio-temporal aggregation 
+feature and Wspa, Wtem is the projection matrix. 
+5 Prediction layer: based on the student’s current state hst and the target exercise qt+1 
+embedding 
+()
+1 ,
+Lg
+thq +  the probability of answering the question correctly is computed 
+by feature interaction: 
+()() 1
+()
+1ˆ
+t
+Tt L g
+tp s p qp σ Wh h b
+++ =+   (23) 
+ where   denotes the element-by-element multiplication (Hadamard product). We 
+are enriching the dynamic, interactive representation of the student’s knowledge state 
+by integrating it with the specific features of each exercise. This process involves 
+contextualising the learner’s profile with real-time data on problem difficulty, 
+required knowledge components, and the problem-solving context, enabling a more 
+nuanced and responsive model for personalised learning. 
+4.5 Model training and optimisation 
+The loss function is defined as the sum of the binary cross entropy and the L2 
+regularisation term: 
+() ( )
+2
+2
+1 Θ
+1 ˆˆlog 1 log 1
+T
+tt t t
+t θ
+Lr p r p λ θT =∈
+=− + − − +  (24) 
+where Θ  is the set of all learnable parameters of the model and λ is the regularisation 
+coefficient. The Adam optimis er is used to minimise L. The initial learning rate is 
+established at 3.0 to provide substantial grad ient updates early in the training  process. 
+This rate is then systematically fine-tuned throughout the training using a cosine 
+annealing scheduler, which smoothly reduces the learning rate according to a  
+
+--- PAGE 14 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+    Knowledge tracing in mathematical problem-solving processes 35    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+cosine-shaped curve over each training cycle.  The selected batch size of 32 effectively 
+balances computational efficiency with stable  gradient estimation, promoting consistent 
+model convergence and robust learning performance. The early stopping strategy is based 
+on monitoring the AUC index of the validation set, and the tr aining is terminated if the 
+model fails to improve in 10 consecutive epochs. 
+5 Experimental results and analysis 
+5.1 Experimental setup 
+The experiment uses two authoritative pub lic datasets in education data mining: 
+ASSISTments2009 and KDDCup2010. The ASSISTments2009 dataset contains math 
+problem solving logs from US middle school students, covering 1,000 students, 101 
+knowledge points (e.g., linear equations, geometric proofs), and a time span of 9 months, 
+including daily practice and vacation interrup tion scenarios. The KD DCup2010 dataset, 
+on the other hand, contains 98,200 algebra problem solving logs covering 1,000 students 
+and 211 knowledge points, and its time-series characteristics show a significant pattern of 
+stage-intensive exams (intervals of <1 hour) and long vacation interruptions (intervals of 
+>30 days). In the data prepro cessing stage, we filtered the knowledge points that were 
+practiced less than 10 times  to eliminate noise, merged  the records of consecutive 
+answers with intervals of less than 5 minutes  in the same exam, and converted all the 
+timestamps into seconds to ensure the accuracy of the time series modelling. 
+The evaluation indexes are selected to take into account the sortin g ability, 
+classification accuracy and probability calibration: AUC (area under the curve): measures 
+the model’s ability to sort st udents’ probability of answering questi ons correctly, with a 
+value range of [0,1], the higher the value i ndicates that the model is more capable of 
+distinguishing between positive and negative samples, the hi gher the value indicates the 
+model’s ability to differentiate between po sitive and negative samples, the higher the 
+value indicates the model’s ability to differentiate between positive and negative samples, 
+and the higher the value indicates that th e model can distinguish between positive and 
+negative samples, the lower the value indi cates the model can distinguish between 
+positive and negative samples. Calibration. 
+In order to comprehensively verify the model validity, six types of frontier baseline 
+models are selected for comparison: traditional probabilistic models: BKT (Mao, 2018), 
+deep timing model (DKT) (Liu et al., 2020). Graph structure model: GKT (Yang et al., 
+2024) and dynamically constructed student-problem interaction graph (DGKT) (Li et al., 
+2018). Temporal fusion mo del: introducing linear forge tting gate (DGMN) in GKT 
+(Abdelrahman and Wang, 2022) with multi-relational GRU fusion time decay (MRTKT) 
+(Cui et al., 2023). 
+5.2 Comparative analysis of overall performance 
+Tables 1 and 2 show the performance compar ison results on the ASSISTments2009 and 
+KDDCup2010 datasets, respectively. In th e ASSISTments2009 datase, STGNN-MKT 
+fully leads the baseline mode l with AUC = 0.901, ACC=0.845, and RMSE = 0.218. 
+Compared to the optimal baseline DGKT ( AUC = 0.832), the AUC of STGNN-MKT is 
+improved by 8.3% and the RMSE is reduced by 17.1%, indicating a better calibration of 
+
+--- PAGE 15 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+   36 X. Li    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+its prediction probability. On the KDDCup2010 datase, wh ich has a larger time span and 
+more frequent interruptions, STGNN-MKT’s lead is furthe r extended: the AUC reaches 
+0.893, a 7.9% improvement over the spatio-temporal fusion baseline MRTKT  
+(AUC = 0.827), and the training time is only increased by 0.8 hours, which verifies the 
+efficient scalability of the model. 
+Table 1 ASSISTments2009 datase t performance comparison 
+Method AUC ACC RMSE Number of participants 
+(in thousands) 
+BKT 0.712 0.698 0.312 0.5 
+DKT 0.781 0.723 0.289 12.3 
+GKT 0.816 0.754 0.271 25.6 
+DGKT 0.832 0.769 0.263 31.2 
+DGMN 0.849 0.793 0.251 28.7 
+STGNN-MKT 0.901 0.845 0.218 34.5 
+Table 2 KDDCup2010 dataset performance comparison 
+Method AUC ACC RMSE Training time (hours) 
+SAKT 0.768 0.718 0.301 1.8 
+MRTKT 0.827 0.781 0.256 2.5 
+DGKT 0.841 0.792 0.247 3.1 
+DGMN 0.831 0.785 0.253 2.7 
+STGNN-MKT 0.893 0.839 0.224 3.9 
+The AUC of STGNN-MKT reaches  0.872 in the long-term interval (>30 days) answer 
+samples, which is significan tly higher than that of DGM N (0.801) and DGKT (0.819). 
+This is attributed to th e FMGM module’s accurate m odelling of the Ebbinghaus 
+forgetting curve – integrating the time interval Δt with the number of practice sessions nj 
+through a nonlinear decay function exp( Δ /( 1 ) ) ,t
+jjγη tn=− + β  e.g., the forgetting gate 
+for a certain knowledge point is 0.65t
+jγ =  at an interval of 60 da ys but with a number of 
+practice sessions nj = 5, while it is 0.24t
+jγ =  at nj = 1 at the same interval, which is more 
+in line with the laws of cognitive psychology. 
+5.3 Fine-grained validatio n of time interval effects 
+In order to verify the ability of gated TCNs to capture dense solving patterns and simulate 
+the exam, Figure 3 shows the trend of prediction accuracy for 10 consecutive questions in 
+the ASSISTments dataset. STGNN-MKT predic ts the ACC to be 0.82 in the first 
+question, and then gradually ri ses to 0.88 with th e advancement of solving and stabilises 
+in the interval of 0.86 ± 0.02, which indicates that TC Ns can effectively capture the 
+thinking and coherence and positive feedback effect of solving the problem chain through 
+the null convolution. coheren ce and positive feedback effect . Due to the lack of local 
+pattern modelling ability, the ACC of the comparison models DKT and SAKT dropped to 
+
+--- PAGE 16 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+    Knowledge tracing in mathematical problem-solving processes 37    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+below 0.75 after the 5th question, and fluc tuated significantly especially when the 
+questions involved cross-knowledge transfer. 
+Figure 3 Change curves of ACC for each model in short time intensive question answering 
+scenarios (see online version for colours) 
+ 
+Figure 4 Comparison of predicted AUC for the first que stion across models after a long interval 
+(see online version for colours) 
+ 
+
+--- PAGE 17 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+   38 X. Li    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+Screening the answering records before and after the vacation in the KDDCup dataset, 
+Figure 4 compares the prediction AUC of e ach model for the firs t question after a long 
+interval. STGNN-MKT leads th e way with an AUC=0.872, an improvement of 8.9% 
+compared to DGMN). Further analysis of the FMGM module behaviour: when the time 
+interval was Δt = 45 day and the number of practice sessions was n
+j = 3, the memory 
+strength t
+jm  decayed to 0.61; whereas at the same interval if nj = 7, t
+jm  it only dropped to 
+0.78. This mechanism allowed the model to accura tely reflect the inhibitory effect of the 
+frequency of historical practice on the rate of forge tting in predicting the performance of 
+the first question after a prolonged interruption. 
+5.4 Ablation experiments and model robustness analysis 
+In Table 3 systematic assessment of the contributions of the STGNN-MKT modules. The 
+removal of the heterogram attention module (w/o heterogram atte ntion) resulted in a 
+4.6% decrease in AUC, conf irming that the stud ent-exercise-knowledge point ternary 
+relationship is the core foun dation of representational lear ning. The elimination of TCN 
+short-time encoding (w/o TCN) and FMGM long-time encoding (w/o FMGM) resulted in 
+a 2.5% and 3.4% AUC loss, respectively, demonstrating the complementary effects of the 
+dual temporal mechanisms on dense and sp arse scenarios. Th e ablation of the  
+spatio-temporal co-upd ating mechanism (w/o spatio-tempo ral co-updating) triggers the 
+maximum performance degradation (5.8% AUC drop), demonstrating that the coupling 
+of spatial structural evolution and tempor al cumulative evolutio n is the key to the 
+dynamic tracking of cognitive states. 
+Table 3 Comparison of ablation experiment results 
+Model variant AUC ΔAUC 
+Full model 0.893 - 
+W/o heterogram attention 0.852 –4.6% 
+W/o TCN 0.871 –2.5% 
+W/o FMGM 0.863 –3.4% 
+W/o space-time collaborative updating 0.841 –5.8% 
+Figure 5 Effect of hidden layer dimens ion d and forgetting coefficient η on AUC (see online 
+version for colours) 
+ 
+
+--- PAGE 18 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+    Knowledge tracing in mathematical problem-solving processes 39    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+Figure 5 explores the effect of hidden layer dimension d and forgetting factor η on model 
+performance. The AUC peaks at 0.893 when d = 64; the characterisation ability is 
+insufficient for d < 64, and the risk of overfitting rises for d > 64. Forgetting coefficient η 
+performs robustly in the [0.1, 0.2] interval (AUC>0.885); forgetting gate suppression is 
+insufficient at η < 0.1, and historical memories are excessively discarded at η > 0.2. 
+6 Conclusions 
+In this paper, we propose a spatio-temporal graph neural network knowledge tracking 
+method for mathematical prob lem solving process, which uni fies the spatial correlation 
+and temporal evolution dynamics of the modelled knowledge structure by constructing a 
+student-exercise-knowledge point ternary heterogeneous graph. In the spatial dimension, 
+a meta-path-aware graph attention mechan ism is designed to explicitly capture  
+inter-conceptual logical dependencies; in th e temporal dimension, a gated temporal 
+sequential convolutional network and a forg etting-memory gate module are innovatively 
+integrated to portray the short-term thinki ng coherence of intensive problem solving and 
+the cognitive forg etting law of the long term interval s, respectively. Experiments show 
+that the method sign ificantly outperforms the baseline model on the ASSISTments and 
+KDDCup datasets. This work provides a new paradigm for educational cognitive 
+modelling that balances predic tive accuracy and educational interpretability, and will be 
+extended to cross-di sciplinary knowledge transfer and privacy-preserving deployment 
+scenarios in the future. 
+Acknowledgements 
+This work is supported by the Innovation in OBE-Based Blended Teaching of Advanced 
+Mathematics, University-level (No. 2025CYYBJY007). 
+Declarations 
+Author declares no conflicts of interest. 
+References 
+Abdelrahman, G. and Wang, Q. (2022) ‘Deep gr aph memory networks for forgetting-robust 
+knowledge tracing’, IEEE Transactions on Knowledge and Data Engineering , Vol. 35, No. 8, 
+pp.7844–7855. 
+Broncano-Berrocal, F. (2018) ‘Knowledge and tracking revisited’, Analysis, Vol. 78, No. 3, 
+pp.396–405. 
+Chang, Z., Zhu, R., Liu, J., Shang, J. and Da i, L. (2024) ‘HGSMDA: miRNA – disease association 
+prediction based on HyperGCN and Sørensen-Dice Loss’, Non-coding RNA, Vol. 10, No. 1, 
+p.9. 
+Chen, M., Bian, K., He, Y., Li, Z. and Zheng, H. (2023) ‘Enhanced learning and forgetting 
+behavior for contextual knowledge tracing’, Information, Vol. 14, No. 3, p.168. 
+
+--- PAGE 19 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+   40 X. Li    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+Cui, C., Yao, Y., Zhang, C., Ma, H., Ma, Y., Ren, Z., Zhang, C. and Ko, J. (2024) ‘DGEKT: A dual 
+graph ensemble learning method for knowledge tracing’, ACM Transactions on Information 
+Systems, Vol. 42, No. 3, pp.1–24. 
+Cui, J., Chen, Z., Zhou, A., Wang, J. and Zhan g, W. (2023) ‘Fine-grained interaction modeling 
+with multi-relational transformer for knowledge tracing’, ACM Transactions on Information 
+Systems, Vol. 41, No. 4, pp.1–26. 
+Dong, J., Li, X., Xu, C., Yang, X., Yang, G., Wa ng, X. and Wang, M. (2021) ‘Dual encoding for 
+video retrieval by text’, IEEE Transactions on Pattern An alysis and Machine Intelligence , 
+Vol. 44, No. 8, pp.4065–4080. 
+Giroux, H. and Taylor, J.R. (2002) ‘The justif ication of knowledge: tracki ng the translations of 
+quality’, Management Learning, Vol. 33, No. 4, pp.497–517. 
+Guzman-Jimenez, R., Prem, D., Saldívar, A. and Escotto-Córdova, E.A. (2025) ‘Yupana Inka Tawa 
+Pukllay arithmetic eye tr acking analysis: novices’, Frontline Learning Research , Vol. 13,  
+No. 3, pp.29–52. 
+Heng-yu, L., Tian-cheng, Z. , Pei-wen, W. and Ge, Y. (2019) ‘A  review of knowledge tracking’, 
+Journal of East China Normal University (Natural Science), Vol. 2019, No. 5, p.1. 
+Holmqvist, K., Örbom, S.L. , Hooge, I.T., Niehorster, D.C., Alexander, R.G., Andersson, R., 
+Benjamins, J.S., Blignaut, P., Brouwer, A.-M. and Chuang, L.L. (2023) ‘RETRACTED 
+ARTICLE: Eye tracking: empirical foundations for a minimal reporting guideline’, Behavior 
+Research Methods, Vol. 55, No. 1, pp.364–416. 
+Jamshidiha, S., Pourahmadi, V., Mohammadi, A. and Bennis, M. (2025) ‘Power allocation using 
+spatio-temporal graph neural netw orks and reinforcement learning’, Wireless Networks ,  
+Vol. 31, No. 2, pp.1163–1176. 
+Jin, G., Liang, Y., Fang, Y., Shao , Z., Huang, J., Zhang, J. and Zh eng, Y. (2023) ‘Spatio-temporal 
+graph neural networks for predictive lear ning in urban computing: a survey’, IEEE 
+Transactions on Knowledge and Data Engineering, Vol. 36, No. 10, pp.5388–5408. 
+Kim, M., Shim, Y., Lee, S., Loh,  H. and Park, J. (2021) ‘Behavioral Testing of Deep Neural 
+Network Knowledge Tracing Models’, International Educational Data Mining Society, Vol. 1, 
+No. 10, pp.1–13. 
+Li, C., Lin, L., Zuo, W., Tang , J. and Yang, M.-H. (2018) ‘Visual tracking via dynamic graph 
+learning’, IEEE Transactions on Pattern Anal ysis and Machine Intelligence , Vol. 41, No. 11, 
+pp.2770–2782. 
+Li, M., Chen, S., Zhao, Y., Zhang,  Y., Wang, Y. and Tian, Q. (2 021) ‘Multiscale spatio-temporal 
+graph neural networks for 3d skeleton-based motion prediction’, IEEE Transactions on Image 
+Processing, Vol. 30, No. 1, pp.7760–7775. 
+Lin, Y., Wang, N., Liu, J., Zhang, F., Wei, Z.  and Yi, M. (2025) ‘CHNSCDA: circRNA-disease 
+association prediction based on strongly co rrelated heterogeneous neighbor sampling’, 
+International Journal of Machine Learning and Cybernetics, Vol. 16, No. 3, pp.2023–2039. 
+Liu, D., Zhang, Y., Zhang, J., Li, Q., Zhang, C.  and Yin, Y. (2020) ‘Multiple features fusion 
+attention mechanism enhanced deep knowledge tracing for student performance prediction’, 
+IEEE Access, Vol. 8, No. 1, pp.194894–194903. 
+Liu, Y., Ji, W. and Zhou, G. (2025) ‘Spatiote mporal fusion knowledge tracking model based on 
+spatiotemporal graph and fourier graph neural network’, Journal of King Saud University 
+Computer and Information Sciences, Vol. 37, No. 6, p.124. 
+Ma, W., Chu, Z., Chen, H. and Li, M. (2024) ‘S patio-temporal envolutional graph neural network 
+for traffic flow prediction in UAV-based urban traffic monitoring system’, Scientific Reports, 
+Vol. 14, No. 1, p.26800. 
+Manierre, M.J. (2015) ‘Gaps in knowledge: tracki ng and explaining gender differences in health 
+information seeking’, Social Science & Medicine, Vol. 128, No. 1, pp.151–158. 
+Mao, Y. (2018) ‘Deep Learning vs. Bayesian knowle dge tracing: student models for interventions’, 
+Journal of Educational Data Mining, Vol. 10, No. 2, pp.1–11. 
+
+--- PAGE 20 ---
+   
+ 
+   
+   
+ 
+   
+   
+ 
+   
+    Knowledge tracing in mathematical problem-solving processes 41    
+ 
+    
+ 
+ 
+   
+   
+ 
+   
+   
+ 
+   
+       
+ 
+Shen, S., Liu, Q., Huang, Z., Zh eng, Y., Yin, M., Wang, M. and Chen, E. (2024) ‘A survey of 
+knowledge tracing: Models, vari ants, and applications’, IEEE Transactions on Learning 
+Technologies, Vol. 17, No. 1, pp.1858–1879. 
+Skarding, J., Gabrys, B. and Musial, K. (2021)  ‘Foundations and modeling of dynamic networks 
+using dynamic graph neural  networks: A survey’, IEEE Access , Vol. 9, No. 1,  
+pp.79143–79168. 
+Song, X., Ling, G., Tu, W. and Chen, Y. (2024) ‘Knowledge-guided heterogeneous graph 
+convolutional network for aspect -based sentimen t analysis’, Electronics, Vol. 13, No. 3, 
+p.517. 
+Sun, Y., Liu, S., Dong, Y., An, Y ., Shi, F., Dong, S. and Liu, G.  (2019) ‘Spatio-temporal evolution 
+scenarios and the coupling analysis of ecosystem  services with land use change in China’, 
+Science of the Total Environment, Vol. 681, No. 1, pp.211–225. 
+Wan, H., Xiang, L., Cai, Y., Xie, Y. and Xu, R.  (2025) ‘Temporal and spatial feature extraction 
+using graph neural networks for multi-point wa ter quality prediction in river network areas’, 
+Water Research, Vol. 281, No. 1, p.123561. 
+Wang, X., Zheng, Z., Zhu, J. an d Yu, W. (2023) ‘What is wrong with deep knowledge tracing? 
+Attention-based knowledge tracing’, Applied Intelligence, Vol. 53, No. 3, pp.2850–2861. 
+Wu, Z., Huang, L., Huang, Q., Huang, C. an d Tang, Y. (2022) ‘SGKT : Session graph-based 
+knowledge tracing for student performance prediction’, Expert Systems with Applications , 
+Vol. 206, No. 1, p.117681. 
+Yang, Z., Hu, J., Zhong, S., Yang, L. and Min, G. (2024) ‘Graph-based effective knowledge tracing 
+via subject knowledge mapping’, Education and Information Technologies , Vol. 2, No. 1, 
+pp.1–28. 
+Yao, K., Zhang, L., Du, D., Luo, T., Tao, L. a nd Wu, Y. (2018) ‘Dual encoding for abstractive text 
+summarization’, IEEE Transactions on Cybernetics, Vol. 50, No. 3, pp.985–996. 
+Zhang, K. and Yao, Y. (2018) ‘A three lear ning states Bayesian know ledge tracing model’, 
+Knowledge-Based Systems, Vol. 148, No. 1, pp.189–201. 
+Zhu, K., Li, Y., Mao, W., Li, F. and Yan, J. (2022) ‘LSTM e nhanced by dual-attention-based 
+encoder-decoder for daily peak load forecasting’, Electric Power Systems Research, Vol. 208, 
+No. 1, p.107860. 

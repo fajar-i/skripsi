@@ -1,0 +1,1494 @@
+--- PAGE 1 ---
+GuideAI: A Real-time Personalized Learning Solution with 
+Adaptive Interventions 
+Ananya Shukla∗ 
+HTI Lab 
+Plaksha University 
+Mohali, Punjab, India 
+ananya.shukla@plaksha.edu.in 
+Chaitanya Modi∗ 
+HTI Lab 
+Plaksha University 
+Mohali, India 
+chaitanya.modi@plaksha.edu.in 
+Satvik Bajpai∗ 
+HTI Lab 
+Plaksha University 
+Mohali, Punjab, India 
+satvik.bajpai@plaksha.edu.in 
+Siddharth Siddharth 
+HTI Lab 
+Plaksha University 
+Mohali, Punjab, India 
+siddharth.s@plaksha.edu.in 
+Figure 1: GuideAI’s Comprehensive Adaptive Learning Interface. The image illustrates the multi-modal, biosensor-driven 
+approach of the personalized system across diferent learning modes—text-based, image-based, audio-based and video-based. 
+Each panel demonstrates real-time adaptation to the learner’s cognitive state, featuring dynamic interventions such as cognitive 
+load management, stress reduction techniques (box breathing), and posture correction. 
+Abstract 
+Large Language Models (LLMs) have emerged as powerful learning 
+tools, but they lack awareness of learners’ cognitive and physiolog-
+ical states, limiting their adaptability to the user’s learning style. 
+Contemporary learning techniques primarily focus on structured 
+learning paths, knowledge tracing, and generic adaptive testing but 
+fail to address real-time learning challenges driven by cognitive load, 
+attention fuctuations, and engagement levels. Building on fndings 
+from a formative user study (? = 66), we introduce GuideAI, a multi-
+modal framework that enhances LLM-driven learning by integrat-
+ing real-time biosensory feedback including eye gaze tracking, heart 
+rate variability, posture detection, and digital note-taking behavior. 
+GuideAI dynamically adapts learning content and pacing through 
+cognitive optimizations (adjusting complexity based on learning 
+∗These authors contributed equally to the work. 
+This work is licensed under a Creative Commons Attribution 4.0 International License. 
+IUI ’26, Paphos, Cyprus 
+© 2026 Copyright held by the owner/author(s). 
+ACM ISBN 979-8-4007-1984-4/26/03 
+https://doi.org/10.1145/3742413.3789125 
+progress markers), physiological interventions (breathing guidance 
+and posture correction), and attention-aware strategies (redirecting 
+focus using gaze analysis). Additionally, GuideAI supports diverse 
+learning modalities, including text-based, image-based, audio-based, 
+and video-based instruction, across varied knowledge domains. A 
+preliminary study (N = 25) assessed GuideAI’s impact on knowledge 
+retention and cognitive load through standardized assessments. The 
+results show statistically signifcant improvements in both problem-
+solving capability and recall-based knowledge assessments. Par-
+ticipants also experienced notable reductions in key NASA-TLX 
+measures including mental demand, frustration levels, and efort, 
+while simultaneously reporting enhanced perceived performance. 
+These fndings demonstrate GuideAI’s potential to bridge the gap 
+between current LLM-based learning systems and individualized 
+learner needs, paving the way for adaptive, cognition-aware educa-
+tion at scale. 
+CCS Concepts 
+• Applied computing → E-learning;• Human-centered com-
+puting → Interaction design theory, concepts and paradigms; 
+HCI theory, concepts and models. 
+1218
+
+--- PAGE 2 ---
+IUI ’26, March 23–26, 2026, Paphos, Cyprus Shukla et al. 
+Keywords 
+large language models, adaptive learning, biosensory personaliza-
+tion, multi-modal interaction, AI personalization, vision language 
+models 
+ACM Reference Format: 
+Ananya Shukla, Satvik Bajpai, Chaitanya Modi, and Siddharth Siddharth. 
+2026. GuideAI: A Real-time Personalized Learning Solution with Adaptive 
+Interventions. In 31st International Conference on Intelligent User Interfaces 
+(IUI ’26), March 23–26, 2026, Paphos, Cyprus. ACM, New York, NY, USA, 
+17 pages. https://doi.org/10.1145/3742413.3789125 
+1 Introduction 
+The rapid evolution of Large Language Models (LLMs) has trans-
+formed domains such as content generation, scientifc discovery, 
+and medicine. Their ability to process and generate natural lan-
+guage has opened new frontiers in Human–Computer Interaction 
+(HCI) [3]. In education, integrating LLMs with learning technologies 
+shows particular promise: they can provide instant feedback, scaf-
+fold explanations, and adapt responses to learner inputs [20, 37, 41]. 
+Recent studies have demonstrated that LLMs have proven efec-
+tive as tutoring systems, capable of answering conceptual questions, 
+explaining complex topics, supporting problem-solving, and pro-
+moting meta-cognitive refection on knowledge gaps [32]. However, 
+most current systems remain text-centric and cognitively myopic, 
+ofering limited personalization and no awareness of learners’ real-
+time cognitive-afective states [2]. 
+Learning science research emphasizes that efective learning 
+depends on context and fuctuates with attention, cognitive load, 
+afect, and physiological well-being [35]. Ideally, intelligent tutors 
+would infer these states from multi-modal signals such as gaze, 
+heart rate variability (HRV), posture, or interaction traces, and adapt 
+their strategies accordingly. Yet current LLM tutors remain reactive, 
+relying only on textual cues like correctness, verbosity, or sentiment. 
+This single-channel approach treats learning as static text-exchange, 
+overlooking the dynamic interplay of attention, uncertainty, and 
+afect that drives genuine learning. 
+This gap can be conceptualized along four critical dimensions 
+that constrain current LLM-based learning systems: 
+(1) Representation Gap — Textual Proxies for Cognition: Cur-
+rent systems assess learner’s understanding mainly through 
+surface-level text features such as accuracy, verbosity, or senti-
+ment. These overlook deeper indicators of learning—like atten-
+tion, uncertainty, and cognitive efort—that appear in physio-
+logical and behavioral signals rather than language [11, 12]. 
+(2) Temporal Gap — Lack of Real-time Adaptivity: Most LLM 
+tutors follow a turn-based dialogue model, updating only af-
+ter learner’s input. This ignores the continuous dynamics of 
+cognition and emotion, limiting timely interventions that could 
+sustain focus or prevent overload [9]. 
+(3) Inference Gap — Absence of Multi-modal State Modeling: 
+Existing systems seldom use multi-modal data such as gaze, 
+HRV, or posture to infer learner’s real-time cognitive-afective 
+states. Without these cues, personalization remains context-
+blind to engagement, fatigue, or frustration [58]. 
+(4) Intervention Gap — Lack of Adaptive, Flow-preserving 
+Support: Even when learner’s states are inferred, most systems 
+lack adaptive frameworks that decide when and how to inter-
+vene. They rely on static prompts or fxed thresholds instead of 
+context-aware, closed-loop strategies that preserve cognitive 
+fow and support metacognitive control [9, 31]. 
+To address these limitations, we frst conducted a formative 
+assessment (? = 66) to identify learner needs. Guided by these 
+results, this study addresses these gaps by introducing GuideAI, 
+a novel biosensor-augmented personalized LLM system across di-
+verse learning modalities. Our work makes the following contribu-
+tions: 
+(1) Integrated Biosensory Framework: We present a unifed 
+behavioral-physiological sensing framework that fuses real-
+time multi-modal signals such as gaze, HRV, posture, and in-
+teraction traces within an LLM-based learning environment. 
+This enables continuous inference of cognitive-afective states 
+including engagement, cognitive load, and fatigue, forming the 
+basis for context-aware and tone-sensitive feedback. 
+(2) Adaptive Intervention Strategies: We design a closed-loop 
+intervention model that dynamically determines when and how 
+to respond based on inferred learner states. GuideAI delivers 
+tiered interventions at the micro-level (content pacing and com-
+plexity), meso-level (focus and afect regulation), and macro-
+level (metacognitive guidance) to sustain fow and promote 
+self-regulation 
+(3) Cross-modal Interface and Empirical Validation: We im-
+plement GuideAI in a multi-modal environment across text, 
+image, audio, and video formats, and evaluate it through a 
+mixed-method study (N = 25) combining biosensor metrics 
+with self-reported measures. Results demonstrate statistically 
+signifcant improvements in retention, understanding, and cog-
+nitive load management compared to non-personalized LLM 
+baselines. 
+By creating systems that can sense and respond to learners’ cog-
+nitive and physiological states in real-time, GuideAI bridges the 
+gap between current LLM-based learning systems and the individ-
+ualized needs of learners, paving the way for adaptive, cognition-
+aware education at scale. GuideAI’s codebase will be released as 
+open source. 
+2 Related Work 
+2.1 Physiological and Cognitive States as 
+Determinants of Learning Efciency 
+Building upon the need for personalization, recent research em-
+phasizes that efective learning is not only a cognitive process but 
+also deeply infuenced by physiological states. Commins et al. [7] 
+demonstrated that physical well-being directly modulates cogni-
+tive functions essential for efective information processing and 
+knowledge acquisition. Suboptimal physiological states, particu-
+larly poor posture, have been linked to increased cognitive load 
+and diminished learning efciency [48]. Research on cognitive load 
+theory has established that when mental processing resources are 
+overwhelmed, learning efciency decreases substantially, highlight-
+ing the necessity of monitoring and managing cognitive demands 
+during educational activities [7, 43, 45]. 
+1219
+
+--- PAGE 3 ---
+GuideAI: A Real-time Personalized Learning Solution with Adaptive Interventions IUI ’26, March 23–26, 2026, Paphos, Cyprus 
+2.2 Biosensors as Biomarkers for Personalized 
+and Adaptive Learning 
+Advances in multi-modal biosensing now enable non-intrusive 
+monitoring of learners’ cognitive and emotional states in real time. 
+Pupillometry, for instance, provides reliable indices of mental ef-
+fort and attentional load, with pupil dilation correlating strongly 
+with task difculty and processing demand [10, 45]. Heart rate vari-
+ability (HRV) serves as a biomarker of stress and engagement by 
+capturing autonomic regulation [1, 39], while posture dynamics 
+and micro-movements indicate fatigue or disengagement [25, 48]. 
+These physiological and behavioral signals ofer complementary 
+perspectives on the learner’s internal state however, existing ap-
+proaches typically use these signals in isolation for ofine analytics 
+or post-hoc feedback rather than integrating them into closed-loop 
+adaptive systems [12] 
+2.3 From Rule-based Systems to LLMs: Toward 
+Multi-modal Personalization in Education 
+The integration of LLMs into educational technologies has revolu-
+tionized learning through advanced natural language understand-
+ing and generation capabilities [6, 27, 40]. Contemporary imple-
+mentations leverage LLMs’ sophisticated reasoning processes to 
+adapt instructional approaches based on inferred knowledge states 
+and learning preferences [5, 57], however fail to address the tem-
+poral and inferential gaps of adaptive support: feedback timing, 
+intervention intensity, and context awareness. The combination of 
+LLMs with wearable biosensors represents a particularly promising 
+direction, with prior studies demonstrating content adaptation and 
+limited learner modeling through physiological data integration 
+[1, 14, 15]. These models’ multi-modal processing capabilities fa-
+cilitate the integration of diverse data sources, including textual, 
+visual, physiological, and behavioral metrics, enabling a more com-
+prehensive understanding of learners’ states [53, 57]. 
+Despite these advances, most current LLM tutoring systems re-
+main reactive, inferring progress only from textual responses rather 
+than multi-modal learner-state cues. They fail to address the tem-
+poral and inferential gaps of adaptive support: feedback timing, 
+intervention intensity, and context awareness [39, 54]. While prior 
+frameworks have explored content adaptation and limited learner 
+modeling [1, 29, 56], none combine real-time multi-modal biosens-
+ing, cognitive fow-aligned adaptation, and meta-cognitive scafold-
+ing within a unifed architecture. GuideAI contributes to this tra-
+jectory by operationalizing a context-aware, biosensor-augmented 
+LLM framework that performs continuous learner-state inference 
+and adaptive intervention at multiple temporal and cognitive scales, 
+extending prior work in both educational AI and intelligent user 
+interfaces. 
+3 Formative Assessment 
+To ground our system design in authentic learner needs, we con-
+ducted a formative study to translate broad challenges, limited 
+personalization and lack of real-time adaptation into actionable, 
+user-centered design goals. The assessment captured learners’ AI 
+usage patterns, limitations of current tools, and expectations for 
+adaptive interventions. 
+3.1 Pre-study Survey 
+A total of 66 participants (mean age = 24.3, range = 19-42) completed 
+an online survey. The sample included undergraduate and graduate 
+students, educators, and professionals in learning-focused roles 
+(63.3% male, 36.7% female). The survey examined participants’ AI 
+usage frequency, perceived utility, preferred learning modalities, 
+and desired personalization features. 
+Figure 2: Participant openness to working with a personal-
+ized AI learning assistant on a scale from 1-10. The distribu-
+tion shows strong receptivity, with 50 out of 66 participants 
+(75.7%) rating their openness at 7 or higher, and a median 
+rating of 8. 
+3.1.1 AI Usage and Perception. Most participants (55.0%) used AI 
+tools daily and 38.3% several times per week. Nearly all respondents 
+(96.6%) found AI systems at least somewhat useful for learning, with 
+40.7% rating them extremely useful. ChatGPT was the most used 
+platform (96.7%), followed by Claude (61.7%) and Gemini (30.0%). 
+Participants viewed AI primarily as an on-demand explainer for 
+complex problems, rather than a continuous learning companion, 
+indicating opportunities for more proactive, context-aware assis-
+tance. 
+3.1.2 Learning Modality Preferences. Text-based materials re-
+mained the most preferred learning modality (98.3%), though many 
+participants expressed interest in video (53.3%), image-based (51.7%), 
+and audio (44.6%) content. Text was valued for self-paced control, 
+while visual and auditory formats aided understanding of spatial or 
+procedural concepts. As one participant noted, “Text lets me learn 
+at my own speed, but diagrams and videos help me grasp complex 
+ideas much faster” (P7). This preference underscores the impor-
+tance of multi-modal learning environments that fexibly align with 
+learners’ cognitive and perceptual needs. 
+3.1.3 AI Learning Tools: Usage Paterns and Limitations. Partici-
+pants primarily used AI tools to explain difcult concepts (91.7%), 
+interpret code or mathematical problems (78.3%), and summarize 
+readings (73.3%). These fndings indicate that learners rely on AI 
+systems during moments of cognitive friction rather than routine 
+study. 
+1220
+
+--- PAGE 4 ---
+IUI ’26, March 23–26, 2026, Paphos, Cyprus Shukla et al. 
+Figure 3: Desired interventions from personalized AI (N = 66). Top priorities: personalized learning paths (68.2%), tailored 
+practice questions (68.2%), and learning style adaptation (65.2%). Nearly half (47.0%) wanted break reminders and alternative 
+methods. Multiple selections allowed. 
+However, participants identifed several persistent limitations. 
+About one-third (31.7%) cited a lack of personalization or adapta-
+tion to their learning style as a major shortcoming. Others noted 
+excessive textual explanations (33.3%) or missing step-by-step rea-
+soning (25.0%). As participants described, systems often “keep ex-
+plaining at the same level even when I’m lost” (P12) or “can’t tell 
+when an explanation isn’t landing” (P15). Nearly half (42.3%) re-
+ported abandoning AI assistance when it failed to adjust to their 
+confusion. These limitations highlight the absence of real-time 
+learner-state awareness—precisely the challenge GuideAI addresses 
+through multi-modal biosensing and adaptive feedback. 
+3.1.4 Desired Interventions. When asked about desired capabilities 
+in AI learning assistants, participants expressed strong interest in 
+adaptive interventions (Figure 2). Top-ranked features included per-
+sonalized learning paths (68.3%), targeted practice questions (66.7%), 
+and adaptive recognition of learning styles (65.0%) (Figure 3). Over 
+half (50.0%) wanted systems capable of detecting struggle and sug-
+gesting breaks or alternative strategies. These fndings directly 
+informed GuideAI’s design goals—developing a system that dynam-
+ically infers cognitive-afective state, modulates support timing and 
+intensity, and maintains learner engagement across modalities. 
+3.2 Design Implications 
+The formative assessment yielded four key design implications that 
+guided GuideAI’s development: 
+(1) Multi-modal Learning Support: Signifcant interest in image-
+based, audio-based and video-based learning suggests the need 
+for systems that seamlessly integrate and adapt across modali-
+ties. 
+(2) Real-time Adaptation: Users desire systems that can detect 
+learning states and dynamically adjust content and pace accord-
+ingly. 
+(3) Physiological Awareness: Strong interest in systems that can 
+detect struggles and suggest interventions indicates the value 
+of incorporating biosensory data. 
+(4) Personalized Learning Paths: Respondents prioritized indi-
+vidualized content sequencing based on their unique strengths 
+and weaknesses, supporting our biosensory-informed personal-
+ization approach. 
+These fndings highlighted the gap between current AI learning 
+systems and learner needs, directly informing our GuideAI system 
+design that integrates biosensory data for responsive, personalized 
+learning across multiple modalities. 
+4 GuideAI Solution 
+Following our formative studies, we developed GuideAI, a person-
+alized system that identifes challenges and support opportunities 
+based on multi-modal cognitive and behavioral cues. 
+4.1 Overview 
+The GuideAI pipeline (Figure 4) comprises three core components: 
+(1) A sensor module, that includes an external posture camera, pupil-
+tracker, wrist-worn wearable, and note-taking device to monitor a 
+learner’s physiological and behavioral state during digital learning 
+sessions. (2) A processing module that analyzes the captured data 
+streams to infer the learner’s engagement, cognitive workload, and 
+afective state. (3) A reasoning and inference module that integrates 
+contextual understanding with pedagogical strategies to suggest 
+timely interventions. 
+We implemented GuideAI as a web-based platform that supports 
+real-time learning and assessment of study behavior. The plat-
+form supports cross-device compatibility, enabling data input from 
+tablets, mobile devices, and desktop systems. 
+1221
+
+--- PAGE 5 ---
+GuideAI: A Real-time Personalized Learning Solution with Adaptive Interventions IUI ’26, March 23–26, 2026, Paphos, Cyprus 
+Figure 4: GuideAI System Architecture with three modules: Sensor Module (left) collects eye tracking, heart activity, posture, 
+and notes data. Processing Module (center) transforms raw signals into physiological and behavioral metrics. Inference Module 
+(right) integrates these to assess six cognitive dimensions (cognitive load, attention, engagement, understanding, stress, fatigue) 
+and deliver personalized interventions across learning modalities (text, image, audio, video). 
+4.2 Data Capture 
+Figure 5: Multi-modal biosensory setup integrating eye track-
+ing, heart rate monitoring, note-taking analysis, and posture 
+detection. 
+In our experimental setup (Figure 5), GuideAI uses a multi-modal 
+sensor confguration to collect real-time data from the learner. We 
+use the Pupil Core eye tracker from Pupil Labs [26] to capture pupil-
+lometry data, fxations, and saccadic movements at 60 fps, providing 
+information about visual attention, cognitive load, and information 
+processing patterns. The Max-Health-Band from Maxim Integrated 
+[16] captures heart rate (HR) and heart rate variability (HRV) at 
+200 Hz, enabling assessment of autonomic nervous system activity 
+and stress levels. 
+An external posture camera captures upper body positioning, while 
+iPad screen recordings provide observational data on note-taking 
+behaviors. To manage time-synchronized data fow across sensors, 
+we use the Lab Streaming Layer (LSL) framework [28]. LSL en-
+sures consistent time-stamping and low-latency data integration, 
+enabling real-time fusion of biosignals, posture analysis, and task 
+interaction data for constructing a temporally coherent model of 
+learners’ attention, afect, and cognitive efort. 
+4.3 Processing Module 
+4.3.1 Biosensors-based Pipeline. To infer users’ cognitive and afec-
+tive states in real-time, our system integrates physiological signals 
+from pupillometry and HRV, extracted via biosensor processing 
+pipelines. The eye-tracking module tracks and analyzes pupil dila-
+tion, saccades, and fxations, all of which have been demonstrated 
+to refect cognitive load, arousal, and visual attention dynamics. 
+Fixation durations correlate with working memory load and atten-
+tional allocation during scene perception and memory integration 
+tasks [4, 19, 33]. By employing robust fxation-detection algorithms 
+1222
+
+--- PAGE 6 ---
+IUI ’26, March 23–26, 2026, Paphos, Cyprus Shukla et al. 
+[38, 47], the system parses gaze data into real-time attentional 
+patterns. Saccadic movements are also analyzed, ofering rapid tem-
+poral markers of stimulus-driven attentional shifts [17, 18]. These 
+signals are instrumental in detecting user interest, task engagement, 
+and transitions between visual targets. 
+To assess autonomic nervous system activity, we implement a HRV 
+processor that analyzes data from a wearable physiological sensor. 
+The heart activity signal is sampled at 200 Hz and processed in 
+real-time. The system extracts standard time-domain HRV features, 
+focusing on pNN50, RMSSD, and SDNN metrics [8, 13, 50]. The 
+pNN50 value measures the percentage of successive RR intervals 
+difering by more than 50 milliseconds, with thresholds indicating 
+stress levels: <20 (high), 20-50 (moderate), >50 (low stress) [46, 59]. 
+These HRV metrics are contextualized against individual baseline 
+recordings to account for inter-individual diferences in resting 
+autonomic tone. 
+Raw Signal Processing and Feature Extraction. Raw biosignals 
+are processed in real-time using modality-specifc pipelines prior 
+to state inference. For pupillometry, raw pupil diameter streams 
+sampled at 60 Hz are frst smoothed using a rolling median flter 
+to remove blink artifacts, followed by baseline normalization. Fixa-
+tions are detected using a velocity-threshold identifcation (I-VT) 
+method, where gaze velocity ?? is computed as: 
+√ 
+(Δ?? )2 +( Δ?? )2 
+?? = (1)Δ? 
+where ?? and ?? represent the horizontal and vertical gaze positions 
+at time ?, respectively. Δ?? = ?? − ?? −1 and Δ?? = ?? − ?? −1 are 
+the gaze displacements along each axis, and Δ? is the sampling 
+interval between successive measurements. Samples with ?? < ?? 
+are classifed as fxations, enabling computation of fxation duration 
+and dispersion metrics. 
+For cardiovascular signals, RR intervals extracted from the wearable 
+sensor are processed over sliding windows to compute standard 
+HRV features including RMSSD, SDNN, and pNN50. These features 
+are normalized against participant baselines to account for inter-
+individual physiological variability. 
+4.3.2 Vision-based Pipeline. GuideAI tracks learner engagement 
+through posture analysis and note-taking behavior. For posture 
+monitoring, we use MediaPipe [34] to analyze shoulder positioning, 
+neck alignment, and back straightness, categorizing posture into 
+four states: ideal (90-100%), average (75-89%), below average (60-
+74%), and poor (<60%). 
+For note-taking analysis, an iPad M1 captures screenshots at 
+60-second intervals. These are processed using OpenAI’s gpt-4o 
+model to analyze handwritten notes, providing qualitative feed-
+back and a correctness score (0-1). This integration captures both 
+physical engagement and cognitive processing refected in learning 
+artifacts. 
+4.4 Personalized Intervention Module 
+Our personalized learning system employs an intelligent interven-
+tion module that continuously analyzes the learner’s state and 
+delivers adaptive support based on multi-modal biosensing data. 
+This adaptive architecture represents a signifcant departure from 
+traditional learning systems that present standardized content re-
+gardless of the learner’s cognitive and afective state. 
+Threshold Calibration and Rationale. All intervention thresholds 
+are defned relative to participant-specifc baselines, obtained 
+during a 5-minute calibration phase prior to each session (Section 
+5.1.1). For each physiological channel, we compute standardized 
+deviations using a Z-score formulation: 
+?? − ?baseline?? = (2)?baseline 
+where ?? is the real-time signal value, and ?baseline, ?baseline are 
+participant-specifc baseline statistics. 
+We defne moderate deviation at |?| ≥ 1.0 and pronounced 
+deviation at |?| ≥ 1.5, consistent with prior cognitive load and 
+stress detection literature using pupillometry and HRV-based mark-
+ers. These values were further validated through pilot sessions to 
+balance sensitivity against false-positive intervention triggering. 
+Why Semantic State Abstractions Instead of Raw Numeric Streams. 
+While raw physiological values (e.g., pupil diameter in millimeters 
+or HRV metrics) are informative, directly injecting high-frequency 
+numeric streams into LLM prompts introduces substantial noise 
+and token inefciency. Instead, we convert processed signals into 
+semantic state descriptors (e.g., High Stress, Moderate Cognitive 
+Load) that preserve interpretability while remaining stable over 
+time. 
+This abstraction enables the LLM to reason over learner state 
+using cognitively meaningful constructs, improving robustness and 
+controllability of generated interventions without requiring the 
+model to infer semantics from raw numerical values. 
+4.4.1 Physiological State Inference Model. 
+Baseline Normalization and Signal Quantifcation. Each partici-
+pant undergoes a 60-second calibration phase in a neutral resting 
+state to compute per-sensor baseline distributions (?base,? , ?base,? ). 
+??,? −?base,? Real-time readings ??,? are standardized as ??,? = .?base,? 
+Dimension Scoring. Each of the six psychophysiological dimen-
+sions ? (e.g., cognitive load, attention) is computed as a weighted 
+average of the absolute deviation scores of its constituent sensorÍ? 
+?=1 ? ?,? ·??,? ·|??,? |features: ? ? = Í? , where ? ?,? is the feature weight 
+?=1 ? ?,? ·??,? 
+and ??,? ∈ [0, 1] is the real-time signal quality score based on sensor 
+confdence. Weights were derived from meta-analytic efect sizes 
+in psychophysiology literature. For example, pupil dilation’s high 
+weight for cognitive load refects its documented large efect size 
+(? = 0.8–1.2) in working memory paradigms [42]. 
+Intervention Triggering. An intervention is triggered when a di-
+mension score ? ? surpasses a predefned threshold (e.g., > 1.5 for 
+"Moderate Deviation") for a sufcient duration (temporal persis-
+tence > 10s), a policy designed to distinguish meaningful state 
+changes from transient noise. 
+4.4.2 LLM Integration and Tone-adaptive Intervention Delivery. The 
+LLM serves as the primary intervention delivery mechanism, with 
+responses enhanced by biosensory context. When biosensors de-
+tect elevated stress, the system adopts a supportive tone with 
+patience-signaling language. During high engagement, it increases 
+1223
+
+--- PAGE 7 ---
+GuideAI: A Real-time Personalized Learning Solution with Adaptive Interventions IUI ’26, March 23–26, 2026, Paphos, Cyprus 
+(a) High Cognitive Load Detection (b) Low Understanding Intervention 
+(c) High Attention State Recognition (d) Stress Regulation 
+(e) Low Engagement Management (f) Fatigue Detection and Response 
+Figure 6: GuideAI’s biosensing-driven intervention framework linking physiological triggers to adaptive strategies. (a) High 
+cognitive load detected via pupil dilation, elevated heart rate, and fxation duration triggers content pausing and chunking; (b) 
+Understanding difculties from erroneous notes initiate conceptual correction; (c) High attention states enable complexity 
+increases; (d) Stress detection triggers graduated interventions from simplifcation to breathing exercises; (e) Low engagement 
+adapts content pacing; (f) Fatigue prompts strategic breaks. This represents a subset of GuideAI’s real-time pedagogical 
+adaptations. 
+Socratic questioning. For fatigue, it becomes more energetic and 
+concise. Tone adaptation operates across multiple linguistic dimen-
+sions—sentence complexity, encouragement frequency, explanation 
+directness, and metaphor usage—calibrated to physiological indica-
+tors. This ensures interventions address both content modifcations 
+and optimal presentation for the learner’s current state. 
+The system includes targeted directives based on detected states 
+that guide response generation. For instance, high cognitive load 
+triggers directives to simplify explanations, reduce information 
+density, and incorporate learning aids. 
+An intervention is triggered only when: (i) the deviation magni-
+tude exceeds threshold, (ii) model confdence exceeds 0.6, and (iii) 
+deviation persists across three consecutive windows to suppress 
+transient noise. 
+4.4.3 Learning Mode–Specific Intervention Mechanisms. GuideAI 
+adapts interventions to the representational properties of each 
+1224
+
+--- PAGE 8 ---
+IUI ’26, March 23–26, 2026, Paphos, Cyprus Shukla et al. 
+Figure 7: Comparison of standard LLM (left) vs. GuideAI (right) responses. GuideAI detects a misconception in the learner’s 
+notes (unlabeled vs. labeled data), identifes high stress levels, and delivers a tone-adaptive intervention with conceptual 
+correction and breathing guidance to address both cognitive and afective states. 
+medium, recognizing that cognitive load and comprehension chal-
+lenges manifest diferently across text, image, audio, and video. 
+This design choice follows evidence from multi-modal learning re-
+search that instructional efectiveness depends on aligning support 
+strategies with modality-specifc afordances. The four modes were 
+selected based on learner preferences in our formative study, and 
+the interventions were tailored accordingly. 
+(1) Text-based learning: Interventions reduce extraneous load 
+by dynamically restructuring content. For instance, dense text 
+is segmented into shorter paragraphs, converted into bullet 
+lists, or supplemented with refective prompts. Example: “Let 
+me organize this information diferently to make the relationships 
+clearer: First, the defnition of sampling distribution... ” 
+(2) Image-based learning: Complex visuals are progressively dis-
+closed, annotation density is adapted to cognitive capacity, and 
+gaze-contingent highlighting draws attention to critical regions. 
+Example: “Looking at this visualization of a sampling distribu-
+tion, notice how the shape changes as sample size increases. I’ll 
+present the sequence of images in a more structured order to help 
+clarify the relationship. ” 
+(3) Audio-based learning: Speech pacing and intonation are mod-
+ulated in response to overload signals. Strategic pauses and 
+summarizations aid temporal integration, while guided breath-
+ing cues are inserted during elevated stress. Example: “I notice 
+this concept might be challenging. I’ll break this down into smaller 
+components and explain each part more deliberately. ” 
+(4) Video-based learning: Playback is adaptively controlled, with 
+pauses introduced at points of detected confusion, clarifying 
+questions embedded, and captions or overlays added for empha-
+sis. Example: [System automatically pauses video] “Let’s pause 
+here to ensure this critical concept is clear. This segment explains 
+a fundamental principle we’ll build upon. ” 
+These modality-specifc mechanisms illustrate how GuideAI 
+leverages the afordances of each medium to scafold comprehen-
+sion, regulate pacing, and maintain learner engagement. 
+4.4.4 Adaptive Interventions. GuideAI employs a tiered adaptive in-
+tervention framework across four categories: cognitive–attentional, 
+physiological, comprehension-oriented, and challenge-enhancement. 
+This structure draws on cognitive load theory, self-regulation re-
+search, and the principle of keeping learners within their zone of 
+proximal development (ZPD). 
+(1) Cognitive and Attentional Interventions: For moderate cog-
+nitive load, GuideAI restructures content with clearer structure 
+or contextual cues (“Let me highlight the key relationships. ”). Un-
+der critical overload, it distills material to core ideas. GuideAI 
+counters attention lapses with curiosity prompts (“What if we 
+doubled the sample size?”) or short physical resets (“Take a quick 
+stretch before we continue. ”). 
+1225
+
+--- PAGE 9 ---
+GuideAI: A Real-time Personalized Learning Solution with Adaptive Interventions IUI ’26, March 23–26, 2026, Paphos, Cyprus 
+(2) Physiological Interventions: GuideAI responds to stress with 
+reassurance (“Many learners fnd this challenging at frst—let’s 
+break it down step by step. ”) for moderate levels, and brief breath-
+ing exercises (“Let’s pause briefy—inhale 4, hold 4, exhale 6. ”) 
+for high stress. Fatigue triggers shorter segments or breaks 
+depending on severity. 
+(3) Comprehension-oriented Interventions: When understand-
+ing is low, GuideAI provides adaptive scafolding. Moderate gaps 
+trigger multiple explanation styles—formal, intuitive, or com-
+parative. Critical gaps prompt frst-principles reconstruction, 
+moving from concrete examples to abstract concepts (“Let’s re-
+build this from a tangible example before the formal defnition. ”). 
+(4) Challenge-enhancement Interventions: Under-challenge 
+states (low load, high engagement) trigger increased task com-
+plexity to sustain engagement within the ZPD. Moderate cases 
+reduce scafolding or add advanced applications; substantial 
+ones extend to theoretical or synthesis prompts (“How might 
+this apply to stratifed sampling in heterogeneous populations?”). 
+(5) Implicit vs. Explicit Framing: GuideAI adjusts feedback style 
+based on context. Implicit adaptations (e.g., simplifying expla-
+nations) are used for moderate deviations, while explicit ac-
+knowledgments of stress or fatigue are reserved for persistent 
+or multimodally confrmed states. This ensures sensitivity to 
+learner diferences while supporting metacognitive awareness. 
+5 Study Design and Evaluation 
+5.1 Procedure 
+To evaluate GuideAI’s efectiveness, we conducted a controlled 
+comparison study with 25 participants (13 male, 12 female; age 
+range 18-42, mean 24.7 years). We employed a within-subjects 
+design with counterbalanced order, wherein each participant 
+interacted with both the GuideAI system and a non-personalized 
+control condition utilizing a standard LLM. 
+This study is intended as a preliminary validation of GuideAI 
+under controlled conditions, focusing on STEM-oriented learning 
+tasks where outcomes can be assessed more objectively. General-
+ization to more subjective domains is explored through hypotheses 
+and discussion rather than empirical evaluation in this study. 
+5.1.1 Participant Selection and Preparation. Participants were care-
+fully screened to ensure they had no prior knowledge of the study 
+topics. The sample included diverse educational backgrounds across 
+undergraduate, master’s, and doctoral programs. Each participant 
+provided written informed consent for biosensing data collection 
+and analysis, with all data anonymized to protect privacy. Topics 
+were selected from diverse domains including statistics (probabil-
+ity vs. sampling distributions), machine learning (supervised vs. 
+unsupervised learning), and biology (innate vs. adaptive immu-
+nity) [22, 51, 55]. Prior to each session, participants underwent 
+a calibration process establishing baseline physiological metrics, 
+including eye-tracker calibration, ideal posture positioning, and 
+heart rate/HRV baseline measurements. These baselines served as 
+reference points for adaptive thresholds in the GuideAI condition. 
+5.1.2 Study Conditions. We developed a custom web-based in-
+terface, ensuring a consistent user experience across condi-
+tions. Based on our formative study, the system utilized Ope-
+nAI’s models (gpt-4o-mini for dialogue, gpt-4o for vision, and 
+gpt-4o-mini-tts for audio) for their balance of quality and la-
+tency. The interface design was identical in both conditions to 
+isolate the efects of the adaptive interventions. 
+Participants each experienced two conditions in a counterbal-
+anced, within-subjects design. To control for content variability, 
+topic difculty was matched, and sessions were spaced by at least 
+24 hours to mitigate fatigue. The two conditions were: 
+(1) Control (Non-adaptive Baseline): Participants used a non-
+personalized LLM-based learning system with an identical sen-
+sor confguration to the experimental condition but without 
+adaptive interventions or content personalization. 
+(2) Intervention (GuideAI): Participants used the fully-adaptive 
+system, where content, pacing, and tone were dynamically per-
+sonalized in real-time based on the multi-modal analysis of their 
+physiological and behavioral signals. 
+This design allows us to test our primary hypothesis by measur-
+ing the holistic efect of our integrated, biosensor-aware support 
+system against a rigorously controlled and representative baseline. 
+5.1.3 Learning Modes. Each condition consisted of four sequential 
+learning modes designed to engage diferent learning modalities, 
+which were selected based on the preferences identifed in our 
+formative study: 
+(1) 
+Text-based Learning: Participants studied structured text con-
+tent on their assigned topic. 
+(2) Image-based Learning: Participants engaged with topic-
+appropriate visual content, where text explanations were sup-
+plemented with illustrative images and diagrams. The content 
+was specifcally selected to beneft from visual reinforcement, 
+for example, statistical distribution graphs for probability con-
+cepts. Each visual element included detailed explanations of its 
+components. 
+(3) Audio-based Learning: Participants engaged in audio-based 
+dialogue with the LLM, asking questions and receiving spoken 
+responses about the topic, creating a more interactive learning 
+experience. 
+(4) Video-based Learning: Participants watched an educational 
+video on the topic, with the ability to ask the system clarifying 
+questions about the video content. 
+5.1.4 Assessment Methods. After each learning mode, participants 
+completed: 
+(1) 
+Cognitive Load Assessment: NASA Task Load Index (NASA-
+TLX) [21] on a 7-point Likert scale measuring perceived mental 
+demand, efort, temporal demand, physical demand, perfor-
+mance and frustration [30]. 
+(2) Knowledge Assessment: Multiple-choice questions test-
+ing factual recall and conceptual understanding through 
+application-based problems, with similar difculty across all 
+topics. 
+(3) Subjective Evaluation: Participants rated their experience on 
+7-point Likert scales covering perceived focus, adaptation to 
+learning pace, quality of examples, and overall satisfaction. 
+1226
+
+--- PAGE 10 ---
+IUI ’26, March 23–26, 2026, Paphos, Cyprus Shukla et al. 
+For the GuideAI condition, participants additionally evaluated the 
+quality and appropriateness of interventions received. All partici-
+pants provided qualitative feedback on both systems at the conclu-
+sion of each learning session. 
+5.2 Findings 
+Our evaluation demonstrates that GuideAI signifcantly improves 
+both learning outcomes and cognitive experience compared to the 
+non-adaptive control condition. Results are reported across three 
+dimensions: (1) cognitive load and user experience, (2) learning 
+performance, and (3) subjective evaluations. 
+5.2.1 Cognitive Load and User Experience. NASA-TLX analysis re-
+vealed consistent reductions in cognitive load across all modalities 
+with GuideAI (Figure 8). Participants reported lower mental demand 
+(Δ = 0.49, ? < 0.05), physical demand (Δ = 0.23, ? < 0.05), efort 
+(Δ = 0.28, ? < 0.05), and frustration (Δ = 0.54, ? < 0.05), alongside 
+higher perceived performance (Δ = 0.34, ? < 0.05). These results 
+indicate reduced cognitive burden and improved self-assessed learn-
+ing efcacy. 
+Mental DemandPhysical DemandT emporal Demand Performance
+Effort
+Frustration Level
+1
+2
+3
+4
+5
+6
+7Score
+NASA-TLX Metrics (All Phases)
+Control
+GuideAI
+Significant (p < 0.05)
+Statistical test: Wilcoxon rank-sum test (p < 0.05)
+Figure 8: Comparison of NASA-TLX metrics between control 
+and GuideAI conditions across all learning modes. Lower 
+scores are better for all metrics except Performance, where 
+higher scores indicate better perceived success. Gray high-
+lighting indicates statistically signifcant diferences (p < 0.05) 
+using Wilcoxon rank-sum tests [44], which were used due to 
+the non-normal distribution and paired nature of the data. 
+Learning mode-specifc analysis revealed how GuideAI infu-
+enced cognitive load across diferent learning modalities (Figure 
+9): 
+• Text-based: Largest reduction in cognitive load, particularly 
+in mental (Δ = 0.65, ? < 0.05) and temporal demand (Δ = 
+0.96, ? < 0.05), suggesting strong alignment between pacing 
+interventions and reading-intensive content (Figure 9a). 
+• Image-based: Signifcant decreases in mental (Δ = 0.51, 
+? < 0.05) and temporal demand (Δ = 0.59, ? < 0.05); perfor-
+mance gains were moderate (Figure 9b). 
+• Audio-based: Higher perceived performance (Δ = 0.77, 
+? < 0.05) and reduced frustration (Δ = 1.14, ? < 0.05), 
+indicating improved engagement through adaptive dialogue 
+pacing (Figure 9c). 
+• Video-based: Lower physical demand (Δ = 0.33, ? < 0.05) 
+but higher temporal demand (Δ = 0.60, ? < 0.05), likely 
+refecting real-time playback adjustments synchronized to 
+cognitive state (Figure 9d). 
+Participants’ qualitative feedback reinforced these fndings: 
+“The interventions were helpful as they were monitoring 
+stress, focus, etc. and trying to reduce the complexity 
+of concepts on the go, which helped in understanding 
+things in a simpler manner. ” — P7 
+“I genuinely appreciated how it slowed down when I was 
+getting overwhelmed and ofered simpler explanations. 
+The personalized pacing made a noticeable diference 
+in how much information I was able to retain. ” — P20 
+5.2.2 Learning Performance. GuideAI produced signifcant learn-
+ing gains across modalities for both problem-solving and recall 
+tasks. 
+• Problem-solving: Text-based 75% vs 52%, Image-based 78% 
+vs 48%, Audio-based 70% vs 59% (? < 0.05); Video-based 72% 
+vs 68% (n.s.). The largest gain (Δ = 30 percentage points) 
+occurred in image-based learning (Figure 10b). 
+• Recall: Image-based 82% vs 62%, Audio-based 70% vs 52% 
+(? < 0.05); Text-based 65% vs 64% and Video-based 72% vs 
+70% (Figure 10a). 
+Performance improvements aligned with reduced cognitive load: 
+for instance, in image-based learning, higher recall corresponded 
+with lower mental (Δ = 0.51) and temporal demand (Δ = 0.59). 
+Audio-based gains in problem-solving paralleled reduced frustra-
+tion (Δ = 1.14) and increased perceived performance (Δ = 0.77). 
+Across all modalities, GuideAI yielded a mean improvement of 16.5 
+percentage points in problem-solving and 10.3 percentage points in 
+recall, indicating stronger support for deep conceptual integration 
+than rote memorization. These fndings validate that biosensor-
+driven adaptive interventions enhance comprehension by reducing 
+cognitive burden and aligning feedback with learner state. 
+5.2.3 Subjective Evaluation. Participants’ subjective ratings (Ta-
+ble 1) corroborated the quantitative results. Four dimensions 
+showed statistically signifcant improvements in the GuideAI con-
+dition: 
+• Focus and Attention: ? = 5.60, ?? = 1.25 vs Control 
+? = 4.85, ?? = 1.34, ? = 0.0418. 
+• Content Personalization: ? = 5.55, ?? = 1.32 vs Control 
+? = 4.90, ?? = 1.26, ? = 0.0362. 
+• Adaptive Pacing: ? = 5.40, ?? = 1.28 vs Control ? = 4.65, 
+?? = 1.22, ? = 0.0322. 
+• Perceived Learning: ? = 5.50, ?? = 1.16 vs Control ? = 
+4.75, ?? = 1.18, ? = 0.0402. 
+Positive but non-signifcant trends were observed for task chal-
+lenge (? = 0.17) and frustration (? = 0.25). Overall enjoyment was 
+comparable across conditions (GuideAI: ? = 5.45, ?? = 1.38; Con-
+trol: ? = 5.20, ?? = 1.30). Qualitative feedback further illustrated 
+increased engagement and perceived adaptivity: 
+“Before using this system, I’d often give up on difcult 
+material. The way it broke concepts down when it de-
+tected my confusion gave me capabilities I didn’t have 
+1227
+
+--- PAGE 11 ---
+GuideAI: A Real-time Personalized Learning Solution with Adaptive Interventions IUI ’26, March 23–26, 2026, Paphos, Cyprus 
+Mental DemandPhysical DemandT emporal Demand Performance
+Effort
+Frustration Level
+1
+2
+3
+4
+5
+6
+7Score
+Text-based Learning
+Control
+GuideAI
+Significant (p < 0.05)
+Statistical test: Wilcoxon rank-sum test (p < 0.05)
+Mental DemandPhysical DemandT emporal Demand Performance
+Effort
+Frustration Level
+1
+2
+3
+4
+5
+6
+7Score
+Image-based Learning
+Control
+GuideAI
+Significant (p < 0.05)
+Statistical test: Wilcoxon rank-sum test (p < 0.05)
+(a) (b) 
+Mental DemandPhysical DemandT emporal Demand Performance
+Effort
+Frustration Level
+1
+2
+3
+4
+5
+6
+7Score
+Audio-based Learning
+Control
+GuideAI
+Significant (p < 0.05)
+Statistical test: Wilcoxon rank-sum test (p < 0.05)
+Mental DemandPhysical DemandT emporal Demand Performance
+Effort
+Frustration Level
+1
+2
+3
+4
+5
+6
+7Score
+Video-based Learning
+Control
+GuideAI
+Significant (p < 0.05)
+Statistical test: Wilcoxon rank-sum test (p < 0.05)
+(c) (d) 
+Figure 9: NASA-TLX metrics across learning modes comparing GuideAI vs. control. (a) Text-based learning showed signifcant 
+reductions in mental demand, temporal demand, and frustration; (b) Image-based learning reduced mental and temporal 
+demand via eye-tracking adaptations; (c) Audio-based learning showed the largest performance improvements with reduced 
+mental demand and frustration; (d) Video-based learning showed lower physical demand but higher temporal demand due to 
+adaptive pacing. Gray shading indicates signifcance (p < 0.05, Wilcoxon rank-sum). Lower is better except Performance (higher 
+is better). 
+T ext-based Learning Image-based Learning Audio-based Learning Video-based Learning
+0
+20
+40
+60
+80
+100Score (%)
+Recall Performance Scores by Phase
+Control
+GuideAI
+Significant (p < 0.05)
+Statistical test: Wilcoxon rank-sum test (p < 0.05)
+T ext-based Learning Image-based Learning Audio-based Learning Video-based Learning
+0
+20
+40
+60
+80
+100Score (%)
+Problem-solving Performance Scores by Phase
+Control
+GuideAI
+Significant (p < 0.05)
+Statistical test: Wilcoxon rank-sum test (p < 0.05)
+(a) Recall performance (b) Problem-solving performance 
+Figure 10: Learning performance comparing Control vs. GuideAI. (a) Recall performance with signifcant improvements in 
+image-based and video-based learning. (b) Problem-solving performance with signifcant gains in image-based and audio-based 
+learning. GuideAI outperformed control across all modalities. Error bars: standard error. Gray shading: p < 0.05 (Wilcoxon 
+rank-sum). 
+1228
+
+--- PAGE 12 ---
+IUI ’26, March 23–26, 2026, Paphos, Cyprus Shukla et al. 
+Table 1: Comparison of Control and GuideAI Groups on Likert Scale Responses ranging from 1 (Strongly Disagree) to 7 (Strongly 
+Agree) 
+Question Control 
+Mean/SD 
+GuideAI 
+Mean/SD 
+U-
+Statistic 
+p-
+value 
+Efect 
+Size 
+I found the learning task to be challenging using this 
+learning system 
+4.65 / 1.22 4.30 / 1.18 159.0 0.1672 0.29 
+I felt frustrated or overwhelmed while using the learning 
+system 
+4.10 / 1.32 3.75 / 1.28 165.5 0.2481 0.27 
+I was able to stay focused throughout the session with 
+the learning system 
+4.85 / 1.34 5.60 / 1.25 127.5 0.0418 -0.48 
+I enjoyed the learning task with the learning system 5.20 / 1.30 5.45 / 1.38 170.0 0.3621 -0.19 
+The examples provided by the learning system were 
+tailored to me and easy to follow 
+4.90 / 1.26 5.55 / 1.32 124.0 0.0362 -0.45 
+The learning system adapted well to my learning pace 4.65 / 1.22 5.40 / 1.28 123.0 0.0322 -0.47 
+I feel I understood the topic better after using this learn-
+ing system 
+4.75 / 1.18 5.50 / 1.16 126.0 0.0402 -0.49 
+Note: Statistical analysis includes the U-statistic, p-value from the Wilcoxon rank-sum tests, and efect size (Cohen’s d). Negative efect sizes indicate that GuideAI 
+condition had a higher mean value than the Control condition. 
+Table 2: Additional Questionnaire Responses from the 
+GuideAI Group on Personalized Interventions 
+Question GuideAI Mean/SD 
+Helped me understand the topic more 
+clearly 
+4.71 / 0.68 
+Responded promptly to my needs 5.50 / 0.75 
+Provided examples that made concepts 
+easier to grasp 
+4.75 / 1.28 
+Positively impacted my task performance 5.25 / 0.58 
+Personalization 5.00 / 0.66 
+Made learning experience more engaging 5.33 / 0.47 
+Adjusted based on my mistakes or strug-
+gles 
+4.43 / 0.55 
+Note: Values measured on a 7-point Likert scale where higher values indicate 
+stronger agreement. 
+before. I could actually stay with the material instead 
+of getting lost. ” — P4 
+5.2.4 Interventions Evaluation. Participants in the GuideAI condi-
+tion rated biosensor-driven interventions positively across all di-
+mensions (Table 2). The highest ratings were observed for system 
+responsiveness (? = 5.50, ?? = 0.75) and enhanced engage-
+ment (? = 5.33, ?? = 0.47), indicating strong appreciation for 
+GuideAI’s ability to detect and respond to cognitive-afective shifts 
+in real time. Participants also rated performance impact highly 
+(? = 5.25, ?? = 0.58), suggesting that interventions efectively sup-
+ported comprehension and task progress rather than functioning 
+as peripheral features. 
+Personalization quality (? = 5.00, ?? = 0.66) and conceptual 
+clarity (? = 4.71, ?? = 0.68) were consistently endorsed, confrm-
+ing that biosensory adaptations successfully aligned with individual 
+learning needs. The comparatively lower score for error-based 
+adjustments (? = 4.43, ?? = 0.55) indicates scope to refne the 
+granularity of real-time difculty calibration. Qualitative feedback 
+substantiated these fndings. Participants emphasized the utility of 
+physiological regulation cues, such as breathing or posture prompts, 
+in managing stress and sustaining focus: 
+“I liked when it prompted me to take deep breaths to 
+control my heartbeat. It helped me relax and refocus on 
+the task when I was feeling overwhelmed by the content. ” 
+— P8 
+“It was good and I liked this learning system because 
+when I study normally, I don’t notice my posture. Hav-
+ing something remind me helped me stay comfortable 
+and focused for longer periods. ” — P15 
+5.3 Ablation Study 
+To assess the individual efectiveness of GuideAI’s adaptive mech-
+anisms, we performed an ablation study on the four intervention 
+types detailed in Section 4.4.5’s Adaptive Interventions framework. 
+Specifcally, we isolated: cognitive optimization (the content restruc-
+turing and complexity adjustments described under "Cognitive and 
+Attentional Interventions"), physiological intervention (the breath-
+ing and posture guidance from "Physiological Interventions"), atten-
+tion redirection (the focus management strategies from "Cognitive 
+and Attentional Interventions"), and tone-adaptive communication 
+(the afective language modulation described in Section 4.4.2). 
+5.3.1 Methodology. For each intervention category, we calculated 
+improvement scores by comparing NASA-TLX metrics in trials 
+where that intervention was active versus control trials (no inter-
+vention) for the same participant. 
+The improvement score is defned as the within-subject difer-
+ence in NASA-TLX ratings (1-7 scale) between intervention and 
+control trials, averaged across all six NASA-TLX dimensions. In in-
+stances where multiple interventions were triggered simultaneously 
+(approx. 12% of cases), the intervention associated with the highest 
+deviation score relative to baseline was prioritized for the analysis. 
+1229
+
+--- PAGE 13 ---
+GuideAI: A Real-time Personalized Learning Solution with Adaptive Interventions IUI ’26, March 23–26, 2026, Paphos, Cyprus 
+Figure 11: NASA-TLX improvement scores by intervention category. Cognitive optimization shows strongest improvements; 
+attention redirection excels at performance enhancement. Error bars: SE. 
+This approach isolates the primary driver of the state change while 
+accounting for the system’s hierarchical decision-making process. 
+5.3.2 Results. Analysis of intervention logs revealed the distribu-
+tion of system actions per session: Cognitive Optimization was 
+the most frequently triggered mechanism (? = 5.2 times/session), 
+refecting the continuous need for micro-adjustments in content 
+complexity to maintain the zone of proximal development. This was 
+followed by Attention Redirection (? = 3.8) and Tone-Adaptive 
+Communication (? = 3.1). Physiological Intervention was the least 
+frequent (? = 1.2), validating our hierarchical design which re-
+serves these explicit, fow-breaking interruptions (e.g., breathing 
+exercises) only for sustained high-stress states to preserve learn-
+ing momentum. As shown in Figure 11, cognitive optimization 
+yielded the largest reductions in mental demand (0.49 ± 0.10), efort 
+(0.31 ± 0.08), and frustration (0.52 ± 0.07). Attention redirection 
+efectively reduced temporal demand (0.39±0.13) and improved per-
+ceived performance (0.49 ± 0.13). Physiological regulation produced 
+moderate but consistent frustration reductions (0.58 ± 0.15), while 
+tone-adaptive communication most strongly reduced frustration 
+(0.72 ± 0.11) but showed smaller efects on other dimensions. 
+The analysis revealed important synergistic efects between in-
+tervention types. Combining cognitive optimization with attention 
+redirection produced amplifed benefts beyond individual efects, 
+particularly for mental demand reduction (combined: 0.67 vs. sum 
+of individual: 0.58). 
+5.3.3 Key Findings. Cognitive optimization emerges as the primary 
+driver of GuideAI’s efectiveness. This validates the importance 
+of real-time content adaptation based on cognitive load indica-
+tors. Attention redirection provides crucial performance benefts 
+for maintaining engagement, while physiological interventions 
+serve as stress modulators. The synergistic efects demonstrate that 
+GuideAI’s multi-modal approach provides benefts beyond individ-
+ual interventions in isolation, supporting the integrated system 
+design. 
+6 Discussion 
+GuideAI demonstrates the potential of biosensor-augmented per-
+sonalized learning to enhance educational outcomes and reduce 
+cognitive load. Integrating real-time physiological data with adap-
+tive content delivery enables a responsive and efective learning 
+environment. This section discusses broader implications, limita-
+tions, and directions for future work. 
+6.1 Multi-modal State-aware Learning 
+Results show signifcant learning improvements across modalities, 
+especially in audio- and image-based learning, suggesting modality-
+specifc optimization. GuideAI’s adaptive mechanisms facilitate 
+higher-order cognition, with stronger efects on problem-solving 
+than recall. These fndings extend cognitive load theory through 
+real-time physiological monitoring, demonstrating the feasibility 
+1230
+
+--- PAGE 14 ---
+IUI ’26, March 23–26, 2026, Paphos, Cyprus Shukla et al. 
+of state-aware systems that adapt to attention, stress, and cognitive 
+fuctuations with minimal latency. 
+While our evaluation focused on STEM-oriented tasks, the under-
+lying state-aware adaptation framework is not inherently domain-
+specifc. Similar benefts may extend to non-technical subjects such 
+as the humanities, social sciences, language learning, and creative 
+disciplines, where learning often depends more on sustained at-
+tention, interpretation, and refection than on binary notions of 
+correctness. In these contexts, learning quality may be better cap-
+tured through engagement-oriented indicators, such as reading 
+dwell time, interaction rhythm, or refective note-taking—rather 
+than accuracy-based metrics, suggesting that adaptive success may 
+be operationalized diferently across domains. 
+6.2 Limitations and Challenges 
+Despite the promising results, several important limitations must 
+be acknowledged: 
+6.2.1 Privacy and Data Security Concerns. The collection of 
+biosensing data raises signifcant privacy considerations. While 
+our study implemented data minimization principles and secure 
+encryption protocols, broader deployment would require robust 
+privacy frameworks to protect sensitive physiological information. 
+Future implementations must address questions around data own-
+ership, storage limitations, and user control over their physiological 
+data. The trade-of between personalization benefts and privacy 
+risks necessitates careful ethical consideration in system design. 
+6.2.2 Technical Feasibility and Deployment Constraints. Our cur-
+rent implementation requires specialized hardware including eye-
+tracking devices, wearable sensors, and cameras, along with calibra-
+tion procedures and controlled environments that limit deployment 
+in typical educational settings. GuideAI’s efectiveness relies on ac-
+curate physiological measurements, making it vulnerable to sensor 
+errors and calibration issues. During testing, we observed that pupil-
+lary measurements were occasionally afected by ambient lighting 
+changes, while HRV readings showed sensitivity to minor physical 
+movements. The complexity of multi-modal sensor integration and 
+real-time processing demands substantial computational resources, 
+making the system less feasible for individual learners or resource-
+constrained institutions. These technical and practical constraints 
+highlight the gap between laboratory validation and real-world 
+educational deployment. 
+In scenarios where dedicated physiological sensors are unavail-
+able, future versions of GuideAI could leverage interaction-level 
+behavioral signals as proxy indicators of learner state. Patterns such 
+as time-on-task (dwell time), mouse cursor movement dynamics, 
+response latency, and interaction rhythm have been shown to re-
+late to user attention, cognitive efort, and stress. While noisier and 
+less direct than physiological biosignals, these interaction-derived 
+proxies enable sensor-light or sensor-free deployments and sup-
+port a graceful degradation of adaptivity in resource-constrained 
+or privacy-sensitive environments [23, 36, 49, 52]. 
+6.2.3 LLM Hallucinations and Content Reliability. While we im-
+plemented guided prompts and structured reasoning frameworks 
+to mitigate LLM hallucinations, the risk of generating inaccurate 
+or misleading content remains a concern. During our study, we 
+observed occasional instances where the LLM generated plausible 
+but factually incorrect explanations, particularly when responding 
+to edge case questions. This highlights the need for content verif-
+cation mechanisms and domain-specifc knowledge guardrails in 
+educational applications of LLMs [24]. 
+6.2.4 Longitudinal Study Considerations. Our evaluation focused 
+on immediate learning efects within controlled sessions rather than 
+longitudinal outcomes. The lack of long-term assessment leaves 
+open questions about knowledge retention over time and the po-
+tential development of dependency on adaptive interventions. 
+6.2.5 Intervention-specific Efectiveness. While our system imple-
+mented various intervention types, we did not systematically evalu-
+ate their relative efectiveness. Participant feedback indicated vary-
+ing preferences for diferent intervention strategies, with physiolog-
+ical regulation features (e.g., breathing guidance, posture correction) 
+receiving particularly positive mentions, while explicit cognitive 
+state notifcations sometimes increased anxiety rather than alle-
+viating it. More granular analysis of intervention-specifc efects 
+would help optimize future implementations. 
+6.2.6 Sample Size and Scope of Validation. The present study 
+should be interpreted as a preliminary validation of GuideAI rather 
+than a conclusive assessment of its efectiveness across populations. 
+While the sample size was sufcient to observe consistent within-
+subject trends and statistically meaningful efects under controlled 
+conditions, it limits the generalizability of the fndings. Larger and 
+more diverse cohorts are required to evaluate robustness across 
+demographic groups, learning styles, and prior knowledge levels. 
+Future work should prioritize scaled evaluations to validate external 
+applicability and reduce sampling bias. 
+6.3 Future Directions 
+Building on our fndings and addressing the limitations identifed, 
+we propose several promising directions for future research: 
+(1) Accessible Sensing Technologies. Future work should focus 
+on developing cost-efective and unobtrusive sensing solutions 
+leveraging ubiquitous devices such as webcams for gaze track-
+ing and smartwatches for HRV measurement. Such scalable 
+alternatives could democratize biosensor-enhanced learning 
+across diverse educational contexts. 
+(2) Longitudinal Learning Efects. Extending evaluation beyond 
+short-term sessions to longitudinal studies can reveal sustained 
+efects on retention, metacognitive strategy development, and 
+learner engagement. Examining how system familiarity and 
+trust evolve over time will clarify the durability of adaptive 
+intervention benefts. 
+(3) Learner-confgurable Interventions. Mixed qualitative feed-
+back underscores the need for user agency in adaptive systems. 
+Allowing learners to confgure intervention frequency, type 
+(implicit vs. explicit), and visibility could enhance comfort, miti-
+gate over-reliance, and align adaptive strategies with individual 
+learning preferences. 
+(4) Designing Transparent Adaptive Interventions. While 
+GuideAI internally tracks the signals and conditions that trig-
+ger adaptive interventions, this information is not currently 
+exposed to learners in order to avoid inducing self-monitoring 
+1231
+
+--- PAGE 15 ---
+GuideAI: A Real-time Personalized Learning Solution with Adaptive Interventions IUI ’26, March 23–26, 2026, Paphos, Cyprus 
+bias or anxiety. Future iterations should explore selective and 
+user-controlled ways of communicating the rationale behind 
+interventions (e.g., indicating that an adjustment was made due 
+to signs of increased cognitive load), balancing transparency 
+with minimal disruption to the learning experience. 
+7 Ethical Considerations 
+Our study’s use of biosensory data followed a robust ethical frame-
+work with ethics committee approval, centered on data minimiza-
+tion, user control, and secure processing. 
+(1) Anonymization and Minimization. All data was immedi-
+ately anonymized with a participant ID. Raw sensor data was 
+stored locally only for the session and permanently deleted after 
+the extraction of anonymized features (e.g., mean HRV), which 
+were retained for analysis. 
+(2) Transparency and Consent. Participants were fully informed 
+about the data being collected and its purpose. A persistent 
+on-screen indicator showed when monitoring was active, and 
+participants could withdraw consent at any time to have their 
+data immediately deleted. 
+(3) Privacy and Future Directions.To mitigate privacy risks from 
+third-party LLM APIs, our system transmitted only anonymized, 
+feature-extracted data (such as summary statistics or note tran-
+scriptions) rather than raw sensor streams. For real-world de-
+ployment, we strongly advocate for prioritizing on-device pro-
+cessing to ensure sensitive biosensory data never leaves the 
+user’s device, thus maximizing privacy and user trust. 
+(4) Research Involving Human Participants and Subjects This 
+research involved human participants and was conducted in 
+accordance with ethical principles and applicable regulations. 
+The study was approved by our institution’s ethics committee 
+prior to data collection. All 25 participants provided informed 
+consent after being fully informed about the study’s purpose, 
+procedures (including biosensory data collection via eye track-
+ing, heart rate monitoring, posture analysis, and note-taking 
+screenshots), potential risks, and their right to withdraw at any 
+time without penalty. 
+8 Conclusion 
+In this paper, we introduced GuideAI, a multi-modal framework 
+that enhances LLM-driven learning by integrating real-time biosen-
+sory feedback, including eye gaze, heart rate variability, posture, 
+and digital note-taking behavior. GuideAI dynamically adapts learn-
+ing content, pacing, and interventions across diverse modalities 
+(text-based, image-based, audio-based, and video-based) based on 
+inferred cognitive and physiological states. Our preliminary study 
+(N=25) demonstrated statistically signifcant improvements in infor-
+mation recall and conceptual understanding compared to standard 
+LLM interactions, highlighting GuideAI’s potential to bridge the 
+gap between current LLM systems and the personalized, adaptive 
+needs of learners. 
+While GuideAI shows promise, several avenues exist for future 
+work. The current evaluation involved a limited number of par-
+ticipants and learning duration; longitudinal studies with larger, 
+more diverse groups in real-world educational settings are needed 
+to assess long-term efectiveness and generalizability. Exploring 
+the integration of additional biosignals or contextual factors could 
+further refne the system’s understanding of learner states. Fu-
+ture iterations could also investigate the system’s performance 
+across a wider variety of learning domains and task types beyond 
+those tested. Finally, addressing potential usability and privacy 
+concerns associated with continuous biosensing, perhaps through 
+on-device processing or alternative sensing methods, will be crucial 
+for broader adoption. This work represents a step toward truly 
+cognition-aware educational technology, adaptable to the dynamic 
+state of individual learners. 
+The research adhered to principles of informed consent, privacy 
+protection, risk minimization, and data security. All physiological 
+and behavioral data were anonymized immediately upon collection, 
+with personal identifers replaced by participant codes (P1-P25). 
+Data were encrypted and stored on secure servers with restricted 
+access, to be retained only for the period necessary for research 
+validation. 
+The research complied with the ACM Code of Ethics and Profes-
+sional Conduct, The Declaration of Helsinki, and applicable local 
+regulations governing human subjects research. 
+9 GenAI Usage Disclosure 
+The authors used generative AI language models (Claude by An-
+thropic and ChatGPT by OpenAI) solely for better phrasing and 
+language standardization for consistency with ACM publication 
+standards. No generative AI was used for research design, data 
+analysis, fgure generation, literature review, or writing of original 
+content. All intellectual contributions, experimental work, and sub-
+stantive writing were produced entirely by the authors, who take 
+full responsibility for the accuracy and integrity of this work. 
+Acknowledgments 
+The authors are thankful to Harish and Bina Shah School AI & 
+CS and the Ofce of Research at Plaksha University for providing 
+seed fnancial support through the Startup Research Grant Ref. No. 
+OOR/PU-SRG/2023-24/06 for this research work. 
+References 
+[1] A. Ahmed, S. Aziz, A. Abd-alrazaq, et al. 2025. Leveraging LLMs and wearables 
+to provide personalized recommendations for enhancing student well-being 
+and academic performance through a proof of concept. Sci Rep 15 (2025), 4591. 
+doi:10.1038/s41598-025-89386-2 
+[2] Bashar Alhafni, Sowmya Vajjala, Stefano Bannò, Kaushal Kumar Maurya, and 
+Ekaterina Kochmar. 2024. LLMs in Education: Novel Perspectives, Challenges, 
+and Opportunities. arXiv:2409.11917 [cs.CL] https://arxiv.org/abs/2409.11917 
+[3] Rishi Bommasani, Drew A. Hudson, Ehsan Adeli, and et al. 2022. On the 
+Opportunities and Risks of Foundation Models. arXiv:2108.07258 [cs.LG] 
+https://arxiv.org/abs/2108.07258 
+[4] James R. Brockmole and David E. Irwin. 2005. Eye movements and the integration 
+of visual memory and visual perception. Perception & Psychophysics 67, 3 (2005), 
+495–512. doi:10.3758/BF03193327 
+[5] Yulin Chen, Ning Ding, Hai-Tao Zheng, Zhiyuan Liu, Maosong Sun, and Bowen 
+Zhou. 2024. Empowering Private Tutoring by Chaining Large Language Models. 
+In Proceedings of the 33rd ACM International Conference on Information and 
+Knowledge Management (Boise, ID, USA) (CIKM ’24). Association for Computing 
+Machinery, New York, NY, USA, 354–364. doi:10.1145/3627673.3679665 
+[6] Zhendong Chu, Shen Wang, Jian Xie, Tinghui Zhu, Yibo Yan, Jinheng Ye, Aoxiao 
+Zhong, Xuming Hu, Jing Liang, Philip S. Yu, and Qingsong Wen. 2025. LLM 
+Agents for Education: Advances and Applications. arXiv:2503.11733 [cs.CY] 
+https://arxiv.org/abs/2503.11733 arXiv preprint. 
+[7] Sean Commins. 2018. Efciency: an underlying principle of learning? Reviews in 
+the Neurosciences 29, 2 (2018), 183–197. doi:10.1515/revneuro-2017-0050 
+1232
+
+--- PAGE 16 ---
+IUI ’26, March 23–26, 2026, Paphos, Cyprus Shukla et al. 
+[8] Christopher M. DeGiorgio, Patrick Miller, Sheba Meymandi, and et al. 2010. 
+RMSSD, a measure of vagus-mediated heart rate variability, is associated with 
+risk factors for SUDEP: the SUDEP-7 Inventory. Epilepsy & Behavior 19, 1 (Sep 
+2010), 78–81. doi:10.1016/j.yebeh.2010.06.011 Epub 2010 Jul 27. 
+[9] Dinithi Dissanayake and Suranga Nanayakkara. 2025. Navigating the State of 
+Cognitive Flow: Context-Aware AI Interventions for Efective Reasoning Support. 
+https://arxiv.org/pdf/2504.16021 Preprint available at arXiv:2504.16021. 
+[10] Sidney D’Mello, Andrew Olney, Claire Williams, and Patrick Hays. 2012. Gaze 
+tutor: A gaze-reactive intelligent tutoring system. International Journal of Human-
+Computer Studies 70, 5 (May 2012), 377–398. doi:10.1016/j.ijhcs.2012.01.004 
+[11] Sidney K. D’Mello and Arthur Graesser. 2010. Multimodal semi-automated afect 
+detection from conversational cues, gross body language, and facial features. 
+User Modeling and User-Adapted Interaction 20, 2 (01 Jun 2010), 147–187. doi:10. 
+1007/s11257-010-9074-4 
+[12] Sidney K. D’mello and Jacqueline Kory. 2015. A Review and Meta-Analysis of 
+Multimodal Afect Detection Systems. ACM Comput. Surv. 47, 3, Article 43 (Feb. 
+2015), 36 pages. doi:10.1145/2682899 
+[13] D J Ewing, J M Neilson, and P Travis. 1984. New method for as-
+sessing cardiac parasympathetic activity using 24 hour electrocar-
+diograms. Heart 52, 4 (1984), 396–402. doi:10.1136/hrt.52.4.396 
+arXiv:https://heart.bmj.com/content/52/4/396.full.pdf 
+[14] Cathy Mengying Fang, Valdemar Danry, Nathan Whitmore, Andria Bao, An-
+drew Hutchison, Cayden Pierce, and Pattie Maes. 2024. PhysioLLM: Support-
+ing Personalized Health Insights with Wearables and Large Language Models. 
+arXiv:2406.19283 [cs.HC] https://arxiv.org/abs/2406.19283 
+[15] Emilio Ferrara. 2024. Large Language Models for Wearable Sensor-Based Human 
+Activity Recognition, Health Monitoring, and Behavioral Modeling: A Survey of 
+Early Trends, Datasets, and Challenges. Sensors 24, 15 (2024), 5045. doi:10.3390/ 
+s24155045 
+[16] Francesco Ferrati, Eduardo Gil, and Jesús Lázaro. 2023. Coverage of PPG-based 
+Wearable Devices in Ofce Tasks. In 2023 Computing in Cardiology (CinC), Vol. 50. 
+IEEE, Tampere, Finland, 1–4. 
+[17] B. Fischer and B. Breitmeyer. 1987. Mechanisms of visual attention revealed by 
+saccadic eye movements. Neuropsychologia 25, 1, Part 1 (1987), 73–83. doi:10. 
+1016/0028-3932(87)90044-3 
+[18] B. Fischer and H. Weber. 1993. Express saccades and visual attention. Behavioral 
+and Brain Sciences 16, 3 (1993), 553–567. doi:10.1017/S0140525X00031575 
+[19] Michael E. Goldberg, H. Eggers, and P. Gouras. 1991. The Oculomotor System. 
+In Principles of Neural Science. Columbia University Press, New York, NY, USA, 
+660–676. http://www.columbia.akadns.net/itc/hs/medical/neuralsci/2004/slides/ 
+31_LectureSlides.pdf 
+[20] Adit Gupta, Jennifer Reddig, Tommaso Calo, Daniel Weitekamp, and Christopher J. 
+MacLellan. 2025. Beyond Final Answers: Evaluating Large Language Models for 
+Math Tutoring. arXiv:2503.16460 [cs.HC] https://arxiv.org/abs/2503.16460 
+[21] Sandra G. Hart and Lowell E. Staveland. 1988. Development of NASA-TLX 
+(Task Load Index): Results of Empirical and Theoretical Research. In Human 
+Mental Workload, Peter A. Hancock and Najmedin Meshkati (Eds.). Advances 
+in Psychology, Vol. 52. North-Holland, Amsterdam, The Netherlands, 139–183. 
+doi:10.1016/S0166-4115(08)62386-9 
+[22] Bihao Hu, Jiayi Zhu, Yiying Pei, and Xiaoqing Gu. 2025. Exploring the potential 
+of LLM to enhance teaching plans through teaching simulation. npj Science of 
+Learning 10, 1 (06 Feb 2025), 7. doi:10.1038/s41539-025-00300-x 
+[23] Jef Huang, Ryen White, and Georg Buscher. 2012. User see, user point: gaze 
+and cursor alignment in web search. In Proceedings of the SIGCHI Conference on 
+Human Factors in Computing Systems (Austin, Texas, USA) (CHI ’12). Association 
+for Computing Machinery, New York, NY, USA, 1341–1350. doi:10.1145/2207676. 
+2208591 
+[24] Lei Huang, Weijiang Yu, Weitao Ma, Weihong Zhong, Zhangyin Feng, Haotian 
+Wang, Qianglong Chen, Weihua Peng, Xiaocheng Feng, Bing Qin, and Ting 
+Liu. 2025. A Survey on Hallucination in Large Language Models: Principles, 
+Taxonomy, Challenges, and Open Questions. ACM Trans. Inf. Syst. 43, 2, Article 
+42 (Jan. 2025), 55 pages. doi:10.1145/3703155 
+[25] Udesh Jayasinghe, Benedikt Janko, Francis Hwang, Thomas Münzer, Christoph 
+Baer, and Gerhard Tröster. 2023. Classifcation of static postures with wearable 
+sensors mounted on loose clothing. Scientifc Reports 13 (2023), 131. doi:10.1038/ 
+s41598-022-27306-4 
+[26] Moritz Kassner, William Patera, and Andreas Bulling. 2014. Pupil: An Open 
+Source Platform for Pervasive Eye Tracking and Mobile Gaze-based Interaction. 
+In Adjunct Proceedings of the 2014 ACM International Joint Conference on Pervasive 
+and Ubiquitous Computing (Seattle, Washington) (UbiComp ’14 Adjunct). ACM, 
+New York, NY, USA, 1151–1160. doi:10.1145/2638728.2641695 
+[27] Khan Academy. 2025. Meet Khanmigo: Khan Academy’s AI-powered teaching 
+assistant & tutor. https://www.khanmigo.ai/ Accessed: 2025-04-10. 
+[28] Christian Kothe, Seyed Yahya Shirazi, Tristan Stenner, David Medine, Chadwick 
+Boulay, Matthew I. Grivich, Tim Mullen, Arnaud Delorme, and Scott Makeig. 
+2024. The Lab Streaming Layer for Synchronized Multimodal Recording. doi:10. 
+1101/2024.02.13.580071 biorxiv:2024.02.13.580071 bioRxiv preprint. 
+[29] Kristjan-Julius Laak and Jaan Aru. 2025. AI and personalized learning: bridging 
+the gap with modern educational goals. arXiv:2404.02798 [cs.CY] https://arxiv. 
+org/abs/2404.02798 
+[30] Rensis Likert. 1932. A Technique for the Measurement of Attitudes. Archives of 
+Psychology 22, 140 (1932), 1–55. 
+[31] Chaeyeon Lim et al. 2025. DeBiasMe: De-biasing Human–AI Interactions with 
+Metacognitive AIED Interventions. arXiv:2504.16770 [cs.HC] https://arxiv.org/ 
+abs/2504.16770 ACM AIREASONING 2025 workshop paper (preprint). 
+[32] Siyang Liu, Xiaorong Guo, Xiangen Hu, and Xin Zhao. 2024. Advancing Genera-
+tive Intelligent Tutoring Systems with GPT-4: Design, Evaluation, and a Mod-
+ular Framework for Future Learning Platforms. Electronics 13, 24 (2024), 4876. 
+doi:10.3390/electronics13244876 
+[33] Zoe Loh, Elizabeth H. Hall, Deborah Cronin, and John M. Henderson. 2023. Work-
+ing memory control predicts fxation duration in scene-viewing. Psychological 
+Research 87, 4 (June 2023), 1143–1154. doi:10.1007/s00426-022-01694-8 
+[34] Camillo Lugaresi, Jiuqiang Tang, Hadon Nash, Chris McClanahan, Esha Uboweja, 
+Michael Hays, Fan Zhang, Chuo-Ling Chang, Ming Yong, Juhyun Lee, Wan-Teh 
+Chang, Wei Hua, Manfred Georg, and Matthias Grundmann. 2019. MediaPipe: 
+A Framework for Perceiving and Processing Reality. arXiv:1906.08172 [cs.DC] 
+https://arxiv.org/abs/1906.08172 Presented at the CVPR 2019 Workshop on 
+Computer Vision for AR/VR. 
+[35] Jens Madsen, Sara U. Júlio, Pawel J. Gucik, Richard Steinberg, and Lu-
+cas C. Parra. 2021. Synchronized eye movements predict test scores 
+in online video education. Proceedings of the National Academy of 
+Sciences 118, 5 (2021), e2016980118. doi:10.1073/pnas.2016980118 
+arXiv:https://www.pnas.org/doi/pdf/10.1073/pnas.2016980118 
+[36] Gonzalo Gabriel Méndez, Luis Galárraga, Rodne Quijije, and Miguel A Nacenta. 
+2025. The Potential of Cognitive Circles to Measure Mental Load. In Proceedings 
+of the 38th Annual ACM Symposium on User Interface Software and Technology 
+(UIST ’25). Association for Computing Machinery, New York, NY, USA, Article 
+75, 10 pages. doi:10.1145/3746059.3747716 
+[37] Ismael Villegas Molina, Audria Montalvo, Benjamin Ochoa, Paul Denny, and Leo 
+Porter. 2024. Leveraging LLM Tutoring Systems for Non-Native English Speakers 
+in Introductory CS Courses. arXiv:2411.02725 [cs.HC] https://arxiv.org/abs/2411. 
+02725 
+[38] Susan M. Munn, Leanne Stefano, and Jef B. Pelz. 2008. Fixation-identifcation 
+in dynamic scenes: comparing an automated algorithm to manual coding. In 
+Proceedings of the 5th Symposium on Applied Perception in Graphics and Visualiza-
+tion (Los Angeles, California) (APGV ’08). Association for Computing Machinery, 
+New York, NY, USA, 33–42. doi:10.1145/1394281.1394287 
+[39] Paola Nicolini, Gabriella Malfatto, and Tiziano Lucchi. 2024. Heart Rate Variability 
+and Cognition: A Narrative Systematic Review of Longitudinal Studies. Journal 
+of Clinical Medicine 13, 1 (2024), 280. doi:10.3390/jcm13010280 
+[40] OpenAI. 2024. Introducing ChatGPT Edu. https://openai.com/index/introducing-
+chatgpt-edu/ Accessed: 2025-04-10. 
+[41] Iris Cristina Peláez-Sánchez, Davis Velarde-Camaqui, and Leonardo David 
+Glasserman-Morales. 2024. The Impact of Large Language Models on Higher 
+Education: Exploring the Connection between AI and Education 4.0. Frontiers in 
+Education 9 (2024), 1392091. doi:10.3389/feduc.2024.1392091 
+[42] Tepring Piquado, Derek Isaacowitz, and Arthur Wingfeld. 2010. Pupillom-
+etry as a measure of cognitive efort in younger and older adults. Psy-
+chophysiology 47, 3 (2010), 560–569. doi:10.1111/j.1469-8986.2009.00947.x 
+arXiv:https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1469-8986.2009.00947.x 
+[43] Lauren B. Resnick. 2017. Toward a Cognitive Theory of Instruction. In Learning 
+and Motivation in the Classroom. Routledge, London, UK, 5–38. doi:10.4324/ 
+9781315188522-2 
+[44] Denise Rey and Markus Neuhäuser. 2011. Wilcoxon-Signed-Rank Test. In 
+International Encyclopedia of Statistical Science, Miodrag Lovric (Ed.). Springer 
+Berlin Heidelberg, Berlin, Heidelberg, 1658–1659. doi:10.1007/978-3-642-04898-
+2_616 
+[45] Marc Rodemer, Jessica Karch, and Sascha Bernholt. 2023. Pupil dilation as cogni-
+tive load measure in instructional videos on complex chemical representations. 
+Frontiers in Education 8 (2023), 1062053. doi:10.3389/feduc.2023.1062053 
+[46] Lizawati Salahuddin, Jaegeol Cho, Myeong Gi Jeong, and Desok Kim. 2007. Ultra 
+short term analysis of heart rate variability for monitoring mental stress in 
+mobile settings. In Proceedings of the Annual International Conference of the IEEE 
+Engineering in Medicine and Biology Society. IEEE, United States, 4656–4659. 
+doi:10.1109/IEMBS.2007.4353378 Research Support, Non-U.S. Gov’t. 
+[47] Dario D. Salvucci and Joseph H. Goldberg. 2000. Identifying fxations and 
+saccades in eye-tracking protocols. In Proceedings of the 2000 Symposium on 
+Eye Tracking Research & Applications (Palm Beach Gardens, Florida, USA) 
+(ETRA ’00). Association for Computing Machinery, New York, NY, USA, 71–78. 
+doi:10.1145/355017.355028 
+[48] Yixuan Shi. 2025. Biomechanics optimizes learning posture and learning efciency 
+in higher education teaching and learning. Molecular &; Cellular Biomechanics 
+22, 5 (Mar. 2025), 1620. doi:10.62617/mcb1620 
+[49] David Sun, Pablo Paredes, and John Canny. 2014. MouStress: detecting stress 
+from mouse motion. In Proceedings of the SIGCHI Conference on Human Factors 
+1233
+
+--- PAGE 17 ---
+GuideAI: A Real-time Personalized Learning Solution with Adaptive Interventions 
+in Computing Systems (Toronto, Ontario, Canada) (CHI ’14). Association for 
+Computing Machinery, New York, NY, USA, 61–70. doi:10.1145/2556288.2557243 
+[50] Hui-Min Wang and Sheng-Chieh Huang. 2012. SDNN/RMSSD as a 
+Surrogate for LF/HF: A Revised Investigation. Modelling and Simu-
+lation in Engineering 2012, 1 (2012), 931943. doi:10.1155/2012/931943 
+arXiv:https://onlinelibrary.wiley.com/doi/pdf/10.1155/2012/931943 
+[51] Shen Wang, Tianlong Xu, Hang Li, Chaoli Zhang, Joleen Liang, Jiliang Tang, 
+Philip S. Yu, and Qingsong Wen. 2024. Large Language Models for Education: A 
+Survey and Outlook. arXiv:2403.18105 [cs.CL] https://arxiv.org/abs/2403.18105 
+[52] Pingmei Xu, Yusuke Sugano, and Andreas Bulling. 2016. Spatio-Temporal Model-
+ing and Prediction of Visual Attention in Graphical User Interfaces. In Proceedings 
+of the 2016 CHI Conference on Human Factors in Computing Systems (San Jose, 
+California, USA) (CHI ’16). Association for Computing Machinery, New York, NY, 
+USA, 3299–3310. doi:10.1145/2858036.2858479 
+[53] Songlin Xu, Xinyu Zhang, and Lianhui Qin. 2024. EduAgent: Generative Student 
+Agents in Learning. arXiv:2404.07963 [cs.CY] https://arxiv.org/abs/2404.07963 
+[54] Ling Zhang, James D. Basham, and Sohyun Yang. 2020. Understanding the 
+implementation of personalized learning: A research synthesis. Educational 
+Research Review 31 (2020), 100339. doi:10.1016/j.edurev.2020.100339 
+[55] Qiang Zhang, Keyang Ding, Tianwen Lyv, Xinda Wang, Qingyu Yin, Yiwen Zhang, 
+Jing Yu, Yuhao Wang, Xiaotong Li, Zhuoyi Xiang, Kehua Feng, Xiang Zhuang, 
+Zeyuan Wang, Ming Qin, Mengyao Zhang, Jinlu Zhang, Jiyu Cui, Tao Huang, 
+Pengju Yan, Renjun Xu, Hongyang Chen, Xiaolin Li, Xiaohui Fan, Huabin Xing, 
+IUI ’26, March 23–26, 2026, Paphos, Cyprus 
+and Huajun Chen. 2024. Scientifc Large Language Models: A Survey on Biological 
+& Chemical Domains. arXiv:2401.14656 [cs.CL] https://arxiv.org/abs/2401.14656 
+[56] Zhaoli Zhang, Zhenhua Li, Hai Liu, Taihe Cao, and Sannyuya Liu. 2020. 
+Data-driven Online Learning Engagement Detection via Facial Expression 
+and Mouse Behavior Recognition Technology. Journal of Educational 
+Computing Research 58, 1 (2020), 63–86. doi:10.1177/0735633119825575 
+arXiv:https://doi.org/10.1177/0735633119825575 
+[57] Zhehao Zhang, Ryan A. Rossi, Branislav Kveton, Yijia Shao, Diyi Yang, Hamed 
+Zamani, Franck Dernoncourt, Joe Barrow, Tong Yu, Sungchul Kim, Ruiyi Zhang, 
+Jiuxiang Gu, Tyler Derr, Hongjie Chen, Junda Wu, Xiang Chen, Zichao Wang, 
+Subrata Mitra, Nedim Lipka, Nesreen Ahmed, and Yu Wang. 2024. Personalization 
+of Large Language Models: A Survey. arXiv:2411.00027 [cs.CL] https://arxiv.org/ 
+abs/2411.00027 
+[58] Xiangrong (Daniel) Zhu, Yuan Xu, Tianjian Liu, Jingwei Sun, Yu Zhang, and 
+Xin Tong. 2025. Intelligent Interaction Strategies for Context-Aware Cognitive 
+Augmentation. arXiv:2504.13684 [cs.HC] https://arxiv.org/abs/2504.13684 ACM 
+AIREASONING 2025 workshop paper (preprint). 
+[59] Michael G. Ziegler. 2004. 50 - Psychological Stress and the Autonomic Nervous 
+System. In Primer on the Autonomic Nervous System (Second Edition) (second 
+edition ed.), David Robertson, Italo Biaggioni, Geofrey Burnstock, and Phillip A. 
+Low (Eds.). Academic Press, San Diego, 189–190. doi:10.1016/B978-012589762-
+4/50051-7 
+1234

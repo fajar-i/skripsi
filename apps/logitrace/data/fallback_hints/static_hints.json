@@ -1,0 +1,62 @@
+{
+  "WLAN_STANDARDS": {
+    "1": "Perhatikan perbedaan generasi standar 802.11 pada pita frekuensi 2.4 GHz vs 5 GHz serta kecepatan data teoritisnya.",
+    "2": "Identifikasi apakah skenario membutuhkan jangkauan sinyal yang luas atau throughput data yang tinggi.",
+    "3": "Pita 2.4 GHz memiliki jangkauan lebih jauh namun rentan interferensi, sedangkan 5 GHz lebih cepat dengan redaman lebih tinggi."
+  },
+  "WLAN_TOPOLOGY_BSS": {
+    "1": "Cermati apakah komunikasi antar perangkat memerlukan perangkat pusat (Access Point) atau langsung peer-to-peer.",
+    "2": "Bedakan karakteristik IBSS (tanpa AP) dengan BSS/ESS yang menggunakan satu atau lebih AP terpusat.",
+    "3": "Pada jaringan skala lab atau kantor, mode Infrastructure (BSS/ESS) wajib dipakai untuk manajemen terpusat."
+  },
+  "IP_PEER_CONFIG": {
+    "1": "Periksa kecocokan subnet mask dan Network ID antara klien nirkabel dengan gateway atau host tujuan.",
+    "2": "Pastikan Host ID unik dan berada pada rentang alamat IP yang sama dengan titik akses lokal.",
+    "3": "Hitung alamat jaringan dari IP dan prefix CIDR untuk memastikan kedua antarmuka berada dalam satu segmen siaran."
+  },
+  "WLAN_FREQ_CHANNEL": {
+    "1": "Perhatikan alokasi kanal pada pita 2.4 GHz yang tidak saling bertumpuk (non-overlapping channels).",
+    "2": "Pilihlah kanal dengan selisih frekuensi minimal 25 MHz untuk mencegah interferensi kanal bersama (co-channel).",
+    "3": "Kanal standar non-overlapping pada 2.4 GHz adalah 1, 6, dan 11 di sebagian besar regulasi."
+  },
+  "WLAN_SECURITY_AUTH": {
+    "1": "Perhatikan metode enkripsi dan tipe pertukaran kunci yang digunakan pada konfigurasi SSID.",
+    "2": "Bandingkan keandalan WPA2-Personal (Pre-Shared Key) dengan WPA3-SAE terhadap serangan kamus (dictionary attack).",
+    "3": "WPA3 menggunakan Simultaneous Authentication of Equals (SAE) untuk melindungi kata sandi dari serangan offline."
+  },
+  "WLAN_HOST_HARDENING": {
+    "1": "Identifikasi lapisan pertahanan keamanan klien di tingkat alamat fisik (L2) dan filter paket jaringan (L3/L4).",
+    "2": "Tinjau daftar putih MAC Address dan aturan firewall yang membatasi port serta alamat IP yang diizinkan.",
+    "3": "MAC filtering membatasi akses perangkat keras terdaftar, sedangkan firewall memfilter lalu lintas berdasarkan protokol dan port."
+  },
+  "WLAN_SIGNAL_PROP": {
+    "1": "Perhatikan hubungan antara jarak dari AP, material penghalang fisik (dinding/kaca), dan nilai kekuatan sinyal (RSSI).",
+    "2": "Ingat bahwa semakin negatif nilai dBm (misal -85 dBm vs -50 dBm), kualitas dan kekuatan sinyal semakin lemah.",
+    "3": "Sinyal di atas -65 dBm dikategorikan baik untuk koneksi stabil, sedangkan di bawah -75 dBm rentan mengalami putus koneksi."
+  },
+  "WLAN_ROAMING_PROB": {
+    "1": "Amati saat klien berpindah posisi mendekati AP lain namun tetap terhubung pada AP lama (sticky client).",
+    "2": "Evaluasi ambang batas roaming threshold (-dBm) dan hysteresis pada konfigurasi kartu jaringan klien.",
+    "3": "Jika selisih sinyal AP baru melampaui margin hysteresis, proses pertukaran asosiasi (handover) baru akan dipicu."
+  },
+  "WLAN_CHANNEL_COLLISION": {
+    "1": "Perhatikan kepadatan perangkat klien yang mentransmisikan data secara bersamaan pada kanal yang sama.",
+    "2": "Analisis mekanisme CSMA/CA dan dampak hidden node problem terhadap peningkatan laju tabrakan paket (collision rate).",
+    "3": "Gunakan mekanisme RTS/CTS untuk mereduksi tabrakan frame ketika jarak antarklien saling terhalang."
+  },
+  "ICMP_CONNECTIVITY": {
+    "1": "Perhatikan parameter keluaran perintah ping seperti Round-Trip Time (RTT) dan persentase packet loss.",
+    "2": "Nilai RTT yang tinggi atau fluktuatif menandakan kongesti jaringan atau gangguan redaman pada media nirkabel.",
+    "3": "Uji ping mengonfirmasi ketercapaian layer 3 (IP) dan keandalan transmisi dua arah antara sumber dan tujuan."
+  },
+  "ICMP_TROUBLE_DHU": {
+    "1": "Analisis arti pesan 'Destination Host Unreachable': pengirim tidak dapat menemukan rute ke host target.",
+    "2": "Periksa apakah ada kesalahan tabel routing, konfigurasi subnet yang salah, atau kegagalan resolusi ARP lokal.",
+    "3": "Galat DHU terjadi di lapisan jaringan lokal saat gateway atau host asal tidak menerima balasan ARP dari IP tujuan."
+  },
+  "ICMP_TROUBLE_RTO": {
+    "1": "Pahami penyebab 'Request Timed Out': paket terkirim namun balasan tidak diterima sebelum batas waktu habis.",
+    "2": "Periksa apakah paket diblokir oleh firewall host tujuan, rute balik terputus, atau redaman sinyal terlalu tinggi.",
+    "3": "RTO sering dipicu oleh paket ICMP Echo Request/Reply yang di-drop oleh firewall atau sinyal nirkabel terputus total."
+  }
+}

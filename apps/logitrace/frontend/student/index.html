@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LogiTrace — Latihan Siswa</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            paper: '#F7F6F2',
+            surface: '#FFFFFF',
+            subtle: '#EFECE6',
+            line: '#DFDCD4',
+            ink: '#121417',
+            muted: '#575E66',
+            brand: '#059669',
+            'brand-dark': '#047857',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #F7F6F2;
+      color: #121417;
+      font-family: "Plus Jakarta Sans", -apple-system, sans-serif;
+      touch-action: manipulation;
+      -webkit-font-smoothing: antialiased;
+    }
+    .tap-target { min-height: 48px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand/15 selection:text-ink font-sans">
+
+  <!-- TOP APP BAR -->
+  <header class="bg-surface border-b border-line sticky top-0 z-30">
+    <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center space-x-2">
+        <div class="w-7 h-7 rounded bg-ink text-white flex items-center justify-center font-mono font-bold text-xs">
+          LT
+        </div>
+        <div>
+          <h1 class="font-bold text-sm leading-tight text-ink">LogiTrace</h1>
+          <p class="text-[10px] text-muted font-mono">XI TKJ 1</p>
+        </div>
+      </a>
+      <div id="student-badge-container" class="flex items-center space-x-2">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-md w-full mx-auto p-4 flex-1 flex flex-col">
+
+    <!-- SCREEN 1: LOGIN / SELECT STUDENT -->
+    <div id="screen-login" class="bg-surface rounded-xl border border-line p-6 my-auto">
+      <div class="mb-5">
+        <h2 class="text-lg font-bold text-ink">Mulai Latihan</h2>
+        <p class="text-xs text-muted mt-1">Pilih kode siswamu. Soal akan otomatis menyesuaikan pemahamanmu.</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-ink mb-1.5">Kode Siswa</label>
+          <select id="student-select" class="w-full bg-paper border border-line rounded-lg px-3 py-3 text-sm text-ink focus:border-ink focus:outline-none">
+            <option value="">-- Pilih Kode Siswa (std_01 s.d std_34) --</option>
+          </select>
+        </div>
+
+        <button id="btn-login" class="w-full bg-ink hover:bg-zinc-800 text-white font-semibold py-3 px-4 rounded-lg tap-target transition flex items-center justify-center space-x-2 text-sm">
+          <span>Buka Tugas</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: ASSIGNMENT LIST -->
+    <div id="screen-classroom" class="hidden flex-1 flex flex-col space-y-4">
+
+      <!-- Simple Course Header -->
+      <div class="bg-ink text-white rounded-xl p-4 border border-ink">
+        <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-400">XI TKJ 1 &bull; Pak Budi</span>
+        <h2 class="text-base font-bold mt-0.5">Teknologi Jaringan Kabel &amp; Nirkabel</h2>
+      </div>
+
+      <!-- Section Title -->
+      <div class="flex items-center justify-between pt-1">
+        <h3 class="text-xs font-mono font-semibold uppercase tracking-wider text-muted">Pilih Sesi Latihan</h3>
+        <button onclick="loadClassroomSessions()" class="text-xs text-ink hover:underline font-medium flex items-center space-x-1">
+          <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+          <span>Muat Ulang</span>
+        </button>
+      </div>
+
+      <!-- Sessions Container -->
+      <div id="classroom-sessions-list" class="space-y-3 flex-1">
+        <!-- Rendered via JS -->
+      </div>
+
+    </div>
+
+    <!-- SCREEN 3: QUIZ INTERFACE -->
+    <div id="screen-quiz" class="hidden flex-1 flex flex-col">
+
+      <!-- Navigation & Progress Bar -->
+      <div class="bg-surface rounded-xl border border-line p-3 mb-3">
+        <div class="flex items-center justify-between text-xs font-medium mb-2">
+          <button onclick="returnToClassroom()" class="text-muted hover:text-ink font-semibold flex items-center space-x-1">
+            <i class="fa-solid fa-chevron-left text-[10px]"></i>
+            <span>Kembali</span>
+          </button>
+          <div class="flex items-center space-x-2 font-mono">
+            <span id="badge-stage" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-subtle text-ink">
+              Soal Awal
+            </span>
+            <span id="label-sequence" class="text-ink font-bold">Soal 1 / 20</span>
+          </div>
+        </div>
+        <div class="w-full bg-subtle rounded-full h-1.5 overflow-hidden">
+          <div id="progress-bar" class="bg-brand h-1.5 transition-all duration-300" style="width: 5%"></div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="bg-surface rounded-xl border border-line p-5 flex-1 flex flex-col justify-between">
+        <div>
+          <!-- Topic & Difficulty Badges -->
+          <div class="flex items-center justify-between mb-3 text-[11px] font-mono">
+            <span id="badge-kc" class="font-medium px-2 py-0.5 rounded bg-paper text-ink border border-line">
+              <span id="text-kc-name">Materi Jaringan</span>
+            </span>
+            <span id="badge-diff" class="font-semibold px-2 py-0.5 rounded bg-subtle text-ink">
+              Mudah
+            </span>
+          </div>
+
+          <!-- Prompt Text -->
+          <div class="mb-5">
+            <h3 id="question-prompt" class="text-ink font-semibold text-sm sm:text-base leading-relaxed">
+              Memuat soal...
+            </h3>
+          </div>
+
+          <!-- Options Container -->
+          <div id="options-container" class="space-y-2 mb-4">
+            <!-- Dynamic options rendered here -->
+          </div>
+        </div>
+
+        <!-- Hint Drawer (RAG) -->
+        <div class="mt-4 pt-3 border-t border-line">
+          <div class="flex items-center justify-between">
+            <button id="btn-toggle-hint" type="button" class="text-xs font-semibold text-brand-dark hover:underline flex items-center space-x-1.5 py-1">
+              <i class="fa-regular fa-lightbulb"></i>
+              <span>Buntu? Minta Petunjuk</span>
+            </button>
+            <span id="hint-status-pill" class="hidden text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-subtle text-ink">
+              Petunjuk Dibuka
+            </span>
+          </div>
+
+          <!-- Hint Panel -->
+          <div id="hint-panel" class="hidden mt-2.5 p-3.5 bg-paper border border-line rounded-lg text-xs text-ink">
+            <div class="flex items-center justify-between mb-2 pb-2 border-b border-line">
+              <span class="font-mono font-semibold text-[11px] text-muted">Pilih Tingkat Petunjuk:</span>
+              <div class="flex space-x-1 font-mono">
+                <button type="button" onclick="loadHint(1)" class="btn-hint-lvl px-2.5 py-1 rounded text-[10px] font-semibold bg-surface hover:bg-subtle text-ink border border-line">Level 1</button>
+                <button type="button" onclick="loadHint(2)" class="btn-hint-lvl px-2.5 py-1 rounded text-[10px] font-semibold bg-surface hover:bg-subtle text-ink border border-line">Level 2</button>
+                <button type="button" onclick="loadHint(3)" class="btn-hint-lvl px-2.5 py-1 rounded text-[10px] font-semibold bg-surface hover:bg-subtle text-ink border border-line">Level 3</button>
+              </div>
+            </div>
+            <div id="hint-body" class="text-xs leading-relaxed text-ink min-h-[32px]">
+              Pilih Level 1 untuk petunjuk ringan, atau Level 2–3 untuk langkah penyelesaian yang lebih rinci.
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-4 pt-2">
+          <button id="btn-submit" disabled class="w-full bg-brand disabled:bg-subtle disabled:text-muted disabled:cursor-not-allowed hover:bg-brand-dark text-white font-semibold py-3 px-4 rounded-lg tap-target transition flex items-center justify-center space-x-2 text-sm">
+            <span>Jawab</span>
+            <i class="fa-solid fa-check text-xs"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SCREEN 4: FEEDBACK MODAL (AFTER ANSWER) -->
+    <div id="modal-feedback" class="fixed inset-0 bg-ink/60 z-50 flex items-end sm:items-center justify-center p-4 hidden">
+      <div class="bg-surface rounded-xl max-w-sm w-full p-5 border border-line">
+        <div class="flex items-center space-x-3 mb-4">
+          <div id="fb-icon-container" class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
+            <!-- Dynamic icon -->
+          </div>
+          <div>
+            <h3 id="fb-title" class="text-base font-bold text-ink">Hasil Jawaban</h3>
+            <p id="fb-subtitle" class="text-xs text-muted">Ringkasan kemampuanmu di materi ini</p>
+          </div>
+        </div>
+
+        <!-- Student-Friendly Mastery Progress -->
+        <div class="bg-paper rounded-lg p-3 border border-line mb-3 text-xs font-mono space-y-1.5">
+          <div class="flex justify-between items-center">
+            <span class="text-muted">Perkiraan Peluang Berhasil:</span>
+            <span id="fb-p-hat" class="font-semibold text-ink">72%</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-muted">Penguasaan Materi:</span>
+            <span id="fb-mastery-shift" class="font-semibold text-ink">0.25 &rarr; 0.40</span>
+          </div>
+          <div class="flex justify-between items-center pt-1 border-t border-line">
+            <span class="text-muted">Perubahan:</span>
+            <span id="fb-delta-m" class="font-bold text-brand">+0.150</span>
+          </div>
+        </div>
+
+        <!-- Explanation -->
+        <div class="bg-paper rounded-lg p-3 border border-line text-xs text-ink mb-4 max-h-36 overflow-y-auto">
+          <p class="font-semibold text-[11px] text-muted mb-1">Pembahasan:</p>
+          <p id="fb-explanation" class="text-xs leading-relaxed">...</p>
+        </div>
+
+        <button id="btn-next-question" class="w-full bg-ink hover:bg-zinc-800 text-white font-semibold py-3 px-4 rounded-lg tap-target transition flex items-center justify-center space-x-2 text-sm">
+          <span>Soal Berikutnya</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 5: COMPLETION SUMMARY -->
+    <div id="screen-summary" class="hidden bg-surface rounded-xl border border-line p-6 my-auto text-center">
+      <div class="w-12 h-12 bg-subtle text-brand rounded-lg flex items-center justify-center mx-auto mb-3 text-xl">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h2 class="text-xl font-bold text-ink">Latihan Selesai</h2>
+      <p class="text-xs text-muted mt-1 mb-5">Semua soal pada sesi ini sudah kamu kerjakan.</p>
+
+      <div class="bg-paper rounded-lg p-4 border border-line mb-5 text-left space-y-2 text-xs">
+        <div class="flex justify-between">
+          <span class="text-muted">Siswa:</span>
+          <span id="sum-student" class="font-semibold text-ink">std_01</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-muted">Soal Dijawab:</span>
+          <span class="font-semibold text-ink">20 Soal</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-muted">Petunjuk Dipakai:</span>
+          <span id="sum-hints" class="font-semibold text-ink">0 kali</span>
+        </div>
+        <div class="flex justify-between pt-1.5 border-t border-line">
+          <span class="text-muted">Penguasaan Akhir:</span>
+          <span id="sum-avg-mastery" class="font-bold text-brand text-sm">0.74</span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <button onclick="returnToClassroom()" class="w-full bg-ink hover:bg-zinc-800 text-white font-semibold py-3 px-4 rounded-lg tap-target transition text-sm">
+          Kembali ke Daftar Tugas
+        </button>
+
+        <button onclick="restartActiveAttempt()" class="w-full bg-surface hover:bg-subtle text-ink font-semibold py-2.5 px-4 rounded-lg tap-target border border-line transition text-xs">
+          Ulangi dari Soal 1
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-3 text-center text-[11px] text-muted border-t border-line bg-surface">
+    LogiTrace &bull; SMK Negeri 4 Bandung
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    const API_BASE = window.location.origin;
+
+    let currentStudentCode = localStorage.getItem("logitrace_student_code") || "";
+    let activeSessionId = localStorage.getItem("logitrace_active_session_id") || "session_01";
+    let currentItem = null;
+    let selectedChoice = null;
+    let hintUsed = false;
+    let hintLevel = 0;
+    let questionStartTime = null;
+    let totalHintsUsed = 0;
+    let lastReportedMastery = null;
+    let consecutiveKcErrors = {};
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function initStudentDropdown() {
+      const select = document.getElementById("student-select");
+      select.innerHTML = '<option value="">-- Pilih Kode Siswa (std_01 s.d std_34) --</option>';
+      for (let i = 1; i <= 34; i++) {
+        const code = `std_${i.toString().padStart(2, '0')}`;
+        const opt = document.createElement("option");
+        opt.value = code;
+        opt.textContent = `${code} (XI TKJ 1)`;
+        if (code === currentStudentCode) opt.selected = true;
+        select.appendChild(opt);
+      }
+    }
+
+    function showScreen(screenId) {
+      ["screen-login", "screen-classroom", "screen-quiz", "screen-summary"].forEach(id => {
+        document.getElementById(id).classList.add("hidden");
+      });
+      document.getElementById(screenId).classList.remove("hidden");
+    }
+
+    function updateStudentBadge() {
+      const container = document.getElementById("student-badge-container");
+      if (!currentStudentCode) {
+        container.innerHTML = "";
+        return;
+      }
+      container.innerHTML = `
+        <span class="px-2 py-1 rounded bg-paper border border-line text-[11px] font-mono font-semibold text-ink">
+          ${escapeHtml(currentStudentCode)}
+        </span>
+        <button onclick="logoutStudent()" class="text-xs text-muted hover:text-ink px-2 py-1 rounded border border-line bg-surface" title="Ganti Siswa">
+          Ganti
+        </button>
+      `;
+    }
+
+    function loginStudent() {
+      const val = document.getElementById("student-select").value;
+      if (!val) {
+        alert("Pilih kode siswamu terlebih dahulu.");
+        return;
+      }
+      currentStudentCode = val;
+      localStorage.setItem("logitrace_student_code", currentStudentCode);
+      updateStudentBadge();
+      loadClassroomSessions();
+    }
+
+    function logoutStudent() {
+      currentStudentCode = "";
+      localStorage.removeItem("logitrace_student_code");
+      updateStudentBadge();
+      showScreen("screen-login");
+    }
+
+    function returnToClassroom() {
+      loadClassroomSessions();
+    }
+
+    async function loadClassroomSessions() {
+      showScreen("screen-classroom");
+      const container = document.getElementById("classroom-sessions-list");
+      container.innerHTML = `<div class="p-4 text-center text-xs text-muted">Memuat daftar sesi...</div>`;
+
+      try {
+        const resp = await fetch(`${API_BASE}/api/sessions?class_rombel=XI%20TKJ%201`);
+        if (!resp.ok) throw new Error("Gagal mengambil sesi");
+        const sessions = await resp.json();
+
+        container.innerHTML = "";
+        for (const sess of sessions) {
+          let statusData = { status: "NOT_STARTED", current_sequence: 0, final_mastery: null };
+          try {
+            const stResp = await fetch(`${API_BASE}/api/sessions/${sess.id}/student/${currentStudentCode}/status`);
+            if (stResp.ok) statusData = await stResp.json();
+          } catch (e) {}
+
+          const card = document.createElement("div");
+          card.className = "bg-surface rounded-xl p-4 border border-line";
+
+          let statusBadge = "";
+          let actionBtn = "";
+
+          if (statusData.status === "COMPLETED") {
+            statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-subtle text-brand-dark">Selesai (${statusData.final_mastery || 0.74})</span>`;
+            actionBtn = `
+              <div class="flex space-x-2 mt-3">
+                <button onclick="startSessionQuiz('${sess.id}')" class="flex-1 bg-paper hover:bg-subtle text-ink text-xs font-semibold py-2.5 px-3 rounded-lg border border-line transition">
+                  Lihat Hasil
+                </button>
+                <button onclick="resetAndStartSession('${sess.id}')" class="flex-1 bg-surface hover:bg-subtle text-ink text-xs font-semibold py-2.5 px-3 rounded-lg border border-line transition">
+                  Ulangi dari Soal 1
+                </button>
+              </div>
+            `;
+          } else if (statusData.status === "IN_PROGRESS") {
+            statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-subtle text-ink">Soal ${statusData.current_sequence} / ${sess.max_items}</span>`;
+            actionBtn = `
+              <div class="flex space-x-2 mt-3">
+                <button onclick="startSessionQuiz('${sess.id}')" class="flex-1 bg-brand hover:bg-brand-dark text-white text-xs font-semibold py-2.5 px-3 rounded-lg transition">
+                  Lanjutkan
+                </button>
+                <button onclick="resetAndStartSession('${sess.id}')" class="bg-paper hover:bg-subtle text-muted hover:text-ink text-xs font-semibold px-3 py-2.5 rounded-lg border border-line" title="Ulangi dari Awal">
+                  Ulangi
+                </button>
+              </div>
+            `;
+          } else {
+            statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono text-muted bg-paper border border-line">Belum Mulai</span>`;
+            actionBtn = `
+              <div class="mt-3">
+                <button onclick="startSessionQuiz('${sess.id}')" class="w-full bg-ink hover:bg-zinc-800 text-white text-xs font-semibold py-2.5 px-3 rounded-lg transition flex items-center justify-center space-x-1.5">
+                  <span>Mulai Latihan (${sess.max_items} Soal)</span>
+                  <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </button>
+              </div>
+            `;
+          }
+
+          card.innerHTML = `
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <span class="text-[10px] font-mono text-muted uppercase">Sesi ${sess.session_number}</span>
+                <h4 class="font-bold text-sm text-ink mt-0.5">${escapeHtml(sess.title)}</h4>
+              </div>
+              <div class="flex-shrink-0">${statusBadge}</div>
+            </div>
+            ${actionBtn}
+          `;
+          container.appendChild(card);
+        }
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="p-4 text-center text-xs text-rose-600">Gagal memuat tugas. Periksa koneksi ke server.</div>`;
+      }
+    }
+
+    async function startSessionQuiz(sessionId) {
+      activeSessionId = sessionId;
+      localStorage.setItem("logitrace_active_session_id", sessionId);
+      totalHintsUsed = 0;
+      await fetchNextQuestion();
+    }
+
+    async function resetAndStartSession(sessionId) {
+      if (!confirm("Ulangi latihan dari Soal 1?")) {
+        return;
+      }
+      try {
+        const resp = await fetch(`${API_BASE}/api/sessions/${sessionId}/reset-student/${currentStudentCode}`, { method: "POST" });
+        if (!resp.ok) throw new Error("Gagal mereset sesi siswa");
+        activeSessionId = sessionId;
+        localStorage.setItem("logitrace_active_session_id", sessionId);
+        totalHintsUsed = 0;
+        await fetchNextQuestion();
+      } catch (e) {
+        alert("Gagal mereset sesi. Coba lagi.");
+      }
+    }
+
+    async function restartActiveAttempt() {
+      resetAndStartSession(activeSessionId);
+    }
+
+    async function fetchNextQuestion() {
+      showScreen("screen-quiz");
+      selectedChoice = null;
+      hintUsed = false;
+      hintLevel = 0;
+      document.getElementById("btn-submit").disabled = true;
+      document.getElementById("hint-panel").classList.add("hidden");
+      document.getElementById("hint-status-pill").classList.add("hidden");
+      document.getElementById("hint-body").innerHTML = "Pilih Level 1 untuk petunjuk ringan, atau Level 2–3 untuk langkah penyelesaian yang lebih rinci.";
+
+      try {
+        const url = `${API_BASE}/api/quiz/${currentStudentCode}/next?session_id=${encodeURIComponent(activeSessionId)}`;
+        const resp = await fetch(url);
+        if (!resp.ok) {
+          if (resp.status === 404) {
+            alert(`Siswa ${currentStudentCode} belum terdaftar.`);
+            logoutStudent();
+            return;
+          }
+          throw new Error("Gagal mengambil soal berikutnya");
+        }
+        const data = await resp.json();
+
+        if (data.is_completed) {
+          showSummary();
+          return;
+        }
+
+        currentItem = data;
+        renderQuestion(data);
+        if ((consecutiveKcErrors[data.primary_kc] || 0) >= 2) {
+          document.getElementById("hint-panel").classList.remove("hidden");
+          loadHint(1);
+        }
+        questionStartTime = Date.now();
+      } catch (err) {
+        console.error(err);
+        alert("Terjadi gangguan koneksi ke server LogiTrace.");
+      }
+    }
+
+    function renderQuestion(item) {
+      const seq = item.sequence_number;
+      const maxSeq = item.max_items || 20;
+
+      if (seq > maxSeq || item.is_completed) {
+        showSummary();
+        return;
+      }
+
+      document.getElementById("label-sequence").textContent = `Soal ${seq} / ${maxSeq}`;
+      const progressPercent = Math.min(100, Math.round((seq / maxSeq) * 100));
+      document.getElementById("progress-bar").style.width = `${progressPercent}%`;
+
+      const badgeStage = document.getElementById("badge-stage");
+      if (item.is_calibration) {
+        badgeStage.textContent = "Soal Awal";
+        badgeStage.className = "px-2 py-0.5 rounded text-[10px] font-semibold bg-subtle text-ink";
+      } else {
+        badgeStage.textContent = "Menyesuaikan Levelmu";
+        badgeStage.className = "px-2 py-0.5 rounded text-[10px] font-semibold bg-subtle text-brand-dark";
+      }
+
+      document.getElementById("text-kc-name").textContent = item.kc_name || item.primary_kc;
+
+      const diffBadge = document.getElementById("badge-diff");
+      if (item.difficulty === 1) {
+        diffBadge.textContent = "Mudah";
+      } else if (item.difficulty === 2) {
+        diffBadge.textContent = "Sedang";
+      } else {
+        diffBadge.textContent = "Sulit";
+      }
+
+      document.getElementById("question-prompt").textContent = item.prompt_text;
+
+      const optContainer = document.getElementById("options-container");
+      optContainer.innerHTML = "";
+
+      const keys = ["A", "B", "C", "D"];
+      keys.forEach(k => {
+        if (!item.options[k]) return;
+        const optCard = document.createElement("button");
+        optCard.type = "button";
+        optCard.className = `opt-card w-full text-left p-3.5 rounded-lg border border-line hover:border-ink bg-paper transition flex items-start space-x-3 tap-target`;
+        optCard.onclick = () => selectOption(k, optCard);
+
+        optCard.innerHTML = `
+          <div class="opt-key w-6 h-6 rounded bg-surface border border-line font-mono font-bold text-xs flex items-center justify-center text-ink flex-shrink-0">
+            ${k}
+          </div>
+          <div class="opt-text text-xs text-ink font-medium leading-relaxed pt-0.5">
+            ${escapeHtml(item.options[k])}
+          </div>
+        `;
+        optContainer.appendChild(optCard);
+      });
+    }
+
+    function selectOption(key, element) {
+      selectedChoice = key;
+      document.querySelectorAll(".opt-card").forEach(el => {
+        el.classList.remove("border-ink", "bg-surface", "ring-1", "ring-ink");
+        el.querySelector(".opt-key").classList.remove("bg-ink", "text-white", "border-ink");
+        el.querySelector(".opt-key").classList.add("bg-surface", "text-ink");
+      });
+
+      element.classList.add("border-ink", "bg-surface", "ring-1", "ring-ink");
+      const keyBox = element.querySelector(".opt-key");
+      keyBox.classList.remove("bg-surface", "text-ink");
+      keyBox.classList.add("bg-ink", "text-white", "border-ink");
+
+      document.getElementById("btn-submit").disabled = false;
+    }
+
+    async function loadHint(level) {
+      if (!currentItem) return;
+      const hintBody = document.getElementById("hint-body");
+      hintBody.innerHTML = `Mengambil petunjuk Level ${level}...`;
+
+      try {
+        const resp = await fetch(`${API_BASE}/api/quiz/hint`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            student_code: currentStudentCode,
+            item_id: currentItem.item_id,
+            requested_level: level
+          })
+        });
+
+        if (!resp.ok) throw new Error("Gagal mengambil petunjuk");
+        const data = await resp.json();
+
+        hintBody.innerHTML = `<strong>Level ${data.hint_level}:</strong> ${escapeHtml(data.hint_text)}`;
+        hintUsed = true;
+        hintLevel = level;
+        totalHintsUsed++;
+        document.getElementById("hint-status-pill").classList.remove("hidden");
+      } catch (err) {
+        console.error(err);
+        hintBody.textContent = "Gagal memuat petunjuk. Silakan coba kembali.";
+      }
+    }
+
+    document.getElementById("btn-toggle-hint").onclick = () => {
+      const panel = document.getElementById("hint-panel");
+      panel.classList.toggle("hidden");
+    };
+
+    document.getElementById("btn-submit").onclick = async () => {
+      if (!selectedChoice || !currentItem) return;
+
+      const responseTimeMs = Date.now() - (questionStartTime || Date.now());
+      const btn = document.getElementById("btn-submit");
+      btn.disabled = true;
+      btn.innerHTML = `Memeriksa jawaban...`;
+
+      try {
+        const payload = {
+          student_code: currentStudentCode,
+          item_id: currentItem.item_id,
+          choice: selectedChoice,
+          session_id: activeSessionId,
+          response_time_ms: responseTimeMs,
+          used_hint: hintUsed,
+          hint_level: hintLevel
+        };
+
+        const resp = await fetch(`${API_BASE}/api/quiz/submit`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) throw new Error("Gagal mengirim jawaban");
+        const result = await resp.json();
+        showFeedback(result);
+      } catch (err) {
+        console.error(err);
+        alert("Gagal memproses jawaban. Silakan coba lagi.");
+        btn.disabled = false;
+        btn.innerHTML = `<span>Jawab</span> <i class="fa-solid fa-check text-xs"></i>`;
+      }
+    };
+
+    function showFeedback(result) {
+      const modal = document.getElementById("modal-feedback");
+      const iconBox = document.getElementById("fb-icon-container");
+      const title = document.getElementById("fb-title");
+      const subtitle = document.getElementById("fb-subtitle");
+
+      if (result.is_correct) {
+        if (currentItem && currentItem.primary_kc) {
+          consecutiveKcErrors[currentItem.primary_kc] = 0;
+        }
+        iconBox.className = "w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-brand text-white flex-shrink-0";
+        iconBox.innerHTML = `<i class="fa-solid fa-check"></i>`;
+        title.textContent = "Jawaban Benar";
+        subtitle.textContent = hintUsed ? "Dijawab dengan bantuan petunjuk" : "Dijawab mandiri tanpa petunjuk";
+      } else {
+        if (currentItem && currentItem.primary_kc) {
+          consecutiveKcErrors[currentItem.primary_kc] = (consecutiveKcErrors[currentItem.primary_kc] || 0) + 1;
+        }
+        iconBox.className = "w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-rose-600 text-white flex-shrink-0";
+        iconBox.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+        title.textContent = "Belum Tepat";
+        subtitle.textContent = `Jawaban yang benar: ${result.correct_choice}`;
+      }
+
+      lastReportedMastery = result.mastery_after;
+      document.getElementById("fb-p-hat").textContent = (result.predicted_p * 100).toFixed(0) + "%";
+      document.getElementById("fb-mastery-shift").textContent = `${result.mastery_before.toFixed(2)} → ${result.mastery_after.toFixed(2)}`;
+
+      const deltaElem = document.getElementById("fb-delta-m");
+      if (result.mastery_delta >= 0) {
+        deltaElem.textContent = `+${result.mastery_delta.toFixed(3)}`;
+        deltaElem.className = "font-bold text-brand";
+      } else {
+        deltaElem.textContent = `${result.mastery_delta.toFixed(3)}`;
+        deltaElem.className = "font-bold text-rose-600";
+      }
+
+      document.getElementById("fb-explanation").textContent = result.explanation || "Tidak ada catatan pembahasan tambahan.";
+      modal.classList.remove("hidden");
+    }
+
+    document.getElementById("btn-next-question").onclick = () => {
+      document.getElementById("modal-feedback").classList.add("hidden");
+      const btn = document.getElementById("btn-submit");
+      btn.innerHTML = `<span>Jawab</span> <i class="fa-solid fa-check text-xs"></i>`;
+
+      if (currentItem && (currentItem.sequence_number >= (currentItem.max_items || 20) || currentItem.is_completed)) {
+        showSummary();
+      } else {
+        fetchNextQuestion();
+      }
+    };
+
+    function showSummary() {
+      showScreen("screen-summary");
+      document.getElementById("sum-student").textContent = `${currentStudentCode} (XI TKJ 1)`;
+      document.getElementById("sum-hints").textContent = `${totalHintsUsed} kali`;
+      if (lastReportedMastery !== null) {
+        document.getElementById("sum-avg-mastery").textContent = `${lastReportedMastery.toFixed(2)}`;
+      }
+    }
+
+    document.getElementById("btn-login").onclick = loginStudent;
+    initStudentDropdown();
+    if (currentStudentCode) {
+      updateStudentBadge();
+      loadClassroomSessions();
+    } else {
+      showScreen("screen-login");
+    }
+  </script>
+</body>
+</html>

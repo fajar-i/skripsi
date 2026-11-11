@@ -1,0 +1,32 @@
+{
+  "roots": ["WLAN_STANDARDS", "WLAN_TOPOLOGY_BSS", "IP_PEER_CONFIG"],
+  "edges": [
+    {"from": "WLAN_STANDARDS", "to": "WLAN_FREQ_CHANNEL"},
+    {"from": "WLAN_FREQ_CHANNEL", "to": "WLAN_CHANNEL_COLLISION"},
+    {"from": "WLAN_STANDARDS", "to": "WLAN_TOPOLOGY_BSS"},
+    {"from": "WLAN_TOPOLOGY_BSS", "to": "WLAN_SIGNAL_PROP"},
+    {"from": "WLAN_SIGNAL_PROP", "to": "WLAN_ROAMING_PROB"},
+    {"from": "WLAN_TOPOLOGY_BSS", "to": "IP_PEER_CONFIG"},
+    {"from": "IP_PEER_CONFIG", "to": "WLAN_SECURITY_AUTH"},
+    {"from": "WLAN_SECURITY_AUTH", "to": "WLAN_HOST_HARDENING"},
+    {"from": "IP_PEER_CONFIG", "to": "ICMP_CONNECTIVITY"},
+    {"from": "WLAN_SIGNAL_PROP", "to": "ICMP_CONNECTIVITY"},
+    {"from": "ICMP_CONNECTIVITY", "to": "ICMP_TROUBLE_DHU"},
+    {"from": "ICMP_CONNECTIVITY", "to": "ICMP_TROUBLE_RTO"},
+    {"from": "WLAN_HOST_HARDENING", "to": "ICMP_TROUBLE_RTO"}
+  ],
+  "in_degrees": {
+    "WLAN_STANDARDS": 0,
+    "WLAN_TOPOLOGY_BSS": 1,
+    "IP_PEER_CONFIG": 1,
+    "WLAN_FREQ_CHANNEL": 1,
+    "WLAN_CHANNEL_COLLISION": 1,
+    "WLAN_SIGNAL_PROP": 1,
+    "WLAN_ROAMING_PROB": 1,
+    "WLAN_SECURITY_AUTH": 1,
+    "WLAN_HOST_HARDENING": 1,
+    "ICMP_CONNECTIVITY": 2,
+    "ICMP_TROUBLE_DHU": 1,
+    "ICMP_TROUBLE_RTO": 2
+  }
+}

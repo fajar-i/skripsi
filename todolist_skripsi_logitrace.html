@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmap & To-Do List Skripsi LogiTrace | Fajari Arkan</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-light: #fffbeb;
+      --danger: #ef4444;
+      --danger-light: #fef2f2;
+      --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --card-shadow-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+      --radius: 12px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #090d16;
+      --surface: #131b2e;
+      --surface-border: #1e293b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --primary-light: #172554;
+      --primary-border: #1e40af;
+      --success-light: #064e3b;
+      --warning-light: #451a03;
+      --danger-light: #450a0a;
+      --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+      --card-shadow-hover: 0 10px 15px -3px rgb(0 0 0 / 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 80px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--surface-border);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(8px);
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    [data-theme="dark"] header {
+      background-color: rgba(19, 27, 46, 0.9);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary);
+    }
+
+    .brand-title span.badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--primary-border);
+    }
+
+    .brand-subtitle {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-outline {
+      border-color: var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      background: var(--primary-light);
+      border-color: var(--primary-border);
+      color: var(--primary);
+    }
+
+    .btn-icon {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text-muted);
+    }
+    .btn-icon:hover {
+      color: var(--text);
+      border-color: var(--primary);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 24px;
+    }
+
+    /* Overall Stats Card */
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .hero-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-info h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .hero-info p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .progress-bar-wrap {
+      background: var(--surface-border);
+      border-radius: 999px;
+      height: 12px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, var(--primary) 0%, #38bdf8 100%);
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    .progress-stats-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat-pill {
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      padding: 12px 14px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .stat-pill.success {
+      background: var(--success-light);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .stat-pill.warning {
+      background: var(--warning-light);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .stat-val {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .stat-lbl {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Filter & Search Bar */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 240px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      border-radius: 8px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.875rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .search-box input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+    .search-box svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .select-filter {
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+    }
+    .select-filter:focus {
+      border-color: var(--primary);
+    }
+
+    /* Phase Accordion */
+    .phase-section {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+    }
+
+    .phase-header {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      background: var(--surface);
+      border-bottom: 1px solid transparent;
+      transition: var(--transition);
+    }
+    .phase-header:hover {
+      background: var(--primary-light);
+    }
+    .phase-section.open .phase-header {
+      border-bottom-color: var(--surface-border);
+    }
+
+    .phase-title-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .phase-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--primary-border);
+    }
+
+    .phase-section.completed .phase-num {
+      background: var(--success-light);
+      color: var(--success);
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .phase-title {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .phase-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .phase-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .phase-progress-pill {
+      font-size: 0.775rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--surface-border);
+    }
+
+    .phase-chevron {
+      transition: transform 0.25s ease;
+      color: var(--text-muted);
+    }
+    .phase-section.open .phase-chevron {
+      transform: rotate(180deg);
+    }
+
+    .phase-body {
+      padding: 12px 20px;
+      display: none;
+    }
+    .phase-section.open .phase-body {
+      display: block;
+    }
+
+    /* Task Item */
+    .task-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      margin-bottom: 10px;
+      transition: var(--transition);
+    }
+    .task-item:hover {
+      border-color: var(--primary-border);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    }
+    .task-item.completed {
+      background: var(--bg);
+      border-color: var(--surface-border);
+      opacity: 0.75;
+    }
+    .task-item.completed:hover {
+      opacity: 1;
+    }
+
+    .task-main {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .task-checkbox {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .task-content {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .task-title {
+      font-size: 0.925rem;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .task-item.completed .task-title {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .task-desc {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .tag {
+      font-size: 0.725rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tag-priority-high {
+      background: var(--danger-light);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    .tag-priority-medium {
+      background: var(--warning-light);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    .tag-priority-low {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+    }
+
+    .tag-date {
+      background: var(--bg);
+      color: var(--text-muted);
+      border: 1px solid var(--surface-border);
+    }
+    .tag-date.overdue {
+      background: var(--danger-light);
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .task-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.4;
+      transition: opacity 0.2s;
+    }
+    .task-item:hover .task-actions {
+      opacity: 1;
+    }
+
+    .btn-action {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-action:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
+    .btn-action.delete:hover {
+      color: var(--danger);
+      background: var(--danger-light);
+    }
+
+    /* Notes accordion */
+    .task-notes-wrapper {
+      margin-top: 6px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--surface-border);
+    }
+    .task-notes-textarea {
+      width: 100%;
+      min-height: 48px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--surface-border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.8rem;
+      outline: none;
+      resize: vertical;
+      transition: var(--transition);
+    }
+    .task-notes-textarea:focus {
+      border-color: var(--primary);
+      background: var(--surface);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.2);
+      overflow: hidden;
+      animation: modalFadeIn 0.2s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .form-control {
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.875rem;
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--surface-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: var(--bg);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--surface-border);
+      border-left: 4px solid var(--primary);
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.15);
+      font-size: 0.85rem;
+      font-weight: 600;
+      z-index: 200;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--text-muted);
+    }
+    .empty-state svg {
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+
+    /* Print styles */
+    @media print {
+      header, .toolbar, .header-actions, .btn-action, .task-notes-textarea {
+        display: none !important;
+      }
+      .phase-body {
+        display: block !important;
+      }
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <div>
+        <div class="brand-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Roadmap Skripsi LogiTrace
+          <span class="badge">UPI 2026</span>
+        </div>
+        <div class="brand-subtitle">Fajari Arkan Fadhlurrahman (NIM. 2304794) • Pembelajaran Station Rotation & RAG-KT</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline" id="btnExport" title="Simpan berkas cadangan ke komputer">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Ekspor JSON
+        </button>
+        <button class="btn btn-outline" id="btnImportTrigger" title="Pulihkan data dari berkas JSON">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          Impor JSON
+        </button>
+        <input type="file" id="fileImport" accept=".json" style="display: none;">
+        <button class="btn btn-primary" id="btnOpenNewTask">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Tambah Tugas
+        </button>
+        <button class="btn-icon" id="btnThemeToggle" title="Ganti Tema Gelap / Terang">
+          <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- HERO / OVERALL PROGRESS -->
+    <div class="hero-card">
+      <div class="hero-info">
+        <h1>Progres Keseluruhan Skripsi</h1>
+        <p>Pengembangan Web Evaluasi Formatif Adaptif RAG-KT untuk Meningkatkan Logical Thinking Siswa SMK</p>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="overallProgressBar"></div>
+        </div>
+        <div class="progress-stats-row">
+          <span id="overallProgressPercent">0% Selesai</span>
+          <span id="overallProgressCounts">0 dari 0 tugas tuntas</span>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-pill">
+          <div class="stat-val" id="statTotalTasks">0</div>
+          <div class="stat-lbl">TOTAL TUGAS</div>
+        </div>
+        <div class="stat-pill success">
+          <div class="stat-val" id="statCompletedTasks">0</div>
+          <div class="stat-lbl">SELESAI</div>
+        </div>
+        <div class="stat-pill warning">
+          <div class="stat-val" id="statPendingHigh">0</div>
+          <div class="stat-lbl">PRIORITAS TINGGI</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Cari nama tugas, materi, atau kata kunci...">
+      </div>
+      <div class="filter-group">
+        <select class="select-filter" id="filterStatus">
+          <option value="all">Semua Status</option>
+          <option value="pending">Belum Selesai</option>
+          <option value="completed">Sudah Selesai</option>
+        </select>
+        <select class="select-filter" id="filterPriority">
+          <option value="all">Semua Prioritas</option>
+          <option value="high">Prioritas Tinggi</option>
+          <option value="medium">Prioritas Sedang</option>
+          <option value="low">Prioritas Rendah</option>
+        </select>
+        <button class="btn btn-outline" id="btnToggleAllPhases">Buka / Tutup Semua</button>
+      </div>
+    </div>
+
+    <!-- PHASES CONTAINER -->
+    <div id="phasesList"></div>
+
+  </div>
+
+  <!-- MODAL ADD / EDIT TASK -->
+  <div class="modal-backdrop" id="taskModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">Tambah Tugas Baru</h3>
+        <button class="btn-action" id="btnCloseModal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editTaskId">
+        <div class="form-group">
+          <label>Fase / Kategori Skripsi *</label>
+          <select class="form-control" id="taskPhaseSelect"></select>
+        </div>
+        <div class="form-group">
+          <label>Judul Tugas *</label>
+          <input type="text" class="form-control" id="taskTitleInput" placeholder="Contoh: Mengunduh silabus CP/ATP TKJ dari guru mitra">
+        </div>
+        <div class="form-group">
+          <label>Deskripsi Tambahan</label>
+          <textarea class="form-control" id="taskDescInput" rows="2" placeholder="Penjelasan ringkas hasil akhir atau hal yang perlu diperhatikan..."></textarea>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label>Tingkat Prioritas</label>
+            <select class="form-control" id="taskPrioritySelect">
+              <option value="high">Tinggi (Mendesak)</option>
+              <option value="medium" selected>Sedang</option>
+              <option value="low">Rendah</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Target Tanggal Selesai</label>
+            <input type="date" class="form-control" id="taskDueDateInput">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Catatan / Tautan Berkas</label>
+          <textarea class="form-control" id="taskNotesInput" rows="2" placeholder="Catatan pribadi, lokasi file, masukan dosen pembimbing..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="btnCancelModal">Batal</button>
+        <button class="btn btn-primary" id="btnSaveTask">Simpan Tugas</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toastMessage">Tersimpan secara lokal!</div>
+
+  <script>
+    // --- DEFAULT INITIAL DATA (TAILORED FOR FAJARI ARKAN SKRIPSI) ---
+    const DEFAULT_DATA = {
+      phases: [
+        {
+          id: "p0",
+          name: "Fase 0: Persiapan Seminar Proposal (Sempro)",
+          desc: "Target terdekat untuk mengamankan persetujuan dosen dan kelolosan judul baru",
+          tasks: [
+            {
+              id: "t0_1",
+              title: "Tinjau Berkas Word Proposal Skripsi Final",
+              desc: "Buka proposal_skripsi_bab_1_2_3.docx dan pastikan tata letak, margin (4-3-3-3), dan penomoran halaman sudah rapi.",
+              priority: "high",
+              dueDate: "2026-11-10",
+              completed: true,
+              notes: "Sudah dikonversi ke DOCX dengan standar UPI (Times New Roman 12pt, spasi 1.5)."
+            },
+            {
+              id: "t0_2",
+              title: "Konsultasikan Pembaruan Judul ke Dosen Pembimbing",
+              desc: "Tegaskan bahwa metode proposal lama tetap dipertahankan utuh dan didukung bukti empiris SLR 21 artikel Scopus.",
+              priority: "high",
+              dueDate: "2026-11-13",
+              completed: false,
+              notes: "Soroti alasan RAG-KT training-free untuk 34 siswa SMK dan model Station Rotation untuk rasio lab 1:2."
+            },
+            {
+              id: "t0_3",
+              title: "Susun Slide Presentasi Seminar Proposal (12–15 Slide)",
+              desc: "Fokus pada Hook (masalah lab SMK), SLR gap, arsitektur 3 lapis LogiTrace, dan desain pra-eksperimen satu kelompok + NEDV.",
+              priority: "high",
+              dueDate: "2026-11-17",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t0_4",
+              title: "Simulasi Tanya Jawab Penguji Berbasis Dokumen Master",
+              desc: "Pelajari berkas tanya-jawab-penguji-rag-kt.md (pertahanan data kecil, anti-leakage guardrail, dan justifikasi ANOVA).",
+              priority: "medium",
+              dueDate: "2026-11-19",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t0_5",
+              title: "Pelaksanaan Seminar Proposal & Revisi Berita Acara",
+              desc: "Menempuh ujian seminar proposal dan mencatat seluruh masukan dewan penguji.",
+              priority: "high",
+              dueDate: "2026-11-23",
+              completed: false,
+              notes: ""
+            }
+          ]
+        },
+        {
+          id: "p1",
+          name: "Fase 1: Ekstraksi CP/ATP Pemerintah & Basis Pengetahuan L1",
+          desc: "Menyusun fondasi kurikulum resmi dan relasi graf dependensi prasyarat (DAG)",
+          tasks: [
+            {
+              id: "t1_1",
+              title: "Hubungi Pak Yofi untuk Dokumen CP, ATP & Modul Ajar TKJ",
+              desc: "Dapatkan dokumen kurikulum resmi mata pelajaran Jaringan Nirkabel Fase F SMKN 4 Bandung.",
+              priority: "high",
+              dueDate: "2026-11-25",
+              completed: false,
+              notes: "Pak Yofi Fikri Islami Anshary, S.Pd. - Guru Konsentrasi Keahlian TKJ."
+            },
+            {
+              id: "t1_2",
+              title: "Petakan Tujuan Pembelajaran (TP) Menjadi 12 Knowledge Components (KC)",
+              desc: "Gunakan CP/ATP untuk melegitimasi 12 KC materi nirkabel (KC-01 s.d KC-12) agar kebal dari kritik penguji.",
+              priority: "high",
+              dueDate: "2026-11-28",
+              completed: false,
+              notes: "Frekuensi, Topologi BSS/ESS, Kanal, Atenuasi, Keamanan WPA2/WPA3, DHCP, ICMP, Gateway, Roaming, dll."
+            },
+            {
+              id: "t1_3",
+              title: "Rancang Graf Ketergantungan Prasyarat (DAG)",
+              desc: "Susun struktur dependensi hirarki konsep mengadopsi model pakar Nkambou et al. (2023) dalam format JSON.",
+              priority: "medium",
+              dueDate: "2026-11-30",
+              completed: false,
+              notes: "Prasyarat menentukan aktivasi adaptive item selection (ambang m >= 0.60)."
+            },
+            {
+              id: "t1_4",
+              title: "Tulis 24 Contoh Pengerjaan Terstandar (Worked-Examples)",
+              desc: "Siapkan basis data solusi langkah-demi-langkah sebagai rujukan context retrieval agen RAG.",
+              priority: "low",
+              dueDate: "2026-12-05",
+              completed: false,
+              notes: "2 contoh untuk setiap KC guna mendukung intervensi scaffolding pemicu T2."
+            }
+          ]
+        },
+        {
+          id: "p2",
+          name: "Fase 2: Bank Butir Soal Kuis & Instrumen TOLT-NEDV",
+          desc: "Penyusunan butir soal bertingkat penalaran logis dan variabel kontrol internal",
+          tasks: [
+            {
+              id: "t2_1",
+              title: "Tulis 36–60 Butir Soal Kuis Adaptif Tahap 1 (Seed Slice)",
+              desc: "Cukup 3-5 soal per KC terlebih dahulu agar dapat langsung diinput ke purwarupa web untuk validasi ahli terpadu.",
+              priority: "high",
+              dueDate: "2026-12-08",
+              completed: false,
+              notes: "Soal pilihan ganda beralasan berbasis studi kasus teknis kejuruan."
+            },
+            {
+              id: "t2_2",
+              title: "Susun Instrumen Tes Paralel TOLT-Jaringan (Form A & Form B)",
+              desc: "10 butir soal tes penalaran logis 5 dimensi (proporsional, kontrol variabel, probabilistik, korelasional, kombinatorial).",
+              priority: "high",
+              dueDate: "2026-12-12",
+              completed: false,
+              notes: "Form A untuk Pretest dan Form B untuk Posttest."
+            },
+            {
+              id: "t2_3",
+              title: "Susun 6 Butir Soal Kontrol NEDV (Teori Antrean M/M/1)",
+              desc: "Materi non-ekuivalen berbobot penalaran yang tidak diajarkan untuk membuktikan validitas internal terhadap ancaman historis.",
+              priority: "medium",
+              dueDate: "2026-12-15",
+              completed: false,
+              notes: "Kriteria keberhasilan: N-Gain NEDV mendekati nol (g ≈ 0)."
+            },
+            {
+              id: "t2_4",
+              title: "Lengkapi Bank Soal Penuh Hingga 180 Butir",
+              desc: "Lanjutkan penulisan soal kuis adaptif hingga mencapai target 15 soal per KC (total 180 butir).",
+              priority: "low",
+              dueDate: "2026-12-22",
+              completed: false,
+              notes: ""
+            }
+          ]
+        },
+        {
+          id: "p3",
+          name: "Fase 3: Pengembangan Sistem Web LogiTrace",
+          desc: "Rekayasa perangkat lunak antarmuka responsif dan mesin inferensi deterministik",
+          tasks: [
+            {
+              id: "t3_1",
+              title: "Bangun Antarmuka Siswa Mobile-First Responsif",
+              desc: "Rancang UI bersih untuk smartphone siswa di stasiun LogiTrace (Device-Purpose Split) tanpa membebani PC lab.",
+              priority: "high",
+              dueDate: "2026-12-18",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t3_2",
+              title: "Implementasi Mesin Runtime Deterministik L3",
+              desc: "Koding aturan pembaruan penguasaan kognitif m_t (alpha_d, gamma_d, beta, h), peluruhan lupa tau=60 hari, dan pita ZPD (0.60–0.85).",
+              priority: "high",
+              dueDate: "2026-12-24",
+              completed: false,
+              notes: "Waktu eksekusi < 1 ms, tidak membutuhkan GPU server eksternal."
+            },
+            {
+              id: "t3_3",
+              title: "Integrasi Agen RAG Lokal dengan Guardrail Anti-Leakage",
+              desc: "Terapkan prompt Sokratik berjenjang (T1/T2) dan 3 lapis filter guardrail agar AI tidak membocorkan kunci jawaban.",
+              priority: "high",
+              dueDate: "2026-12-28",
+              completed: false,
+              notes: "Filter Entailment NLI, Masking Token Jawaban, dan Verifikasi Deterministik."
+            },
+            {
+              id: "t3_4",
+              title: "Bangun Dasbor Guru Pemantau Kelas (WebSocket Real-Time)",
+              desc: "Dasbor orkestrasi bagi guru untuk memantau transisi stasiun dan mendeteksi siswa macet (Pemicu T3).",
+              priority: "medium",
+              dueDate: "2027-01-05",
+              completed: false,
+              notes: ""
+            }
+          ]
+        },
+        {
+          id: "p4",
+          name: "Fase 4: Paket Validasi Terpadu (Ahli Materi & Media)",
+          desc: "Pemeriksaan simultan materi, media, dan soal di hadapan dewan ahli validator",
+          tasks: [
+            {
+              id: "t4_1",
+              title: "Siapkan Paket Demo Web LogiTrace Berisi 12 KC & Soal Seed",
+              desc: "Jalankan prototipe web lokal yang sudah terisi data kurikulum dan bank soal awal.",
+              priority: "high",
+              dueDate: "2027-01-08",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t4_2",
+              title: "Cetak Instrumen Validasi Ahli Materi (Aiken's V) & Ahli Media (LORI 2.0)",
+              desc: "Gunakan kisi-kisi Lampiran 1 dan Lampiran 2 yang sudah tercantum di proposal skripsi.",
+              priority: "high",
+              dueDate: "2027-01-10",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t4_3",
+              title: "Pelaksanaan Sidang Validasi Terpadu & Perbaikan Produk",
+              desc: "Uji coba sistem di hadapan 2 ahli materi dan 2 ahli media; lakukan perbaikan hingga mencapai status Sangat Layak.",
+              priority: "high",
+              dueDate: "2027-01-15",
+              completed: false,
+              notes: "Target skor kelayakan LORI 2.0 >= 80%."
+            }
+          ]
+        },
+        {
+          id: "p5",
+          name: "Fase 5: Uji Coba Terbatas & Pembekuan Sistem",
+          desc: "Pengujian kelompok kecil dan kalibrasi parameter empiris sebelum masuk lab utama",
+          tasks: [
+            {
+              id: "t5_1",
+              title: "Uji Coba Kelompok Kecil (9–12 Siswa)",
+              desc: "Simulasikan pembelajaran pada kelompok kecil siswa TKJ di luar rombel utama untuk menguji stabilitas server dan alur.",
+              priority: "medium",
+              dueDate: "2027-01-20",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t5_2",
+              title: "Analisis Psikometrik CTT Butir Tes",
+              desc: "Hitung daya pembeda (D >= 0.30), tingkat kesukaran (0.30 <= p <= 0.70), dan reliabilitas KR-20.",
+              priority: "medium",
+              dueDate: "2027-01-24",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t5_3",
+              title: "Pembekuan Kode Sistem LogiTrace v1.0",
+              desc: "Kunci seluruh konfigurasi prompt LLM, bobot pembaruan, dan skema database (append-only audit log).",
+              priority: "high",
+              dueDate: "2027-01-28",
+              completed: false,
+              notes: "Mencegah bias instrumen akibat modifikasi perangkat lunak saat eksperimen berlangsung."
+            }
+          ]
+        },
+        {
+          id: "p6",
+          name: "Fase 6: Implementasi Lapangan 4 Pertemuan di SMKN 4 Bandung",
+          desc: "Eksperimen model Station Rotation pada 34 siswa kelas XI TKJ 1",
+          tasks: [
+            {
+              id: "t6_1",
+              title: "Sesi 1: Pretest Form A, Kalibrasi Cold-Start & Sosialisasi",
+              desc: "Pelaksanaan pretest 16 butir (10 TOLT + 6 NEDV), kalibrasi 6 butir cold-start di LogiTrace, dan orientasi 3 stasiun.",
+              priority: "high",
+              dueDate: "2027-02-03",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t6_2",
+              title: "Sesi 2: Pembelajaran Station Rotation Materi Topologi & SSID",
+              desc: "Rotasi 3 stasiun: Stasiun 1 (Fisik), Stasiun 2 (LogiTrace di HP), Stasiun 3 (Simulasi Cisco Packet Tracer di PC).",
+              priority: "high",
+              dueDate: "2027-02-10",
+              completed: false,
+              notes: "Catat lembar observasi Treatment Fidelity Index (target >= 85%)."
+            },
+            {
+              id: "t6_3",
+              title: "Sesi 3: Pembelajaran Station Rotation Materi Troubleshooting & ICMP",
+              desc: "Latihan pemecahan masalah konektivitas jaringan nirkabel dan bimbingan Sokratik adaptif.",
+              priority: "high",
+              dueDate: "2027-02-17",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t6_4",
+              title: "Sesi 4: Posttest Form B & Pengisian Kuesioner SUS",
+              desc: "Pelaksanaan posttest paralel dan pengisian angket usabilitas System Usability Scale (SUS) 10 butir oleh seluruh siswa.",
+              priority: "high",
+              dueDate: "2027-02-24",
+              completed: false,
+              notes: ""
+            }
+          ]
+        },
+        {
+          id: "p7",
+          name: "Fase 7: Analisis Data Statistik & Evaluasi Enam Jalur (E1–E6)",
+          desc: "Pengolahan bukti empiris untuk menjawab seluruh agenda riset dan hipotesis",
+          tasks: [
+            {
+              id: "t7_1",
+              title: "Hitung Capaian Normalized Gain (N-Gain) & Paired t-Test (Jalur E6)",
+              desc: "Uji signifikansi peningkatan penalaran logis sebelum dan sesudah intervensi serta kategorisasi gain Hake.",
+              priority: "high",
+              dueDate: "2027-03-02",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t7_2",
+              title: "Uji One-Way ANOVA Profil 5 Dimensi TOLT (Jalur E6)",
+              desc: "Buktikan apakah LogiTrace meningkatkan dimensi penalaran secara seimbang atau mengalami disparitas.",
+              priority: "high",
+              dueDate: "2027-03-05",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t7_3",
+              title: "Verifikasi Nilai Kontrol NEDV (g_NEDV ≈ 0)",
+              desc: "Buktikan validitas internal: peningkatan nilai murni akibat LogiTrace, bukan faktor kematangan alami.",
+              priority: "high",
+              dueDate: "2027-03-08",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t7_4",
+              title: "Analisis Akurasi KT (E3), Guardrail (E4), & Usabilitas SUS (E5)",
+              desc: "Hitung RMSE, AUC, tingkat kebocoran jawaban (<= 1%), dan rata-rata skor SUS (target >= 70).",
+              priority: "medium",
+              dueDate: "2027-03-12",
+              completed: false,
+              notes: ""
+            }
+          ]
+        },
+        {
+          id: "p8",
+          name: "Fase 8: Finalisasi Skripsi & Pendaftaran Sidang Munaqasyah",
+          desc: "Penulisan Bab IV dan Bab V menuju kelulusan Sarjana Pendidikan (S.Pd.)",
+          tasks: [
+            {
+              id: "t8_1",
+              title: "Penulisan Lengkap Bab IV (Hasil Penelitian dan Pembahasan)",
+              desc: "Sajikan temuan sistematis menjawab 4 rumusan masalah dan konfrontasikan dengan temuan SLR 21 artikel Scopus.",
+              priority: "high",
+              dueDate: "2027-03-20",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t8_2",
+              title: "Penulisan Bab V (Kesimpulan, Implikasi, Keterbatasan, & Saran)",
+              desc: "Sintesis kesimpulan, implikasi pedagogis SMK, dan rekomendasi bagi riset AIEd lanjutan.",
+              priority: "high",
+              dueDate: "2027-03-26",
+              completed: false,
+              notes: ""
+            },
+            {
+              id: "t8_3",
+              title: "Bimbingan Draft Lengkap & Persetujuan Sidang Munaqasyah",
+              desc: "Revisi menyeluruh bersama dosen pembimbing dan pengurusan administrasi pendaftaran sidang skripsi.",
+              priority: "high",
+              dueDate: "2027-04-05",
+              completed: false,
+              notes: "Gelar Sarjana Pendidikan (S.Pd.) Pendidikan Ilmu Komputer FPMIPA UPI."
+            }
+          ]
+        }
+      ]
+    };
+
+    // --- STATE MANAGEMENT (LOCAL STORAGE PERSISTENCE) ---
+    const STORAGE_KEY = 'logitrace_skripsi_todos_fajari_2026';
+    const THEME_KEY = 'logitrace_theme_pref';
+
+    let appData = { phases: [] };
+
+    function loadData() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          appData = JSON.parse(stored);
+        } else {
+          appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+          saveData();
+        }
+      } catch (e) {
+        console.error("Gagal memuat dari localStorage:", e);
+        appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      }
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        showToast("Progres tersimpan otomatis secara offline!");
+      } catch (e) {
+        console.error("Gagal menyimpan ke localStorage:", e);
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastMessage');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    // --- THEME TOGGLE ---
+    function initTheme() {
+      const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    document.getElementById('btnThemeToggle').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem(THEME_KEY, next);
+    });
+
+    // --- RENDERING ENGINE ---
+    function renderApp() {
+      const container = document.getElementById('phasesList');
+      container.innerHTML = '';
+
+      const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+      const statusFilter = document.getElementById('filterStatus').value;
+      const priorityFilter = document.getElementById('filterPriority').value;
+
+      let totalTasks = 0;
+      let completedTasks = 0;
+      let pendingHigh = 0;
+
+      appData.phases.forEach((phase, phaseIdx) => {
+        // Filter tasks
+        const filteredTasks = phase.tasks.filter(task => {
+          const matchQuery = !searchQuery || 
+            task.title.toLowerCase().includes(searchQuery) || 
+            (task.desc && task.desc.toLowerCase().includes(searchQuery)) ||
+            (task.notes && task.notes.toLowerCase().includes(searchQuery));
+          
+          const matchStatus = statusFilter === 'all' || 
+            (statusFilter === 'completed' && task.completed) || 
+            (statusFilter === 'pending' && !task.completed);
+
+          const matchPriority = priorityFilter === 'all' || task.priority === priorityFilter;
+
+          return matchQuery && matchStatus && matchPriority;
+        });
+
+        const pTotal = phase.tasks.length;
+        const pCompleted = phase.tasks.filter(t => t.completed).length;
+        const isPhaseFullyDone = pTotal > 0 && pTotal === pCompleted;
+
+        totalTasks += pTotal;
+        completedTasks += pCompleted;
+        pendingHigh += phase.tasks.filter(t => !t.completed && t.priority === 'high').length;
+
+        // Skip phase rendering if filtered out
+        if (filteredTasks.length === 0 && (searchQuery || statusFilter !== 'all' || priorityFilter !== 'all')) {
+          return;
+        }
+
+        const section = document.createElement('div');
+        section.className = `phase-section open ${isPhaseFullyDone ? 'completed' : ''}`;
+        section.dataset.phaseId = phase.id;
+
+        const percent = pTotal > 0 ? Math.round((pCompleted / pTotal) * 100) : 0;
+
+        section.innerHTML = `
+          <div class="phase-header" onclick="togglePhase('${phase.id}')">
+            <div class="phase-title-area">
+              <div class="phase-num">${isPhaseFullyDone ? '✓' : phaseIdx}</div>
+              <div>
+                <div class="phase-title">${phase.name}</div>
+                <div class="phase-desc">${phase.desc || ''}</div>
+              </div>
+            </div>
+            <div class="phase-meta">
+              <span class="phase-progress-pill">${pCompleted} / ${pTotal} (${percent}%)</span>
+              <svg class="phase-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="phase-body" id="body_${phase.id}">
+            <div class="tasks-container" id="tasks_${phase.id}"></div>
+          </div>
+        `;
+
+        const tasksBox = section.querySelector(`#tasks_${phase.id}`);
+
+        filteredTasks.forEach(task => {
+          const tItem = document.createElement('div');
+          tItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+          tItem.id = `item_${task.id}`;
+
+          let priorityClass = 'tag-priority-low';
+          let priorityLabel = 'Rendah';
+          if (task.priority === 'high') {
+            priorityClass = 'tag-priority-high';
+            priorityLabel = 'Prioritas Tinggi';
+          } else if (task.priority === 'medium') {
+            priorityClass = 'tag-priority-medium';
+            priorityLabel = 'Prioritas Sedang';
+          }
+
+          let dateHtml = '';
+          if (task.dueDate) {
+            const today = new Date().toISOString().split('T')[0];
+            const isOverdue = !task.completed && task.dueDate < today;
+            dateHtml = `
+              <span class="tag tag-date ${isOverdue ? 'overdue' : ''}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                ${isOverdue ? 'Terlambat: ' : 'Target: '} ${task.dueDate}
+              </span>
+            `;
+          }
+
+          tItem.innerHTML = `
+            <div class="task-main">
+              <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTaskStatus('${phase.id}', '${task.id}')">
+              <div class="task-content" onclick="toggleTaskNotes('${task.id}')">
+                <div class="task-title">
+                  ${task.title}
+                </div>
+                ${task.desc ? `<div class="task-desc">${task.desc}</div>` : ''}
+                <div class="task-meta">
+                  <span class="tag ${priorityClass}">${priorityLabel}</span>
+                  ${dateHtml}
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="btn-action" title="Edit Tugas" onclick="openEditTaskModal('${phase.id}', '${task.id}')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                </button>
+                <button class="btn-action delete" title="Hapus Tugas" onclick="deleteTask('${phase.id}', '${task.id}')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="task-notes-wrapper" id="notes_wrap_${task.id}" style="${task.notes ? 'display:block;' : 'display:none;'}">
+              <textarea class="task-notes-textarea" placeholder="Tulis catatan perkembangan, link file, atau masukan dosen..." onchange="updateTaskNotes('${phase.id}', '${task.id}', this.value)">${task.notes || ''}</textarea>
+            </div>
+          `;
+
+          tasksBox.appendChild(tItem);
+        });
+
+        container.appendChild(section);
+      });
+
+      // Update Overall Summary
+      const overallPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+      document.getElementById('overallProgressBar').style.width = overallPercent + '%';
+      document.getElementById('overallProgressPercent').textContent = overallPercent + '% Selesai';
+      document.getElementById('overallProgressCounts').textContent = `${completedTasks} dari ${totalTasks} tugas tuntas`;
+
+      document.getElementById('statTotalTasks').textContent = totalTasks;
+      document.getElementById('statCompletedTasks').textContent = completedTasks;
+      document.getElementById('statPendingHigh').textContent = pendingHigh;
+    }
+
+    // --- ACCORDION TOGGLE ---
+    function togglePhase(phaseId) {
+      const sec = document.querySelector(`.phase-section[data-phase-id="${phaseId}"]`);
+      if (sec) sec.classList.toggle('open');
+    }
+
+    let allOpen = true;
+    document.getElementById('btnToggleAllPhases').addEventListener('click', () => {
+      allOpen = !allOpen;
+      document.querySelectorAll('.phase-section').forEach(s => {
+        if (allOpen) s.classList.add('open');
+        else s.classList.remove('open');
+      });
+      document.getElementById('btnToggleAllPhases').textContent = allOpen ? 'Tutup Semua' : 'Buka Semua';
+    });
+
+    // --- TASK INTERACTIONS ---
+    function toggleTaskStatus(phaseId, taskId) {
+      const phase = appData.phases.find(p => p.id === phaseId);
+      if (!phase) return;
+      const task = phase.tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      task.completed = !task.completed;
+      saveData();
+      renderApp();
+    }
+
+    function toggleTaskNotes(taskId) {
+      const wrap = document.getElementById(`notes_wrap_${taskId}`);
+      if (wrap) {
+        wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+
+    function updateTaskNotes(phaseId, taskId, val) {
+      const phase = appData.phases.find(p => p.id === phaseId);
+      if (!phase) return;
+      const task = phase.tasks.find(t => t.id === taskId);
+      if (!task) return;
+      task.notes = val;
+      saveData();
+    }
+
+    function deleteTask(phaseId, taskId) {
+      if (!confirm("Hapus tugas ini dari roadmap skripsi?")) return;
+      const phase = appData.phases.find(p => p.id === phaseId);
+      if (!phase) return;
+      phase.tasks = phase.tasks.filter(t => t.id !== taskId);
+      saveData();
+      renderApp();
+    }
+
+    // --- MODAL & FORM LOGIC ---
+    function populatePhaseSelect(selectedId) {
+      const sel = document.getElementById('taskPhaseSelect');
+      sel.innerHTML = '';
+      appData.phases.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.name;
+        if (p.id === selectedId) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    }
+
+    document.getElementById('btnOpenNewTask').addEventListener('click', () => {
+      document.getElementById('editTaskId').value = '';
+      document.getElementById('modalTitle').textContent = 'Tambah Tugas Baru';
+      document.getElementById('taskTitleInput').value = '';
+      document.getElementById('taskDescInput').value = '';
+      document.getElementById('taskPrioritySelect').value = 'medium';
+      document.getElementById('taskDueDateInput').value = '';
+      document.getElementById('taskNotesInput').value = '';
+      populatePhaseSelect(appData.phases[0]?.id);
+      document.getElementById('taskModal').classList.add('active');
+    });
+
+    function openEditTaskModal(phaseId, taskId) {
+      const phase = appData.phases.find(p => p.id === phaseId);
+      if (!phase) return;
+      const task = phase.tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      document.getElementById('editTaskId').value = taskId;
+      document.getElementById('modalTitle').textContent = 'Edit Tugas Skripsi';
+      document.getElementById('taskTitleInput').value = task.title;
+      document.getElementById('taskDescInput').value = task.desc || '';
+      document.getElementById('taskPrioritySelect').value = task.priority || 'medium';
+      document.getElementById('taskDueDateInput').value = task.dueDate || '';
+      document.getElementById('taskNotesInput').value = task.notes || '';
+      populatePhaseSelect(phaseId);
+      document.getElementById('taskModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('taskModal').classList.remove('active');
+    }
+
+    document.getElementById('btnCloseModal').addEventListener('click', closeModal);
+    document.getElementById('btnCancelModal').addEventListener('click', closeModal);
+
+    document.getElementById('btnSaveTask').addEventListener('click', () => {
+      const title = document.getElementById('taskTitleInput').value.trim();
+      if (!title) {
+        alert("Judul tugas wajib diisi!");
+        return;
+      }
+
+      const editId = document.getElementById('editTaskId').value;
+      const targetPhaseId = document.getElementById('taskPhaseSelect').value;
+      const desc = document.getElementById('taskDescInput').value.trim();
+      const priority = document.getElementById('taskPrioritySelect').value;
+      const dueDate = document.getElementById('taskDueDateInput').value;
+      const notes = document.getElementById('taskNotesInput').value.trim();
+
+      if (editId) {
+        // Edit existing: find source phase
+        let oldTask = null;
+        appData.phases.forEach(p => {
+          const idx = p.tasks.findIndex(t => t.id === editId);
+          if (idx !== -1) {
+            oldTask = p.tasks.splice(idx, 1)[0];
+          }
+        });
+        if (oldTask) {
+          oldTask.title = title;
+          oldTask.desc = desc;
+          oldTask.priority = priority;
+          oldTask.dueDate = dueDate;
+          oldTask.notes = notes;
+          const targetPhase = appData.phases.find(p => p.id === targetPhaseId) || appData.phases[0];
+          targetPhase.tasks.push(oldTask);
+        }
+      } else {
+        // New task
+        const newTask = {
+          id: 't_custom_' + Date.now(),
+          title: title,
+          desc: desc,
+          priority: priority,
+          dueDate: dueDate,
+          notes: notes,
+          completed: false
+        };
+        const targetPhase = appData.phases.find(p => p.id === targetPhaseId) || appData.phases[0];
+        targetPhase.tasks.push(newTask);
+      }
+
+      saveData();
+      renderApp();
+      closeModal();
+    });
+
+    // --- SEARCH & FILTER LISTENERS ---
+    document.getElementById('searchInput').addEventListener('input', renderApp);
+    document.getElementById('filterStatus').addEventListener('change', renderApp);
+    document.getElementById('filterPriority').addEventListener('change', renderApp);
+
+    // --- EXPORT & IMPORT JSON (BACKUP & RESTORE) ---
+    document.getElementById('btnExport').addEventListener('click', () => {
+      const jsonStr = JSON.stringify(appData, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().split('T')[0];
+      a.href = url;
+      a.download = `backup_roadmap_skripsi_fajari_${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("Cadangan JSON berhasil diunduh!");
+    });
+
+    document.getElementById('btnImportTrigger').addEventListener('click', () => {
+      document.getElementById('fileImport').click();
+    });
+
+    document.getElementById('fileImport').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const imported = JSON.parse(event.target.result);
+          if (imported && Array.isArray(imported.phases)) {
+            appData = imported;
+            saveData();
+            renderApp();
+            showToast("Data roadmap berhasil dipulihkan dari cadangan!");
+          } else {
+            alert("Format berkas JSON tidak valid.");
+          }
+        } catch (err) {
+          alert("Gagal membaca berkas JSON: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    // --- INITIALIZE ---
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      loadData();
+      renderApp();
+    });
+  </script>
+</body>
+</html>

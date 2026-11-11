@@ -1,0 +1,128 @@
+{
+  "paper_01.md": {
+    "title_md": "A Survey of Knowledge Tracing Models, Variants, and Applications.md",
+    "pdf_source": "A Survey of Knowledge Tracing Models, Variants, and Applications.pdf",
+    "char_count": 203914,
+    "line_count": 2229
+  },
+  "paper_02.md": {
+    "title_md": "Adapting DAS3H Model for a Personalized Distributed Practice Schedule to Improve Long-Term Memorization in Designing an Intelligent Programming Language Tutor.md",
+    "pdf_source": "Adapting DAS3H Model for a Personalized Distributed Practice Schedule to Improve Long-Term Memorization in Designing an Intelligent Programming Language Tutor.pdf",
+    "char_count": 34663,
+    "line_count": 444
+  },
+  "paper_03.md": {
+    "title_md": "Affect is key Enhancing knowledge tracing with hypergraph-based affective state modeling.md",
+    "pdf_source": "Affect is key Enhancing knowledge tracing with hypergraph-based affective state modeling.pdf",
+    "char_count": 69949,
+    "line_count": 1267
+  },
+  "paper_04.md": {
+    "title_md": "CLST Cold-Start Mitigation in Knowledge Tracing by Aligning a Generative Language Model as a Students' Knowledge Tracer.md",
+    "pdf_source": "CLST Cold-Start Mitigation in Knowledge Tracing by Aligning a Generative Language Model as a Students' Knowledge Tracer.pdf",
+    "char_count": 69302,
+    "line_count": 953
+  },
+  "paper_05.md": {
+    "title_md": "Data Augmentation for Sparse Multidimensional Learning Performance Data Using Generative AI.md",
+    "pdf_source": "Data Augmentation for Sparse Multidimensional Learning Performance Data Using Generative AI.pdf",
+    "char_count": 137034,
+    "line_count": 1946
+  },
+  "paper_06.md": {
+    "title_md": "Design and Implementation of an AI-Enhanced Heuristic Learning System in a Virtual Realm.md",
+    "pdf_source": "Design and Implementation of an AI-Enhanced Heuristic Learning System in a Virtual Realm.pdf",
+    "char_count": 40887,
+    "line_count": 535
+  },
+  "paper_07.md": {
+    "title_md": "Difficulty aware programming knowledge tracing via large language models.md",
+    "pdf_source": "Difficulty aware programming knowledge tracing via large language models.pdf",
+    "char_count": 99179,
+    "line_count": 1193
+  },
+  "paper_08.md": {
+    "title_md": "GuideAI A Real-time Personalized Learning Solution with Adaptive Interventions.md",
+    "pdf_source": "GuideAI A Real-time Personalized Learning Solution with Adaptive Interventions.pdf",
+    "char_count": 90301,
+    "line_count": 1013
+  },
+  "paper_09.md": {
+    "title_md": "Guiding, Not Solving Agentic Scaffolding for LLM Programming Tutors.md",
+    "pdf_source": "Guiding, Not Solving Agentic Scaffolding for LLM Programming Tutors.pdf",
+    "char_count": 30692,
+    "line_count": 457
+  },
+  "paper_10.md": {
+    "title_md": "Infusing Expert Knowledge Into a Deep Neural Network Using Attention Mechanism for Personalized Learning Environments.md",
+    "pdf_source": "Infusing Expert Knowledge Into a Deep Neural Network Using Attention Mechanism for Personalized Learning Environments.pdf",
+    "char_count": 114718,
+    "line_count": 1117
+  },
+  "paper_11.md": {
+    "title_md": "Knowledge tracing for complex problem solving Granular rank-based tensor factorization.md",
+    "pdf_source": "Knowledge tracing for complex problem solving Granular rank-based tensor factorization.pdf",
+    "char_count": 62510,
+    "line_count": 945
+  },
+  "paper_12.md": {
+    "title_md": "Knowledge tracing in mathematical problem-solving processes a spatio-temporal graph neural network approach.md",
+    "pdf_source": "Knowledge tracing in mathematical problem-solving processes a spatio-temporal graph neural network approach.pdf",
+    "char_count": 74672,
+    "line_count": 1170
+  },
+  "paper_13.md": {
+    "title_md": "Learning Logical Reasoning Using an Intelligent Tutoring System A Hybrid Approach to Student Modeling.md",
+    "pdf_source": "Learning Logical Reasoning Using an Intelligent Tutoring System A Hybrid Approach to Student Modeling.pdf",
+    "char_count": 68539,
+    "line_count": 701
+  },
+  "paper_14.md": {
+    "title_md": "Let GPT be a Math Tutor Teaching Math Word Problem Solvers with Customized Exercise Generation.md",
+    "pdf_source": "Let GPT be a Math Tutor Teaching Math Word Problem Solvers with Customized Exercise Generation.pdf",
+    "char_count": 64056,
+    "line_count": 739
+  },
+  "paper_15.md": {
+    "title_md": "Leveraging LLM and Multiscale Knowledge States to Improve Knowledge Tracing in Programming Tasks.md",
+    "pdf_source": "Leveraging LLM and Multiscale Knowledge States to Improve Knowledge Tracing in Programming Tasks.pdf",
+    "char_count": 76116,
+    "line_count": 1082
+  },
+  "paper_16.md": {
+    "title_md": "Modeling Student Performance Using Feature Crosses Information for Knowledge Tracing.md",
+    "pdf_source": "Modeling Student Performance Using Feature Crosses Information for Knowledge Tracing.pdf",
+    "char_count": 93951,
+    "line_count": 1354
+  },
+  "paper_17.md": {
+    "title_md": "Optimizing Mastery Learning by Fast-Forwarding Over-Practice Steps.md",
+    "pdf_source": "Optimizing Mastery Learning by Fast-Forwarding Over-Practice Steps.pdf",
+    "char_count": 51934,
+    "line_count": 687
+  },
+  "paper_18.md": {
+    "title_md": "Remembering is Not Applying Interpretable Knowledge Tracing for Problem-solving Processes.md",
+    "pdf_source": "Remembering is Not Applying Interpretable Knowledge Tracing for Problem-solving Processes.pdf",
+    "char_count": 63327,
+    "line_count": 730
+  },
+  "paper_19.md": {
+    "title_md": "SageJavon A scalable AI tutor for personalized programming learning.md",
+    "pdf_source": "SageJavon A scalable AI tutor for personalized programming learning.pdf",
+    "char_count": 162839,
+    "line_count": 1762
+  },
+  "paper_20.md": {
+    "title_md": "Tracing Mathematical Proficiency Through Problem-Solving Processes.md",
+    "pdf_source": "Tracing Mathematical Proficiency Through Problem-Solving Processes.pdf",
+    "char_count": 119348,
+    "line_count": 1470
+  },
+  "paper_21.md": {
+    "title_md": "Unlocking Math Potential EDSense - A Personalized Intervention Tool for Children with Dyscalculia.md",
+    "pdf_source": "Unlocking Math Potential EDSense - A Personalized Intervention Tool for Children with Dyscalculia.pdf",
+    "char_count": 38491,
+    "line_count": 388
+  }
+}

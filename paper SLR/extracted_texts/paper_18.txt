@@ -1,0 +1,1170 @@
+--- PAGE 1 ---
+Remembering is Not Applying: Interpretable Knowledge Tracing
+for Problem-solving Processes
+Tao Huang
+Central China Normal University
+Wuhan, Hubei, China
+Ningxia Normal University
+Guyuan, Ningxia, China
+tmht@mail.ccnu.edu.cn
+Xinjia Ou
+Central China Normal University
+Wuhan, Hubei, China
+ouxinjia@mails.ccnu.edu.cn
+Huali Yang∗
+Wuhan Textile University
+Wuhan, Hubei, China
+yanghuali@mail.ccnu.edu.cn
+Shengze Hu
+Central China Normal University
+Wuhan, Hubei, China
+hsz666@mails.ccnu.edu.cn
+Jing Geng
+Jianghan University
+Wuhan, Hubei, China
+gengjing@mails.ccnu.edu.cn
+Junjie Hu
+Central China Normal University
+Wuhan, Hubei, China
+jjboy23366@mails.ccnu.edu.cn
+Zhuoran Xu
+Central China Normal University
+Wuhan, Hubei, China
+xuzhuoran@mails.ccnu.edu.cn
+Abstract
+Knowledge Tracing (KT) is a critical service in distance education,
+predicting students’ future performance based on their responses
+to learning resources. The reasonable assessment of the knowledge
+state, along with accurate response prediction, is crucial for KT.
+However, existing KT methods prioritize fitting results and over-
+look attention to the problem-solving process. They equate the
+knowledge students memorize before problem-solving with the
+knowledge that can be acquired or applied during problem-solving,
+leading to dramatic fluctuations in knowledge states between mas-
+tery and non-mastery, with low interpretability. This paper explores
+knowledge transformation in problem-solving and proposes an in-
+terpretable model, Problem-solving Knowledge Tracing (PSKT).
+Specifically, we first present a knowledge-centered problem repre-
+sentation that enhances its expression by adjusting problem variabil-
+ity. Then, we meticulously designed a Sequential Neural Network
+(SNN) with three stages: (1) Before problem-solving, we model stu-
+dents’ personalized problem space and simulate their acquisition of
+problem-related knowledge through a gating mechanism. (2) Dur-
+ing problem-solving, we evaluate knowledge application and calcu-
+late response with a four-parameter IRT. (3) After problem-solving,
+we quantify student knowledge internalization and forgetting using
+an incremental indicator. The SNN, inspired by problem-solving
+and constructivist learning theories, is an interpretable model that
+∗Corresponding Author.
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for components of this work owned by others than the
+author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or
+republish, to post on servers or to redistribute to lists, requires prior specific permission
+and/or a fee. Request permissions from permissions@acm.org.
+MM’24, October 28 - November 1, 2024, Melbourne, Australia
+© 2024 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+ACM ISBN 979-8-4007-0686-8/24/10
+https://doi.org/10.1145/3664647.3681049
+attributes learner performance to subjective problems (difficulty,
+discrimination), objective knowledge (knowledge acquisition and
+application), and behavior (guessing and slipping). Experimental
+results show PSKT’s advantages in prediction accuracy, reasonable
+knowledge state assessment, and learning process explanation. The
+code is available at https://github.com/Oia-10/PSKT.
+CCS Concepts
+•Applied computing → Education; Distance learning.
+Keywords
+Distance Education, Knowledge Tracing, Problem Solving
+ACM Reference Format:
+Tao Huang, Xinjia Ou, Huali Yang, Shengze Hu, Jing Geng, Junjie Hu,
+and Zhuoran Xu. 2024. Remembering is Not Applying: Interpretable Knowl-
+edge Tracing for Problem-solving Processes. In Proceedings of the 32nd ACM
+International Conference on Multimedia (MM ’24), October 28-November
+1, 2024, Melbourne, VIC, Australia. ACM, New York, NY, USA, 9 pages.
+https://doi.org/10.1145/3664647.3681049
+1 Introduction
+Digital multimedia technology enables the creation and delivery
+of high-quality educational content in various digital formats, pro-
+moting distance education’s popularization. Consequently, online
+teaching modes represented by MOOCs, micro-courses, and blended
+learning have emerged [12, 13]. The phenomenon of knowledge re-
+versal occurs when instructional procedures effective for beginners
+are ineffective for experts [17]. Therefore, educators must be able
+to continuously assess and monitor learners’ knowledge mastery
+during the learning process to dynamically determine appropriate
+teaching resources, especially in online learning scenarios.
+Knowledge tracing (KT) is an influential research area in distance
+education, which can automatically track students’ knowledge lev-
+els at various stages and has been widely used in adaptive learning
+3151
+
+--- PAGE 2 ---
+MM’24, October 28 - November 1, 2024, Melbourne, Australia Tao Huang et al.
+P1 P2 P3 P4
+What is the size of angle  
+o105 o130
+o80 op
+？p
+o105 o130
+o80 op
+known condition
+target
+difficulty
+discrimination
+Understanding 
+the problem
+Knowledge retrieval 
+and organization
+?1
+?2
+known 
+condition
+target
+Finding a solution
+Write down the 
+answer
+ Feedback
+Before Problem Solving During Problem Solving After Problem Solving
+Improvement
+P4
+Remembered Knowledge Acquired Knowledge Applied Knowledge Updated Knowledge
+?1
+?2
+?5?6
+?3
+?4
+step1: The sum of the interior 
+angles of a quadrilateral is ?
+step2:    360-105-80-130=?
+step3:        is?p
+?1
+?2
+Knowledge Transformation
+Problem Solving Process
+?1
+?2
+?3?4
+?5
+Internalized 
+ Forgotten
+Figure 1: Profiling the student’s problem-solving process involves comprehending the problem based on memorized knowledge,
+acquiring relevant knowledge, applying it to find a solution, and write down the answer. Feedback then helps internalize the
+knowledge. Additionally, memorized knowledge may be forgotten over time.
+systems [2, 19]. The goal of KT involves two stages. Firstly, as-
+sessing the development of students’ knowledge states according
+to records, and secondly, predicting their performance on specific
+problems using the assessed knowledge states. Therefore, KT offers
+two key applications for intelligent educational services: dynamic
+adjustment of teaching strategies based on assessment states and
+personalized resource recommendation based on prediction results.
+Early KT models, such as Bayesian Knowledge Tracing (BKT)
+[6, 43] based on Hidden Markov Models, and Performance Factor
+Analysis [29] based on logistic functions, used educational param-
+eters to estimate students’ mastery probabilities. These models
+were characterized by high interpretability but low precision in
+prediction. As smart education progresses, deep learning-based ap-
+proaches (DLKT) have become mainstream, significantly improving
+the performance of KT tasks [11, 25, 30, 34, 44]. However, due to the
+black-box nature of deep learning, these models have lower trans-
+parency and interpretability. Similar to how good teachers need
+to understand students, a good KT model should provide higher-
+value educational services, such as attribution analysis, which helps
+understand the ’why’ - not just the ’what’.
+Fortunately, many DLKT methods are addressing this issue by
+enhancing the interpretability of their models. Methods like Deep-
+IRT [41] and Deep-IRTw [ 37] combine KT with Item Response
+Theory (IRT). SAKT [27] and AKT [11] use attention weights to
+explain relationships between historical interactions. IKT [22] sets
+knowledge mastery, learning transfer ability, and problem difficulty
+as three educationally meaningful parameters. RCKT[
+7] and CMKT
+[46] enhance model interpretability through causal inference.
+However, the aforementioned methods primarily focus on predic-
+tion and overlook the learning process, leading to an unreasonable
+assessment of knowledge mastery patterns. LPKT [32] recognized
+the limitations of previous models, which assumed that learners’
+knowledge states would decline once they answered incorrectly.
+LPKT applied knowledge gain to measure the value of error inter-
+actions. From a cognitive perspective, learners’ knowledge mastery
+curve is relatively stable and does not fluctuate drastically in a
+short period. Previous work [33, 42] has noted this irrationality and
+mitigated the fluctuations by designing a punishment mechanism,
+albeit at the cost of sacrificing the model’s performance.
+To address the irrationality of knowledge state assessment, en-
+hance model interpretability, and improve performance, we decon-
+struct students’ learning processes from the perspective of human
+problem-solving. Engaging in exercises is a typical problem-solving
+process. As illustrated in Figure 1, students enhance their under-
+standing of problems through deep thinking, continuously explore
+solutions, and ultimately achieve consolidation of knowledge. The
+entire problem-solving process involves the acquisition, applica-
+tion, internalization, and forgetting of memorized knowledge in the
+brain. However, existing KT methods overlook learners’ problem-
+solving processes, equating memorized knowledge with acquired
+or applied knowledge, leading to drastic fluctuations in knowledge
+states. According to problem-solving theory [3, 8, 9, 26], knowledge
+acquisition involves learners organizing implicit and explicit knowl-
+edge relevant to problems, while knowledge application involves
+applying this knowledge to seek a solution. Remembering does not
+equal applying. Familiarity with discrete knowledge concepts (KCs)
+does not imply that students can effectively organize them or con-
+vert abstract knowledge into specific applications when answering
+problems. The common saying that knowing the path and walking
+the path are two different thingsreflects this phenomenon. Therefore,
+our work delves into various stages of problem-solving, reproduc-
+ing the learning process by analyzing how students understand
+problems, acquire, apply, internalize, and forget knowledge.
+In this paper, considering the effects of knowledge transforma-
+tion mentioned above, we propose an interpretable knowledge
+tracing approach for problem-solving processes (PSKT). In PSKT,
+we first enhance the representation of knowledge-centered prob-
+lems by learning the rich attributes of the problem. Then, we
+present a Sequential Neural Network (SNN) to simulate knowledge
+transformation in the problem-solving process. Before problem-
+solving, PSKT models students’ personalized problem space and
+3152
+
+--- PAGE 3 ---
+Remembering is Not Applying: Interpretable Knowledge Tracing for Problem-solving Processes MM’24, October 28 - November 1, 2024, Melbourne, Australia
+knowledge acquisition degree. During the problem-solving pro-
+cess, PSKT captures learners’ goal-oriented knowledge application
+and attributes learners’ response through educational parameters,
+namely problem factors (difficulty, discrimination), learner knowl-
+edge factors (knowledge acquisition and application), and learner
+behavior factors (guessing, slipping). After problem-solving, PSKT
+designs an update indicator to measure the degree of learners’
+knowledge internalization and models the forgetting effect over
+time. Finally, we conducted extensive experiments on five real-
+world datasets, demonstrating the effectiveness of PSKT. Addition-
+ally, PSKT showed outstanding performance in modeling reasonable
+knowledge states, explaining prediction, and learning reliable prob-
+lem difficulty. The main contributions of our paper are summarized
+as follows:
+• We quantify the learner’s knowledge transformation by de-
+constructing the process of solving a particular problem,
+ensuring that knowledge state changing is reasonableness.
+• We propose a novel Sequential Neural Network (SNN). The
+design of the SNN follows the problem-solving theory and
+the active construction principle of constructivist learning
+theory, providing good interpretability.
+• Extensive experiments demonstrate the effectiveness of PSKT.
+2 Related Work
+2.1 Item Response Theory
+Item Response Theory (IRT) is a classic measurement theory rooted
+in education and psychology. It calculates the probability of a cor-
+rect response based on the student’s latent traits and the problem’s
+characteristics. Although the traditional IRT model is highly inter-
+pretable, it treats students’ latent traits as static parameters, making
+it suitable only for single assessments. Recognizing IRT’s limita-
+tions, many researchers have incorporated it into KT for process
+assessment. [18] integrate IRT and BKT models to model students’
+learning abilities. Deep-IRT[41] fits student ability through DKVMN
+[44] and uses IRT to compute the probability of a correct response.
+AKT [11] uses IRT to enhance the personalized embedding of ques-
+tions and responses, while PKT [ 33] applies IRT to fit students’
+knowledge mastery states. PSKT, inspired by IRT, attributes an-
+swering performance to objective problem factors (difficulty, dis-
+crimination) and subjective learner factors (knowledge application,
+guessing, and slipping). These rich educational parameters make
+our model interpretable while maintaining accuracy.
+2.2 Knowledge Tracing
+Knowledge tracing tracks students’ dynamic knowledge states by
+modeling their historical learning sequences. It is suitable for mul-
+tiple assessment scenarios and performs process measurements on
+students. Early KT methods were based on hidden Markov models,
+which evaluated student performance by modeling four parame-
+ters: initial mastery, knowledge mastery transformation, guessing
+and slipping [6, 28, 43]. Neural networks have greatly improved
+the performance of KT and have become the current mainstream
+method. DKT [30] introduced deep learning into KT for the first
+time and applied RNN/LSTM to model students’ knowledge changes.
+Subsequent work [20, 24, 42] improved upon this basis. [1, 41, 44]
+use memory networks to store potential KCs and update students’
+knowledge mastery. [11, 16, 27] use attention mechanism to model
+the relationship between interaction histories, and [25, 35, 39] apply
+graph neural networks to model the graph structure between KCs.
+Recent research has emphasized the importance of modeling the
+learning process. LPKT [32] and FKT [15] finely model learning
+and forgetting by incorporating response time and interval time.
+LBKT [
+38] highlighted the impact of answering speed, prompts,
+and other behaviors. However, these models suffer from poor inter-
+pretability and controllability. In contrast, our primary focus is on
+providing reasonable predictive explanations from an educational
+perspective. We disaggregate students’ problem-solving processes
+to make multifaceted attributions of answering responses, rather
+than focusing on additional features of the learning process.
+3 Problem Definition
+Suppose that in an online learning platform, there is a set of students
+𝑆 =
+
+𝑠1, 𝑠2, ..., 𝑠|𝑆 |
+	
+, a set of problems 𝑃 =
+
+𝑝1, 𝑝2, ..., 𝑝 |𝑃 |
+	
+, and a
+set of knowledge concepts 𝐾 =
+
+𝑘1, 𝑘2, ..., 𝑘|𝐾 |
+	
+. We denote the ex-
+ercise records of a student as 𝑋𝑁 = { 𝑋1, 𝑋2, ..., 𝑋𝑁 } , where 𝑁 rep-
+resents the total number of exercises. 𝑋𝑛 = (𝑡𝑠𝑛, 𝑝𝑛, 𝑘𝑛, 𝑟𝑛) , 𝑛 ∈ 𝑁
+is the most basic practice unit, denoting that the student’s response
+to problem 𝑝𝑛 at timestamp 𝑡𝑠𝑛 is 𝑟𝑛. Where 𝑟𝑛 ∈ { 0, 1} , 0 denotes
+an incorrect answer and 1 denotes a correct answer.
+Problem Definition. Given a student’s historical learning se-
+quence 𝑋𝑛, the task of KT is to evaluate the student’s knowledge
+states based on 𝑋𝑛 and predict the probability of correctly answer-
+ing the next problem, that is, 𝑝 (𝑟𝑛+1 = 1|𝑝𝑛+1, 𝑋𝑛).
+4 The PSKT Model
+Students increase their knowledge by practicing problems, so the
+core of PSKT is quantifying learners’ knowledge growth by de-
+constructing their problem-solving process. As shown in Figure 2,
+to model the learners’ problem-solving process and analyze their
+knowledge transformation, we designed a sequence neural network
+(SNN). The PSKT model comprises four main modules: problem
+representation, knowledge acquisition, application, and updating.
+First, we present a knowledge-centered problem representation
+that enhances its expression by adjusting problem variability. Then,
+we model learners’ personalized problem perception and knowl-
+edge acquisition degree in the knowledge acquisition module. Next,
+PSKT measures the knowledge application level based on knowl-
+edge acquisition and calculates problem response by IRT. Finally,
+the knowledge update module quantifies the degree of knowledge
+internalization and forgetting. The design of the SNN is inspired
+by problem-solving theory [9] and constructivist learning theory
+[10], ensuring good interpretability.
+4.1 Problem Representation
+Understanding the nature, scope, and relevant factors of a problem
+is a prerequisite for solving it. Early KT methods used KCs to replace
+problems, or directly concatenated problems and KCs. However,
+these methods simply fused information without considering the
+primary and secondary relationships of the problems. Since the
+goal of exercises is to learn knowledge, the KCs examined by the
+problems are of utmost importance. Moreover, problems that test
+the same KCs can have different effects on learning and performance
+3153
+
+--- PAGE 4 ---
+MM’24, October 28 - November 1, 2024, Melbourne, Australia Tao Huang et al.
+nK
+nP
+1n−H
+1n−H
+tanh
+
+nOP
+nOP
+nEP
+nEP
+nP
+nP
+nG
+nG
+nS
+nS
+ˆnr
+nd
+nd
+n
+n
+nSP
+nSP
+nKA
+nKP
+nKP
+1n−H
+1n−H
+Sequential Neural Network (SNN)
+Knowledge Acquisition Knowledge Application Knowledge UpdatingProblem Representation
+Perception
+ Internalizing
+1nnTS TS+ −
+nP
+nP
+Before During After
+MLPMLP MLPMLP
+nd
+n
+tanh
+MLPMLP MLPMLP
+(tanh+1)/2
+nKP
+nR
+nR
+nKA
+
+Acquisition Application Answering  Forgetting
+nH
+nH
+nP
+nR
+1nnTS TS+ −
+nK
+Input
+SPn
+EPn
+OPn
+nOP
+nEP
+nSP
+nOP
+nEP
+nSP
+Problem Space
+SPn
+EPn
+OPn
+nOP
+nEP
+nSP
+Problem Space
+SPn
+EPn
+OPn
+SPn
+EPn
+OPn
+SPn
+EPn
+OPn
+nP
+( )n n n n d  +  +  KP
+( ) ( ) ( )
+1111
+11
+n n n n n n
+nn D d D d
+GS
+ee
+− − − −
+      − + −   
+   ++   
+KP KP
+Figure 2: The architecture of the PSKT model.
+due to differences in difficulty and discrimination. In the PSKT, we
+consider both the primary-secondary relationships and problem
+attributes to enhance problem representation:
+𝑝𝑎𝑛 = 𝜎
+
+W𝑇
+𝑝𝑎 P𝑛 + b𝑝𝑎
+
+, 𝑝𝑎𝑛 ∈ {𝑑𝑛, 𝛼𝑛 } , (1)
+fP𝑛 = K𝑛 + (𝜙 × 𝑑𝑛 + 𝜑 × 𝛼𝑛) × P𝑛, (2)
+where W𝑝𝑎 ∈ R𝑑ℎ ×1, 𝑑ℎ is embedding dimension. 𝑑𝑛 is difficulty,
+𝛼𝑛 is discrimination, and both are scalars. The representation is
+inspired by𝑚𝑒𝑎𝑛 ±𝜇 ·𝑠𝑡𝑑 . K𝑛 is the KC embedding,P𝑛 is the original
+problem embedding. (𝜙 × 𝑑𝑛 + 𝜑 × 𝛼𝑛) is coefficient of variation,
+𝜙, 𝜑 are trainable weights.
+4.2 Knowledge Acquisition
+According to problem-solving theory, knowledge acquisition re-
+quires learners to first clarify the problem, ensure an understanding
+of critical aspects of the problem (problem perception), and then
+acquire knowledge about the problem (knowledge acquisition).
+(1) Problem Perception. The learner’s solution to a problem
+begins with the construction of an internal representation of the
+external problem statement, i.e., the "problem space" (including
+the initial state, the goal state, and the adapted operators) [14]. To
+simulate the learner’s personalized perception of the problem, we
+integrate the learner’s prior knowledge H𝑛−1 and problem rep-
+resentation fP𝑛 to represent the initial state and goal state in the
+problem space. We use the difference between the goal stateEP𝑛
+and the initial state SP𝑛 to represent the applicable operations OP𝑛:
+PP𝑛 = W𝑇
+𝑃𝑃
+
+fP𝑛 ⊕ H𝑛−1
+
++ b𝑃𝑃 , PP𝑛 ∈ { SP𝑛, EP𝑛 } , (3)
+OP𝑛 = EP𝑛 − SP𝑛, (4)
+where ⊕ is concatenate, W𝑃𝑃 ∈ R(𝑑ℎ+| 𝐾 | ) × |𝐾 | and |𝐾 | is the total
+number of KCs.
+(2) Knowledge Acquisition. Knowledge acquisition involves
+the systematic generation and integration of information. This in-
+cludes acquiring knowledge from the external environment as well
+as constructing new knowledge through internal thought processes.
+In the KT scenario, external knowledge comes from the initial state
+of the problem SP𝑛 (known conditions), and internal knowledge is
+derived from the learner’s previous knowledge stateH𝑛−1. We use
+the tanh to generate candidate values. The specific formula is:
+KA𝑛 = tanh
+
+W𝑇
+𝐾𝐴 (SP𝑛 ⊕ H𝑛−1) + b𝐾𝐴
+
+, (5)
+since learners have limited memory capacity, they will selectively
+focus on the most relevant and core aspects of the problem during
+the knowledge acquisition process in order to conduct more effec-
+tive planning [8]. Therefore, we further design a gate to select and
+retain the essential parts through the problem information.
+Γ𝐾𝐴
+𝑛 = 𝜎
+
+W𝑇
+Γ𝐾𝐴 (SP𝑛 ⊕ EP𝑛 ⊕ OP𝑛) + bΓ𝐾𝐴
+
+, (6)
+gKA𝑛 = Γ𝐾𝐴
+𝑛 × KA𝑛, (7)
+where 𝜎 is sigmoid, W𝐾𝐴 ∈ R2|𝐾 | × |𝐾 |, WΓ𝐾𝐴 ∈ R3|𝐾 | × |𝐾 |.
+4.3 Knowledge Application
+Acquiring knowledge is only the beginning of problem-solving.
+What is more important is how to apply knowledge to actual prob-
+lems or situations. During practice, learners transform acquired
+theoretical knowledge into practical abilities, propose solutions
+(knowledge application), and then implement actions to achieve
+the expected goals (problem answering).
+(1) Knowledge Application. Knowledge application involves
+transforming abstract knowledge into concrete action plans and
+adapting and refining these in practice. The solution is contained in
+the adapted operators of problem space, and we use tanh to generate
+possible solutions. Learners need to flexibly apply knowledge to
+make a series of dynamic decisions and continuously monitor the
+consequences of these decisions to achieve the goal as much as
+possible. Therefore, we designed a gate Γ𝐾𝑃 led by problem goals
+and knowledge acquisition to determine the learner’s final solution.
+Γ𝐾𝑃
+𝑛 = 𝜎
+
+W𝑇
+Γ𝐾𝑃
+
+EP𝑛 ⊕ gKA𝑛
+
++ bΓ𝐾𝑃
+
+, (8)
+gKP𝑛 = Γ𝐾𝑃
+𝑛 × tanh (OP𝑛) . (9)
+(2) Problem Answering. Applying knowledge is to achieve
+goals. IRT shows that whether students can answer problems cor-
+rectly depends not only on their knowledge application but also on
+3154
+
+--- PAGE 5 ---
+Remembering is Not Applying: Interpretable Knowledge Tracing for Problem-solving Processes MM’24, October 28 - November 1, 2024, Melbourne, Australia
+the problem itself. Inspired by the Four-parameter IRT and BKT, we
+simulate students’ responses by fully considering problem factors
+(difficulty, discrimination), learner knowledge factors (knowledge
+application), and learner behavioral factors (guessing and slipping).
+The core functions are as follows:
+dKP𝑛 = 𝜎
+
+W𝑇
+2 ·ReLU
+
+W𝑇
+1
+
+gKP𝑛 ⊕ fP𝑛
+
++ b1
+
++ b2
+
+(10)
+ˆ𝑟𝑛 = 𝐺𝑛
+
+ 
+
+1 − 11 + 𝑒 −𝐷𝛼𝑛
+
+dKP𝑛 −𝑑𝑛
+
+
+ 
+
++(1 − 𝑆𝑛)
+
+ 
+
+1
+1 + 𝑒 −𝐷𝛼𝑛
+
+dKP𝑛 −𝑑𝑛
+
+
+ 
+
+,
+(11)
+where W1 ∈ R( |𝐾 |+𝑑ℎ ) ×𝑑ℎ , W2 ∈ R𝑑ℎ × |𝐾 |. The first term in Equa-
+tion (11) represents the probability that the learner has not mastered
+the knowledge but guessed correctly, and the second term indicates
+that the learner can answer correctly without slipping. 𝐷 is a con-
+stant with a value of 4 × 1.7 [4]. 𝐺𝑛 is guessing, and 𝑆𝑛 is slipping:
+𝐺𝑆𝑛 = 𝜆 × 𝜎
+
+W𝑇
+𝐺𝑆
+
+dKP𝑛 ⊕ fP𝑛
+
++ b𝐺𝑆
+
+, 𝐺𝑆𝑛 ∈ {𝐺𝑛, 𝑆𝑛 } , (12)
+where 𝜆 is hyperparameter, indicating the threshold of guessing
+and slipping, W𝐺𝑆 ∈ R( |𝐾 |+𝑑ℎ ) ×1.
+4.4 Knowledge Updating
+After practice, the learner’s knowledge state changes. Constructivist
+learning theory [10] suggests that increasing knowledge mastery
+reflects knowledge internalization while forgetting leads to a re-
+duction in knowledge. Thus, learner state updating includes both
+knowledge internalization and forgetting.
+(1) Knowledge internalizing. Knowledge internalizing is how
+learners transform external knowledge, experience or information
+into thinking structures and cognitive patterns. In the problem-
+solving process, the learner’s new knowledge originates from the
+problems, so we fuse all the information of the problems to obtain
+the candidate value of knowledge increment. Constructivist learn-
+ing theory shows that learning is an active construction process, so
+we tend to think that the entire practice process positively impacts
+learners, and use (tanh () + 1) /2 as a non-negative constraint op-
+erator to ensure that the increment is non-negative.
+KI𝑛 =
+
+tanh
+
+W𝑇
+𝐾𝐼 (SP𝑛 ⊕ EP𝑛 ⊕ OP𝑛) + b𝐾𝐼
+
++ 1
+
+/2. (13)
+Through internalization, learners do not simply accept information
+but integrate it into their cognitive framework. Thus, even if differ-
+ent learners answer the same problem, the level of knowledge they
+internalize will be different due to differences in the knowledge
+they acquire, the knowledge they apply, and the results of their
+answers. To this end, we propose a growth indicator to determine
+the learner’s personalized knowledge increment.
+Γ𝐾𝐼
+𝑛 = 𝜎
+
+W𝑇
+Γ𝐾𝐼
+
+gKA𝑛 ⊕ gKP𝑛 ⊕ R𝑛
+
++ bΓ𝐾𝐼
+
+, (14)
+fH𝑛 = H𝑛−1 + Γ𝐾𝐼
+𝑛 × KI𝑛, (15)
+where R𝑛 is response embedding, WΓ𝐾𝐼 ∈ R(2|𝐾 |+𝑑ℎ ) × |𝐾 |.
+(2) Knowledge Forgetting. Limited by the human memory
+system, although learners may delay the occurrence of forgetting
+through review and reinforcement learning, forgetting is still a
+Table 1: Details of the all datasets.
+datasets Students Problems KCs Responses
+ASSIST12 29,018 53,091 265 2,711,813
+ASSIST17 1,709 3,162 102 942,816
+EdNet-KT1 100,000 12,267 189 12,092,643
+Junyi 247,606 722 41 25,926,003
+Eedi 118,971 27,613 1,989 15,867,850
+continuous process [21]. Therefore, current knowledge may be for-
+gotten over time intervals. In order to model the complex forgetting
+effect, we design a forgetting gate as follows:
+Γ𝐾 𝐹
+𝑛 = 𝜎
+
+W𝑇
+Γ𝐾 𝐹
+
+IT𝑛 ⊕ P𝑛+1 ⊕ fH𝑛
+
++ bΓ𝐾 𝐹
+
+, (16)
+H𝑛 = Γ𝐾 𝐹
+𝑛 × fH𝑛, (17)
+where time interval is𝑖𝑡𝑛 = 𝑡𝑠𝑛+1−𝑡𝑠𝑛, in minutes.IT𝑛 is embedding
+of 𝑖𝑡𝑛, and we set all intervals greater than 1 month to 1 month.
+4.5 Objective Function
+To train all parameters Θ in PSKT, we use cross-entropy log loss
+between the predicted response ˆ𝑟𝑛 and the actual response 𝑟𝑛 as
+the objective function, minimized with the Adam optimizer:
+L𝑟 (Θ) =
+𝑁∑︁
+𝑛=1
+− [𝑟𝑛 log ˆ𝑟𝑛 + ( 1 − 𝑟𝑛) log(1 − ˆ𝑟𝑛)], (18)
+5 Experiments
+We conduct extensive experiments to answer these questions:
+• RQ1. What is the predictive performance of PSKT?
+• RQ2. Can PSKT reasonably explain the learning process?
+• RQ3. How effective is the problem representation of PSKT?
+• RQ4. What is the impact of each element in PSKT?
+5.1 Experimental Setting
+5.1.1 Dataset. We selected five large public datasets to evaluate the
+effectiveness of PSKT: ASSIST121, ASSIST172, EdNet-KT13, Junyi4,
+Eedi5. The statistical information of datasets is shown in Table 1.
+We filtered learning records for all datasets with missing relevant
+KCs and removed problems with fewer than 10 occurrences and
+learners with fewer than 3 response records. Due to the large size
+of the Ednet-KT1, we randomly selected 100,000 learners [33, 40].
+For datasets where a problem assesses multiple KCs, we use the
+average of all KC embeddings to represent the final KC embedding.
+5.1.2 Training Details. All input sequences were fixed at a length of
+100. Longer sequences were split into several unique subsequences.
+We used 5-fold cross-validation: 80% of the sequences were split
+into training and validation sets (8:2), and 20% served as the test set.
+Parameters 𝑑ℎ, learning rate, and 𝜆 were set to 256, 0.001, and 0.5,
+1https://sites.google.com/site/assistmentsdata/2012-13-school-data-withaffect
+2https://sites.google.com/view/assistmentsdatamining/dataset
+3https://github.com/riiid/ednet
+4https://pslcdatashop.web.cmu.edu/DatasetInfo?datasetId=1198
+5https://eedi.com/projects/neurips-education-challenge
+3155
+
+--- PAGE 6 ---
+MM’24, October 28 - November 1, 2024, Melbourne, Australia Tao Huang et al.
+Table 2: Comparative results of student response prediction. The best results are in bold, and the next best are underlined. *
+indicates p-value < 0.05 in the t-test compared to the second-best result.
+Datasets Metrics DKT DKVMN SAKT Deep-IRT DKT-F AKT SAINT LPKT ATDKT FKT PKT PSKT
+ASSIST
+-12
+AUC 0.7191 0.7261 0.7741 0.7660 0.7504 0.7938 0.7856 0.7974 0.7631 0.7931 0.7938 0.8252∗
+ACC 0.7313 0.7301 0.7553 0.7522 0.7451 0.7664 0.7640 0.7692 0.7519 0.7667 0.7647 0.7838∗
+RMSE 0.4272 0.4258 0.4090 0.4116 0.4169 0.4006 0.4037 0.3987 0.4120 0.4006 0.4011 0.3858∗
+R2 0.1354 0.1410 0.2077 0.1992 0.1786 0.2415 0.2305 0.2468 0.1976 0.2400 0.2398 0.2966∗
+ASSIST
+-17
+AUC 0.7295 0.7511 0.7355 0.7500 0.7518 0.7781 0.7649 0.8058 0.7488 0.7888 0.7947 0.8182∗
+ACC 0.6940 0.7043 0.7053 0.7139 0.7054 0.7210 0.7113 0.7414 0.7026 0.7326 0.7327 0.7503∗
+RMSE 0.4454 0.4379 0.4419 0.4364 0.4376 0.4308 0.4323 0.4136 0.4389 0.4224 0.4194 0.4075∗
+R2 0.1556 0.1839 0.1690 0.1896 0.1852 0.2101 0.2048 0.2719 0.1803 0.2408 0.2515 0.2933∗
+EdNet
+-KT1
+AUC 0.7128 0.7401 0.7590 0.7600 0.7316 0.7623 0.7509 0.7645 0.7413 0.7639 0.7588 0.7749∗
+ACC 0.6961 0.7138 0.7213 0.7229 0.7054 0.7247 0.7166 0.7262 0.7099 0.7247 0.7216 0.7318∗
+RMSE 0.4438 0.4346 0.4285 0.4280 0.4379 0.4271 0.4316 0.4251 0.4348 0.4267 0.4286 0.4220∗
+R2 0.129 0.1646 0.1882 0.1900 0.1521 0.1933 0.1763 0.2009 0.1639 0.1946 0.1876 0.2125∗
+Junyi
+AUC 0.7510 0.7964 0.7976 0.7971 0.7646 0.7995 0.7958 0.8004 0.7839 0.8035 0.7970 0.8057∗
+ACC 0.8457 0.8523 0.8531 0.8525 0.8477 0.8537 0.8527 0.8530 0.8503 0.8550 0.8539 0.8558∗
+RMSE 0.3445 0.3336 0.3329 0.3333 0.3414 0.3322 0.3337 0.3323 0.3370 0.3309 0.3326 0.3296∗
+R2 0.1584 0.2108 0.2140 0.2121 0.1735 0.2173 0.2103 0.2168 0.1949 0.2233 0.2155 0.2298∗
+Eedi
+AUC 0.7714 0.7691 0.7760 0.8068 0.7813 0.8082 0.8045 0.8053 0.7928 0.8065 0.8087 0.8201∗
+ACC 0.7240 0.7224 0.7244 0.7470 0.7313 0.7480 0.7450 0.7461 0.7375 0.7476 0.7487 0.7571∗
+RMSE 0.4273 0.4278 0.4253 0.4113 0.4228 0.4106 0.4126 0.4120 0.4179 0.4114 0.4104 0.4045∗
+R2 0.2042 0.2023 0.2116 0.2628 0.2210 0.2651 0.2581 0.2602 0.2389 0.2625 0.2661 0.2867∗
+respectively. Batch sizes were 64 for ASSIST12 and ASSIST17, and
+512 for larger datasets. We used an early stopping mechanism with
+5 epochs of patience. For fairness, the baselines’ hyper-parameters
+are tuned to achieve optimal performance. All experiments were
+performed on a Linux server with an NVIDIA GeForce RTX3090.
+5.1.3 Baselines. We compared PSKT with 11 baselines.
+• DKT uses the hidden state of RNN to represent the learner’s
+knowledge state. [30]
+• DKVMN defines a static KC matrix and a dynamic state
+matrix, using read and write operations to update state. [44]
+• SAKT utilizes the self-attention mechanism to capture the
+relationships between historical records. [27]
+• Deep-IRT utilizes DKVMN to estimate the learner’s ability
+and uses IRT to compute the correct probability. [41]
+• DKT-Fincorporates temporal information into DKT to model
+learner forgetting behavior. [24]
+• AKT enhances problems’ personalized embedding by IRT
+and captures the learner’s state by attention mechanism. [11]
+• SAINT directly applies transformer technology and sepa-
+rates problems and responses in interactions. [5]
+• LPKT uses response times and intervals to model the learn-
+ing process, calculating learning gains and forgetting. [32]
+• ATDKT improves performance by adding KC prediction and
+learner prior knowledge prediction tasks. [20]
+• PKT uses IRT to compute students’ knowledge states and
+models answering behaviors (guessing and slipping). [33]
+• FKT feeds response and interval time into the transformer
+to enrich the learner’s observable performance. [15]
+5.2 Student Performance Prediction (Q1)
+We measure model performance in terms of area under the curve
+(AUC), accuracy (ACC), root mean square error (RMSE), and Pear-
+son correlation squared (R2). We used the average result of 5-fold
+cross-validation on the test set as the experimental result. Since
+the Eedi does not have response time features, the FKT and LPKT
+results on Eedi are after eliminating response time.
+The experimental results are shown in Table 2, and PSKT consis-
+tently outperforms all baseline methods on all datasets and metrics.
+The excellent performance of PSKT shows that comprehensively
+modeling the learner’s problem-solving process significantly im-
+pacts understanding the entire learning process and predicting
+learning performance. Compared with the most advanced deep
+learning models, the superiority of the PSKT framework also shows
+that the factor that restricts the performance of the current KT
+method is not the expressive ability of the algorithm but the design
+of a scientific framework that conforms to students’ cognitive rules.
+Among the models combined with IRT (AKT, Deep-IRT, PKT, PSKT),
+PSKT performs best, further proving the efficacy of the PSKT al-
+gorithm mechanism. The superiority of it takes into account both
+high accuracy and interpretability.
+5.3 Explain the learning process (Q2)
+To prove that PSKT can capture students’ reasonable knowledge
+states, we conducted experiments on learning process analysis.
+In Figure 3, we randomly select a student from each dataset and
+visualize their learning process when they practiced the same KC
+consecutively. We illustrate the superiority of PSKT in two aspects.
+3156
+
+--- PAGE 7 ---
+Remembering is Not Applying: Interpretable Knowledge Tracing for Problem-solving Processes MM’24, October 28 - November 1, 2024, Melbourne, Australia
+PSKT
+PKT
+Deep-IRT
+DKT
+ASSIST12 ASSIST17 Ednet-KT1 Junyi Eedi
+Student_id:71
+Concept_id:190
+Student_id:21
+Concept_id:70
+Student_id:22
+Concept_id:184
+Student_id:0
+Concept_id:13
+Student_id:13
+Concept_id:154
+Knowledge Application Guessing SlippingKnowledge StateKnowledge State DifficultyDifficulty DistinguishDistinguish Knowledge AcquisitionKnowledge Acquisition
+Response
+11 14 25 33 56 47 29 28
+55 16 39 39 22 9 38 68 54
+37 38 84 38 72 46 70
+7 7 1
+6
+7 1
+6
+2
+6
+1
+2
+2
+6
+1
+2
+2
+6
+1
+2
+2
+6
+7 27 36 36 29 62 15 25
+Figure 3: Compare the interpretability of DKT, Deep-IRT, PKT and PSKT for the learning process.
+(1) Knowledge state rationality. The rationality of the knowl-
+edge state includes both the stability of the knowledge state curve
+and the rationality of the knowledge state value. First, the knowl-
+edge state curve fitted by PSKT is more stable. We quantify fluctua-
+tions based on differences in knowledge states for all KCs between
+each student’s adjacent responses. As shown in Figure 4 (a), PSKT
+is the most stable among the three models. Learners’ knowledge
+mastery is directional and does not fluctuate drastically in a short
+period [42]. In Figure 3, Deep-IRT and DKT knowledge state curves
+often fluctuate sharply. In contrast, PKT alleviates the irrationality
+through a penalty mechanism but does not fully solve the problem
+and affects performance. PSKT, based on human problem-solving
+theory, employs a scientific framework for a more directional curve.
+Secondly, PSKT tracked more reasonable knowledge state values.
+DKT, Deep-IRT, and PKT obtained high knowledge values (>0.5)
+when learners responded correctly and decreased when incorrect.
+In ASSIST12, when the student answered the 4th (indices start from
+0) problem incorrectly, the PKT knowledge value dropped from 0.56
+to 0.30 and then increased significantly for the last three correct
+answers (0.31
+→0.71). PSKT maintains that learners’ knowledge
+states remain stable (around 0.55), attributing correct answers to
+improved application levels. The 4th problem was difficult, so the
+incorrect answer was due to a mismatch between knowledge state
+and difficulty, not a knowledge decline. The correct answers for
+the last three problems are due to improved knowledge application,
+not a significant increase in knowledge state.
+(2) Learning process interpretability. Compared with other
+methods, PSKT provides more educational parameters to explain
+the learning process. DKT attributes student performance entirely
+to knowledge mastery, Deep-IRT adds the effect of problem diffi-
+culty, and PKT considers student guessing and slipping behavior.
+However, these models rely heavily on a sudden drop in knowledge
+mastery to explain responses incorrectly, whereas PSKT provides
+a more reasonable explanation. For example, on the Eedi dataset,
+the student incorrectly answered six consecutive problems that
+examined 154 KC, which DKT and PKT attributed to a decrease in
+students’ knowledge mastery. We think that the practice process
+positively affects learners and that students’ knowledge mastery
+does not decline significantly during continuous answering. Specifi-
+cally, although students answered problems 1 and 2 correctly, PSKT
+considered that learners’ mastery of this knowledge was still only
+about 0.5 because of the low difficulty of these two problems. The
+student answered the last 6 problems incorrectly, though, which
+PSKT attributed to the high difficulty and the low level of knowl-
+edge application. At the same time, students correctly answered
+the first problem (more difficult) but incorrectly answered the last
+two problems, which PSKT attributed to the slipping.
+5.4 Study the Problem Representation(Q3)
+In this section, we conduct some experiments to demonstrate the
+reliability of the problem representation learned in PSKT, including
+the effectiveness of problem difficulty assessment and the inter-
+pretability of the problem representation.
+(1) Validity of problem difficulty assessment. Since there is
+no problem difficulty indicator in all datasets, to evaluate the effec-
+tiveness of the difficulty learned by PSKT, we refer to the Classical
+Test Theory [36] and previous KT work that considers difficulty
+[23, 31, 45], and defines the statistical difficulty of the problem as the
+error rate. We conducted a Pearson correlation test between the two
+difficulties. The experimental objects are the problems involved
+in the test set. The experimental results are shown in subgraph
+(b1) in Figure 4. PSKT learned difficulty is strongly correlated with
+statistical difficulty (>0.7) on all datasets, which demonstrates the
+reliability of its problem difficulty. In addition, the scatter plot on
+ASSIST17 also shows a certain degree of correlation and consistency
+between the two difficulties (Figure 4 (b2)).
+3157
+
+--- PAGE 8 ---
+MM’24, October 28 - November 1, 2024, Melbourne, Australia Tao Huang et al.
+(b1) Pearson Correlation
+Score
+PSKT DifficultyDataset
+(b2) Scatter Plot
+Statistical Difficulty
+ASSIST12 ASSIST17
+PSKTPKTDKT
+Junyi
+PSKTPKTDKT PSKTPKTDKT
+(b) Correlation between two difficulties
+(a) Comparison of the waviness of the knowledge state  
+Figure 4: Visualization of knowledge state fluctuations and
+correlation between two difficulties.
+Figure 5: Weights of problem representations on ASSIST17.
+The label [𝑖, 𝑗, 𝑘 ] indicates [𝐾𝐶, 𝑑𝑖 𝑓 𝑓 𝑖𝑐𝑢𝑙𝑡𝑦, 𝑑𝑖𝑠𝑐𝑟𝑖𝑚𝑖𝑛𝑎𝑡𝑖𝑜𝑛 ].
+(2) Interpretability of problem representation. We visualize
+the correlation weights between problems by computing the cosine
+similarity of the problem representations, as shown in Figure 5. We
+randomly selected eight questions on ASSIST17. These problems
+tested two KCs (9, 74). First, the correlation weights tend to be
+higher between problems that test the same KC, such as problems
+1, 2, and 3. Secondly, when different problems have the same KC,
+the closer the difficulty and discrimination of the problems are, the
+higher the similarity, for example, [9,0.60,0.81] and [9,0.58,0.85].
+5.5 Ablation experiments(Q4)
+We explore the impact of each module in PSKT through ablation
+experiments. As shown in Table 3, we selected 6 variants, each
+removing an element from the PSKT. PR is replacing the problem
+representation with concatenate, EP denotes removing problem
+Table 3: Results of ablation experiments.
+Data
+Metrics PR EP KA KP KI KF PSKT
+ASSIST
+-12
+AUC
+0.8248 0.8158 0.8243 0.8232 0.8244 0.8132 0.8252
+ACC 0.7834 0.7784 0.7823 0.7817 0.7830 0.7764 0.7838
+RMSE 0.3861 0.3905 0.3866 0.3871 0.3864 0.3918 0.3858
+R2 0.2954 0.2793 0.2935 0.2918 0.2942 0.2744 0.2966
+ASSIST
+-17
+AUC
+0.8175 0.8146 0.8157 0.8166 0.8141 0.8078 0.8182
+ACC 0.7496 0.7476 0.7485 0.7490 0.7473 0.7433 0.7503
+RMSE 0.4080 0.4096 0.4088 0.4083 0.4097 0.4127 0.4075
+R2 0.2917 0.2861 0.2889 0.2905 0.2856 0.2753 0.2933
+Ednet
+-KT1
+AUC
+0.7745 0.7729 0.7686 0.7724 0.7667 0.7640 0.7749
+ACC 0.7311 0.7329 0.7277 0.7304 0.7261 0.7247 0.7318
+RMSE 0.4222 0.4223 0.4247 0.4230 0.4256 0.4264 0.4220
+R2 0.2119 0.2151 0.2025 0.2089 0.1991 0.1961 0.2125
+Junyi
+AUC
+0.8052 0.8042 0.8048 0.8049 0.8042 0.8040 0.8057
+ACC 0.8555 0.8550 0.8553 0.8554 0.8552 0.8555 0.8558
+RMSE 0.3298 0.3303 0.3300 0.3299 0.3302 0.3303 0.3296
+R2 0.2286 0.2262 0.2280 0.2281 0.2267 0.2265 0.2298
+Ee
+di
+AUC 0.8194 0.8193 0.8183 0.8180 0.8170 0.8090 0.8201
+ACC 0.7569 0.757 0.7561 0.7555 0.7547 0.7482 0.7571
+RMSE 0.4047 0.4049 0.4054 0.4057 0.4065 0.4103 0.4045
+R2 0.2861 0.2854 0.2839 0.2827 0.2799 0.2663 0.2867
+perception, KA means removing knowledge application, and KP
+denotes removing knowledge acquisition. KI is knowledge internal-
+ization without considering knowledge acquisition and Knowledge
+application, KF represents removing knowledge forgetting.
+First, knowledge forgetting is vital in the learning process, and
+deleting this module causes the most significant performance drop.
+According to the design of PSKT, if forgetting is not considered,
+the learner’s knowledge mastery will continue to increase (or re-
+main unchanged) as the number of exercises increases, making
+it challenging to identify incorrect answers. Secondly, the impact
+of problem perception is also significant. This is because problem
+perception involves modeling the problem’s initial state, the target
+state, and the adapted operator. These three variables are through-
+out the entire problem-solving process. Third, both knowledge
+acquisition and knowledge application contribute to the perfor-
+mance of PSKT, proving that knowledge acquisition and knowledge
+application are both indispensable processes for problem-solving.
+6 Conclusion
+In this paper, we propose a problem-solving process-oriented knowl-
+edge tracing model to explore how students transform theoretical
+knowledge into practical skills. Before problem-solving, we obtain
+students’ personalized perceptions of the problem and simulate
+their acquisition of problem-related knowledge. During problem-
+solving, we model the learner’s knowledge application level and
+use educationally meaningful parameters to predict responses. Af-
+ter problem-solving, we design an update indicator to measure
+their knowledge internalization and the forgetting effect over time.
+Finally, extensive experiments validated that PSKT excels in re-
+sponse prediction and effectively evaluates learners’ knowledge
+mastery patterns, providing insights into students’ success or fail-
+ure.Looking forward, PSKT can be improved by collecting details
+of students’ answers and using large language model technology
+to capture knowledge transformation more finely from their steps.
+3158
+
+--- PAGE 9 ---
+Remembering is Not Applying: Interpretable Knowledge Tracing for Problem-solving Processes MM’24, October 28 - November 1, 2024, Melbourne, Australia
+Acknowledgments
+This research was supported by the National Key R&D Program of
+China (Grant No. 2023YFC3305600), the National Natural Science
+Foundation of China (Grant No. U20A20229, 62307029).
+References
+[1] Ghodai Abdelrahman and Qing Wang. 2019. Knowledge tracing with sequential
+key-value memory networks. In Proceedings of the 42nd international ACM SIGIR
+conference on research and development in information retrieval. 175–184.
+[2] Ghodai Abdelrahman, Qing Wang, and Bernardo Nunes. 2023. Knowledge tracing:
+A survey. Comput. Surveys 55, 11 (2023), 1–37.
+[3] John R Anderson. 1993. Problem solving and learning. American psychologist 48,
+1 (1993), 35.
+[4] Frank B Baker. 2001. The basics of item response theory. ERIC.
+[5] Youngduck Choi, Youngnam Lee, Junghyun Cho, Jineon Baek, Byungsoo Kim,
+Yeongmin Cha, Dongmin Shin, Chan Bae, and Jaewe Heo. 2020. Towards an ap-
+propriate query, key, and value computation for knowledge tracing. InProceedings
+of the seventh ACM conference on learning@ scale. 341–344.
+[6] Albert T Corbett and John R Anderson. 1994. Knowledge tracing: Modeling the
+acquisition of procedural knowledge. User modeling and user-adapted interaction
+4 (1994), 253–278.
+[7] Jiajun Cui, Minghe Yu, Bo Jiang, Aimin Zhou, Jianyong Wang, and Wei Zhang.
+2023. Interpretable Knowledge Tracing via Response Influence-based Counter-
+factual Reasoning. arXiv preprint arXiv:2312.10045 (2023).
+[8] Andreas Fischer, Samuel Greiff, and Joachim Funke. 2011. The process of solving
+complex problems. Journal of Problem Solving 4, 1 (2011), 19–42.
+[9] Andreas Fischer, Samuel Greiff, and Joachim Funke. 2017. The history of complex
+problem solving. (2017).
+[10] Catherine Twomey Fosnot. 2013.Constructivism: Theory, perspectives, and practice.
+Teachers College Press.
+[11] Aritra Ghosh, Neil Heffernan, and Andrew S Lan. 2020. Context-aware atten-
+tive knowledge tracing. In Proceedings of the 26th ACM SIGKDD international
+conference on knowledge discovery & data mining. 2330–2339.
+[12] Lisa Harrell. 2013. A learner centered approach to online education. IAP.
+[13] Derek Hodson. 1998. Teaching and learning science: Towards a personalized
+approach. McGraw-Hill Education (UK).
+[14] Keith J Holyoak and Robert G Morrison. 2005. The Cambridge handbook of
+thinking and reasoning. Cambridge University Press.
+[15] Tao Huang, Shengze Hu, Huali Yang, Jing Geng, Zhifei Li, Zhuoran Xu, and
+Xinjia Ou. 2024. Response speed enhanced fine-grained knowledge tracing: A
+multi-task learning perspective. Expert Systems with Applications 238 (2024),
+122107.
+[16] Tao Huang, Xinjia Ou, Huali Yang, Shengze Hu, Jing Geng, Zhuoran Xu, and
+Zongkai Yang. 2024. Pull together: Option-weighting-enhanced mixture-of-
+experts knowledge tracing. Expert Systems with Applications (2024), 123419.
+[17] Slava Kalyuga. 2007. Expertise reversal effect and its implications for learner-
+tailored instruction. Educational psychology review 19 (2007), 509–539.
+[18] Mohammad M Khajah, Yun Huang, José P González-Brenes, Michael C Mozer,
+and Peter Brusilovsky. 2014. Integrating knowledge tracing and item response
+theory: A tale of two frameworks. In CEUR Workshop proceedings, Vol. 1181.
+University of Pittsburgh, 7–15.
+[19] Qi Liu, Shuanghong Shen, Zhenya Huang, Enhong Chen, and Yonghe Zheng.
+2021. A survey of knowledge tracing. arXiv preprint arXiv:2105.15106 (2021).
+[20] Zitao Liu, Qiongqiong Liu, Jiahao Chen, Shuyan Huang, Boyu Gao, Weiqi Luo,
+and Jian Weng. 2023. Enhancing deep knowledge tracing with auxiliary tasks. In
+Proceedings of the ACM Web Conference 2023. 4178–4187.
+[21] Shaul Markovitch and Paul D Scott. 1988. The role of forgetting in learning. In
+Machine learning proceedings 1988. Elsevier, 459–465.
+[22] Sein Minn, Jill-Jênn Vie, Koh Takeuchi, Hisashi Kashima, and Feida Zhu. 2022.
+Interpretable knowledge tracing: Simple and efficient student modeling with
+causal relations. In Proceedings of the AAAI conference on artificial intelligence,
+Vol. 36. 12810–12818.
+[23] Sein Minn, Feida Zhu, and Michel C Desmarais. 2018. Improving knowledge trac-
+ing model by integrating problem difficulty. In 2018 IEEE International conference
+on data mining workshops (ICDMW). IEEE, 1505–1506.
+[24] Koki Nagatani, Qian Zhang, Masahiro Sato, Yan-Ying Chen, Francine Chen,
+and Tomoko Ohkuma. 2019. Augmenting knowledge tracing by considering
+forgetting behavior. In The world wide web conference. 3101–3107.
+[25] Hiromi Nakagawa, Yusuke Iwasawa, and Yutaka Matsuo. 2019. Graph-based
+knowledge tracing: modeling student proficiency using graph neural network.
+In IEEE/WIC/ACM International Conference on Web Intelligence. 156–163.
+[26] Allen Newell, Herbert Alexander Simon, et al . 1972. Human problem solving.
+Vol. 104. Prentice-hall Englewood Cliffs, NJ.
+[27] Shalini Pandey and George Karypis. 2019. A self-attentive model for knowledge
+tracing. arXiv preprint arXiv:1907.06837 (2019).
+[28] Zachary A Pardos and Neil T Heffernan. 2010. Modeling individualization in
+a bayesian networks implementation of knowledge tracing. In User Modeling,
+Adaptation, and Personalization: 18th International Conference, UMAP 2010, Big
+Island, HI, USA, June 20-24, 2010. Proceedings 18. Springer, 255–266.
+[29] Philip I Pavlik Jr, Hao Cen, and Kenneth R Koedinger. 2009. Performance Factors
+Analysis–A New Alternative to Knowledge Tracing. Online Submission (2009).
+[30] Chris Piech, Jonathan Bassen, Jonathan Huang, Surya Ganguli, Mehran Sahami,
+Leonidas J Guibas, and Jascha Sohl-Dickstein. 2015. Deep knowledge tracing.
+Advances in neural information processing systems 28 (2015).
+[31] Shuanghong Shen, Zhenya Huang, Qi Liu, Yu Su, Shijin Wang, and Enhong Chen.
+2022. Assessing student’s dynamic knowledge state by exploring the question
+difficulty effect. In Proceedings of the 45th international ACM SIGIR conference on
+research and development in information retrieval. 427–437.
+[32] Shuanghong Shen, Qi Liu, Enhong Chen, Zhenya Huang, Wei Huang, Yu Yin, Yu
+Su, and Shijin Wang. 2021. Learning process-consistent knowledge tracing. In
+Proceedings of the 27th ACM SIGKDD conference on knowledge discovery & data
+mining. 1452–1460.
+[33] Jianwen Sun, Mengqi Wei, Jintian Feng, Fenghua Yu, Qing Li, and Rui Zou.
+2024. Progressive knowledge tracing: Modeling learning process from abstract
+to concrete. Expert Systems with Applications 238 (2024), 122280.
+[34] Jianwen Sun, Fenghua Yu, Sannyuya Liu, Yawei Luo, Ruxia Liang, and Xiaoxuan
+Shen. 2023. Adversarial Bootstrapped Question Representation Learning for
+Knowledge Tracing. In Proceedings of the 31st ACM International Conference on
+Multimedia. 8016–8025.
+[35] Shiwei Tong, Qi Liu, Wei Huang, Zhenya Hunag, Enhong Chen, Chuanren Liu,
+Haiping Ma, and Shijin Wang. 2020. Structure-based knowledge tracing: An
+influence propagation view. In 2020 IEEE international conference on data mining
+(ICDM). IEEE, 541–550.
+[36] Ross E Traub. 1997. Classical test theory in historical perspective. Educational
+Measurement 16 (1997), 8–13.
+[37] Emiko Tsutsumi, Ryo Kinoshita, and Maomi Ueno. 2021. Deep-IRT with Indepen-
+dent Student and Item Networks. International Educational Data Mining Society
+(2021).
+[38] Bihan Xu, Zhenya Huang, Jiayu Liu, Shuanghong Shen, Qi Liu, Enhong Chen,
+Jinze Wu, and Shijin Wang. 2023. Learning behavior-oriented knowledge tracing.
+In Proceedings of the 29th ACM SIGKDD conference on knowledge discovery and
+data mining. 2789–2800.
+[39] Huali Yang, Shengze Hu, Jing Geng, Tao Huang, Junjie Hu, Hao Zhang, and Qiang
+Zhu. 2024. Heterogeneous graph-based knowledge tracing with spatiotemporal
+evolution. Expert Systems with Applications 238 (2024), 122249.
+[40] Yang Yang, Jian Shen, Yanru Qu, Yunfei Liu, Kerong Wang, Yaoming Zhu, Weinan
+Zhang, and Yong Yu. 2021. GIKT: a graph-based interaction model for knowledge
+tracing. In Machine Learning and Knowledge Discovery in Databases: European
+Conference, ECML PKDD 2020, Ghent, Belgium, September 14–18, 2020, Proceedings,
+Part I. Springer, 299–315.
+[41] Chun-Kit Yeung. 2019. Deep-IRT: Make deep learning based knowledge tracing
+explainable using item response theory. arXiv preprint arXiv:1904.11738 (2019).
+[42] Chun-Kit Yeung and Dit-Yan Yeung. 2018. Addressing two problems in deep
+knowledge tracing via prediction-consistent regularization. In Proceedings of the
+fifth annual ACM conference on learning at scale. 1–10.
+[43] Michael V Yudelson, Kenneth R Koedinger, and Geoffrey J Gordon. 2013. Individ-
+ualized bayesian knowledge tracing models. In Artificial Intelligence in Education:
+16th International Conference, AIED 2013, Memphis, TN, USA, July 9-13, 2013.
+Proceedings 16. Springer, 171–180.
+[44] Jiani Zhang, Xingjian Shi, Irwin King, and Dit-Yan Yeung. 2017. Dynamic key-
+value memory networks for knowledge tracing. In Proceedings of the 26th inter-
+national conference on World Wide Web. 765–774.
+[45] Moyu Zhang, Xinning Zhu, Chunhong Zhang, Yang Ji, Feng Pan, and Changchuan
+Yin. 2021. Multi-factors aware dual-attentional knowledge tracing. In Proceedings
+of the 30th ACM International Conference on Information & Knowledge Manage-
+ment. 2588–2597.
+[46] Moyu Zhang, Xinning Zhu, Chunhong Zhang, Wenchen Qian, Feng Pan, and
+Hui Zhao. 2023. Counterfactual Monotonic Knowledge Tracing for Assessing
+Students’ Dynamic Mastery of Knowledge Concepts. InProceedings of the 32nd
+ACM International Conference on Information and Knowledge Management. 3236–
+3246.
+3159
