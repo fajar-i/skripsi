@@ -8,7 +8,13 @@ Validates:
 5. Output HTML escaping (anti-XSS)
 """
 
+import os
+import sys
 import pytest
+
+# Ensure parent directory (apps) is in sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 from logitrace.backend.app.rag.secure_client import PIIScrubber, SecureLLMClient, mask_secret
 from logitrace.backend.app.rag.hint_service import HintService
 

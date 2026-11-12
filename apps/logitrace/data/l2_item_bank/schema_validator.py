@@ -17,6 +17,7 @@ logger = logging.getLogger("schema_validator")
 BASE_DIR = os.path.dirname(__file__)
 ITEMS_PATH = os.path.join(BASE_DIR, "items_adaptive_180.json")
 TOLT_PATH = os.path.join(BASE_DIR, "tolt_test_parallel.json")
+TROUBLESHOOTING_PATH = os.path.join(BASE_DIR, "troubleshooting_test_parallel.json")
 NEDV_PATH = os.path.join(BASE_DIR, "nedv_control_items.json")
 
 EXPECTED_KCS = {
@@ -32,6 +33,14 @@ EXPECTED_TOLT_DIMS = {
     "COMBINATORIAL_REASONING",
     "PROBABILISTIC_REASONING",
     "CORRELATIONAL_REASONING"
+}
+
+EXPECTED_JONASSEN_PHASES = {
+    "SYMPTOM_RECOGNITION",
+    "PROBLEM_SPACE_CONSTRUCTION",
+    "FAULT_HYPOTHESIS_GENERATION",
+    "HYPOTHESIS_TESTING_EVALUATION",
+    "CORRECTIVE_ACTION_VERIFICATION"
 }
 
 ROOT_KCS = {"WLAN_STANDARDS", "WLAN_TOPOLOGY_BSS", "IP_PEER_CONFIG"}
@@ -223,6 +232,92 @@ def validate_tolt_parallel_test(file_path: str = TOLT_PATH) -> Tuple[bool, List[
     return len(errors) == 0, errors
 
 
+def validate_troubleshooting_parallel_test(file_path: str = TROUBLESHOOTING_PATH) -> Tuple[bool, List[str]]:
+    """
+    Validates parallel Cognitive Troubleshooting instruments (Form A and Form B)
+    based on David H. Jonassen & Woei Hung (2006):
+    - Exactly 36 items in Form A and 36 items in Form B
+    - Unique item IDs across both forms
+    - Exactly 6 items per Jonassen phase (5 phases x 6 = 30 target items)
+    - Exactly 6 NEDV control items (2 VoIP + 4 Fiber Optic)
+    - Non-empty prompt, options == 4, correct_option in options
+    - Reasoning options >= 3, correct_reasoning in reasoning_options
+    - Balanced answer key distribution across forms
+    """
+    errors: List[str] = []
+    success, data, err_msg = _safe_load_json(file_path)
+    if not success:
+        return False, [err_msg]
+
+    if not isinstance(data, dict):
+        return False, ["Troubleshooting file root must be a JSON object with 'form_a' and 'form_b'"]
+
+    seen_ids: Set[str] = set()
+
+    for form_name in ("form_a", "form_b"):
+        items = data.get(form_name, [])
+        if not isinstance(items, list) or len(items) != 36:
+            errors.append(f"{form_name}: Expected 36 items, got {len(items) if isinstance(items, list) else 0}")
+            continue
+
+        phase_counts = {phase: 0 for phase in EXPECTED_JONASSEN_PHASES}
+        phase_counts["NEDV_CONTROL"] = 0
+        form_keys: List[str] = []
+
+        for item in items:
+            item_id = item.get("id", "UNKNOWN")
+            if item_id in seen_ids:
+                errors.append(f"Duplicate troubleshooting item ID: '{item_id}'")
+            seen_ids.add(item_id)
+
+            phase = item.get("phase")
+            if phase in phase_counts:
+                phase_counts[phase] += 1
+            else:
+                errors.append(f"{item_id}: Unknown troubleshooting phase '{phase}'")
+
+            prompt = item.get("prompt")
+            if not prompt or not str(prompt).strip():
+                errors.append(f"{item_id}: Empty prompt text")
+
+            opts = item.get("options", {})
+            if not isinstance(opts, dict) or len(opts) != 4:
+                errors.append(f"{item_id}: Expected exactly 4 options (A, B, C, D), got {len(opts)}")
+
+            ans = item.get("correct_option")
+            if ans not in opts:
+                errors.append(f"{item_id}: correct_option '{ans}' not found in options")
+            else:
+                form_keys.append(ans)
+
+            # Polytomous reasoning options check
+            r_opts = item.get("reasoning_options", {})
+            if not isinstance(r_opts, dict) or len(r_opts) < 3:
+                errors.append(f"{item_id}: Expected at least 3 reasoning options for polytomous scoring")
+
+            r_ans = item.get("correct_reasoning")
+            if r_ans not in r_opts:
+                errors.append(f"{item_id}: correct_reasoning '{r_ans}' not found in reasoning_options")
+
+        # Each target phase must have exactly 6 items
+        for phase in EXPECTED_JONASSEN_PHASES:
+            cnt = phase_counts[phase]
+            if cnt != 6:
+                errors.append(f"{form_name} phase {phase} expected 6 items, got {cnt}")
+
+        # NEDV control must have exactly 6 items
+        if phase_counts["NEDV_CONTROL"] != 6:
+            errors.append(f"{form_name} NEDV_CONTROL expected 6 items, got {phase_counts['NEDV_CONTROL']}")
+
+        # Form answer key balance: no single option should exceed 40% (15 out of 36)
+        key_counts = collections.Counter(form_keys)
+        for opt, cnt in key_counts.items():
+            if cnt > 15:
+                errors.append(f"{form_name}: Option '{opt}' overrepresented ({cnt}/36)")
+
+    return len(errors) == 0, errors
+
+
 def validate_nedv_controls(file_path: str = NEDV_PATH) -> Tuple[bool, List[str]]:
     """
     Validates NEDV control items (Threat to Internal Validity C2):
@@ -306,13 +401,19 @@ def run_full_validation() -> bool:
         for e in err2[:5]:
             logger.error(f"  TOLT: {e}")
 
+    logger.info("Validating Parallel Troubleshooting Tests Jonassen 2006 (36 Items A & B)...")
+    ok_tb, err_tb = validate_troubleshooting_parallel_test()
+    if not ok_tb:
+        for e in err_tb[:5]:
+            logger.error(f"  Troubleshooting Test: {e}")
+
     logger.info("Validating NEDV Control Items (6 Items)...")
     ok3, err3 = validate_nedv_controls()
     if not ok3:
         for e in err3[:5]:
             logger.error(f"  NEDV: {e}")
 
-    all_ok = ok1 and ok2 and ok3
+    all_ok = ok1 and ok2 and ok_tb and ok3
     if all_ok:
         logger.info("All L2 item bank integrity checks PASSED successfully.")
     else:

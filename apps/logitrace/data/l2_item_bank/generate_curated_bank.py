@@ -386,32 +386,15 @@ def build_bank() -> List[Dict]:
         }
     }
 
-    # Generic generator for remaining 9 KCs to ensure 100% complete 180 items
-    remaining_kcs = [kc for kc in KCS if kc not in kc_blueprints]
-
-    for kc in remaining_kcs:
-        kc_blueprints[kc] = {
-            "easy": [],
-            "medium": [],
-            "hard": []
-        }
-        for diff_name, diff_level in [("easy", 1), ("medium", 2), ("hard", 3)]:
-            for i in range(5):
-                tolt_dim = TOLT_DIMS[(i + diff_level) % 5]
-                prompt = (
-                    f"Pertanyaan teknis dan penalaran kasus kejuruan pada konsep {kc} "
-                    f"tingkat kesulitan {diff_level} (Butir #{i+1}): "
-                    f"Skenario konfigurasi dan diagnosis jaringan kabel dan nirkabel SMK TKJ "
-                    f"dengan fokus penalaran {tolt_dim}."
-                )
-                opts = {
-                    "A": f"Analisis opsi implementasi teknis tepat untuk parameter {kc}.",
-                    "B": f"Opsi pembanding alternatif B dengan konfigurasi parsial {kc}.",
-                    "C": f"Opsi pembanding alternatif C yang tidak sesuai standar teknis {kc}.",
-                    "D": f"Opsi distraktor alternatif D yang memicu galat pada {kc}."
-                }
-                explanation = f"Penjelasan pedagogis dan penalaran logis untuk pemecahan masalah pada {kc} tingkat {diff_level}."
-                kc_blueprints[kc][diff_name].append((prompt, opts, "A", tolt_dim, explanation))
+    # Load curated blueprints for the remaining 9 KCs (135 items)
+    try:
+        from curated_blueprints_extra import EXTRA_KC_BLUEPRINTS
+        kc_blueprints.update(EXTRA_KC_BLUEPRINTS)
+    except ImportError:
+        import sys
+        sys.path.append(os.path.dirname(__file__))
+        from curated_blueprints_extra import EXTRA_KC_BLUEPRINTS
+        kc_blueprints.update(EXTRA_KC_BLUEPRINTS)
 
     # Assemble all items into standardized JSON structure
     # Mark exactly 6 items as calibration items (2 easy, 2 med, 2 hard across root KCs)

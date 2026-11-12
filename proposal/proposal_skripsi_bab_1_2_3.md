@@ -69,8 +69,8 @@ NIM. 2304794
     - 2.5.3 Strategi Device-Purpose Split untuk Mengatasi Rasio Lab (1 PC : 2 Siswa)
   - 2.6 Kemampuan Logical Thinking dalam Bidang Jaringan Komputer
     - 2.6.1 Hakikat Logical Thinking dan Perkembangan Kognitif Formal
-    - 2.6.2 Kerangka Kerja Test of Logical Thinking (TOLT) Tobin & Capie (1981)
-    - 2.6.3 Operasionalisasi 5 Dimensi TOLT pada Materi Jaringan Nirkabel TKJ
+    - 2.6.2 Kerangka Kerja Penalaran Kausal dan Troubleshooting Jonassen & Hung (2006)
+    - 2.6.3 Operasionalisasi 5 Fase Kognitif Troubleshooting pada Materi Jaringan Nirkabel TKJ
   - 2.7 Materi Teknologi Jaringan Nirkabel sebagai Domain Pengetahuan
     - 2.7.1 Konsep Dasar dan Topologi Jaringan Nirkabel (Ad-Hoc vs Infrastruktur)
     - 2.7.2 Konfigurasi Perangkat Nirkabel, SSID, dan Keamanan Autentikasi
@@ -101,7 +101,7 @@ NIM. 2304794
     - 3.3.2 Subjek, Tempat Penelitian, dan Analisis Kekuatan Statistik (Power Analysis)
   - 3.4 Instrumen Pengumpulan Data
     - 3.4.1 Instrumen Non-Tes (Lembar Validasi LORI 2.0 & Angket Usability SUS)
-    - 3.4.2 Bank Butir Soal Kuis Adaptif dan Instrumen Tes TOLT-Jaringan
+    - 3.4.2 Bank Butir Soal Kuis Adaptif dan Instrumen Tes Penalaran Troubleshooting Jaringan
     - 3.4.3 Pengujian Kualitas Butir Tes Berbasis Teori Tes Klasik (CTT)
     - 3.4.4 Skema Basis Data dan Log Transaksi Interaksi (Append-Only)
     - 3.4.5 Teknik Pengumpulan Data Komprehensif (Observasi, Wawancara, Angket, Tes)
@@ -121,7 +121,7 @@ NIM. 2304794
   - Lampiran 1. Kisi-kisi Rubrik Validasi Ahli Media (Adaptasi LORI 2.0)
   - Lampiran 2. Kisi-kisi Rubrik Validasi Ahli Materi (Materi Jaringan Nirkabel & Penalaran Logis)
   - Lampiran 3. Kuesioner System Usability Scale (SUS)
-  - Lampiran 4. Kisi-kisi Instrumen Tes Kemampuan Logical Thinking (TOLT-Jaringan)
+  - Lampiran 4. Kisi-kisi Instrumen Tes Kemampuan Logical Thinking Berbasis Penalaran Troubleshooting Jaringan
   - Lampiran 5. Contoh Struktur Dokumen Knowledge Component (KC) dan DAG Prasyarat
 
 ---
@@ -165,7 +165,7 @@ Berdasarkan batasan masalah dan identifikasi kesenjangan di atas, rumusan masala
 1. Bagaimana rancang bangun sistem web evaluasi formatif adaptif LogiTrace berbasis arsitektur tiga lapis (*Knowledge Base*, *Item Indexing*, dan *Deterministic Runtime Engine* dengan agen RAG tiga pemicu) yang terintegrasi ke dalam model pembelajaran *Station Rotation*?
 2. Bagaimana kelayakan (validitas isi, mutu petunjuk, dan kepraktisan) sistem LogiTrace berdasarkan penilaian ahli materi dan ahli media mengacu pada rubrik LORI 2.0, kesepakatan pelabelan semantik Cohen's $\kappa$, serta respons penerimaan siswa menggunakan instrumen *System Usability Scale* (SUS)?
 3. Bagaimana akurasi prediksi status penguasaan konsep sistem LogiTrace pada fase pasca-kalibrasi apabila dibandingkan secara empiris terhadap tiga model pembanding tanpa-latih (*base rate*, *running accuracy*, dan *difficulty-only model*)?
-4. Bagaimana peningkatan kemampuan *Logical Thinking* siswa setelah mengikuti model pembelajaran *Station Rotation* berbantuan LogiTrace sebagai satu kesatuan ekosistem pembelajaran terpadu, bagaimana profil ukuran efek peningkatannya di seluruh dimensi penalaran TOLT (*Controlling Variables*, *Proportional*, *Combinatorial*, *Probabilistic*, dan *Correlational Reasoning*), serta bagaimana kontribusi spesifik interaksi digital siswa dianalisis melalui hubungan dosis-respons (*dosage-response*)?
+4. Bagaimana peningkatan kemampuan *Logical Thinking* siswa setelah mengikuti model pembelajaran *Station Rotation* berbantuan LogiTrace sebagai satu kesatuan ekosistem pembelajaran terpadu, bagaimana profil ukuran efek peningkatannya di seluruh fase kognitif penalaran troubleshooting Jonassen (*Symptom Recognition*, *Problem Space Construction*, *Fault Hypothesis Generation*, *Hypothesis Testing & Evaluation*, dan *Corrective Action & Verification*), serta bagaimana kontribusi spesifik interaksi digital siswa dianalisis melalui hubungan dosis-respons (*dosage-response*)?
 
 ---
 
@@ -175,7 +175,7 @@ Berdasarkan rumusan masalah tersebut, tujuan yang hendak dicapai dalam penelitia
 1. Menghasilkan produk web evaluasi formatif adaptif LogiTrace dengan arsitektur tiga lapis yang menghubungkan basis pengetahuan kurikulum, pelabelan otomatis LLM, mesin inferensi penguasaan deterministik, dan tiga pemicu agen RAG ke dalam sintaks pembelajaran *Station Rotation*.
 2. Menguji kelayakan sistem LogiTrace ditinjau dari validitas media dan materi berbasis LORI 2.0, konsistensi pelabelan pakar versus model, mutu pedagogis petunjuk Sokratik, serta tingkat kepraktisan pengguna (*usability*) berbasis skor SUS.
 3. Mengukur dan membuktikan akurasi prediktif sistem LogiTrace pasca-kalibrasi secara ketat terhadap tiga model *baseline* tanpa pelatihan menggunakan metrik akurasi, Brier score, dan uji signifikansi McNemar serta bootstrap.
-4. Menganalisis besaran peningkatan kemampuan *Logical Thinking* siswa melalui analisis *N-Gain* dan ukuran efek berpasangan *Cohen's* $d_z$, memetakan profil keseimbangan peningkatan di seluruh dimensi penalaran TOLT melalui analisis komparatif ukuran efek dan uji Repeated Measures ANOVA, serta membuktikan kontribusi empiris interaksi sistem melalui analisis hubungan dosis-respons (*dosage-response relationship*).
+4. Menganalisis besaran peningkatan kemampuan *Logical Thinking* siswa melalui analisis *N-Gain* dan ukuran efek berpasangan *Cohen's* $d_z$, memetakan profil keseimbangan peningkatan di seluruh fase kognitif penalaran troubleshooting Jonassen melalui analisis komparatif ukuran efek dan uji Repeated Measures ANOVA, serta membuktikan kontribusi empiris interaksi sistem melalui analisis hubungan dosis-respons (*dosage-response relationship*).
 
 ---
 
@@ -228,7 +228,7 @@ Penelitian ini dibangun di atas sintesis kritis **Tinjauan Sistematis (*Systemat
                                        ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                      SISTEM LOGITRACE (RAG-KT ENGINE)                       │
-│      L1: Basis Pengetahuan (12 KC, DAG Prasyarat, 5 TOLT, 24 Contoh)        │
+│      L1: Basis Pengetahuan (12 KC, DAG Prasyarat, 5 Fase Jonassen, 24 Contoh)        │
 │      L2: Indeks Butir Semantik & Pelabelan Otomatis LLM Lokal (Frozen)      │
 │      L3: Aturan Penguasaan Deterministik (<1 ms) & Agen RAG 3 Pemicu        │
 └──────────────────────────────────────┬──────────────────────────────────────┘
@@ -324,7 +324,7 @@ Sistem LogiTrace dirancang menggunakan arsitektur modular tiga lapis (*Three-Tie
 │                 L1 — BASIS PENGETAHUAN (Offline, Sekali Buat)               │
 │  • 12 Dokumen Knowledge Components (Definisi, Prasyarat, Miskonsepsi)       │
 │  • Graf Prasyarat Terarah (Prerequisite DAG) — Aturan Gerbang m ≥ 0,60      │
-│  • 5 Dokumen Deskripsi Dimensi TOLT                                         │
+│  • 5 Dokumen Deskripsi Fase Kognitif Troubleshooting Jonassen (2006)                                         │
 │  • 24 Contoh Pengerjaan Terstandar (1-2 per KC)                             │
 └──────────────────────────────────────┬──────────────────────────────────────┘
                                        │
@@ -332,7 +332,7 @@ Sistem LogiTrace dirancang menggunakan arsitektur modular tiga lapis (*Three-Tie
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                 L2 — INDEKS BUTIR SOAL (Offline per Butir)                  │
 │  • Pembacaan Teks Butir oleh LLM Lokal (Frozen 3B/7B)                       │
-│  • Pelabelan Ganda: KC Utama, KC Sekunder, Dimensi TOLT, Kesulitan (1-3)    │
+│  • Pelabelan Ganda: KC Utama, KC Sekunder, Fase Troubleshooting Jonassen, Kesulitan (1-3)    │
 │  • Vektorisasi Teks Butir (Text Embedding untuk Pencarian Kemiripan)        │
 │  • Antrean Tinjauan Guru (Review Queue bila Keyakinan < 0,60)               │
 └──────────────────────────────────────┬──────────────────────────────────────┘
@@ -482,30 +482,32 @@ Hambatan fasilitas laboratorium komputer di sekolah mitra yang berada pada rasio
 ## 2.6 Kemampuan Logical Thinking dalam Bidang Jaringan Komputer
 
 ### 2.6.1 Hakikat Logical Thinking dan Perkembangan Kognitif Formal
-Berpikir logis (*logical thinking*) merupakan kemampuan operasional mental untuk menghubungkan premis, menganalisis relasi kausalitas, menarik kesimpulan yang valid berdasarkan kaidah inferensi yang konsisten, serta merumuskan strategi sistematis dalam memecahkan masalah kompleks (Inhelder & Piaget, 1958; Piaget, 1972; Tobin & Capie, 1981). Dalam teori perkembangan intelektual Piaget, peserta didik jenjang SMK (usia 16–17 tahun) secara kronologis berada pada tahap perkembangan operasional formal yang ditandai oleh kemampuan penalaran hipotesis-deduktif, pengisolasian variabel, dan penalaran kombinatorik (Lawson, 1985; Valanides, 1999).
+Berpikir logis (*logical thinking*) merupakan kemampuan operasional mental untuk menghubungkan premis, menganalisis relasi kausalitas, menarik kesimpulan yang valid berdasarkan kaidah inferensi yang konsisten, serta merumuskan strategi sistematis dalam memecahkan masalah kompleks (Inhelder & Piaget, 1958; Jonassen, 2006; Piaget, 1972). Dalam teori perkembangan intelektual Piaget, peserta didik jenjang SMK (usia 16–17 tahun) secara kronologis berada pada tahap perkembangan operasional formal yang ditandai oleh kemampuan penalaran hipotesis-deduktif, pengisolasian variabel, dan penarikan kesimpulan kausal (Lawson, 1985; Valanides, 1999).
 
-Sebagaimana dicatat dalam SLR, literatur AIEd terkini sangat minim mendefinisikan *computational thinking* atau *logical thinking* sebagai konstruk terukur (kebanyakan hanya diukur sebagai keberhasilan sintaks kode program) (Wang et al., 2026; Zhao et al., 2026). Oleh karena itu, penelitian ini mengisi celah fundamental tersebut dengan mengadopsi kerangka kerja baku psikometrik penalaran formal yang teruji.
+Sebagaimana dicatat dalam tinjauan sistematis (SLR) pada Bab I, literatur AIEd terkini sangat minim mendefinisikan *computational thinking* atau *logical thinking* sebagai konstruk terapan yang terukur (kebanyakan hanya diukur sebagai keberhasilan sintaks kode program atau logika silogisme simbolik murni yang kaku) (Tato & Nkambou, 2022; Wang et al., 2026; Zhao et al., 2026). Oleh karena itu, penelitian ini mengisi celah fundamental tersebut dengan mengadopsi kerangka kerja penalaran pemecahan masalah teknis (*cognitive troubleshooting*) yang autentik dan teruji.
 
-### 2.6.2 Kerangka Kerja Test of Logical Thinking (TOLT) Tobin & Capie (1981)
-Untuk mengukur operasi berpikir formal secara objektif dan reliabel, Tobin dan Capie (1981) merumuskan instrumen baku **Test of Logical Thinking (TOLT)** yang mencakup lima dimensi penalaran fundamental:
-1. **Controlling Variables:** Kemampuan merancang penyelidikan dengan mengisolasi variabel bebas dan mempertahankan variabel kontrol secara konstan saat menguji sistem multi-faktor.
-2. **Proportional Reasoning:** Kemampuan memahami dan mengkalkulasi hubungan rasio matematis, fraksi, dan skala proporsional non-linear antar-variabel.
-3. **Combinatorial Reasoning:** Kemampuan membangkitkan secara tuntas seluruh kombinasi atau permutasi yang mungkin dari serangkaian kondisi alternatif.
-4. **Probabilistic Reasoning:** Kemampuan memperhitungkan peluang terjadinya suatu peristiwa di bawah kondisi fluktuasi acak dan ketidakpastian parameter.
-5. **Correlational Reasoning:** Kemampuan mengevaluasi ada atau tidaknya hubungan asosiasi timbal-balik antara dua variabel dengan membandingkan data konfirmasi terhadap data diskonfirmasi.
+### 2.6.2 Kerangka Kerja Penalaran Kausal dan Troubleshooting Jonassen & Hung (2006)
+Dalam konteks pendidikan kejuruan dan rekayasa sistem komputer, kemampuan berpikir logis (*logical thinking*) tidak dapat diukur secara autentik menggunakan instrumen logika abstrak murni seperti *Test of Logical Thinking* (TOLT) Piagetian (Tobin & Capie, 1981) yang berbasis eksperimen sains dasar (seperti bandul ayunan dan kelereng). Jonassen (2006) serta Jonassen dan Hung (2006) menegaskan bahwa bentuk manifestasi berpikir logis paling nyata dan fungsional dalam ranah teknologi komputer adalah **penalaran pemecahan masalah teknis (*troubleshooting as causal problem-solving reasoning*)**. 
 
-### 2.6.3 Operasionalisasi 5 Dimensi TOLT pada Materi Jaringan Nirkabel TKJ
-Kelima dimensi TOLT dikontekstualisasikan ke dalam domain permasalahan konfigurasi dan *troubleshooting* jaringan nirkabel SMK, sebagaimana disajikan pada Tabel 2.5.
+Dalam arsitektur teori pemecahan masalah teknis (*A New Theory-Based Design Architecture*), Jonassen dan Hung (2006) memetakan ekosistem *troubleshooting* ke dalam tiga kelompok: kelompok pengetahuan (*system knowledge*), kelompok proses kognitif (*cognitive processes*), dan kelompok karakteristik masalah (*problem characteristics*). Guna mengukur alur berpikir logis siswa secara objektif dan terstandar, penelitian ini memfokuskan pengukuran kemampuan *Logical Thinking* pada **Kelompok 2 (Lima Fase Kognitif Troubleshooting)**:
+1. **Symptom Recognition (Identifikasi Gejala):** Kemampuan mengamati, mengenali, dan membedakan perilaku anomali sistem jaringan yang menyimpang dari kondisi operasi normal (misal: menginterpretasikan pesan galat ICMP, status indikator link adapter fisik, atau degradasi performa koneksi).
+2. **Problem Space Construction (Konstruksi Ruang Masalah):** Kemampuan memetakan batas subsistem yang bermasalah, mengisolasi komponen yang relevan, serta mengendalikan variabel pengujian (misal: memisahkan dugaan kegagalan pada adapter klien vs konfigurasi *Access Point* pemancar).
+3. **Fault Hypothesis Generation (Perumusan Hipotesis Gangguan):** Kemampuan merumuskan dugaan logis mengenai akar penyebab kerusakan (*fault state*) berdasarkan model mental sistem dan penalaran kausal sebab-akibat fisik (misal: pengaruh jarak, sudut kelengkungan kabel, dan hambatan material terhadap pelemahan daya sinyal dBm).
+4. **Hypothesis Testing & Evaluation (Pengujian & Evaluasi Hipotesis):** Kemampuan merancang dan mengevaluasi tes diagnostik secara sistematis serta memperhitungkan probabilitas keberhasilan di bawah ketidakpastian (misal: analisis ambang batas *roaming* dan probabilitas tabrakan sinyal nirkabel).
+5. **Corrective Action & Verification (Tindakan Korektif & Verifikasi):** Kemampuan memilih kombinasi tindakan perbaikan fisik maupun konfigurasi yang paling optimal, lalu memverifikasi bahwa kontinuitas koneksi sistem telah pulih secara tuntas (misal: penataan kanal *non-overlapping* 1, 6, 11).
 
-**Tabel 2.5** Operasionalisasi 5 Dimensi TOLT dalam Domain Jaringan Nirkabel TKJ
+### 2.6.3 Operasionalisasi 5 Fase Kognitif Troubleshooting pada Materi Jaringan Nirkabel TKJ
+Kelima fase kognitif penalaran *troubleshooting* Jonassen (2006) dikontekstualisasikan ke dalam domain permasalahan konfigurasi dan perawatan jaringan nirkabel SMK, sebagaimana disajikan pada Tabel 2.5.
 
-| Dimensi TOLT | Definisi Kognitif Baku | Manifestasi Keterampilan pada Materi Jaringan Nirkabel | Indikator Perilaku Siswa yang Terukur |
+**Tabel 2.5** Operasionalisasi 5 Fase Kognitif Troubleshooting Jonassen (2006) dalam Domain Jaringan Nirkabel TKJ
+
+| Fase Kognitif Jonassen (2006) | Definisi Kognitif Baku | Manifestasi Keterampilan pada Materi Jaringan Nirkabel | Indikator Perilaku Siswa yang Terukur |
 | :--- | :--- | :--- | :--- |
-| **1. Controlling Variables** | Mengisolasi variabel bebas dalam sistem multi-faktor. | **Troubleshooting Konektivitas & Pengujian Mandiri Klien:** Memeriksa adapter Wi-Fi lokal, kecocokan SSID, dan password autentikasi secara sekuensial sebelum mengubah setelan AP pemancar. | Siswa mampu menentukan titik anomali koneksi dengan menguji variabel klien terlebih dahulu tanpa mereset AP bersama secara acak. |
-| **2. Proportional Reasoning** | Menghitung rasio matematis dan skala non-linear. | **Analisis Redaman Jarak & Kualitas Sinyal (RSSI):** Menganalisis penurunan kuat sinyal (-dBm) dan kestabilan throughput data terhadap kelipatan jarak fisik dan ketebalan material penghalang. | Siswa mampu memprediksi degradasi sinyal nirkabel berdasarkan rasio jarak fisik dan hambatan material secara logis matematis. |
-| **3. Combinatorial Reasoning** | Menyusun permutasi dan kombinasi partisi sistem. | **Desain Topologi Nirkabel & Alokasi Kanal Frekuensi:** Merancang kombinasi arsitektur Ad-Hoc vs Infrastruktur serta memilih alokasi kanal frekuensi *non-overlapping* (1, 6, 11 pada 2,4 GHz). | Siswa mampu merancang skema topologi nirkabel yang tepat tanpa menimbulkan tumpang tindih kanal (*co-channel interference*). |
-| **4. Probabilistic Reasoning** | Memperhitungkan peluang di bawah kondisi ketidakpastian. | **Analisis Keputusan Roaming Jalur Pemancar:** Menilai probabilitas perangkat berpindah (*roaming*) ke pemancar terdekat (misal: WLAN Extender) berdasarkan ambang batas sinyal (*roaming threshold*). | Siswa mampu memperhitungkan bahwa perangkat klien tidak serta-merta berpindah jalur sinyal kecuali telah melampaui ambang batas probabilitas *failover*. |
-| **5. Correlational Reasoning** | Menganalisis korelasi timbal-balik antar-gejala dan kode galat. | **Interpretasi Galat Uji ICMP (Ping Peer-to-Peer):** Mengorelasikan pesan galat ICMP (*Destination Host Unreachable* vs *Request Timed Out*) terhadap letak kegagalan komunikasi nirkabel. | Siswa mampu mengorelasikan bahwa pesan DHU berkaitan dengan kegagalan rute logis/ARP lokal, sedangkan RTO berkaitan dengan blokade firewall atau putusnya rute balik. |
+| **1. Symptom Recognition** | Mengamati dan membedakan anomali perilaku sistem dari kondisi normal. | **Interpretasi Gejala Galat & Respons Protokol ICMP:** Mengamati perbedaan respons koneksi ping peer-to-peer (*Destination Host Unreachable* vs *Request Timed Out*) dan status indikator adapter. | Siswa mampu mengidentifikasi karakteristik gejala kerusakan secara presisi dan membedakan apakah anomali terjadi pada rute logis lokal atau ketiadaan jalur balik. |
+| **2. Problem Space Construction** | Mengisolasi batas subsistem masalah dan mengendalikan variabel uji. | **Isolasi Batas Masalah Klien vs Pemancar:** Menguji adapter Wi-Fi lokal, kecocokan SSID, dan kata sandi WPA2 secara terisolasi sebelum mengubah setelan AP pemancar bersama. | Siswa mampu memetakan ruang masalah dengan menguji variabel klien secara sekuensial tanpa melakukan tindakan acak yang berisiko mengganggu perangkat lain. |
+| **3. Fault Hypothesis Generation** | Merumuskan dugaan kausal penyebab gangguan berbasis model mental fisik. | **Penalaran Kausalitas Redaman Jarak & Hambatan Material (RSSI):** Menghubungkan degradasi daya sinyal (-dBm) dan throughput data dengan pertambahan jarak atau sifat dielektrik partisi dinding. | Siswa mampu merumuskan hipotesis logis mengenai akar penyebab penurunan performa sinyal berdasarkan prinsip propagasi gelombang elektromagnetik. |
+| **4. Hypothesis Testing & Evaluation** | Menguji hipotesis diagnostik dan memperhitungkan probabilitas kondisi sistem. | **Pengujian Keputusan Roaming & Evaluasi Tabrakan Sinyal:** Menganalisis probabilitas klien berpindah (*roaming*) ke WLAN Extender serta mengevaluasi potensi tabrakan paket (*collision*) pada kanal padat. | Siswa mampu menguji dugaan gangguan melalui perhitungan probabilitas *failover* sinyal dan utilisasi spektrum nirkabel. |
+| **5. Corrective Action & Verification** | Merencanakan tindakan perbaikan optimal dan memverifikasi pemulihan link. | **Perencanaan Alokasi Kanal Non-Overlapping & Verifikasi Koneksi:** Menata kombinasi kanal frekuensi (1, 6, 11 pada 2,4 GHz) serta memverifikasi transfer data end-to-end setelah perbaikan. | Siswa mampu menentukan solusi konfigurasi fisik/logis yang bebas interferensi (*zero co-channel interference*) dan memverifikasi pemulihan performa jaringan secara tuntas. |
 
 ---
 
@@ -625,7 +627,7 @@ Sebagai landasan posisi kebaruan (*novelty*) penelitian ini, dilakukan sintesis 
 
 Berdasarkan telaah sintesis pada Tabel 2.6, **tiga kebaruan utama (*novelty*) dari penelitian ini** adalah:
 1. **Adaptasi Tanpa Pelatihan (*Training-Free KT*):** Menggeser kebutuhan data dari korpus perilaku siswa ke korpus konten kurikulum, menyelesaikan kebuntuan penerapan KT pada domain kejuruan tanpa dataset pelatihan publik.
-2. **Pelabelan Semantik Ganda KC $\times$ TOLT:** Mengoperasionalkan penalaran logis ke dalam pemetaan ganda komponen pengetahuan teknis dan dimensi berpikir logis formal.
+2. **Pelabelan Semantik Ganda KC $\times$ Fase Troubleshooting Jonassen:** Mengoperasionalkan penalaran logis ke dalam pemetaan ganda komponen pengetahuan teknis dan dimensi berpikir logis formal.
 3. **Pengukuran Batas Empiris (*Boundary Testing*):** Melaporkan secara jujur batas-batas ketidakmampuan pendekatan tanpa-latih melalui perbandingan ketat terhadap tiga model *baseline*.
 
 ---
@@ -647,7 +649,7 @@ Kerangka berpikir penelitian ini berakar pada kenyataan bahwa rendahnya kemampua
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                              TINDAKAN / PENGEMBANGAN (R&D)                             │
 │ 1. Pengembangan Sistem Web LogiTrace (Arsitektur Tiga Lapis):                          │
-│    - L1: Basis Pengetahuan (12 Dokumen KC, DAG Prasyarat, 5 TOLT, 24 Contoh).          │
+│    - L1: Basis Pengetahuan (12 Dokumen KC, DAG Prasyarat, 5 Fase Jonassen, 24 Contoh).          │
 │    - L2: Indeks Butir Semantik & Pelabelan Ganda Otomatis LLM Lokal (Frozen).          │
 │    - L3: Aturan Penguasaan Determinis (< 1 ms), Pemilih Butir (Pita 0,60-0,85),        │
 │          Kalibrasi Cold-Start (6 Butir), dan Tiga Pemicu Agen RAG (Guardrail Ketat).   │
@@ -663,7 +665,7 @@ Kerangka berpikir penelitian ini berakar pada kenyataan bahwa rendahnya kemampua
 │ • Terwujudnya sistem LogiTrace yang teruji valid (LORI, Kappa, ICC) dan praktis (SUS). │
 │ • Terbuktinya keunggulan akurasi prediksi pasca-kalibrasi di atas tiga model baseline. │
 │ • Peningkatan signifikan Logical Thinking melalui ekosistem Station Rotation terpadu.  │
-│ • Keseimbangan profil penalaran TOLT terpetakan via ukuran efek per dimensi & RM-ANOVA.│
+│ • Keseimbangan profil penalaran troubleshooting Jonassen terpetakan via ukuran efek per fase & RM-ANOVA.│
 │ • Terverifikasinya peran interaksi sistem via analisis hubungan dosis-respons.         │
 │ • Terselesaikannya kendala rasio lab komputer melalui manajemen kelas rotasi terpadu.  │
 └────────────────────────────────────────────────────────────────────────────────────────┘
@@ -681,7 +683,7 @@ Penelitian ini merupakan penelitian pengembangan (*Research and Development* / R
 
 Prosedur pengembangan mengadopsi model instruksional **ADDIE** yang dikembangkan oleh Branch (2009) dan diselaraskan dengan tahapan umum R&D menurut Judijanto et al. (2024). Model ADDIE terdiri atas lima fase iteratif:
 1. **Analysis:** Mendiagnosis kesenjangan evaluasi kejuruan mengacu pada temuan SLR, menganalisis hambatan fasilitas lab 1:2, serta mendekomposisi silabus kurikulum jaringan nirkabel ke dalam 12 *Knowledge Components* (KC) dan graf prasyarat DAG.
-2. **Design:** Menyusun cetak biru arsitektur tiga lapis LogiTrace berlandaskan prinsip-prinsip desain SLR (Nkambou et al., 2023; Wang et al., 2026; Zhao et al., 2026), merumuskan aturan penguasaan deterministik, memetakan taksonomi butir soal ke dalam matriks ganda KC $\times$ TOLT, serta merancang modul ajar *Station Rotation*.
+2. **Design:** Menyusun cetak biru arsitektur tiga lapis LogiTrace berlandaskan prinsip-prinsip desain SLR (Nkambou et al., 2023; Wang et al., 2026; Zhao et al., 2026), merumuskan aturan penguasaan deterministik, memetakan taksonomi butir soal ke dalam matriks ganda KC $\times$ Fase Troubleshooting Jonassen, serta merancang modul ajar *Station Rotation*.
 3. **Development:** Mengembangkan kode perangkat lunak (FastAPI, Vue/React, PostgreSQL, Redis, dan integrasi modul klien model bahasa aman bertingkat SecureLLMClient), menyusun bank butir 180 soal, serta melakukan uji validitas ahli materi dan ahli media menggunakan instrumen LORI 2.0.
 4. **Implementation:** Menerapkan sistem web LogiTrace dan model *Station Rotation* secara nyata dalam 4 sesi tatap muka pada kelas kejuruan SMK mitra.
 5. **Evaluation:** Melaksanakan evaluasi formatif dan sumatif komprehensif melalui enam jalur evaluasi empiris (E1 hingga E6) yang secara langsung menjawab agenda riset SLR, mencakup akurasi pemetaan, mutu petunjuk, akurasi prediksi pasca-kalibrasi terhadap tiga baseline, reliabilitas model, kepraktisan SUS, serta analisis $N\text{-Gain}$ dan uji Repeated Measures ANOVA antar-dimensi TOLT.
@@ -766,15 +768,15 @@ Untuk memitigasi ancaman terhadap validitas internal (*internal validity*) dan b
 3. **Kuesioner System Usability Scale (SUS):** Instrumen baku 10 butir pernyataan berskala 1–5 untuk mengukur kepraktisan sistem menurut persepsi 34 siswa (Brooke, 1996; Lampiran 3).
 4. **Pedoman Wawancara Guru:** Wawancara semi-terstruktur kepada 3 orang guru kejuruan untuk mengevaluasi kepraktisan implementasi dasbor orkestrasi kelas dan beban kerja pendidik.
 
-### 3.4.2 Bank Butir Soal Kuis Adaptif dan Instrumen Tes TOLT-Jaringan
+### 3.4.2 Bank Butir Soal Kuis Adaptif dan Instrumen Tes Penalaran Troubleshooting Jaringan
 1. **Bank Butir Soal Adaptif LogiTrace (180 Butir):**  
-   Disusun mencakup 12 KC, di mana setiap KC memiliki minimal 5 butir pada setiap tingkat kesulitan (mudah, sedang, sulit). Guna merealisasikan target 180 butir berkualitas tinggi dalam linimasa penelitian yang realistis, draf awal butir soal dibangkitkan mengadopsi teknik *Automated Item Generation* (AIG) berbantuan model bahasa besar (*Large Language Model*) yang dikontrol secara ketat menggunakan *prompt* berbasis dokumen spesifikasi KC Lapisan 1 (Liang et al., 2023; Zhang et al., 2025). Seluruh draf butir, kunci jawaban, dan opsi distraktor kemudian melalui proses telaah, kurasi mendalam, dan penyuntingan mandiri oleh peneliti (*Human-in-the-Loop Curation*) guna memastikan kebenaran teknis dan ketiadaan distorsi konsep sebelum diajukan ke panel ahli (*expert judgment*). Dilengkapi 6 butir kalibrasi terstandar yang diberi tanda `is_calibration = true`.
-2. **Instrumen Tes Kemampuan Logical Thinking (TOLT-Jaringan):**  
-   Terdiri atas 10 butir soal pilihan ganda beralasan dua tingkat (*two-tier multiple choice*), mencakup 5 dimensi penalaran TOLT (2 butir per dimensi) yang direkontekstualisasikan ke materi target kurikulum (TP 2.1 Menerapkan instalasi jaringan kabel dan nirkabel serta TP 2.2 Menerapkan perawatan dan perbaikan jaringan kabel dan nirkabel) (Lampiran 4). Penskoran menggunakan **sistem bergradasi polikotomis tiga tingkat (*polytomous graded scoring*)** mengadopsi kerangka kerja Treagust (1988) dan Azwar (2012):
+   Disusun mencakup 12 KC, di mana setiap KC memiliki minimal 5 butir pada setiap tingkat kesulitan (mudah, sedang, sulit). Guna merealisasikan target 180 butir berkualitas tinggi dalam linimasa penelitian yang realistis, draf awal butir soal dibangkitkan mengadopsi teknik *Automated Item Generation* (AIG) berbantuan model bahasa besar (*Large Language Model*) yang dikontrol secara ketat menggunakan *prompt* berbasis dokumen spesifikasi KC Lapisan 1 (Liang et al., 2023; Zhang et al., 2025). Seluruh draf butir, kunci jawaban, dan opsi distraktor kemudian melalui proses telaah, kurasi mendalam, dan penyuntingan mandiri oleh peneliti (*Human-in-the-Loop Curation*) guna memastikan kebenaran teknis dan ketiadaan distorsi konsep sebelum diajukan ke panel ahli (*expert judgment*). Dilengkapi 6 butir kalibrasi terstandar yang diberi tanda is_calibration = true.
+2. **Instrumen Tes Kemampuan Logical Thinking Berbasis Penalaran Troubleshooting Jaringan:**  
+   Terdiri atas paket instrumen paralel (Bentuk A untuk *Pre-Test* dan Bentuk B untuk *Post-Test*) dengan masing-masing memuat **30 butir soal target pilihan ganda beralasan dua tingkat (*two-tier multiple choice*)**, mencakup 5 fase kognitif penalaran *troubleshooting* Jonassen (2006) (masing-masing 6 butir per fase) yang direkontekstualisasikan ke materi target kurikulum (TP 2.1 Menerapkan instalasi jaringan kabel dan nirkabel serta TP 2.2 Menerapkan perawatan dan perbaikan jaringan kabel dan nirkabel) (Lampiran 4). Penskoran menggunakan **sistem bergradasi polikotomis tiga tingkat (*polytomous graded scoring*)** mengadopsi kerangka kerja Treagust (1988) dan Azwar (2012):
    * **Skor 2:** Opsi jawaban benar pada *tier* 1 DAN opsi alasan logis benar pada *tier* 2 (mengindikasikan penalaran ilmiah matang).
    * **Skor 1:** Opsi jawaban benar pada *tier* 1 namun alasan keliru pada *tier* 2 (mengindikasikan hafalan prosedural semu), ATAU opsi jawaban keliru akibat salah perhitungan teknis minor namun alasan penalarannya sahih (mengindikasikan penguasaan parsial / miskonsepsi).
    * **Skor 0:** Jawaban dan alasan salah keduanya, atau tidak menjawab (tidak menguasai konsep).  
-   Penerapan penskoran bergradasi ini menghasilkan rentang skor total **0 hingga 20 poin** (skor per dimensi berada pada rentang **0 hingga 4 poin** dengan 5 tingkatan), sehingga memperluas varians data secara signifikan, memitigasi volatilitas pengukuran pada tes 10 butir, serta memperkuat fungsi evaluasi formatif diagnostik. Instrumen ini dilengkapi pula dengan **6 butir kontrol NEDV** (TP 2.3 Layanan VoIP sebanyak 2 butir; TP 2.4 & TP 2.5 Jaringan Fiber Optik sebanyak 4 butir) dengan format dua tingkat dan penskoran bergradasi yang setara (skor 0–2), namun skor NEDV dianalisis secara terpisah murni sebagai variabel kontrol validitas internal dan tidak diakumulasikan ke dalam skor capaian target TOLT-Jaringan.
+   Penerapan penskoran bergradasi ini menghasilkan rentang skor total **0 hingga 60 poin** (skor per fase berada pada rentang **0 hingga 12 poin** dengan 7 tingkatan), sehingga memperluas varians data secara signifikan, memitigasi volatilitas pengukuran, serta memperkuat fungsi evaluasi formatif diagnostik. Instrumen ini dilengkapi pula dengan **6 butir kontrol NEDV** (TP 2.3 Layanan VoIP sebanyak 2 butir; TP 2.4 & TP 2.5 Jaringan Fiber Optik sebanyak 4 butir) dengan format dua tingkat dan penskoran bergradasi yang setara (skor 0–2), menghasilkan total **36 butir soal per paket tes**. Skor NEDV dianalisis secara terpisah murni sebagai variabel kontrol validitas internal dan tidak diakumulasikan ke dalam skor capaian target penalaran *troubleshooting*.
 
 ### 3.4.3 Pengujian Kualitas Butir Tes Berbasis Teori Tes Klasik (CTT)
 Mengacu pada Shofiah et al. (2023) dan Azwar (2012), butir tes diuji coba secara empiris:
@@ -834,12 +836,12 @@ Untuk menjawab rekomendasi agenda riset SLR mengenai perlunya protokol evaluasi 
 * **Pengukuran Usability:** Dihitung rata-rata skor SUS dari 34 siswa responden dengan rumus standar Brooke (1996) dan diklasifikasikan berdasarkan kriteria Bangor et al. (2008, 2009). Target: rata-rata skor $\overline{\text{SUS}} \ge 68{,}0$ (predikat minimal *Good*). Ditambah analisis kualitatif wawancara dengan 3 guru kejuruan.
 
 ### 3.5.6 Jalur E6 — Analisis Dampak Belajar, Profil Keseimbangan Dimensi, dan Hubungan Dosis-Respons
-* **Tujuan:** Mengevaluasi peningkatan kemampuan berpikir logis siswa, memetakan profil keseimbangan peningkatan di seluruh dimensi penalaran TOLT, serta membuktikan kontribusi empiris interaksi sistem melalui analisis hubungan dosis-respons (*dosage-response*).
+* **Tujuan:** Mengevaluasi peningkatan kemampuan berpikir logis siswa, memetakan profil keseimbangan peningkatan di seluruh fase kognitif penalaran troubleshooting Jonassen, serta membuktikan kontribusi empiris interaksi sistem melalui analisis hubungan dosis-respons (*dosage-response*).
 * **Metrik Evaluasi:** Dihitung gain skor mentah, *Normalized Gain* ($N\text{-Gain}$ Hake, 1999), dan ukuran efek berpasangan *Cohen's* $d_z$:
   $$d_z = \frac{\bar{D}}{s_D}$$
 * **Uji Hipotesis Komparatif:** Uji *Paired Sample t-Test* atau *Wilcoxon Signed-Rank Test* pada taraf $\alpha = 0{,}05$.
 * **Pemetaan Profil Keseimbangan Antar-Dimensi (Ukuran Efek $d_z$ dan Repeated Measures ANOVA):**  
-  Data perolehan $N\text{-Gain}$ dikelompokkan menjadi 5 dimensi penalaran TOLT:
+  Data perolehan $N\text{-Gain}$ dikelompokkan menjadi 5 fase kognitif penalaran troubleshooting Jonassen:
   * Dimensi 1: *Controlling Variables*
   * Dimensi 2: *Proportional Reasoning*
   * Dimensi 3: *Combinatorial Reasoning*
@@ -1112,7 +1114,7 @@ Zhao, H., Wu, Y., Lu, Z., Yu, X., Miao, W., & Chen, L. (2026). SageJavon: A scal
 | Aspek Penilaian | Indikator Penilaian Operasional |
 | :--- | :--- |
 | **Substansi Materi Jaringan Nirkabel** | Akurasi konsep topologi Ad-Hoc vs Infrastruktur; kebenaran konsep frekuensi nirkabel dan alokasi kanal *non-overlapping*; kebenaran prosedur konfigurasi SSID dan enkripsi WPA2/WPA3. |
-| **Konstruksi Dimensi TOLT** | Keselarasan butir kuis dan butir tes dengan 5 dimensi penalaran formal TOLT (*Controlling Variables, Proportional, Combinatorial, Probabilistic, Correlational*). |
+| **Konstruksi Fase Troubleshooting Jonassen** | Keselarasan butir kuis dan butir tes dengan 5 fase kognitif penalaran troubleshooting Jonassen (2006) (*Controlling Variables, Proportional, Combinatorial, Probabilistic, Correlational*). |
 | **Taksonomi Knowledge Components (KC)** | Ketepatan dekomposisi materi teknologi jaringan nirkabel ke dalam 12 KC atomik dan kesahihan relasi ketergantungan pada graf dependensi prasyarat (DAG). |
 | **Integrasi Sintaks Station Rotation** | Keterlaksanaan sintaks *Station Rotation* satu ruangan lab (Zona A: Praktik Lab Mandiri 1:1; Zona B: Evaluasi Adaptif Mandiri via ponsel cerdas dan bimbingan guru bergerak). |
 | **Kualitas Soal & Rubrik Penskoran** | Kejelasan rumusan butir soal *two-tier*, ketepatan kunci jawaban, berfungsinya distraktor, serta objektivitas rubrik pedoman penskoran kognitif bergradasi polikotomis (Skor 0, 1, 2). |
@@ -1138,29 +1140,26 @@ Petunjuk: Berilah tanda centang ($\checkmark$) pada kolom skala yang paling sesu
 
 ---
 
-### Lampiran 4. Kisi-kisi Instrumen Tes Kemampuan Logical Thinking (TOLT-Jaringan)
+### Lampiran 4. Kisi-kisi Instrumen Tes Kemampuan Logical Thinking Berbasis Penalaran Troubleshooting Jaringan
 
-| No | Dimensi TOLT (Tobin & Capie, 1981) | Konteks Kasus Kejuruan Jaringan Kabel & Nirkabel (TKJ) | Alur Capaian Kurikulum | Bentuk Soal | Skor Maks |
-| :---: | :--- | :--- | :---: | :---: | :---: |
-| 1 | *Controlling Variables* | Menentukan variabel uji mandiri adapter Wi-Fi klien saat SSID tidak terdeteksi sebelum mereset AP pemancar. | **TP 2.2** (Perawatan & Perbaikan) | *Two-Tier* | 2 |
-| 2 | *Controlling Variables* | Melacak penyebab kegagalan autentikasi dengan menguji variabel kata sandi enkripsi WPA2 secara terisolasi. | **TP 2.2** (Perawatan & Perbaikan) | *Two-Tier* | 2 |
-| 3 | *Proportional Reasoning* | Mengkalkulasi proporsi penurunan kuat sinyal RSSI (-dBm) akibat pertambahan kelipatan jarak fisik dari AP. | **TP 2.1** (Instalasi Nirkabel) | *Two-Tier* | 2 |
-| 4 | *Proportional Reasoning* | Menganalisis rasio throughput transfer data terhadap nilai redaman material penghalang dinding beton vs kayu. | **TP 2.1** (Instalasi Nirkabel) | *Two-Tier* | 2 |
-| 5 | *Combinatorial Reasoning* | Merancang seluruh kemungkinan kombinasi kanal non-overlapping (1, 6, 11) pada 3 Access Point yang berdekatan. | **TP 2.1** (Instalasi Nirkabel) | *Two-Tier* | 2 |
-| 6 | *Combinatorial Reasoning* | Menyusun kombinasi skema topologi Ad-Hoc antar-laptop dan topologi BSS untuk kebutuhan simulasi praktikum lab. | **TP 2.1** (Instalasi Nirkabel) | *Two-Tier* | 2 |
-| 7 | *Probabilistic Reasoning* | Memprediksi probabilitas laptop berpindah jalur koneksi (*roaming*) ke WLAN Extender saat bergerak menjauhi AP Utama. | **TP 2.2** (Perawatan & Perbaikan) | *Two-Tier* | 2 |
-| 8 | *Probabilistic Reasoning* | Memperhitungkan peluang terjadinya tabrakan paket (*collision*) pada kanal nirkabel yang padat pengguna. | **TP 2.1** (Instalasi Nirkabel) | *Two-Tier* | 2 |
-| 9 | *Correlational Reasoning* | Mengorelasikan respons pesan *Destination Host Unreachable* (DHU) dengan kekeliruan segmen subnet IP lokal. | **TP 2.2** (Perawatan & Perbaikan) | *Two-Tier* | 2 |
-| 10 | *Correlational Reasoning* | Mengorelasikan respons pesan *Request Timed Out* (RTO) saat SSID terhubung dengan blokade firewall laptop penerima. | **TP 2.2** (Perawatan & Perbaikan) | *Two-Tier* | 2 |
-| 11–12 | *Non-Equivalent Dependent Variable (NEDV - Kontrol)* | **Layanan Voice over IP (VoIP):** Menganalisis parameter codec audio, packet loss, dan latensi jitter pada komunikasi VoIP (2 butir kontrol efek tes, materi tidak diajarkan selama 4 sesi). | **TP 2.3** (Layanan VoIP) | *Two-Tier* | 2 |
-| 13–16 | *Non-Equivalent Dependent Variable (NEDV - Kontrol)* | **Jaringan dan Perbaikan Fiber Optik:** Menganalisis redaman sambungan fusion splicer, pengukuran OTDR, serta perbedaan kabel single-mode vs multi-mode (4 butir kontrol efek tes, materi tidak diajarkan selama 4 sesi). | **TP 2.4 & TP 2.5** (Fiber Optik) | *Two-Tier* | 2 |
+Paket instrumen paralel (Bentuk A dan Bentuk B) masing-masing memuat **36 butir soal pilihan ganda beralasan dua tingkat (*two-tier multiple choice*)**, terdiri atas 30 butir materi target (5 fase Jonassen × 6 butir) dan 6 butir kontrol NEDV:
+
+| No | Fase Kognitif Troubleshooting (Jonassen, 2006) | Konteks Kasus Kejuruan Jaringan Kabel & Nirkabel (TKJ) | Alur Capaian Kurikulum | Bentuk Soal | Butir Bentuk A | Butir Bentuk B | Skor Maks |
+| :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| 1–6 | **1. Symptom Recognition** | Mengidentifikasi indikator LED adapter/switch, pesan galat ICMP DHU vs RTO, dan degradasi awal sinyal. | **TP 2.2** (Perawatan & Perbaikan) | *Two-Tier* | A01–A06 | B01–B06 | 12 |
+| 7–12 | **2. Problem Space Construction** | Mengisolasi batas masalah (klien vs AP), verifikasi kecocokan SSID/WPA2, dan pemisahan variabel uji. | **TP 2.2** (Perawatan & Perbaikan) | *Two-Tier* | A07–A12 | B07–B12 | 12 |
+| 13–18 | **3. Fault Hypothesis Generation** | Merumuskan dugaan kausalitas penurunan RSSI (-dBm) akibat kelipatan jarak dan koefisien serap material sekat. | **TP 2.1** (Instalasi Nirkabel) | *Two-Tier* | A13–A18 | B13–B18 | 12 |
+| 19–24 | **4. Hypothesis Testing & Evaluation** | Menguji ambang batas roaming pemancar dan mengevaluasi probabilitas tabrakan paket (CSMA/CA) pada spektrum padat. | **TP 2.1 & 2.2** | *Two-Tier* | A19–A24 | B19–B24 | 12 |
+| 25–30 | **5. Corrective Action & Verification** | Merancang alokasi kanal non-overlapping (1, 6, 11), skema topologi bebas interferensi, dan verifikasi throughput link. | **TP 2.1** (Instalasi Nirkabel) | *Two-Tier* | A25–A30 | B25–B30 | 12 |
+| 31–32 | **Non-Equivalent Dependent Variable (NEDV - Kontrol)** | **Layanan Voice over IP (VoIP):** Menganalisis parameter codec audio (G.711 vs G.729), packet loss, dan latensi jitter pada komunikasi VoIP (2 butir kontrol efek tes, materi tidak diajarkan selama 4 sesi). | **TP 2.3** (Layanan VoIP) | *Two-Tier* | C01–C02 | C01–C02 | 4 |
+| 33–36 | **Non-Equivalent Dependent Variable (NEDV - Kontrol)** | **Jaringan dan Perbaikan Fiber Optik:** Menganalisis redaman sambungan fusion splicer, pengukuran OTDR, bending radius, serta perbedaan kabel single-mode vs multi-mode (4 butir kontrol efek tes, materi tidak diajarkan selama 4 sesi). | **TP 2.4 & TP 2.5** (Fiber Optik) | *Two-Tier* | C03–C06 | C03–C06 | 8 |
 
 *Pedoman Penskoran Polikotomis:*
 * **Skor 2**: Jawaban *tier* 1 Benar dan Alasan *tier* 2 Benar (Penalaran Ilmiah Matang).
-* **Skor 1**: Jawaban *tier* 1 Benar namun Alasan *tier* 2 Keliru (Hafalan Prosedural Semu), ATAU Jawaban *tier* 1 Keliru akibat salah perhitungan minor namun Alasan *tier* 2 Benar (Pemahaman Parsial).
+* **Skor 1**: Jawaban *tier* 1 Benar namun Alasan *tier* 2 Keliru (Hafalan Prosedural Semu), ATAU Jawaban *tier* 1 Keliru akibat salah perhitungan teknis minor namun Alasan *tier* 2 Benar (Pemahaman Parsial).
 * **Skor 0**: Jawaban dan Alasan Keliru keduanya, atau tidak menjawab (Tidak Menguasai Konsep).  
-*Skor Maksimal Total Tes Target (Butir 1–10) = 20 Poin (Skor per dimensi = 0 s.d. 4 poin).*  
-*Skor Butir NEDV (Butir 11–16, skor 0–2 per butir) dianalisis terpisah murni sebagai variabel kontrol validitas internal.*
+*Skor Maksimal Total Tes Target (Butir 1–30) = 60 Poin (Skor per fase = 0 s.d. 12 poin).*  
+*Skor Butir NEDV (Butir 31–36, skor 0–2 per butir) dianalisis terpisah murni sebagai variabel kontrol validitas internal.*
 
 ---
 
