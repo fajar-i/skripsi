@@ -65,6 +65,10 @@ FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..
 DOCS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "docs"))
 STUDENT_DIR = os.path.join(FRONTEND_DIR, "student")
 TEACHER_DIR = os.path.join(FRONTEND_DIR, "teacher")
+ASSETS_DIR = os.path.join(FRONTEND_DIR, "assets")
+
+if os.path.exists(ASSETS_DIR):
+    app.mount("/assets", StaticFiles(directory=ASSETS_DIR), name="assets")
 
 if os.path.exists(STUDENT_DIR):
     app.mount("/student", StaticFiles(directory=STUDENT_DIR, html=True), name="student")

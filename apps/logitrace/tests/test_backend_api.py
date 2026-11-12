@@ -344,3 +344,15 @@ async def test_agent_t1_semantic_labeling_and_review():
         }
         res_bad_kc = await client.post(f"/api/teacher/items/{first_item['item_id']}/approve-label", json=bad_kc_payload)
         assert res_bad_kc.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_feedback_audio_assets_served():
+    """Student quiz and landing demo feedback audio files must be served over /assets/audio/."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        for filename in ("correct_answer.mp3", "wrong_answer.mp3"):
+            res = await client.get(f"/assets/audio/{filename}")
+            assert res.status_code == 200, f"Expected 200 for {filename}, got {res.status_code}"
+            assert "audio" in res.headers.get("content-type", ""), f"Expected audio content-type for {filename}"
+            assert len(res.content) > 1000

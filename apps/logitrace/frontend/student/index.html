@@ -2,33 +2,43 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LogiTrace — Latihan Siswa</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+            display: ['"Baloo 2"', 'Fredoka', 'Nunito', 'system-ui', 'sans-serif'],
+            sans: ['Nunito', 'system-ui', '-apple-system', 'sans-serif'],
+            num: ['Fredoka', 'Nunito', 'system-ui', 'sans-serif'],
           },
           colors: {
-            paper: '#F7F6F2',
-            surface: '#FFFFFF',
-            subtle: '#EFECE6',
-            line: '#DFDCD4',
-            ink: '#121417',
-            muted: '#575E66',
-            brand: '#059669',
-            'brand-dark': '#047857',
+            feather: '#58CC02',
+            'feather-shade': '#46A302',
+            'feather-soft': '#EAFBD6',
+            macaw: '#1CB0F6',
+            'macaw-shade': '#1899D6',
+            'macaw-soft': '#DFF4FF',
+            cardinal: '#FF4B4B',
+            'cardinal-shade': '#D33131',
+            'cardinal-soft': '#FFDFDF',
+            fox: '#FF9600',
+            'fox-soft': '#FFF3E0',
+            bee: '#FFC800',
+            'bee-shade': '#D9A500',
+            eel: '#4B4B4B',
+            wolf: '#777777',
+            hare: '#CFCFCF',
+            swan: '#E5E5E5',
+            snow: '#F7F7F7',
+            polar: '#FFFFFF',
           }
         }
       }
@@ -36,706 +46,545 @@
   </script>
 
   <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
-      background-color: #F7F6F2;
-      color: #121417;
-      font-family: "Plus Jakarta Sans", -apple-system, sans-serif;
+      background-color: #FFFFFF;
+      color: #4B4B4B;
+      font-family: Nunito, system-ui, -apple-system, sans-serif;
+      font-weight: 700;
       touch-action: manipulation;
       -webkit-font-smoothing: antialiased;
     }
+
+    h1, h2, h3, .font-display {
+      font-family: "Baloo 2", Nunito, system-ui, sans-serif;
+    }
+
     .tap-target { min-height: 48px; }
+
+    /* Tactile 3D Duolingo Buttons */
+    .duo-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-radius: 16px;
+      border: 0;
+      cursor: pointer;
+      transition: transform 0.06s ease, box-shadow 0.06s ease, filter 0.12s ease;
+    }
+
+    .duo-btn-green {
+      background: #58CC02;
+      color: #FFFFFF;
+      box-shadow: 0 4px 0 #46A302;
+    }
+    .duo-btn-green:hover:not(:disabled) { filter: brightness(1.05); }
+    .duo-btn-green:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #46A302;
+    }
+
+    .duo-btn-blue {
+      background: #1CB0F6;
+      color: #FFFFFF;
+      box-shadow: 0 4px 0 #1899D6;
+    }
+    .duo-btn-blue:hover:not(:disabled) { filter: brightness(1.05); }
+    .duo-btn-blue:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #1899D6;
+    }
+    .duo-btn-blue:disabled {
+      background: #CFCFCF;
+      color: #FFFFFF;
+      box-shadow: 0 4px 0 #AFAFAF;
+      cursor: not-allowed;
+    }
+
+    .duo-btn-red {
+      background: #FF4B4B;
+      color: #FFFFFF;
+      box-shadow: 0 4px 0 #D33131;
+    }
+    .duo-btn-red:hover:not(:disabled) { filter: brightness(1.05); }
+    .duo-btn-red:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #D33131;
+    }
+
+    .duo-btn-ghost {
+      background: #FFFFFF;
+      color: #4B4B4B;
+      border: 2px solid #E5E5E5;
+      border-bottom-width: 6px;
+      box-shadow: none;
+    }
+    .duo-btn-ghost:hover:not(:disabled) { background: #F7F7F7; }
+    .duo-btn-ghost:active:not(:disabled) {
+      transform: translateY(4px);
+      border-bottom-width: 2px;
+    }
+
+    .duo-btn-white {
+      background: #FFFFFF;
+      color: #58CC02;
+      box-shadow: 0 4px 0 #46A302;
+    }
+    .duo-btn-white:hover { filter: brightness(0.98); }
+    .duo-btn-white:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #46A302;
+    }
+
+    /* Tactile Multiple-Choice Tiles */
+    .mc-opt {
+      width: 100%;
+      text-align: left;
+      background: #FFFFFF;
+      border: 2px solid #E5E5E5;
+      border-bottom-width: 4px;
+      border-radius: 16px;
+      padding: 14px 16px;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: transform 0.06s ease, border-bottom-width 0.06s ease, background-color 0.12s ease, border-color 0.12s ease;
+    }
+    .mc-opt:hover:not(:disabled) { background: #F7F7F7; }
+    .mc-opt:active:not(:disabled) {
+      transform: translateY(2px);
+      border-bottom-width: 2px;
+    }
+    .mc-opt .opt-key {
+      width: 34px;
+      height: 34px;
+      flex: none;
+      border: 2px solid #E5E5E5;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Fredoka, Nunito, system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: #777777;
+      background: #FFFFFF;
+    }
+    .mc-opt.is-selected {
+      border-color: #1CB0F6;
+      background: #DFF4FF;
+    }
+    .mc-opt.is-selected .opt-key {
+      border-color: #1CB0F6;
+      background: #1CB0F6;
+      color: #FFFFFF;
+    }
+    .mc-opt.is-correct {
+      border-color: #58CC02;
+      background: #EAFBD6;
+    }
+    .mc-opt.is-correct .opt-key {
+      border-color: #58CC02;
+      background: #58CC02;
+      color: #FFFFFF;
+    }
+    .mc-opt.is-wrong {
+      border-color: #FF4B4B;
+      background: #FFDFDF;
+    }
+    .mc-opt.is-wrong .opt-key {
+      border-color: #FF4B4B;
+      background: #FF4B4B;
+      color: #FFFFFF;
+    }
+
+    /* Progress & Animations */
+    .spring-bar {
+      transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .banner-slide {
+      animation: slideUp 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .pop-in {
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -20px;
+      width: 10px;
+      height: 16px;
+      border-radius: 3px;
+      z-index: 1;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      to { transform: translateY(110vh) rotate(720deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spring-bar, .banner-slide, .pop-in, .confetti-piece {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-brand/15 selection:text-ink font-sans">
+<body class="min-h-screen flex flex-col justify-between bg-polar text-eel font-sans selection:bg-feather-soft selection:text-eel">
 
-  <!-- TOP APP BAR -->
-  <header class="bg-surface border-b border-line sticky top-0 z-30">
-    <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="/" class="flex items-center space-x-2">
-        <div class="w-7 h-7 rounded bg-ink text-white flex items-center justify-center font-mono font-bold text-xs">
-          LT
+  <!-- TOP APP BAR (Visible on Login & Classroom) -->
+  <header id="app-topbar" class="bg-polar border-b-2 border-swan sticky top-0 z-30">
+    <div class="max-w-xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+      <a href="/" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-feather shadow-[0_3px_0_#46A302] text-white flex items-center justify-center flex-shrink-0">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="6" cy="7" r="2.5" fill="#fff"/>
+            <circle cx="18" cy="7" r="2.5" fill="#fff"/>
+            <circle cx="12" cy="17" r="2.5" fill="#fff"/>
+            <path d="M8 8.3L10.8 15M16 8.3L13.2 15M8.5 7H15.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
         </div>
         <div>
-          <h1 class="font-bold text-sm leading-tight text-ink">LogiTrace</h1>
-          <p class="text-[10px] text-muted font-mono">XI TKJ 1</p>
+          <h1 class="font-display font-extrabold text-base leading-none text-eel">LogiTrace</h1>
+          <p class="text-[11px] text-wolf font-num font-semibold mt-0.5">XI TKJ 1</p>
         </div>
       </a>
-      <div id="student-badge-container" class="flex items-center space-x-2">
+      <div id="student-badge-container" class="flex items-center gap-2">
         <!-- Rendered via JS -->
       </div>
     </div>
   </header>
 
   <!-- MAIN CONTAINER -->
-  <main class="max-w-md w-full mx-auto p-4 flex-1 flex flex-col">
+  <main class="max-w-xl w-full mx-auto px-4 py-5 flex-1 flex flex-col">
 
     <!-- SCREEN 1: LOGIN / SELECT STUDENT -->
-    <div id="screen-login" class="bg-surface rounded-xl border border-line p-6 my-auto">
-      <div class="mb-5">
-        <h2 class="text-lg font-bold text-ink">Mulai Latihan</h2>
-        <p class="text-xs text-muted mt-1">Pilih kode siswamu. Soal akan otomatis menyesuaikan pemahamanmu.</p>
-      </div>
-
-      <div class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-ink mb-1.5">Kode Siswa</label>
-          <select id="student-select" class="w-full bg-paper border border-line rounded-lg px-3 py-3 text-sm text-ink focus:border-ink focus:outline-none">
-            <option value="">-- Pilih Kode Siswa (std_01 s.d std_34) --</option>
-          </select>
+    <section id="screen-login" class="my-auto py-4">
+      <div class="bg-polar rounded-3xl border-2 border-swan border-b-[6px] p-6 sm:p-7 space-y-5">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-feather-soft border-2 border-feather/30 text-feather-shade flex items-center justify-center flex-shrink-0">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3Z" stroke="#46A302" stroke-width="2.4" stroke-linejoin="round"/>
+              <path d="M9 12l2 2 4-4" stroke="#46A302" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="font-display text-2xl font-extrabold text-eel leading-tight">Ayo Mulai Latihan!</h2>
+            <p class="text-sm text-wolf font-bold mt-0.5">Pilih kode siswamu untuk membuka sesi adaptif.</p>
+          </div>
         </div>
 
-        <button id="btn-login" class="w-full bg-ink hover:bg-zinc-800 text-white font-semibold py-3 px-4 rounded-lg tap-target transition flex items-center justify-center space-x-2 text-sm">
-          <span>Buka Tugas</span>
-          <i class="fa-solid fa-arrow-right text-xs"></i>
-        </button>
+        <div id="login-error" class="hidden p-3.5 rounded-2xl bg-cardinal-soft border-2 border-cardinal/40 text-xs font-extrabold text-cardinal-shade">
+          Pilih kode siswamu terlebih dahulu ya.
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label for="student-select" class="block text-xs font-extrabold uppercase tracking-wider text-wolf mb-2">
+              Kode Siswa (XI TKJ 1)
+            </label>
+            <select id="student-select" class="w-full bg-snow border-2 border-swan rounded-2xl px-3.5 py-3.5 text-sm font-num font-semibold text-eel focus:border-macaw focus:bg-polar focus:outline-none tap-target cursor-pointer">
+              <option value="">-- Pilih Kode (std_01–34) --</option>
+            </select>
+          </div>
+
+          <button id="btn-login" type="button" class="w-full duo-btn duo-btn-green py-3.5 px-5 tap-target">
+            <span>Buka Tugas Saya</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- SCREEN 2: ASSIGNMENT LIST -->
-    <div id="screen-classroom" class="hidden flex-1 flex flex-col space-y-4">
+    <!-- SCREEN 2: ASSIGNMENT LIST (CLASSROOM) -->
+    <section id="screen-classroom" class="hidden flex-1 flex flex-col gap-4 pb-6">
 
-      <!-- Simple Course Header -->
-      <div class="bg-ink text-white rounded-xl p-4 border border-ink">
-        <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-400">XI TKJ 1 &bull; Pak Budi</span>
-        <h2 class="text-base font-bold mt-0.5">Teknologi Jaringan Kabel &amp; Nirkabel</h2>
+      <!-- Feather Green Course Header -->
+      <div class="bg-feather rounded-3xl p-5 text-white border-2 border-feather-shade border-b-[6px]">
+        <div class="flex items-center justify-between gap-2 mb-1">
+          <span class="px-2.5 py-0.5 rounded-full bg-white/20 font-num text-[11px] font-semibold uppercase tracking-wider">
+            XI TKJ 1 &bull; Pak Budi
+          </span>
+          <span class="font-num text-[11px] font-bold text-white/95">Zona B</span>
+        </div>
+        <h2 class="font-display text-xl sm:text-2xl font-extrabold leading-snug">
+          Teknologi Jaringan Kabel &amp; Nirkabel
+        </h2>
       </div>
 
       <!-- Section Title -->
       <div class="flex items-center justify-between pt-1">
-        <h3 class="text-xs font-mono font-semibold uppercase tracking-wider text-muted">Pilih Sesi Latihan</h3>
-        <button onclick="loadClassroomSessions()" class="text-xs text-ink hover:underline font-medium flex items-center space-x-1">
-          <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+        <h3 class="font-sans text-xs font-extrabold uppercase tracking-wider text-wolf">Daftar Sesi Latihan</h3>
+        <button type="button" onclick="loadClassroomSessions()" class="px-3 py-1.5 rounded-xl bg-snow hover:bg-swan/60 border-2 border-swan text-xs font-extrabold text-eel transition flex items-center gap-1.5">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 12a9 9 0 1 1-2.64-6.36M21 4v6h-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
           <span>Muat Ulang</span>
         </button>
       </div>
 
       <!-- Sessions Container -->
-      <div id="classroom-sessions-list" class="space-y-3 flex-1">
+      <div id="classroom-sessions-list" class="space-y-3.5 flex-1">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- SCREEN 3: DUOLINGO QUIZ INTERFACE -->
+    <section id="screen-quiz" class="hidden flex-1 flex flex-col pb-40">
+
+      <!-- Top Lesson HUD -->
+      <div class="flex items-center gap-2.5 pt-1 pb-4">
+        <button id="btn-exit-quiz" type="button" onclick="returnToClassroom()" class="w-11 h-11 rounded-xl border-2 border-swan bg-polar hover:bg-snow text-wolf hover:text-eel flex items-center justify-center flex-shrink-0 transition" aria-label="Kembali ke daftar sesi" title="Kembali ke daftar tugas">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <div class="flex-1 h-4 rounded-full bg-swan overflow-hidden">
+          <div id="progress-bar" class="h-full bg-feather rounded-full shadow-[inset_0_-4px_0_rgba(0,0,0,0.08)] spring-bar" style="width: 5%"></div>
+        </div>
+
+        <div class="flex items-center gap-1.5 flex-shrink-0">
+          <span id="label-sequence" class="font-num text-xs font-bold tabular-nums text-eel bg-snow border-2 border-swan px-2.5 py-1 rounded-xl">
+            1/20
+          </span>
+          <button id="btn-toggle-sound" type="button" onclick="toggleSound()" aria-pressed="false" aria-label="Bisukan efek suara" title="Efek suara aktif — klik untuk bisukan" class="w-11 h-11 rounded-xl border-2 border-swan bg-polar hover:bg-snow text-macaw-shade flex items-center justify-center flex-shrink-0 transition">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M11 5L6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <span id="badge-stage" class="hidden sm:inline-block px-2.5 py-1 rounded-xl text-[11px] font-extrabold bg-macaw-soft text-macaw-shade">
+            Soal Awal
+          </span>
+        </div>
+      </div>
+
+      <!-- Topic & Difficulty Pills -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span id="badge-kc" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-snow border-2 border-swan text-xs font-extrabold text-eel">
+          <span class="w-2 h-2 rounded-full bg-macaw"></span>
+          <span id="text-kc-name">Materi Jaringan</span>
+        </span>
+        <span id="badge-diff" class="px-3 py-1 rounded-xl text-xs font-extrabold bg-feather-soft text-feather-shade">
+          Mudah
+        </span>
+      </div>
+
+      <!-- Prompt -->
+      <div class="mb-5">
+        <h2 id="question-prompt" class="font-display text-xl sm:text-2xl font-extrabold text-eel leading-snug">
+          Memuat soal...
+        </h2>
+      </div>
+
+      <!-- Options Container -->
+      <div id="options-container" class="space-y-3 mb-5">
         <!-- Rendered via JS -->
       </div>
 
-    </div>
-
-    <!-- SCREEN 3: QUIZ INTERFACE -->
-    <div id="screen-quiz" class="hidden flex-1 flex flex-col">
-
-      <!-- Navigation & Progress Bar -->
-      <div class="bg-surface rounded-xl border border-line p-3 mb-3">
-        <div class="flex items-center justify-between text-xs font-medium mb-2">
-          <button onclick="returnToClassroom()" class="text-muted hover:text-ink font-semibold flex items-center space-x-1">
-            <i class="fa-solid fa-chevron-left text-[10px]"></i>
-            <span>Kembali</span>
+      <!-- Socratic Hint Drawer (RAG T2) -->
+      <div class="bg-snow rounded-2xl border-2 border-swan p-3.5 space-y-2.5">
+        <div class="flex items-center justify-between gap-2">
+          <button id="btn-toggle-hint" type="button" class="text-xs sm:text-sm font-extrabold text-macaw-shade hover:underline flex items-center gap-2 py-0.5">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.7.6 1 1.4 1 2.3h6c0-.9.3-1.7 1-2.3A7 7 0 0 0 12 2Z" stroke="#1899D6" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Buntu? Minta Petunjuk</span>
           </button>
-          <div class="flex items-center space-x-2 font-mono">
-            <span id="badge-stage" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-subtle text-ink">
-              Soal Awal
-            </span>
-            <span id="label-sequence" class="text-ink font-bold">Soal 1 / 20</span>
-          </div>
-        </div>
-        <div class="w-full bg-subtle rounded-full h-1.5 overflow-hidden">
-          <div id="progress-bar" class="bg-brand h-1.5 transition-all duration-300" style="width: 5%"></div>
-        </div>
-      </div>
-
-      <!-- Question Card -->
-      <div class="bg-surface rounded-xl border border-line p-5 flex-1 flex flex-col justify-between">
-        <div>
-          <!-- Topic & Difficulty Badges -->
-          <div class="flex items-center justify-between mb-3 text-[11px] font-mono">
-            <span id="badge-kc" class="font-medium px-2 py-0.5 rounded bg-paper text-ink border border-line">
-              <span id="text-kc-name">Materi Jaringan</span>
-            </span>
-            <span id="badge-diff" class="font-semibold px-2 py-0.5 rounded bg-subtle text-ink">
-              Mudah
-            </span>
-          </div>
-
-          <!-- Prompt Text -->
-          <div class="mb-5">
-            <h3 id="question-prompt" class="text-ink font-semibold text-sm sm:text-base leading-relaxed">
-              Memuat soal...
-            </h3>
-          </div>
-
-          <!-- Options Container -->
-          <div id="options-container" class="space-y-2 mb-4">
-            <!-- Dynamic options rendered here -->
-          </div>
+          <span id="hint-status-pill" class="hidden text-[11px] font-num font-semibold px-2.5 py-0.5 rounded-full bg-fox-soft text-fox border border-fox/30">
+            Petunjuk Dibuka
+          </span>
         </div>
 
-        <!-- Hint Drawer (RAG) -->
-        <div class="mt-4 pt-3 border-t border-line">
-          <div class="flex items-center justify-between">
-            <button id="btn-toggle-hint" type="button" class="text-xs font-semibold text-brand-dark hover:underline flex items-center space-x-1.5 py-1">
-              <i class="fa-regular fa-lightbulb"></i>
-              <span>Buntu? Minta Petunjuk</span>
-            </button>
-            <span id="hint-status-pill" class="hidden text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-subtle text-ink">
-              Petunjuk Dibuka
-            </span>
-          </div>
-
-          <!-- Hint Panel -->
-          <div id="hint-panel" class="hidden mt-2.5 p-3.5 bg-paper border border-line rounded-lg text-xs text-ink">
-            <div class="flex items-center justify-between mb-2 pb-2 border-b border-line">
-              <span class="font-mono font-semibold text-[11px] text-muted">Pilih Tingkat Petunjuk:</span>
-              <div class="flex space-x-1 font-mono">
-                <button type="button" onclick="loadHint(1)" class="btn-hint-lvl px-2.5 py-1 rounded text-[10px] font-semibold bg-surface hover:bg-subtle text-ink border border-line">Level 1</button>
-                <button type="button" onclick="loadHint(2)" class="btn-hint-lvl px-2.5 py-1 rounded text-[10px] font-semibold bg-surface hover:bg-subtle text-ink border border-line">Level 2</button>
-                <button type="button" onclick="loadHint(3)" class="btn-hint-lvl px-2.5 py-1 rounded text-[10px] font-semibold bg-surface hover:bg-subtle text-ink border border-line">Level 3</button>
-              </div>
-            </div>
-            <div id="hint-body" class="text-xs leading-relaxed text-ink min-h-[32px]">
-              Pilih Level 1 untuk petunjuk ringan, atau Level 2–3 untuk langkah penyelesaian yang lebih rinci.
+        <div id="hint-panel" class="hidden pt-2.5 border-t-2 border-swan space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-wolf">Pilih Level Panduan:</span>
+            <div class="flex gap-1.5 font-num">
+              <button type="button" data-level="1" onclick="loadHint(1)" class="btn-hint-lvl px-3 py-1.5 rounded-xl text-xs font-extrabold bg-polar hover:bg-macaw-soft text-eel border-2 border-swan transition">
+                Lv 1
+              </button>
+              <button type="button" data-level="2" onclick="loadHint(2)" class="btn-hint-lvl px-3 py-1.5 rounded-xl text-xs font-extrabold bg-polar hover:bg-macaw-soft text-eel border-2 border-swan transition">
+                Lv 2
+              </button>
+              <button type="button" data-level="3" onclick="loadHint(3)" class="btn-hint-lvl px-3 py-1.5 rounded-xl text-xs font-extrabold bg-polar hover:bg-macaw-soft text-eel border-2 border-swan transition">
+                Lv 3
+              </button>
             </div>
           </div>
-        </div>
-
-        <!-- Submit Button -->
-        <div class="mt-4 pt-2">
-          <button id="btn-submit" disabled class="w-full bg-brand disabled:bg-subtle disabled:text-muted disabled:cursor-not-allowed hover:bg-brand-dark text-white font-semibold py-3 px-4 rounded-lg tap-target transition flex items-center justify-center space-x-2 text-sm">
-            <span>Jawab</span>
-            <i class="fa-solid fa-check text-xs"></i>
-          </button>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- SCREEN 4: FEEDBACK MODAL (AFTER ANSWER) -->
-    <div id="modal-feedback" class="fixed inset-0 bg-ink/60 z-50 flex items-end sm:items-center justify-center p-4 hidden">
-      <div class="bg-surface rounded-xl max-w-sm w-full p-5 border border-line">
-        <div class="flex items-center space-x-3 mb-4">
-          <div id="fb-icon-container" class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
-            <!-- Dynamic icon -->
+          <div id="hint-body" class="p-3 rounded-xl bg-polar border-2 border-swan text-xs sm:text-sm font-bold leading-relaxed text-eel min-h-[40px]">
+            Pilih Level 1 untuk arahan ringan, atau Level 2–3 untuk langkah berpikir yang lebih rinci tanpa membocorkan kunci jawaban.
           </div>
-          <div>
-            <h3 id="fb-title" class="text-base font-bold text-ink">Hasil Jawaban</h3>
-            <p id="fb-subtitle" class="text-xs text-muted">Ringkasan kemampuanmu di materi ini</p>
-          </div>
-        </div>
-
-        <!-- Student-Friendly Mastery Progress -->
-        <div class="bg-paper rounded-lg p-3 border border-line mb-3 text-xs font-mono space-y-1.5">
-          <div class="flex justify-between items-center">
-            <span class="text-muted">Perkiraan Peluang Berhasil:</span>
-            <span id="fb-p-hat" class="font-semibold text-ink">72%</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-muted">Penguasaan Materi:</span>
-            <span id="fb-mastery-shift" class="font-semibold text-ink">0.25 &rarr; 0.40</span>
-          </div>
-          <div class="flex justify-between items-center pt-1 border-t border-line">
-            <span class="text-muted">Perubahan:</span>
-            <span id="fb-delta-m" class="font-bold text-brand">+0.150</span>
-          </div>
-        </div>
-
-        <!-- Explanation -->
-        <div class="bg-paper rounded-lg p-3 border border-line text-xs text-ink mb-4 max-h-36 overflow-y-auto">
-          <p class="font-semibold text-[11px] text-muted mb-1">Pembahasan:</p>
-          <p id="fb-explanation" class="text-xs leading-relaxed">...</p>
-        </div>
-
-        <button id="btn-next-question" class="w-full bg-ink hover:bg-zinc-800 text-white font-semibold py-3 px-4 rounded-lg tap-target transition flex items-center justify-center space-x-2 text-sm">
-          <span>Soal Berikutnya</span>
-          <i class="fa-solid fa-arrow-right text-xs"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- SCREEN 5: COMPLETION SUMMARY -->
-    <div id="screen-summary" class="hidden bg-surface rounded-xl border border-line p-6 my-auto text-center">
-      <div class="w-12 h-12 bg-subtle text-brand rounded-lg flex items-center justify-center mx-auto mb-3 text-xl">
-        <i class="fa-solid fa-check"></i>
-      </div>
-      <h2 class="text-xl font-bold text-ink">Latihan Selesai</h2>
-      <p class="text-xs text-muted mt-1 mb-5">Semua soal pada sesi ini sudah kamu kerjakan.</p>
-
-      <div class="bg-paper rounded-lg p-4 border border-line mb-5 text-left space-y-2 text-xs">
-        <div class="flex justify-between">
-          <span class="text-muted">Siswa:</span>
-          <span id="sum-student" class="font-semibold text-ink">std_01</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-muted">Soal Dijawab:</span>
-          <span class="font-semibold text-ink">20 Soal</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-muted">Petunjuk Dipakai:</span>
-          <span id="sum-hints" class="font-semibold text-ink">0 kali</span>
-        </div>
-        <div class="flex justify-between pt-1.5 border-t border-line">
-          <span class="text-muted">Penguasaan Akhir:</span>
-          <span id="sum-avg-mastery" class="font-bold text-brand text-sm">0.74</span>
         </div>
       </div>
 
-      <div class="space-y-2">
-        <button onclick="returnToClassroom()" class="w-full bg-ink hover:bg-zinc-800 text-white font-semibold py-3 px-4 rounded-lg tap-target transition text-sm">
-          Kembali ke Daftar Tugas
-        </button>
-
-        <button onclick="restartActiveAttempt()" class="w-full bg-surface hover:bg-subtle text-ink font-semibold py-2.5 px-4 rounded-lg tap-target border border-line transition text-xs">
-          Ulangi dari Soal 1
-        </button>
-      </div>
-    </div>
+    </section>
 
   </main>
 
-  <!-- FOOTER -->
-  <footer class="py-3 text-center text-[11px] text-muted border-t border-line bg-surface">
-    LogiTrace &bull; SMK Negeri 4 Bandung
+  <!-- GLOBAL FLOATING ERROR BANNER (Visible across Classroom, Quiz, and Summary screens) -->
+  <div id="quiz-error-banner" role="alert" class="hidden fixed top-4 inset-x-4 max-w-xl mx-auto z-[70] p-3.5 rounded-2xl bg-cardinal-soft border-2 border-cardinal text-xs font-extrabold text-cardinal-shade shadow-lg">
+    <div class="flex items-center justify-between gap-3">
+      <span id="quiz-error-text"></span>
+      <button type="button" onclick="document.getElementById('quiz-error-banner').classList.add('hidden')" class="px-2 py-1 rounded-lg bg-polar border border-cardinal/30 text-cardinal-shade hover:bg-cardinal hover:text-white transition flex-shrink-0" aria-label="Tutup pesan galat">
+        &#10005;
+      </button>
+    </div>
+  </div>
+
+  <!-- STICKY BOTTOM ACTION DOCK (Visible during Quiz before Submit) -->
+  <div id="quiz-dock" class="hidden fixed inset-x-0 bottom-0 z-40 bg-polar border-t-2 border-swan px-4 py-3.5">
+    <div class="max-w-xl mx-auto">
+      <button id="btn-submit" type="button" disabled class="w-full duo-btn duo-btn-blue py-3.5 px-6 tap-target">
+        <span>Cek Jawaban</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- WARM SLIDE-UP FEEDBACK BANNER (After Answer Submit) -->
+  <div id="feedback-banner" class="hidden fixed inset-x-0 bottom-0 z-50 border-t-2 px-4 py-5 banner-slide">
+    <div class="max-w-xl mx-auto space-y-3.5">
+      <div class="flex items-start gap-3">
+        <div id="fb-icon-container" class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 text-white mt-0.5">
+          <!-- Rendered via JS -->
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 id="fb-title" class="font-display text-2xl font-extrabold leading-tight">Mantap!</h3>
+            <span id="fb-delta-m" class="font-num text-xs font-bold tabular-nums px-2.5 py-1 rounded-full bg-polar border border-swan">
+              +0.150
+            </span>
+          </div>
+          <p id="fb-subtitle" class="text-sm font-bold mt-0.5">Dijawab mandiri tanpa petunjuk</p>
+        </div>
+      </div>
+
+      <!-- Compact Mastery & Explanation Strip -->
+      <div class="bg-polar/90 rounded-2xl border-2 border-black/10 p-3.5 space-y-2">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-wolf pb-2 border-b border-swan">
+          <span>Penguasaan: <strong id="fb-mastery-shift" class="font-num font-bold text-eel tabular-nums">0.25 &rarr; 0.40</strong></span>
+          <span>Peluang: <strong id="fb-p-hat" class="font-num font-bold text-eel tabular-nums">72%</strong></span>
+        </div>
+        <div class="max-h-28 overflow-y-auto pr-1">
+          <p id="fb-explanation" class="text-xs sm:text-sm font-bold text-eel leading-relaxed"></p>
+        </div>
+      </div>
+
+      <button id="btn-next-question" type="button" class="w-full duo-btn duo-btn-green py-3.5 px-6 tap-target">
+        <span>Lanjut</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- FULL-BLEED CELEBRATION TAKEOVER (SCREEN 5: COMPLETION SUMMARY) -->
+  <div id="screen-summary" class="hidden fixed inset-0 z-50 bg-feather overflow-y-auto flex items-center justify-center p-4">
+    <div id="confetti-layer" class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true"></div>
+
+    <div class="relative z-10 max-w-md w-full text-center text-white space-y-5 pop-in my-auto py-4">
+      <div class="w-20 h-20 rounded-3xl bg-white/20 border-2 border-white/30 flex items-center justify-center mx-auto">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8 21h8M12 17v4M6 4h12v5a6 6 0 1 1-12 0V4Z" stroke="#FFC800" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="#FFC800" fill-opacity="0.25"/>
+          <path d="M6 6H3v2a3 3 0 0 0 3 3M18 6h3v2a3 3 0 0 1-3 3" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div>
+        <span class="inline-block px-3 py-1 rounded-full bg-feather-shade/50 font-num text-xs font-bold uppercase tracking-wider text-white mb-2">
+          Kerja Bagus!
+        </span>
+        <h2 class="font-display text-4xl sm:text-5xl font-extrabold leading-none">
+          Latihan Selesai!
+        </h2>
+        <p class="text-base font-bold text-white/95 mt-2">
+          Semua soal pada sesi ini berhasil kamu tuntaskan.
+        </p>
+      </div>
+
+      <!-- White Tactile Stats Card -->
+      <div class="bg-polar text-eel rounded-3xl border-2 border-feather-shade border-b-[6px] p-5 text-left space-y-3">
+        <div class="flex items-center justify-between text-xs sm:text-sm">
+          <span class="font-bold text-wolf">Kode Siswa</span>
+          <span id="sum-student" class="font-num font-bold text-eel">std_01 (XI TKJ 1)</span>
+        </div>
+        <div class="flex items-center justify-between text-xs sm:text-sm">
+          <span class="font-bold text-wolf">Soal Diselesaikan</span>
+          <span id="sum-total-items" class="font-num font-bold text-eel">20 Soal</span>
+        </div>
+        <div class="flex items-center justify-between text-xs sm:text-sm">
+          <span class="font-bold text-wolf">Petunjuk Dipakai</span>
+          <span id="sum-hints" class="font-num font-bold text-macaw-shade">0 kali</span>
+        </div>
+        <div class="flex items-center justify-between pt-3 border-t-2 border-swan">
+          <span class="font-extrabold text-sm text-eel">Penguasaan Akhir</span>
+          <span id="sum-avg-mastery" class="font-num text-2xl font-bold tabular-nums text-feather-shade">0.00</span>
+        </div>
+      </div>
+
+      <div class="space-y-3 pt-1">
+        <button type="button" onclick="returnToClassroom()" class="w-full duo-btn duo-btn-white py-4 px-6 tap-target">
+          Kembali ke Daftar Tugas
+        </button>
+        <button type="button" onclick="restartActiveAttempt()" class="w-full py-3 px-6 rounded-2xl border-2 border-white/40 text-white hover:bg-white/10 font-extrabold text-xs uppercase tracking-wider transition tap-target">
+          Ulangi Dari Soal 1
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOM TACTILE CONFIRM MODAL (Replaces native browser confirm()) -->
+  <div id="modal-confirm" role="dialog" aria-modal="true" aria-labelledby="confirm-title" class="hidden fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4">
+    <div class="bg-polar rounded-3xl border-2 border-swan border-b-[6px] max-w-sm w-full p-6 text-center space-y-4 pop-in">
+      <div class="w-12 h-12 rounded-2xl bg-fox-soft text-fox flex items-center justify-center mx-auto">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+          <path d="M3 12a9 9 0 1 0 3-6.7L3 8" stroke="#FF9600" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3 3v5h5" stroke="#FF9600" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h3 id="confirm-title" class="font-display text-2xl font-extrabold text-eel">Ulangi dari Soal 1?</h3>
+        <p id="confirm-body" class="text-sm font-bold text-wolf mt-1 leading-relaxed">
+          Progresmu di sesi ini akan diatur ulang ke Soal 1.
+        </p>
+      </div>
+      <div class="space-y-2.5 pt-1">
+        <button id="confirm-ok-btn" type="button" class="w-full duo-btn duo-btn-red py-3 px-4 tap-target">
+          Ya, Ulangi Sekarang
+        </button>
+        <button id="confirm-cancel-btn" type="button" class="w-full duo-btn duo-btn-ghost py-3 px-4 tap-target">
+          Batal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER (Hidden during Quiz/Summary) -->
+  <footer id="app-footer" class="py-3.5 text-center text-xs font-bold text-wolf border-t-2 border-swan bg-snow">
+    LogiTrace &bull; SMK Negeri 4 Bandung &bull; XI TKJ 1
   </footer>
 
-  <!-- SCRIPT LOGIC -->
-  <script>
-    const API_BASE = window.location.origin;
-
-    let currentStudentCode = localStorage.getItem("logitrace_student_code") || "";
-    let activeSessionId = localStorage.getItem("logitrace_active_session_id") || "session_01";
-    let currentItem = null;
-    let selectedChoice = null;
-    let hintUsed = false;
-    let hintLevel = 0;
-    let questionStartTime = null;
-    let totalHintsUsed = 0;
-    let lastReportedMastery = null;
-    let consecutiveKcErrors = {};
-
-    function escapeHtml(text) {
-      if (!text) return "";
-      return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function initStudentDropdown() {
-      const select = document.getElementById("student-select");
-      select.innerHTML = '<option value="">-- Pilih Kode Siswa (std_01 s.d std_34) --</option>';
-      for (let i = 1; i <= 34; i++) {
-        const code = `std_${i.toString().padStart(2, '0')}`;
-        const opt = document.createElement("option");
-        opt.value = code;
-        opt.textContent = `${code} (XI TKJ 1)`;
-        if (code === currentStudentCode) opt.selected = true;
-        select.appendChild(opt);
-      }
-    }
-
-    function showScreen(screenId) {
-      ["screen-login", "screen-classroom", "screen-quiz", "screen-summary"].forEach(id => {
-        document.getElementById(id).classList.add("hidden");
-      });
-      document.getElementById(screenId).classList.remove("hidden");
-    }
-
-    function updateStudentBadge() {
-      const container = document.getElementById("student-badge-container");
-      if (!currentStudentCode) {
-        container.innerHTML = "";
-        return;
-      }
-      container.innerHTML = `
-        <span class="px-2 py-1 rounded bg-paper border border-line text-[11px] font-mono font-semibold text-ink">
-          ${escapeHtml(currentStudentCode)}
-        </span>
-        <button onclick="logoutStudent()" class="text-xs text-muted hover:text-ink px-2 py-1 rounded border border-line bg-surface" title="Ganti Siswa">
-          Ganti
-        </button>
-      `;
-    }
-
-    function loginStudent() {
-      const val = document.getElementById("student-select").value;
-      if (!val) {
-        alert("Pilih kode siswamu terlebih dahulu.");
-        return;
-      }
-      currentStudentCode = val;
-      localStorage.setItem("logitrace_student_code", currentStudentCode);
-      updateStudentBadge();
-      loadClassroomSessions();
-    }
-
-    function logoutStudent() {
-      currentStudentCode = "";
-      localStorage.removeItem("logitrace_student_code");
-      updateStudentBadge();
-      showScreen("screen-login");
-    }
-
-    function returnToClassroom() {
-      loadClassroomSessions();
-    }
-
-    async function loadClassroomSessions() {
-      showScreen("screen-classroom");
-      const container = document.getElementById("classroom-sessions-list");
-      container.innerHTML = `<div class="p-4 text-center text-xs text-muted">Memuat daftar sesi...</div>`;
-
-      try {
-        const resp = await fetch(`${API_BASE}/api/sessions?class_rombel=XI%20TKJ%201`);
-        if (!resp.ok) throw new Error("Gagal mengambil sesi");
-        const sessions = await resp.json();
-
-        container.innerHTML = "";
-        for (const sess of sessions) {
-          let statusData = { status: "NOT_STARTED", current_sequence: 0, final_mastery: null };
-          try {
-            const stResp = await fetch(`${API_BASE}/api/sessions/${sess.id}/student/${currentStudentCode}/status`);
-            if (stResp.ok) statusData = await stResp.json();
-          } catch (e) {}
-
-          const card = document.createElement("div");
-          card.className = "bg-surface rounded-xl p-4 border border-line";
-
-          let statusBadge = "";
-          let actionBtn = "";
-
-          if (statusData.status === "COMPLETED") {
-            statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-subtle text-brand-dark">Selesai (${statusData.final_mastery || 0.74})</span>`;
-            actionBtn = `
-              <div class="flex space-x-2 mt-3">
-                <button onclick="startSessionQuiz('${sess.id}')" class="flex-1 bg-paper hover:bg-subtle text-ink text-xs font-semibold py-2.5 px-3 rounded-lg border border-line transition">
-                  Lihat Hasil
-                </button>
-                <button onclick="resetAndStartSession('${sess.id}')" class="flex-1 bg-surface hover:bg-subtle text-ink text-xs font-semibold py-2.5 px-3 rounded-lg border border-line transition">
-                  Ulangi dari Soal 1
-                </button>
-              </div>
-            `;
-          } else if (statusData.status === "IN_PROGRESS") {
-            statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-subtle text-ink">Soal ${statusData.current_sequence} / ${sess.max_items}</span>`;
-            actionBtn = `
-              <div class="flex space-x-2 mt-3">
-                <button onclick="startSessionQuiz('${sess.id}')" class="flex-1 bg-brand hover:bg-brand-dark text-white text-xs font-semibold py-2.5 px-3 rounded-lg transition">
-                  Lanjutkan
-                </button>
-                <button onclick="resetAndStartSession('${sess.id}')" class="bg-paper hover:bg-subtle text-muted hover:text-ink text-xs font-semibold px-3 py-2.5 rounded-lg border border-line" title="Ulangi dari Awal">
-                  Ulangi
-                </button>
-              </div>
-            `;
-          } else {
-            statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono text-muted bg-paper border border-line">Belum Mulai</span>`;
-            actionBtn = `
-              <div class="mt-3">
-                <button onclick="startSessionQuiz('${sess.id}')" class="w-full bg-ink hover:bg-zinc-800 text-white text-xs font-semibold py-2.5 px-3 rounded-lg transition flex items-center justify-center space-x-1.5">
-                  <span>Mulai Latihan (${sess.max_items} Soal)</span>
-                  <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                </button>
-              </div>
-            `;
-          }
-
-          card.innerHTML = `
-            <div class="flex justify-between items-start gap-2">
-              <div>
-                <span class="text-[10px] font-mono text-muted uppercase">Sesi ${sess.session_number}</span>
-                <h4 class="font-bold text-sm text-ink mt-0.5">${escapeHtml(sess.title)}</h4>
-              </div>
-              <div class="flex-shrink-0">${statusBadge}</div>
-            </div>
-            ${actionBtn}
-          `;
-          container.appendChild(card);
-        }
-      } catch (err) {
-        console.error(err);
-        container.innerHTML = `<div class="p-4 text-center text-xs text-rose-600">Gagal memuat tugas. Periksa koneksi ke server.</div>`;
-      }
-    }
-
-    async function startSessionQuiz(sessionId) {
-      activeSessionId = sessionId;
-      localStorage.setItem("logitrace_active_session_id", sessionId);
-      totalHintsUsed = 0;
-      await fetchNextQuestion();
-    }
-
-    async function resetAndStartSession(sessionId) {
-      if (!confirm("Ulangi latihan dari Soal 1?")) {
-        return;
-      }
-      try {
-        const resp = await fetch(`${API_BASE}/api/sessions/${sessionId}/reset-student/${currentStudentCode}`, { method: "POST" });
-        if (!resp.ok) throw new Error("Gagal mereset sesi siswa");
-        activeSessionId = sessionId;
-        localStorage.setItem("logitrace_active_session_id", sessionId);
-        totalHintsUsed = 0;
-        await fetchNextQuestion();
-      } catch (e) {
-        alert("Gagal mereset sesi. Coba lagi.");
-      }
-    }
-
-    async function restartActiveAttempt() {
-      resetAndStartSession(activeSessionId);
-    }
-
-    async function fetchNextQuestion() {
-      showScreen("screen-quiz");
-      selectedChoice = null;
-      hintUsed = false;
-      hintLevel = 0;
-      document.getElementById("btn-submit").disabled = true;
-      document.getElementById("hint-panel").classList.add("hidden");
-      document.getElementById("hint-status-pill").classList.add("hidden");
-      document.getElementById("hint-body").innerHTML = "Pilih Level 1 untuk petunjuk ringan, atau Level 2–3 untuk langkah penyelesaian yang lebih rinci.";
-
-      try {
-        const url = `${API_BASE}/api/quiz/${currentStudentCode}/next?session_id=${encodeURIComponent(activeSessionId)}`;
-        const resp = await fetch(url);
-        if (!resp.ok) {
-          if (resp.status === 404) {
-            alert(`Siswa ${currentStudentCode} belum terdaftar.`);
-            logoutStudent();
-            return;
-          }
-          throw new Error("Gagal mengambil soal berikutnya");
-        }
-        const data = await resp.json();
-
-        if (data.is_completed) {
-          showSummary();
-          return;
-        }
-
-        currentItem = data;
-        renderQuestion(data);
-        if ((consecutiveKcErrors[data.primary_kc] || 0) >= 2) {
-          document.getElementById("hint-panel").classList.remove("hidden");
-          loadHint(1);
-        }
-        questionStartTime = Date.now();
-      } catch (err) {
-        console.error(err);
-        alert("Terjadi gangguan koneksi ke server LogiTrace.");
-      }
-    }
-
-    function renderQuestion(item) {
-      const seq = item.sequence_number;
-      const maxSeq = item.max_items || 20;
-
-      if (seq > maxSeq || item.is_completed) {
-        showSummary();
-        return;
-      }
-
-      document.getElementById("label-sequence").textContent = `Soal ${seq} / ${maxSeq}`;
-      const progressPercent = Math.min(100, Math.round((seq / maxSeq) * 100));
-      document.getElementById("progress-bar").style.width = `${progressPercent}%`;
-
-      const badgeStage = document.getElementById("badge-stage");
-      if (item.is_calibration) {
-        badgeStage.textContent = "Soal Awal";
-        badgeStage.className = "px-2 py-0.5 rounded text-[10px] font-semibold bg-subtle text-ink";
-      } else {
-        badgeStage.textContent = "Menyesuaikan Levelmu";
-        badgeStage.className = "px-2 py-0.5 rounded text-[10px] font-semibold bg-subtle text-brand-dark";
-      }
-
-      document.getElementById("text-kc-name").textContent = item.kc_name || item.primary_kc;
-
-      const diffBadge = document.getElementById("badge-diff");
-      if (item.difficulty === 1) {
-        diffBadge.textContent = "Mudah";
-      } else if (item.difficulty === 2) {
-        diffBadge.textContent = "Sedang";
-      } else {
-        diffBadge.textContent = "Sulit";
-      }
-
-      document.getElementById("question-prompt").textContent = item.prompt_text;
-
-      const optContainer = document.getElementById("options-container");
-      optContainer.innerHTML = "";
-
-      const keys = ["A", "B", "C", "D"];
-      keys.forEach(k => {
-        if (!item.options[k]) return;
-        const optCard = document.createElement("button");
-        optCard.type = "button";
-        optCard.className = `opt-card w-full text-left p-3.5 rounded-lg border border-line hover:border-ink bg-paper transition flex items-start space-x-3 tap-target`;
-        optCard.onclick = () => selectOption(k, optCard);
-
-        optCard.innerHTML = `
-          <div class="opt-key w-6 h-6 rounded bg-surface border border-line font-mono font-bold text-xs flex items-center justify-center text-ink flex-shrink-0">
-            ${k}
-          </div>
-          <div class="opt-text text-xs text-ink font-medium leading-relaxed pt-0.5">
-            ${escapeHtml(item.options[k])}
-          </div>
-        `;
-        optContainer.appendChild(optCard);
-      });
-    }
-
-    function selectOption(key, element) {
-      selectedChoice = key;
-      document.querySelectorAll(".opt-card").forEach(el => {
-        el.classList.remove("border-ink", "bg-surface", "ring-1", "ring-ink");
-        el.querySelector(".opt-key").classList.remove("bg-ink", "text-white", "border-ink");
-        el.querySelector(".opt-key").classList.add("bg-surface", "text-ink");
-      });
-
-      element.classList.add("border-ink", "bg-surface", "ring-1", "ring-ink");
-      const keyBox = element.querySelector(".opt-key");
-      keyBox.classList.remove("bg-surface", "text-ink");
-      keyBox.classList.add("bg-ink", "text-white", "border-ink");
-
-      document.getElementById("btn-submit").disabled = false;
-    }
-
-    async function loadHint(level) {
-      if (!currentItem) return;
-      const hintBody = document.getElementById("hint-body");
-      hintBody.innerHTML = `Mengambil petunjuk Level ${level}...`;
-
-      try {
-        const resp = await fetch(`${API_BASE}/api/quiz/hint`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            student_code: currentStudentCode,
-            item_id: currentItem.item_id,
-            requested_level: level
-          })
-        });
-
-        if (!resp.ok) throw new Error("Gagal mengambil petunjuk");
-        const data = await resp.json();
-
-        hintBody.innerHTML = `<strong>Level ${data.hint_level}:</strong> ${escapeHtml(data.hint_text)}`;
-        hintUsed = true;
-        hintLevel = level;
-        totalHintsUsed++;
-        document.getElementById("hint-status-pill").classList.remove("hidden");
-      } catch (err) {
-        console.error(err);
-        hintBody.textContent = "Gagal memuat petunjuk. Silakan coba kembali.";
-      }
-    }
-
-    document.getElementById("btn-toggle-hint").onclick = () => {
-      const panel = document.getElementById("hint-panel");
-      panel.classList.toggle("hidden");
-    };
-
-    document.getElementById("btn-submit").onclick = async () => {
-      if (!selectedChoice || !currentItem) return;
-
-      const responseTimeMs = Date.now() - (questionStartTime || Date.now());
-      const btn = document.getElementById("btn-submit");
-      btn.disabled = true;
-      btn.innerHTML = `Memeriksa jawaban...`;
-
-      try {
-        const payload = {
-          student_code: currentStudentCode,
-          item_id: currentItem.item_id,
-          choice: selectedChoice,
-          session_id: activeSessionId,
-          response_time_ms: responseTimeMs,
-          used_hint: hintUsed,
-          hint_level: hintLevel
-        };
-
-        const resp = await fetch(`${API_BASE}/api/quiz/submit`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        if (!resp.ok) throw new Error("Gagal mengirim jawaban");
-        const result = await resp.json();
-        showFeedback(result);
-      } catch (err) {
-        console.error(err);
-        alert("Gagal memproses jawaban. Silakan coba lagi.");
-        btn.disabled = false;
-        btn.innerHTML = `<span>Jawab</span> <i class="fa-solid fa-check text-xs"></i>`;
-      }
-    };
-
-    function showFeedback(result) {
-      const modal = document.getElementById("modal-feedback");
-      const iconBox = document.getElementById("fb-icon-container");
-      const title = document.getElementById("fb-title");
-      const subtitle = document.getElementById("fb-subtitle");
-
-      if (result.is_correct) {
-        if (currentItem && currentItem.primary_kc) {
-          consecutiveKcErrors[currentItem.primary_kc] = 0;
-        }
-        iconBox.className = "w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-brand text-white flex-shrink-0";
-        iconBox.innerHTML = `<i class="fa-solid fa-check"></i>`;
-        title.textContent = "Jawaban Benar";
-        subtitle.textContent = hintUsed ? "Dijawab dengan bantuan petunjuk" : "Dijawab mandiri tanpa petunjuk";
-      } else {
-        if (currentItem && currentItem.primary_kc) {
-          consecutiveKcErrors[currentItem.primary_kc] = (consecutiveKcErrors[currentItem.primary_kc] || 0) + 1;
-        }
-        iconBox.className = "w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-rose-600 text-white flex-shrink-0";
-        iconBox.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-        title.textContent = "Belum Tepat";
-        subtitle.textContent = `Jawaban yang benar: ${result.correct_choice}`;
-      }
-
-      lastReportedMastery = result.mastery_after;
-      document.getElementById("fb-p-hat").textContent = (result.predicted_p * 100).toFixed(0) + "%";
-      document.getElementById("fb-mastery-shift").textContent = `${result.mastery_before.toFixed(2)} → ${result.mastery_after.toFixed(2)}`;
-
-      const deltaElem = document.getElementById("fb-delta-m");
-      if (result.mastery_delta >= 0) {
-        deltaElem.textContent = `+${result.mastery_delta.toFixed(3)}`;
-        deltaElem.className = "font-bold text-brand";
-      } else {
-        deltaElem.textContent = `${result.mastery_delta.toFixed(3)}`;
-        deltaElem.className = "font-bold text-rose-600";
-      }
-
-      document.getElementById("fb-explanation").textContent = result.explanation || "Tidak ada catatan pembahasan tambahan.";
-      modal.classList.remove("hidden");
-    }
-
-    document.getElementById("btn-next-question").onclick = () => {
-      document.getElementById("modal-feedback").classList.add("hidden");
-      const btn = document.getElementById("btn-submit");
-      btn.innerHTML = `<span>Jawab</span> <i class="fa-solid fa-check text-xs"></i>`;
-
-      if (currentItem && (currentItem.sequence_number >= (currentItem.max_items || 20) || currentItem.is_completed)) {
-        showSummary();
-      } else {
-        fetchNextQuestion();
-      }
-    };
-
-    function showSummary() {
-      showScreen("screen-summary");
-      document.getElementById("sum-student").textContent = `${currentStudentCode} (XI TKJ 1)`;
-      document.getElementById("sum-hints").textContent = `${totalHintsUsed} kali`;
-      if (lastReportedMastery !== null) {
-        document.getElementById("sum-avg-mastery").textContent = `${lastReportedMastery.toFixed(2)}`;
-      }
-    }
-
-    document.getElementById("btn-login").onclick = loginStudent;
-    initStudentDropdown();
-    if (currentStudentCode) {
-      updateStudentBadge();
-      loadClassroomSessions();
-    } else {
-      showScreen("screen-login");
-    }
-  </script>
+  <script src="/student/app.js"></script>
 </body>
 </html>
