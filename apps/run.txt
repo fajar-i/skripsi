@@ -1,0 +1,3 @@
+python -m uvicorn logitrace.backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+
+cd C:\kuliah\semester_7\skripsi\apps; $env:LOGITRACE_DB_URL = "sqlite+aiosqlite:///C:/kuliah/semester_7/skripsi/apps/logitrace/logitrace_preview.db"; python -m uvicorn logitrace.backend.app.main:app --host 127.0.0.1 --port 8001

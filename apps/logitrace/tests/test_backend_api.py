@@ -27,6 +27,18 @@ async def setup_test_db():
         await seed_database(session)
 
 
+@pytest.fixture(autouse=True)
+def bypass_auth():
+    """These tests cover domain logic; login itself is covered in test_auth.py."""
+    from backend.app.auth import Principal, require_student, require_teacher, require_teacher_or_student
+    wildcard = Principal(is_teacher=True, wildcard=True)
+    app.dependency_overrides[require_teacher] = lambda: wildcard
+    app.dependency_overrides[require_student] = lambda: Principal(wildcard=True)
+    app.dependency_overrides[require_teacher_or_student] = lambda: wildcard
+    yield
+    app.dependency_overrides.clear()
+
+
 @pytest.mark.asyncio
 async def test_health_endpoint():
     transport = ASGITransport(app=app)
@@ -153,7 +165,7 @@ async def test_socratic_hint_delivery():
         data = res.json()
         assert data["hint_level"] == 1
         assert data["word_count"] <= 60
-        assert data["source"] in ("rag_llm", "fallback_static")
+        assert data["source"] in ("llm_9router", "fallback_static")
         assert len(data["hint_text"]) > 10
 
 
@@ -245,37 +257,84 @@ async def test_session_lifecycle_and_reset():
 @pytest.mark.asyncio
 async def test_agent_t3_session_summary_and_peer_tutoring():
     """
-    US-06: Agent T3 produces structured narrative summary for closing reflection
-    and peer-tutoring pairing recommendations based on class mastery metrics.
+    US-06: T3 summary uses only directly measured mastery of students who answered in
+    this session. Students who never started, prior values and DAG-inherited values
+    must not produce tutors or mentees.
     """
+    from backend.app.db.models import QuizSession, StudentAttempt
+
+    tag = uuid.uuid4().hex[:6]
+    rombel = f"T3_{tag}"
+    kc = "WLAN_STANDARDS"
+    async with AsyncSessionLocal() as session:
+        sess = QuizSession(class_rombel=rombel, title=f"Sesi uji {tag}", is_active=True)
+        session.add(sess)
+        await session.flush()
+
+        def add_student(code, status, snaps):
+            st = Student(anonymous_code=f"{code}_{tag}", class_rombel=rombel)
+            session.add(st)
+            return st, status, snaps
+
+        rows = [
+            add_student("tutor", "IN_PROGRESS", [(kc, 0.85, "high")]),
+            add_student("m1", "IN_PROGRESS", [(kc, 0.30, "high")]),
+            add_student("m2", "COMPLETED", [(kc, 0.35, "high")]),
+            add_student("inherited", "IN_PROGRESS", [(kc, 0.90, "low")]),
+            add_student("idle", "NOT_STARTED", [(kc, 0.25, "low")]),
+        ]
+        await session.flush()
+        for st, status, snaps in rows:
+            session.add(StudentAttempt(
+                student_id=st.id, session_id=sess.id, status=status,
+                answered_item_ids=[] if status == "NOT_STARTED" else ["ITEM_X"],
+            ))
+            for kc_id, m, conf in snaps:
+                session.add(MasterySnapshot(student_id=st.id, kc_id=kc_id, current_mastery=m, confidence=conf))
+        await session.commit()
+        session_id = sess.id
+
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        # 1. Fetch summary via GET
-        res = await client.get("/api/teacher/session-summary")
+        res = await client.get("/api/teacher/session-summary", params={"session_id": session_id})
         assert res.status_code == 200
         data = res.json()
 
-        assert "session_id" in data
-        assert data["class_rombel"] == "XI TKJ 1"
-        assert data["total_students"] >= 34
-        assert 0.02 <= data["class_avg_mastery"] <= 0.98
-        assert len(data["strengths"]) > 0
-        assert len(data["bottlenecks"]) > 0
-        assert len(data["narrative_summary"]) >= 100
-        assert data["source"] in ("rag_llm", "deterministic_fallback")
-        assert isinstance(data["peer_tutoring_recommendations"], list)
+        assert data["session_id"] == session_id
+        assert data["class_rombel"] == rombel
+        assert data["total_students"] == 5
+        # class average from measured values only: (0.85 + 0.30 + 0.35) / 3
+        assert data["class_avg_mastery"] == pytest.approx(0.5, abs=1e-3)
+        assert [s["kc_id"] for s in data["strengths"]] == [kc]
+        assert data["source"] in ("llm_9router", "deterministic_fallback")
+        assert "sangat kokoh" not in data["narrative_summary"]
 
-        # 2. Verify peer-tutoring structure
-        if len(data["peer_tutoring_recommendations"]) > 0:
-            pair = data["peer_tutoring_recommendations"][0]
-            assert "tutor_student_code" in pair
-            assert "mentee_student_codes" in pair
-            assert len(pair["action_guidance"]) > 10
+        pairs = data["peer_tutoring_recommendations"]
+        assert len(pairs) == 1
+        assert pairs[0]["tutor_student_code"] == f"tutor_{tag}"
+        assert sorted(pairs[0]["mentee_student_codes"]) == sorted([f"m1_{tag}", f"m2_{tag}"])
+        involved = {pairs[0]["tutor_student_code"], *pairs[0]["mentee_student_codes"]}
+        assert f"idle_{tag}" not in involved
+        assert f"inherited_{tag}" not in involved
 
-        # 3. Fetch summary via POST with specific session
-        res_post = await client.post("/api/teacher/session-summary", params={"session_id": data["session_id"]})
-        assert res_post.status_code == 200
-        assert res_post.json()["session_id"] == data["session_id"]
+
+@pytest.mark.asyncio
+async def test_agent_t3_summary_without_data_says_so():
+    from backend.app.db.models import QuizSession
+
+    tag = uuid.uuid4().hex[:6]
+    async with AsyncSessionLocal() as session:
+        sess = QuizSession(class_rombel=f"EMPTY_{tag}", title=f"Kosong {tag}", is_active=True)
+        session.add(sess)
+        await session.commit()
+        session_id = sess.id
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        data = (await client.get("/api/teacher/session-summary", params={"session_id": session_id})).json()
+        assert data["strengths"] == []
+        assert data["peer_tutoring_recommendations"] == []
+        assert "belum memiliki jawaban siswa" in data["narrative_summary"]
 
 
 @pytest.mark.asyncio
@@ -304,7 +363,7 @@ async def test_agent_t1_semantic_labeling_and_review():
         assert label_data["primary_kc_id"] == "WLAN_SECURITY_AUTH"
         assert 0.0 <= label_data["confidence"] <= 1.0
         assert label_data["nominal_difficulty"] in (1, 2, 3)
-        assert label_data["tolt_dimension"] is not None
+        assert label_data["bloom_level"] in ("C1", "C2", "C3", "C4", "C5")
 
         # 2. Check Teacher Review Queue
         res_queue = await client.get("/api/teacher/items/review-queue")
@@ -316,7 +375,9 @@ async def test_agent_t1_semantic_labeling_and_review():
         # 3. Approve / edit label for item in review queue
         approve_payload = {
             "primary_kc_id": "WLAN_STANDARDS",
-            "tolt_dimension": "Proportional Reasoning",
+            "bloom_level": "C2",
+            "indikator_id": "IND-01.1",
+            "jonassen_phase": "SYMPTOM_RECOGNITION",
             "difficulty_nominal": 2,
             "teacher_notes": "Ditinjau oleh Guru TKJ: Terkonfirmasi sesuai materi 802.11"
         }
@@ -326,11 +387,14 @@ async def test_agent_t1_semantic_labeling_and_review():
         assert app_data["status"] == "success"
         assert app_data["primary_kc_id"] == "WLAN_STANDARDS"
         assert app_data["difficulty_nominal"] == 2
+        assert app_data["bloom_level"] == "C2"
+        assert app_data["indikator_id"] == "IND-01.1"
+        assert app_data["label_status"] == "ditinjau_guru"
 
         # 4. Validation error on out-of-range difficulty_nominal (> 3)
         bad_diff_payload = {
             "primary_kc_id": "WLAN_STANDARDS",
-            "tolt_dimension": "Proportional Reasoning",
+            "bloom_level": "C2",
             "difficulty_nominal": 999
         }
         res_bad_diff = await client.post(f"/api/teacher/items/{first_item['item_id']}/approve-label", json=bad_diff_payload)
@@ -339,7 +403,7 @@ async def test_agent_t1_semantic_labeling_and_review():
         # 5. Validation error on non-existent primary_kc_id
         bad_kc_payload = {
             "primary_kc_id": "NON_EXISTENT_KC",
-            "tolt_dimension": "Proportional Reasoning",
+            "bloom_level": "C2",
             "difficulty_nominal": 2
         }
         res_bad_kc = await client.post(f"/api/teacher/items/{first_item['item_id']}/approve-label", json=bad_kc_payload)
@@ -356,3 +420,92 @@ async def test_feedback_audio_assets_served():
             assert res.status_code == 200, f"Expected 200 for {filename}, got {res.status_code}"
             assert "audio" in res.headers.get("content-type", ""), f"Expected audio content-type for {filename}"
             assert len(res.content) > 1000
+
+
+@pytest.mark.asyncio
+async def test_hint_usage_is_tracked_server_side():
+    """h = 0.5 must come from the server hint log; a client claiming no hint cannot bypass it."""
+    from backend.app.engine.cognitive import update_mastery
+
+    code = f"tstd_{uuid.uuid4().hex[:6]}"
+    async with AsyncSessionLocal() as session:
+        session.add(Student(anonymous_code=code, class_rombel="XI TKJ 1"))
+        await session.commit()
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        item = (await client.get(f"/api/quiz/{code}/next")).json()
+        hint = await client.post("/api/quiz/hint", json={
+            "student_code": code, "item_id": item["item_id"], "requested_level": 2,
+            "session_id": item.get("session_id"),
+        })
+        assert hint.status_code == 200
+
+        from backend.app.db.models import Item
+        async with AsyncSessionLocal() as session:
+            db_item = await session.get(Item, item["item_id"])
+            correct = db_item.correct_answer
+            difficulty = db_item.difficulty_nominal
+
+        res = (await client.post("/api/quiz/submit", json={
+            "student_code": code, "item_id": item["item_id"], "choice": correct,
+            "session_id": item.get("session_id"), "used_hint": False, "hint_level": 0,
+        })).json()
+
+        assert res["is_correct"] is True
+        expected = update_mastery(res["mastery_before"], 1, difficulty, used_hint=True)
+        assert res["mastery_after"] == pytest.approx(round(expected, 4), abs=1e-4)
+
+
+@pytest.mark.asyncio
+async def test_inactive_session_rejects_student_work():
+    """Students may only work in their class's active session; inactive ones are review-only."""
+    from backend.app.db.models import Item, QuizSession, StudentAttempt
+
+    tag = uuid.uuid4().hex[:6]
+    rombel = f"GUARD_{tag}"
+    async with AsyncSessionLocal() as session:
+        student = Student(anonymous_code=f"tstd_g{tag}", class_rombel=rombel)
+        other = Student(anonymous_code=f"tstd_o{tag}", class_rombel=f"OTHER_{tag}")
+        active = QuizSession(class_rombel=rombel, title=f"Aktif {tag}", is_active=True)
+        closed = QuizSession(class_rombel=rombel, title=f"Tutup {tag}", is_active=False)
+        done = QuizSession(class_rombel=rombel, title=f"Selesai {tag}", is_active=False)
+        session.add_all([student, other, active, closed, done])
+        await session.flush()
+        session.add(StudentAttempt(student_id=student.id, session_id=done.id, status="COMPLETED",
+                                   current_sequence=20, answered_item_ids=[]))
+        item_id = (await session.execute(select(Item.id).limit(1))).scalar_one()
+        await session.commit()
+        ids = (active.id, closed.id, done.id)
+
+    active_id, closed_id, done_id = ids
+    code = f"tstd_g{tag}"
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        res = await client.get(f"/api/quiz/{code}/next", params={"session_id": closed_id})
+        assert res.status_code == 409
+        assert "SESSION_INACTIVE" in res.json()["detail"]
+
+        res = await client.post("/api/quiz/submit", json={
+            "student_code": code, "item_id": item_id, "choice": "A",
+            "session_id": closed_id, "response_time_ms": 1000,
+        })
+        assert res.status_code == 409
+
+        res = await client.post("/api/quiz/hint", json={
+            "student_code": code, "item_id": item_id, "session_id": closed_id, "requested_level": 1,
+        })
+        assert res.status_code == 409
+
+        # A finished inactive session may still be opened to see the result screen
+        res = await client.get(f"/api/quiz/{code}/next", params={"session_id": done_id})
+        assert res.status_code == 200
+        assert res.json()["is_completed"] is True
+
+        # Another class's session is refused
+        res = await client.get(f"/api/quiz/tstd_o{tag}/next", params={"session_id": active_id})
+        assert res.status_code == 403
+
+        # The active session works
+        res = await client.get(f"/api/quiz/{code}/next", params={"session_id": active_id})
+        assert res.status_code == 200

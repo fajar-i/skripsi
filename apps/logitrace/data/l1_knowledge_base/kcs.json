@@ -10,77 +10,101 @@
     "id": "WLAN_TOPOLOGY_BSS",
     "name": "Topologi Jaringan Nirkabel",
     "description": "Perbedaan topologi mode Ad-Hoc (IBSS) vs mode Infrastructure (BSS/ESS).",
-    "is_root": true,
-    "prerequisites": []
+    "is_root": false,
+    "prerequisites": [
+      "WLAN_STANDARDS"
+    ]
   },
   {
     "id": "IP_PEER_CONFIG",
     "name": "Pengalamatan IPv4 dan Konfigurasi Klien",
     "description": "Pengalamatan IPv4 statis, subnetting lokal, dan konfigurasi klien nirkabel.",
-    "is_root": true,
-    "prerequisites": []
+    "is_root": false,
+    "prerequisites": [
+      "WLAN_TOPOLOGY_BSS"
+    ]
   },
   {
     "id": "WLAN_FREQ_CHANNEL",
     "name": "Alokasi Kanal Frekuensi dan Mitigasi Interferensi",
     "description": "Alokasi kanal non-overlapping (1, 6, 11 pada 2,4 GHz) dan mitigasi interferensi.",
     "is_root": false,
-    "prerequisites": ["WLAN_STANDARDS"]
+    "prerequisites": [
+      "WLAN_STANDARDS"
+    ]
   },
   {
     "id": "WLAN_SECURITY_AUTH",
     "name": "Autentikasi dan Enkripsi Nirkabel",
     "description": "Autentikasi identitas SSID dan enkripsi WPA2-PSK / WPA3-SAE.",
     "is_root": false,
-    "prerequisites": ["IP_PEER_CONFIG"]
+    "prerequisites": [
+      "IP_PEER_CONFIG"
+    ]
   },
   {
     "id": "WLAN_HOST_HARDENING",
     "name": "Pengamanan Klien dan Filtrasi Akses",
     "description": "Pengamanan klien melalui filtrasi alamat fisik (MAC Filtering) dan dinding api (firewall).",
     "is_root": false,
-    "prerequisites": ["WLAN_SECURITY_AUTH"]
+    "prerequisites": [
+      "WLAN_SECURITY_AUTH"
+    ]
   },
   {
     "id": "WLAN_SIGNAL_PROP",
     "name": "Propagasi Gelombang Radio dan Redaman Sinyal",
     "description": "Propagasi gelombang radio, nilai redaman material (path loss), dan RSSI (-dBm).",
     "is_root": false,
-    "prerequisites": ["WLAN_TOPOLOGY_BSS"]
+    "prerequisites": [
+      "WLAN_TOPOLOGY_BSS"
+    ]
   },
   {
     "id": "WLAN_ROAMING_PROB",
     "name": "Perpindahan Sinyal Klien (Roaming) dan Ambang Batas",
     "description": "Ambang batas perpindahan sinyal klien (roaming threshold) dan hysteresis extender.",
     "is_root": false,
-    "prerequisites": ["WLAN_SIGNAL_PROP"]
+    "prerequisites": [
+      "WLAN_SIGNAL_PROP"
+    ]
   },
   {
     "id": "WLAN_CHANNEL_COLLISION",
     "name": "Tabrakan Paket dan Kepadatan Kanal",
     "description": "Perhitungan peluang tabrakan paket (collision) dan beban kepadatan kanal.",
     "is_root": false,
-    "prerequisites": ["WLAN_FREQ_CHANNEL"]
+    "prerequisites": [
+      "WLAN_FREQ_CHANNEL"
+    ]
   },
   {
     "id": "ICMP_CONNECTIVITY",
     "name": "Uji Ketercapaian Jaringan (ICMP Ping & RTT)",
     "description": "Pengujian ketercapaian host melalui protokol ICMP (ping) dan evaluasi Round-Trip Time (RTT).",
     "is_root": false,
-    "prerequisites": ["IP_PEER_CONFIG", "WLAN_SIGNAL_PROP"]
+    "prerequisites": [
+      "IP_PEER_CONFIG",
+      "WLAN_SIGNAL_PROP"
+    ]
   },
   {
     "id": "ICMP_TROUBLE_DHU",
     "name": "Troubleshooting Destination Host Unreachable",
     "description": "Pelacakan akar masalah pesan galat Destination Host Unreachable (DHU) akibat salah subnet/ARP.",
     "is_root": false,
-    "prerequisites": ["ICMP_CONNECTIVITY"]
+    "prerequisites": [
+      "ICMP_CONNECTIVITY"
+    ]
   },
   {
     "id": "ICMP_TROUBLE_RTO",
     "name": "Troubleshooting Request Timed Out",
     "description": "Pelacakan akar masalah pesan galat Request Timed Out (RTO) akibat blokade firewall atau redaman ekstrem.",
     "is_root": false,
-    "prerequisites": ["ICMP_CONNECTIVITY", "WLAN_HOST_HARDENING"]
+    "prerequisites": [
+      "ICMP_CONNECTIVITY",
+      "WLAN_HOST_HARDENING"
+    ]
   }
 ]

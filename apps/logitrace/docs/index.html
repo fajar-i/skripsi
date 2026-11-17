@@ -666,7 +666,7 @@
       <li><a href="#sec-usecase" class="nav-link"><span class="nav-num">08</span> Use Case & 11 Skenario</a></li>
 
       <li class="nav-section-title">Validasi & Penerapan</li>
-      <li><a href="#sec-evals" class="nav-link"><span class="nav-num">09</span> Evaluasi Empiris (E1-E6)</a></li>
+      <li><a href="#sec-evals" class="nav-link"><span class="nav-num">09</span> Status Evaluasi</a></li>
       <li><a href="#sec-benchmark" class="nav-link"><span class="nav-num">10</span> Benchmark Konkurensi</a></li>
       <li><a href="#sec-deploy" class="nav-link"><span class="nav-num">11</span> Panduan Deployment</a></li>
     </ul>
@@ -923,7 +923,7 @@
       </div>
 
       <p style="margin-bottom: 20px; color: var(--text-muted);">
-        Mengatasi keterbatasan RAM 8 GB pada laptop penguji dan menghindari sewa VPS GPU yang mahal, LogiTrace mengimplementasikan <strong>Arsitektur Hibrida Terproteksi (Privacy-Preserving Zero-PII Cloud Call)</strong> yang mendukung <strong>9router Local Proxy</strong> (OpenAI-compatible), DeepSeek API, Groq Cloud API, dan Ollama Lokal CPU.
+        Mengatasi keterbatasan RAM 8 GB pada laptop penguji dan menghindari sewa VPS GPU yang mahal, LogiTrace mengimplementasikan <strong>Arsitektur Hibrida Terproteksi (Privacy-Preserving Zero-PII Cloud Call)</strong> yang memakai satu penyedia: <strong>9router Local Proxy</strong> (OpenAI-compatible). Mode Ollama CPU lokal, DeepSeek, dan Groq telah dihapus.
       </p>
 
       <div class="grid-3">
@@ -1152,7 +1152,7 @@
             </div>
             <div class="accordion-content">
               <strong>Pra-kondisi:</strong> Siswa sedang membuka butir adaptif (7–20) dan belum submit jawaban.<br>
-              <strong>Alur Utama:</strong> Siswa klik "Minta Petunjuk" &rarr; PIIScrubber menyensor identitas siswa &rarr; Cloud LLM / Ollama menghasilkan petunjuk (&le; 60 kata) &rarr; Answer Leakage Guard memeriksa regex &rarr; Tampil di smartphone siswa &rarr; Pengali mastery ditetapkan h = 0.5.<br>
+              <strong>Alur Utama:</strong> Siswa klik "Minta Petunjuk" &rarr; PIIScrubber menyensor identitas siswa &rarr; LLM via 9router menghasilkan petunjuk (&le; 60 kata) &rarr; Answer Leakage Guard memeriksa regex &rarr; Tampil di smartphone siswa &rarr; Pengali mastery ditetapkan h = 0.5.<br>
               <strong>Alur Fallback:</strong> Jika waktu &gt; 3,0 detik, kuota habis, atau bocor kunci &rarr; Sistem seketika beralih ke Curated Static Bank (&lt; 50 ms).
             </div>
           </div>
@@ -1241,135 +1241,21 @@
     <section class="doc-section" id="sec-evals">
       <div class="section-header">
         <span class="section-tag">MODUL 05</span>
-        <h2 class="section-title">Hasil Evaluasi Empiris (E1–E6 & Benchmark)</h2>
+        <h2 class="section-title">Status Evaluasi</h2>
       </div>
-
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>ID Uji</th>
-              <th>Nama Evaluasi</th>
-              <th>Indikator Kunci (KPI)</th>
-              <th>Target Batas</th>
-              <th>Hasil Pengujian</th>
-              <th>Status Hasil</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>E1</strong></td>
-              <td>Validitas Isi Butir Soal</td>
-              <td>Aiken's V Index (180 butir / 5 validator)</td>
-              <td>V &ge; 0.80</td>
-              <td><strong>V = 0.88 &plusmn; 0.04</strong></td>
-              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
-            </tr>
-            <tr>
-              <td><strong>E2</strong></td>
-              <td>Kualitas Pedagogis Sokratik</td>
-              <td>RAGAS Relevance & Zero Leakage Rate</td>
-              <td>Skor &ge; 0.80, Bocor = 0%</td>
-              <td><strong>Skor = 0.86, Bocor = 0%</strong></td>
-              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
-            </tr>
-            <tr>
-              <td><strong>E3</strong></td>
-              <td>Akurasi Prediksi Kognitif L3</td>
-              <td>Brier Score & Koefisien Determinasi R&sup2;</td>
-              <td>Brier &le; 0.18, R&sup2; &ge; 0.65</td>
-              <td><strong>Brier = 0.142, R&sup2; = 0.731</strong></td>
-              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
-            </tr>
-            <tr>
-              <td><strong>E4</strong></td>
-              <td>Reliabilitas Serving LLM</td>
-              <td>Konsistensi Output & Validitas Skema JSON</td>
-              <td>Identik &ge; 95%, JSON &ge; 98%</td>
-              <td><strong>Identik = 97.2%, JSON = 99.4%</strong></td>
-              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
-            </tr>
-            <tr>
-              <td><strong>E5</strong></td>
-              <td>Latensi Teknis & Skala Usabilitas</td>
-              <td>L3 p95 Latency & SUS Score (34 siswa)</td>
-              <td>L3 &le; 10 ms, SUS &ge; 68.0</td>
-              <td><strong>L3 = 0.42 ms, SUS = 82.4</strong></td>
-              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
-            </tr>
-            <tr>
-              <td><strong>E6</strong></td>
-              <td>Dampak Belajar (Scaffolding)</td>
-              <td>Hake's Normalized Gain (g) & Paired t-test</td>
-              <td>Gain &ge; 0.40, p &lt; 0.05</td>
-              <td><strong>Gain = 0.58, p = 0.0004</strong></td>
-              <td><span class="badge badge-success">MEMENUHI (PASS)</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- BENCHMARK TABLE FOR JOURNAL -->
-      <div class="card" id="sec-benchmark" style="margin-top: 24px;">
-        <h3 style="font-weight: 700; margin-bottom: 8px;">Benchmark Konkurensi Klien CPU Lokal (Data Revisi Jurnal)</h3>
-        <p style="color: var(--text-muted); font-size: 0.86rem; margin-bottom: 16px;">
-          Pengujian pemanggilan inferensi lokal pada CPU 8-thread untuk menguji perilaku saturasi antrean dan membuktikan efektivitas <em>Graceful Fallback</em> (&lt; 50 ms):
-        </p>
-
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>Beban Konkruen (k)</th>
-                <th>Rerata Latensi</th>
-                <th>Latensi p95</th>
-                <th>Lolos Batas (&lt; 3,0s)</th>
-                <th>Graceful Fallback</th>
-                <th>Puncak CPU</th>
-                <th>Perilaku Sistem</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>k = 1 klien</strong></td>
-                <td>1,74 &plusmn; 0,30 s</td>
-                <td><strong>2,13 s</strong></td>
-                <td><span class="badge badge-success">100,0%</span></td>
-                <td>0,0%</td>
-                <td>79,0%</td>
-                <td>Optimal, waktu respon sangat cepat.</td>
-              </tr>
-              <tr>
-                <td><strong>k = 2 klien</strong></td>
-                <td>2,64 &plusmn; 0,26 s</td>
-                <td><strong>3,06 s</strong></td>
-                <td><span class="badge badge-accent">83,3%</span></td>
-                <td>16,7%</td>
-                <td>77,2%</td>
-                <td>Batas kapasitas aman CPU 8-thread lokal.</td>
-              </tr>
-              <tr>
-                <td><strong>k = 4 klien</strong></td>
-                <td>4,74 &plusmn; 0,64 s</td>
-                <td><strong>5,85 s</strong></td>
-                <td><span class="badge badge-danger">0,0%</span></td>
-                <td><span class="badge badge-primary">100,0%</span></td>
-                <td>72,9%</td>
-                <td>Saturasi antrean; seluruh siswa dialihkan ke bank statis.</td>
-              </tr>
-              <tr>
-                <td><strong>k = 8 klien</strong></td>
-                <td>8,90 &plusmn; 1,24 s</td>
-                <td><strong>10,16 s</strong></td>
-                <td><span class="badge badge-danger">0,0%</span></td>
-                <td><span class="badge badge-primary">100,0%</span></td>
-                <td>98,5%</td>
-                <td>CPU 100% penuh; zero outage berkat fallback statis instan.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <p>
+        <strong>Belum ada evaluasi dengan subjek manusia</strong> (validasi pakar, uji kebergunaan/SUS,
+        pre-test/post-test). Angka E1&ndash;E6 yang sebelumnya tercantum di halaman ini dihasilkan oleh
+        skrip simulasi (bilangan acak) dan telah dihapus. Skrip tersebut disimpan di
+        <code>old/evals_simulated/</code> hanya sebagai rancangan analisis, bukan hasil.
+      </p>
+      <p>Evaluasi teknis yang dapat direproduksi:</p>
+      <ul>
+        <li><code>evals/benchmark_l3_engine.py</code> &mdash; latensi mesin L3 dan fallback statis.</li>
+        <li><code>evals/benchmark_concurrency_9router.py</code> &mdash; latensi dan tingkat fallback petunjuk T2 melalui 9router (memerlukan 9router aktif).</li>
+        <li><code>pytest</code> &mdash; uji unit dan integrasi.</li>
+      </ul>
+      <p>Hasil mentah tersimpan di <code>evals/results/</code>.</p>
     </section>
 
     <!-- 06. PANDUAN DEPLOYMENT & EKSEKUSI DI LAB -->
@@ -1400,7 +1286,7 @@ LOGITRACE_LLM_PROVIDER=9router
 NINEROUTER_API_URL=http://localhost:20128/v1/chat/completions
 NINEROUTER_API_KEY=sk-your_9router_api_key_here
 NINEROUTER_MODEL=ag/gemini-3.8-flash
-LOGITRACE_DB_URL=sqlite+aiosqlite:///./logitrace_dev.db
+LOGITRACE_DB_URL=sqlite+aiosqlite:///./logitrace.db
             </div>
           </div>
         </div>

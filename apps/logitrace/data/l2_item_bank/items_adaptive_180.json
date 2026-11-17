@@ -5,7 +5,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": true,
     "prompt_text": "Manakah di antara standar nirkabel IEEE 802.11 berikut yang hanya beroperasi pada pita frekuensi 2.4 GHz dan memiliki kecepatan data teoretis maksimal 54 Mbps?",
     "options": {
@@ -18,7 +17,14 @@
     "explanation": "802.11g beroperasi murni pada pita 2.4 GHz dengan kecepatan puncak 54 Mbps menggunakan modulasi OFDM.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_STANDARDS_1_02",
@@ -26,7 +32,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Standar nirkabel IEEE 802.11ac (Wi-Fi 5) dirancang khusus untuk beroperasi pada pita frekuensi...",
     "options": {
@@ -39,7 +44,12 @@
     "explanation": "IEEE 802.11ac hanya beroperasi pada pita 5 GHz untuk memaksimalkan throughput tanpa interferensi pita 2.4 GHz.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_STANDARDS_1_03",
@@ -47,7 +57,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Keunggulan utama pita frekuensi 2.4 GHz dibandingkan pita frekuensi 5 GHz pada lingkungan laboratorium kejuruan adalah...",
     "options": {
@@ -60,7 +69,14 @@
     "explanation": "Frekuensi yang lebih rendah (2.4 GHz) memiliki panjang gelombang lebih besar sehingga redamannya lebih rendah saat menembus material padat.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_STANDARDS_1_04",
@@ -68,7 +84,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Teknologi Wi-Fi 6 secara resmi mengacu pada spesifikasi standar IEEE nomor...",
     "options": {
@@ -81,7 +96,12 @@
     "explanation": "Wi-Fi Alliance menetapkan nama dagang Wi-Fi 6 untuk standar teknis IEEE 802.11ax.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_STANDARDS_1_05",
@@ -89,7 +109,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Berapakah kecepatan data maksimal teoretis pada standar nirkabel IEEE 802.11b lawas?",
     "options": {
@@ -102,7 +121,14 @@
     "explanation": "802.11b beroperasi pada 2.4 GHz dengan kecepatan transfer data maksimum hingga 11 Mbps menggunakan DSSS.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_STANDARDS_2_01",
@@ -110,7 +136,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": true,
     "prompt_text": "Sebuah laboratorium TKJ mengganti AP dari 802.11n (2.4 GHz) ke 802.11ac (5 GHz). Mengapa siswa di sudut luar ruangan mengalami penurunan bar sinyal meskipun kecepatan dekat AP meningkat drastis?",
     "options": {
@@ -123,7 +148,12 @@
     "explanation": "Sesuai persamaan Free Space Path Loss, redaman meningkat berbanding lurus dengan frekuensi gelombang radio.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_STANDARDS_2_02",
@@ -131,7 +161,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Fitur OFDMA (Orthogonal Frequency Division Multiple Access) pada standar Wi-Fi 6 (802.11ax) memungkinkan efisiensi tinggi di kelas dengan cara...",
     "options": {
@@ -144,7 +173,14 @@
     "explanation": "OFDMA membagi pita frekuensi menjadi resource units kecil sehingga transmisi data multi-user dapat berlangsung bersamaan tanpa menunggu antrean CSMA/CA.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_STANDARDS_2_03",
@@ -152,7 +188,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika sebuah Access Point 802.11n mendukung MIMO 2x2 dengan lebar kanal 40 MHz, berapakah throughput maksimal PHY rate yang dapat dicapai (short guard interval)?",
     "options": {
@@ -165,7 +200,12 @@
     "explanation": "Pada 802.11n, 1 spatial stream pada 40 MHz menghasilkan 150 Mbps. Dengan MIMO 2x2 (2 spatial streams), kapasitas menjadi 2 x 150 = 300 Mbps.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.3",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_STANDARDS_2_04",
@@ -173,7 +213,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Perbedaan mendasar antara teknologi MU-MIMO pada 802.11ac Wave 2 dan 802.11ax terletak pada...",
     "options": {
@@ -186,7 +225,12 @@
     "explanation": "Wi-Fi 5 Wave 2 hanya mendukung MU-MIMO downlink, sementara Wi-Fi 6 memperluasnya ke uplink dan downlink secara simultan.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_STANDARDS_2_05",
@@ -194,7 +238,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Teknologi BSS Coloring pada standar IEEE 802.11ax berfungsi untuk...",
     "options": {
@@ -207,7 +250,12 @@
     "explanation": "BSS Coloring memberi label warna logika sehingga stasiun dapat membedakan frame jaringan lokal dengan frame asing (spatial reuse).",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_STANDARDS_3_01",
@@ -215,7 +263,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Sebuah AP 802.11ax melayani 34 smartphone siswa TKJ di satu ruangan lab. Berapakah alokasi ukuran Resource Unit (RU) terkecil per klien pada kanal 20 MHz menggunakan modulasi OFDMA agar seluruh klien dapat menerima paket transmisi penjadwalan simultan?",
     "options": {
@@ -228,7 +275,14 @@
     "explanation": "Pada kanal 20 MHz, standar 802.11ax dapat membagi spektrum hingga maksimal sembilan 26-tone RU secara bersamaan untuk trafik data kecil.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.3",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_WLAN_STANDARDS_3_02",
@@ -236,7 +290,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Di lingkungan bengkel TKJ terdapat mesin las listrik yang menimbulkan spark gap noise kuat. Standar nirkabel dan strategi spektrum manakah yang paling tahan terhadap interferensi elektromagnetik pita lebar ini?",
     "options": {
@@ -249,7 +302,12 @@
     "explanation": "Pita 5 GHz memiliki jarak frekuensi jauh dari noise spark gap mesin industri, dan subcarrier sempit OFDMA 802.11ax memberikan ketahanan tinggi.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_STANDARDS_3_03",
@@ -257,7 +315,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Sebuah Access Point disetel dengan MCS (Modulation and Coding Scheme) Index 9 pada 802.11ac. Jika nilai SNR tiba-tiba turun menjadi 12 dB karena pintu besi tertutup, fenomena adaptasi fisik apakah yang terjadi?",
     "options": {
@@ -270,7 +327,12 @@
     "explanation": "Algoritma dynamic rate shifting menurunkan skema modulasi saat SNR anjlok agar komunikasi data tetap tersambung meski bitrate menurun.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_STANDARDS_3_04",
@@ -278,7 +340,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Target Wake Time (TWT) pada standar IEEE 802.11ax memberikan dampak positif langsung pada pembelajaran siswa yang menggunakan baterai smartphone di Zona B karena...",
     "options": {
@@ -291,7 +352,12 @@
     "explanation": "TWT menegosiasikan jendela waktu aktif klien sehingga stasiun dapat memasuki mode tidur (sleep) hemat daya di luar jendela transmisi.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_STANDARDS_3_05",
@@ -299,7 +365,6 @@
     "primary_kc": "WLAN_STANDARDS",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Mengapa kanal bonding 80 atau 160 MHz pada standar 802.11ac/ax tidak disarankan diterapkan pada area lab sekolah yang berdekatan dengan 3 lab lain?",
     "options": {
@@ -312,7 +377,12 @@
     "explanation": "Penggabungan kanal selebar 160 MHz menghabiskan seluruh spektrum 5 GHz non-DFS, memaksa AP lain berbagi kanal yang sama sehingga throughput justru anjlok akibat contention.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-01.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_1_01",
@@ -320,7 +390,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": true,
     "prompt_text": "Mode jaringan nirkabel di mana dua laptop siswa TKJ saling terhubung langsung untuk berbagi berkas tanpa melalui perantara Access Point disebut mode...",
     "options": {
@@ -333,7 +402,12 @@
     "explanation": "Mode Ad-Hoc / IBSS menghubungkan perangkat peer-to-peer langsung tanpa Access Point terpusat.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_1_02",
@@ -341,7 +415,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Topologi nirkabel yang menggunakan sebuah Access Point sebagai pengendali pusat transmisi data bagi seluruh perangkat klien disebut...",
     "options": {
@@ -354,7 +427,12 @@
     "explanation": "BSS Infrastructure mengandalkan sebuah AP pusat yang memancarkan beacon dan mengatur asosiasi stasiun.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_1_03",
@@ -362,7 +440,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Gabungan dari dua atau lebih area Basic Service Set (BSS) yang saling terhubung melalui Distribution System (DS) dengan SSID yang sama dinamakan...",
     "options": {
@@ -375,7 +452,14 @@
     "explanation": "ESS adalah gabungan beberapa BSS yang terhubung melalui backbone jaringan kabel (Distribution System).",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_1_04",
@@ -383,7 +467,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Identitas nama jaringan nirkabel yang dipancarkan secara berkala oleh Access Point agar dapat dikenali dan dipilih oleh perangkat siswa disebut...",
     "options": {
@@ -396,7 +479,12 @@
     "explanation": "SSID adalah nama pengenal alfanumerik jaringan nirkabel yang dibaca pengguna pada daftar Wi-Fi perangkat.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_1_05",
@@ -404,7 +492,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Alamat fisik perangkat keras (MAC Address) dari radio nirkabel pada Access Point yang menjadi pengenal unik sebuah sel nirkabel di layer 2 disebut...",
     "options": {
@@ -417,7 +504,12 @@
     "explanation": "BSSID adalah alamat MAC 48-bit antarmuka radio AP yang membedakan sel satu dengan sel lainnya dalam ESS yang sama.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_2_01",
@@ -425,7 +517,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada topologi Extended Service Set (ESS) di laboratorium SMK, mengapa seluruh Access Point disarankan menggunakan SSID yang sama namun kanal frekuensi yang berbeda?",
     "options": {
@@ -438,7 +529,12 @@
     "explanation": "SSID seragam memungkinkan roaming transparan, sedangkan kanal berbeda (1, 6, 11) mencegah interferensi antar sel yang berdampingan.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_2_02",
@@ -446,7 +542,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika sebuah lab TKJ menerapkan mode Ad-Hoc antarlaptop siswa tanpa AP, kelemahan utama yang akan segera timbul saat jumlah siswa mencapai 34 orang adalah...",
     "options": {
@@ -459,7 +554,12 @@
     "explanation": "IBSS tidak memiliki penjadwalan AP terpusat; setiap stasiun memancarkan beacon secara independen sehingga tabrakan paket naik drastis seiring banyaknya stasiun.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_2_03",
@@ -467,7 +567,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Media perantara kabel atau serat optik yang menghubungkan beberapa Access Point dalam topologi Extended Service Set (ESS) ke server lokal LogiTrace disebut...",
     "options": {
@@ -480,7 +579,14 @@
     "explanation": "Distribution System (DS) adalah tulang punggung infrastruktur (umumnya Ethernet switch) yang mengintegrasikan berbagai BSS.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_2_04",
@@ -488,7 +594,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Seorang guru TKJ ingin menghubungkan jaringan komputer di Gedung A dan Gedung B yang berjarak 300 meter tanpa menarik kabel tanah. Topologi nirkabel apakah yang tepat diaplikasikan?",
     "options": {
@@ -501,7 +606,12 @@
     "explanation": "Wireless PTP Bridge dengan antena terarah (direktional) memfokuskan pancaran gelombang radio untuk koneksi backbone antargedung.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.3",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_2_05",
@@ -509,7 +619,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Apa fungsi frame Beacon yang dipancarkan secara teratur (default 100 ms) oleh Access Point dalam topologi BSS?",
     "options": {
@@ -522,7 +631,12 @@
     "explanation": "Beacon frame adalah frame manajemen periodik yang memberitahukan kehadiran sel BSS dan menyinkronkan jam internal stasiun.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_3_01",
@@ -530,7 +644,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": true,
     "prompt_text": "Di sebuah aula sekolah diadakan pameran teknologi dengan 1 Access Point BSS yang menampung 100 klien aktif. Terjadi fenomena di mana klien dekat AP mendapat throughput tinggi sementara klien di pojok aula terputus total. Solusi arsitektur topologi manakah yang paling tepat?",
     "options": {
@@ -543,7 +656,12 @@
     "explanation": "Satu AP memiliki kapasitas airtime terbatas. Arsitektur multi-cell ESS membagi beban kepadatan klien ke beberapa saluran radio yang berbeda.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_3_02",
@@ -551,7 +669,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada perancangan Wireless Mesh Network (WMN) di area kampus SMK, apa kelemahan utama penambahan hop nirkabel berulang (multi-hop mesh) terhadap performa transmisi data kuis adaptif?",
     "options": {
@@ -564,7 +681,12 @@
     "explanation": "Radio tunggal harus menerima dan memancarkan ulang frame pada kanal yang sama, menghabiskan separuh kapasitas transmisi untuk setiap penambahan hop relai.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_3_03",
@@ -572,7 +694,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Dalam perancangan ESS dengan protokol fast roaming IEEE 802.11r (FT), bagaimana proses pertukaran kunci keamanan dioptimalkan untuk mencegah putusnya sesi kuis siswa saat berpindah AP?",
     "options": {
@@ -585,7 +706,14 @@
     "explanation": "802.11r memungkinkan pre-authentication di mana turunan kunci PMK-R1 dinegosiasikan sebelum reasosiasi sehingga memangkas latensi transisi < 50 ms.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Isi soal lebih dekat ke KC lain; kesesuaian KC perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_3_04",
@@ -593,7 +721,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Di lab TKJ dipasang dua AP yang terhubung ke satu switch dengan kabel LAN. Kedua AP disetel dengan SSID yang sama, namun siswa yang berpindah meja mengeluh koneksi internetnya macet dan IP-nya bentrok. Akar masalah topologi yang paling logis adalah...",
     "options": {
@@ -606,7 +733,12 @@
     "explanation": "Dua server DHCP aktif pada segmen layer 2 yang sama (rogue DHCP) akan menimbulkan konflik pembagian IP dan salah gateway default.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_TOPOLOGY_BSS_3_05",
@@ -614,7 +746,6 @@
     "primary_kc": "WLAN_TOPOLOGY_BSS",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika dalam satu lab TKJ terdapat 17 unit PC di Zona A (kabel) dan 17 smartphone di Zona B (nirkabel), konfigurasi pemisahan layer 2 terbaik pada Access Point dan Switch manajemen adalah...",
     "options": {
@@ -627,7 +758,14 @@
     "explanation": "Penggunaan VLAN berbasis SSID mengisolasi domain siaran (broadcast domain) Zona B nirkabel dari Zona A laboratorium kabel.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-02.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_1_01",
@@ -635,7 +773,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Sebuah smartphone siswa di Zona B terhubung ke AP dengan konfigurasi IP statis 192.168.1.50/24. Manakah alamat subnet mask yang tepat untuk prefix tersebut?",
     "options": {
@@ -648,7 +785,12 @@
     "explanation": "Prefix /24 merepresentasikan 24 bit angka biner 1 berurutan, setara dengan desimal 255.255.255.0.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.1",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_1_02",
@@ -656,7 +798,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Server lokal LogiTrace memiliki alamat IP 192.168.10.1/24. Manakah alamat IP yang sah (valid) dan berada dalam satu subnet yang sama untuk dipasang pada ponsel siswa?",
     "options": {
@@ -669,7 +810,12 @@
     "explanation": "192.168.10.25 berada pada rentang host valid (1–254). 192.168.10.0 adalah Network ID dan .255 adalah Broadcast ID.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.1",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_1_03",
@@ -677,7 +823,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Protokol jaringan yang bertugas memetakan alamat logika IP (Layer 3) ke alamat fisik MAC Address (Layer 2) pada komunikasi lokal nirkabel adalah...",
     "options": {
@@ -690,7 +835,12 @@
     "explanation": "ARP bertugas mencari alamat MAC perangkat tujuan berdasarkan alamat IP yang diketahui dalam satu subnet lokal.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.3",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_1_04",
@@ -698,7 +848,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Berapa jumlah maksimal host yang dapat dialokasikan pada subnet dengan prefix /24?",
     "options": {
@@ -711,7 +860,12 @@
     "explanation": "Jumlah host = 2^(32-24) - 2 = 2^8 - 2 = 256 - 2 = 254 alamat host valid.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_1_05",
@@ -719,7 +873,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika sebuah perangkat klien salah memasukkan Default Gateway (misal diisi alamat IP milik klien lain), dampak teknis langsung yang akan dialami klien tersebut adalah...",
     "options": {
@@ -732,7 +885,12 @@
     "explanation": "Default Gateway adalah pintu keluar paket menuju jaringan luar; jika salah, perutean antarnetwork akan gagal total.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_2_01",
@@ -740,7 +898,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": true,
     "prompt_text": "Laboratorium TKJ membutuhkan subnet khusus untuk 34 siswa di Zona B agar tidak menghamburkan alamat IP. Prefix CIDR terkecil manakah yang dapat menampung minimal 34 perangkat siswa sekaligus?",
     "options": {
@@ -753,7 +910,12 @@
     "explanation": "/27 hanya menyediakan 30 host (tidak cukup untuk 34 siswa). Maka prefix terkecil yang mencukupi adalah /26 (2^6 - 2 = 62 host).",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_2_02",
@@ -761,7 +923,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Seorang siswa mengonfigurasi IP 192.168.1.15/28 pada ponselnya, sementara server kuis berada di IP 192.168.1.20/28. Mengapa siswa tidak dapat mengakses server kuis meskipun berada di Access Point yang sama?",
     "options": {
@@ -774,7 +935,12 @@
     "explanation": "Pada /28, subnet 0 adalah 192.168.1.0-15 (host 1-14, broadcast .15). Subnet 1 adalah 192.168.1.16-31 (host 17-30). Keduanya berbeda segmen siaran.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_2_03",
@@ -782,7 +948,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Ketika smartphone siswa mengirim paket ke server lokal LogiTrace, ponsel memeriksa tabel routing internalnya. Kapan paket tersebut akan diteruskan ke Default Gateway alih-alih langsung di-ARP?",
     "options": {
@@ -795,7 +960,12 @@
     "explanation": "Operasi bitwise AND menentukan apakah host tujuan berada di subnet lokal (kirim ARP langsung) atau di luar subnet (kirim ke MAC Gateway).",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_2_04",
@@ -803,7 +973,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika alamat IP gateway adalah 172.16.5.1/22, berapakah alamat broadcast dari subnet tersebut?",
     "options": {
@@ -816,7 +985,12 @@
     "explanation": "Prefix /22 memiliki panjang blok 4 pada oktet ketiga (256 - 252 = 4). Rentang subnet adalah 172.16.4.0 hingga 172.16.7.255.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_2_05",
@@ -824,7 +998,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Sebuah ponsel menampilkan alamat IP 169.254.12.88 setelah terhubung ke Wi-Fi laboratorium. Apa arti dari alamat IP tersebut?",
     "options": {
@@ -837,7 +1010,12 @@
     "explanation": "Blok IP 169.254.0.0/16 adalah alamat link-local APIPA yang digunakan otomatis oleh sistem operasi saat kueri DHCP Discover tidak mendapat penawaran.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_3_01",
@@ -845,7 +1023,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": true,
     "prompt_text": "Sebuah antarmuka nirkabel memiliki IP 10.10.85.120 dengan subnet mask 255.255.240.0. Manakah dari pasangan IP berikut yang berada di luar subnet antarmuka tersebut sehingga membutuhkan routing gateway?",
     "options": {
@@ -858,7 +1035,12 @@
     "explanation": "Mask 255.255.240.0 (/20) memiliki ukuran blok 16 pada oktet ke-3. Subnet yang mencakup 85 adalah 10.10.80.0 s.d. 10.10.95.255. Alamat 10.10.96.1 sudah masuk subnet berikutnya.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_3_02",
@@ -866,7 +1048,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Di lab TKJ terjadi kasus ARP Poisoning / Spoofing saat kuis adaptif berlangsung. Bagaimana penyerang dapat membelokkan lalu lintas kuis siswa di Zona B ke laptopnya?",
     "options": {
@@ -879,7 +1060,14 @@
     "explanation": "Protokol ARP bersifat stateless tanpa verifikasi identitas; paket gratuitous ARP palsu memperbarui cache ARP korban sehingga Gateway diarahkan ke MAC penyerang.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Isi soal lebih dekat ke KC lain; kesesuaian KC perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_3_03",
@@ -887,7 +1075,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Seorang siswa di Zona B melakukan konfigurasi IP ganda (IP Conflict) dengan memasang IP 192.168.1.1 yang sama persis dengan IP router gateway. Dampak fatal apa yang terjadi pada antrean lalu lintas kuis di laboratorium?",
     "options": {
@@ -900,7 +1087,12 @@
     "explanation": "Tabrakan kepemilikan IP memicu flapping entri ARP pada switch dan klien lain di LAN, mengacaukan rute pengiriman paket ke gateway.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_3_04",
@@ -908,7 +1100,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Dalam skenario rotasi stasiun, 17 siswa berpindah dari Zona A ke Zona B dan menghubungkan ponsel mereka ke AP. Mengapa konfigurasi DHCP Lease Time pendek (misal 2 jam) lebih disarankan dibanding Lease Time 7 hari pada lab sekolah?",
     "options": {
@@ -921,7 +1112,12 @@
     "explanation": "Pool IP terbatas pada lingkungan rotasi dinamis akan cepat terkuras jika lease time terlalu panjang karena IP tetap terkunci meski stasiun telah pergi.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_IP_PEER_CONFIG_3_05",
@@ -929,7 +1125,6 @@
     "primary_kc": "IP_PEER_CONFIG",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Sebuah server LogiTrace dihubungkan ke switch dengan IP 192.168.10.2/29. Berapakah jumlah total alamat host efektif yang dapat digunakan oleh perangkat penguji pada segmen tersebut?",
     "options": {
@@ -942,7 +1137,12 @@
     "explanation": "Prefix /29 memiliki 3 bit host: 2^3 - 2 = 8 - 2 = 6 alamat host yang dapat dialokasikan.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-03.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_1_01",
@@ -950,7 +1150,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada pita frekuensi 2.4 GHz standar Indonesia (ETSI), berapakah nomor tiga kanal standar yang benar-benar tidak saling bertumpuk (non-overlapping)?",
     "options": {
@@ -963,7 +1162,14 @@
     "explanation": "Pita 2.4 GHz memiliki lebar kanal 20-22 MHz dengan jarak pisah 5 MHz, sehingga hanya kanal 1, 6, dan 11 yang memiliki jarak 25 MHz bebas tumpang tindih.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_1_02",
@@ -971,7 +1177,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Berapakah jarak pemisah frekuensi minimal antar-pusat kanal pada pita 2.4 GHz agar dua Access Point yang bersebelahan tidak saling mengganggu?",
     "options": {
@@ -984,7 +1189,12 @@
     "explanation": "Setiap kanal 802.11 b/g/n membutuhkan spektrum selebar 20-22 MHz. Dengan spasi kanal 5 MHz, diperlukan selisih 5 kanal (5 x 5 MHz = 25 MHz) agar terisolasi.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_1_03",
@@ -992,7 +1202,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Dalam pemasangan Access Point di lab TKJ, teknisi mengatur lebar kanal (channel bandwidth) dari 20 MHz menjadi 40 MHz pada pita 2.4 GHz. Variabel apakah yang dikorbankan demi mendapatkan kecepatan yang lebih tinggi?",
     "options": {
@@ -1005,7 +1214,12 @@
     "explanation": "Kanal 40 MHz pada 2.4 GHz menghabiskan lebih dari 8 nomor kanal sekaligus, menyisakan ruang spektrum yang sangat sempit dan memicu interferensi hebat dengan AP tetangga.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_1_04",
@@ -1013,7 +1227,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Mengapa pita frekuensi 5 GHz menyediakan jumlah kanal non-overlapping yang jauh lebih banyak (hingga 24+ kanal) dibanding pita 2.4 GHz?",
     "options": {
@@ -1026,7 +1239,12 @@
     "explanation": "Rentang spektrum 5 GHz (UNII-1, UNII-2, UNII-3) mencakup ratusan MHz spektrum bersih dengan kanal mandiri berjarak 20 MHz, tidak seperti 2.4 GHz yang hanya selebar ~80 MHz.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_1_05",
@@ -1034,7 +1252,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika tiga Access Point di tiga kelas berdampingan semuanya disetel secara default pada kanal 6, apa dampak probabilistik yang paling mungkin dialami siswa saat ujian online?",
     "options": {
@@ -1047,7 +1264,12 @@
     "explanation": "Pada kanal yang sama (CCI), seluruh perangkat berbagi satu media transmisi half-duplex; probabilitas stasiun mendeteksi media sibuk meningkat tajam, memicu delay antrean.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_2_01",
@@ -1055,7 +1277,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Seorang teknisi mengamati bahwa AP Lab A berada di kanal 1, sedangkan AP Lab B disetel di kanal 2. Fenomena interferensi apakah yang terjadi di antara kedua AP tersebut?",
     "options": {
@@ -1068,7 +1289,12 @@
     "explanation": "ACI terjadi ketika dua kanal parsial saling bertumpuk (kanal 1 dan 2); radio tidak dapat mendekode sinyal tetangga sebagai frame Wi-Fi yang sah melainkan menganggapnya sebagai derau liar perusak frame.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_2_02",
@@ -1076,7 +1302,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Di sebuah lorong sekolah terdapat 4 unit Access Point berjajar (AP-1, AP-2, AP-3, AP-4). Susunan alokasi kanal 2.4 GHz manakah yang paling ideal untuk meminimalkan interferensi antar-sel yang bersebelahan?",
     "options": {
@@ -1089,7 +1314,12 @@
     "explanation": "Pola pengulangan kanal (frequency reuse) 1-6-11-1 memberikan jarak fisik terjauh antara dua AP yang menggunakan kanal sama (AP-1 dan AP-4), meminimalkan CCI dan mengeliminasi ACI.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.3",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_2_03",
@@ -1097,7 +1327,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Access Point disetel pada pita 5 GHz dengan kanal bonding 80 MHz. Jika teknisi menurunkan lebar kanal menjadi 20 MHz pada daya pancar yang sama, perubahan proporsional apakah yang terjadi pada tingkat noise floor dan sensitivitas penerima?",
     "options": {
@@ -1110,7 +1339,12 @@
     "explanation": "Daya derau termal (noise) berbanding lurus dengan lebar pita (kTB). Mempersempit lebar kanal dari 80 MHz ke 20 MHz (faktor 4x) memangkas noise floor sebesar 10*log10(4) = 6 dB, meningkatkan SNR pada jarak jauh.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.1",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_2_04",
@@ -1118,7 +1352,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Kelompok kanal pada pita frekuensi 5 GHz yang masuk dalam regulasi Dynamic Frequency Selection (DFS) diwajibkan oleh regulasi telekomunikasi untuk...",
     "options": {
@@ -1131,7 +1364,12 @@
     "explanation": "Kanal DFS (UNII-2 dan UNII-2 Extended: kanal 52-144) berbagi spektrum dengan sistem radar penerbangan dan cuaca; AP wajib melakukan Channel Availability Check (CAC) dan pindah kanal jika mendeteksi radar.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_2_05",
@@ -1139,7 +1377,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Dalam pengujian koneksi Wi-Fi di area kantin sekolah yang ramai dengan 5 SSID berbeda pada kanal 1, probabilitas sebuah paket data mengalami collision dan retransmisi meningkat karena...",
     "options": {
@@ -1152,7 +1389,12 @@
     "explanation": "Semakin banyak AP dan stasiun pada kanal yang sama, semakin besar probabilitas slot backoff acak yang dipilih bertabrakan, ditambah beban overhead frame manajemen (beacon) yang memakan kapasitas airtime.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_3_01",
@@ -1160,7 +1402,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Sebuah gedung sekolah berlantai dua memiliki 6 ruangan kelas yang saling bersinggungan secara vertikal dan horizontal. Rencana alokasi kanal 2.4 GHz manakah yang meminimalkan interferensi 3 dimensi?",
     "options": {
@@ -1173,7 +1414,12 @@
     "explanation": "Perencanaan sel 3 dimensi wajib memperhitungkan propagasi sinyal menembus lantai beton; memastikan ruang atas dan bawah menggunakan kanal berbeda mencegah degradasi CCI vertikal.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_3_02",
@@ -1181,7 +1427,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Di titik tengah antara AP-1 (kanal 6, sinyal -65 dBm) dan AP-2 (kanal 6, sinyal -70 dBm), berapakah Signal-to-Interference Ratio (SIR) yang diterima klien laptop dari AP-1?",
     "options": {
@@ -1194,7 +1439,12 @@
     "explanation": "Rasio sinyal terhadap interferensi (SIR) dalam skala desibel dihitung dari selisih daya: SIR = P_sinyal - P_interferensi = (-65 dBm) - (-70 dBm) = +5 dB. Nilai ini di bawah ambang aman (biasanya butuh >= 10-15 dB untuk modulasi tinggi).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_3_03",
@@ -1202,7 +1452,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Seorang administrator jaringan ingin membuktikan apakah kanal 20 MHz lebih tahan interferensi dibanding kanal 40 MHz pada area padat. Prosedur kontrol variabel manakah yang paling valid?",
     "options": {
@@ -1215,7 +1464,12 @@
     "explanation": "Untuk mengisolasi pengaruh lebar kanal, lokasi fisik, perangkat klien, jarak, dan kondisi interferensi latar belakang wajib dijaga konstan.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_3_04",
@@ -1223,7 +1477,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Hasil tangkapan spectrum analyzer menunjukkan adanya lonjakan energi elektromagnetik kontinu non-802.11 selebar 20 MHz di sekitar frekuensi 2445-2465 MHz. Sumber interferensi apakah yang paling mungkin menyebabkan fenomena ini?",
     "options": {
@@ -1236,7 +1489,12 @@
     "explanation": "Microwave oven dan pemancar video analog bekerja pada frekuensi sekitar 2.45 GHz tanpa protokol CSMA/CA, memancarkan gelombang kontinu (duty cycle tinggi) yang melumpuhkan kanal 6-10.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_FREQ_CHANNEL_3_05",
@@ -1244,7 +1502,6 @@
     "primary_kc": "WLAN_FREQ_CHANNEL",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika kanal radio mengalami utilisasi rata-rata sebesar 85% akibat transmisi video streaming dari lab sebelah, probabilitas sebuah klien baru berhasil mendapatkan slot transmisi pada upaya backoff pertama adalah...",
     "options": {
@@ -1257,7 +1514,14 @@
     "explanation": "Pada utilisasi kanal 85%, probabilitas saluran berada dalam kondisi IDLE hanya 15%. Peluang klien menemukan kanal bebas tanpa menunda transmisi sangat kecil, memicu penumpukan antrean.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-04.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Isi soal lebih dekat ke KC lain; kesesuaian KC perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_1_01",
@@ -1265,7 +1529,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Mengapa protokol keamanan lawas Wired Equivalent Privacy (WEP) sudah dinyatakan tidak aman dan dilarang digunakan pada jaringan sekolah?",
     "options": {
@@ -1278,7 +1541,12 @@
     "explanation": "WEP memiliki cacat kriptografi fatal pada implementasi RC4 dan daur ulang IV 24-bit yang memungkinkan kunci enkripsi direkonstruksi dengan menangkap paket data.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_1_02",
@@ -1286,7 +1554,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Perbedaan mendasar antara metode pengamanan WPA2-Personal (PSK) dan WPA2-Enterprise terletak pada...",
     "options": {
@@ -1299,7 +1566,14 @@
     "explanation": "WPA2-Personal mengandalkan Pre-Shared Key yang dibagikan ke semua orang, sedangkan WPA2-Enterprise memisahkan identitas tiap siswa/guru menggunakan server autentikasi terpusat (802.1X/RADIUS).",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_1_03",
@@ -1307,7 +1581,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Berapakah batas minimal panjang karakter kata sandi (passphrase) yang diwajibkan oleh standar keamanan WPA2-Personal (PSK)?",
     "options": {
@@ -1320,7 +1593,14 @@
     "explanation": "Standar IEEE 802.11i menetapkan panjang passphrase WPA2-PSK antara 8 hingga 63 karakter ASCII (atau 64 digit heksadesimal).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.2",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_1_04",
@@ -1328,7 +1608,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Algoritma penyandian simetris modern yang wajib diimplementasikan pada standar pengamanan WPA2 untuk menjamin kerahasiaan payload data adalah...",
     "options": {
@@ -1341,7 +1620,12 @@
     "explanation": "WPA2 mewajibkan penggunaan cipher blok AES-CCMP (Counter Mode with Cipher Block Chaining Message Authentication Code Protocol) menggantikan TKIP dan WEP.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_1_05",
@@ -1349,7 +1633,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Berapa banyakkah ruang kombinasi kunci yang harus diuji penyerang dalam serangan brute force terhadap sandi Wi-Fi 8 digit yang hanya menggunakan angka (0-9)?",
     "options": {
@@ -1362,7 +1645,12 @@
     "explanation": "Dengan 10 kemungkinan angka untuk tiap posisi pada panjang 8 digit, total ruang kunci adalah 10^8 = 100 juta kombinasi, yang dapat diuji dalam hitungan detik oleh kartu grafis modern.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_2_01",
@@ -1370,7 +1658,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada proses asosiasi klien ke AP dengan WPA2-PSK, celah keamanan apakah yang dimanfaatkan penyerang saat menangkap paket 4-Way Handshake (EAPOL)?",
     "options": {
@@ -1383,7 +1670,12 @@
     "explanation": "Frame EAPOL 4-Way Handshake berisi nilai nonce dan MIC yang dihitung dari PMK. Penyerang dapat menguji jutaan kata kamus secara offline di komputernya sendiri tanpa mengirim paket ke AP.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_2_02",
@@ -1391,7 +1683,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Keunggulan utama protokol Simultaneous Authentication of Equals (SAE) pada standar WPA3 dibandingkan WPA2-PSK dalam melindungi kata sandi sekolah adalah...",
     "options": {
@@ -1404,7 +1695,12 @@
     "explanation": "WPA3-SAE (Dragonfly Handshake) menggunakan pertukaran kunci berbasis kurva eliptik yang mengharuskan interaksi aktif, menggagalkan analisis kamus pasif offline.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_2_03",
@@ -1412,7 +1708,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Dalam implementasi WPA2-Enterprise di SMK, protokol EAP manakah yang paling umum digunakan karena mendukung enkripsi terowongan TLS menggunakan sertifikat server tanpa mewajibkan sertifikat pada tiap smartphone siswa?",
     "options": {
@@ -1425,7 +1720,12 @@
     "explanation": "PEAP membangun terowongan terenkripsi TLS menggunakan sertifikat digital server RADIUS terlebih dahulu, lalu mengalirkan autentikasi username/password siswa secara aman di dalam terowongan.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.3",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_2_04",
@@ -1433,7 +1733,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika panjang kata sandi nirkabel bertambah dari 8 karakter menjadi 12 karakter alfanumerik (62 variasi karakter), faktor peningkatan ruang kunci yang harus dipecahkan penyerang meningkat secara proporsional sebesar...",
     "options": {
@@ -1446,7 +1745,12 @@
     "explanation": "Ruang kunci eksponensial terhadap panjang sandi: 62^12 / 62^8 = 62^(12-8) = 62^4 = 14.776.336 kali lipat lebih banyak, membuat serangan brute-force menjadi tidak praktis secara komputasi.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_2_05",
@@ -1454,7 +1758,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Ketika Access Point diaktifkan dalam mode transisi (WPA2/WPA3 Mixed Mode) demi mendukung laptop siswa versi lama, risiko keamanan apakah yang meningkat secara probabilistik?",
     "options": {
@@ -1467,7 +1770,12 @@
     "explanation": "Mode transisi memungkinkan penyerang mengirim paket deauth dan memalsukan beacon untuk memperdaya klien agar menganggap AP hanya mendukung WPA2, sehingga membuka celah dictionary attack.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_3_01",
@@ -1475,7 +1783,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Serangan Evil Twin / Rogue AP dilakukan dengan membuat AP palsu dengan SSID dan BSSID identik di dekat sekolah. Protokol keamanan manakah yang kebal terhadap serangan penyadapan kredensial ini?",
     "options": {
@@ -1488,7 +1795,12 @@
     "explanation": "Pada EAP-TLS, klien memverifikasi keaslian sertifikat digital server RADIUS resmi sekolah; jika AP penyerang mencoba memalsukan identitas, validasi sertifikat gagal dan klien menolak asosiasi.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_3_02",
@@ -1496,7 +1808,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Sebuah cluster GPU penguji dapat mengkalkulasi 1.000.000 hash PBKDF2 per detik. Berapa lama waktu maksimal yang dibutuhkan untuk menguji seluruh kombinasi kata sandi numerik 8 digit (10^8 kombinasi)?",
     "options": {
@@ -1509,7 +1820,12 @@
     "explanation": "Waktu = Total Kombinasi / Kecepatan = 10^8 / 10^6 = 100 detik. Hal ini membuktikan bahwa kata sandi Wi-Fi 8 digit numerik sangat rapuh dan dapat ditembus dalam waktu kurang dari dua menit.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_3_03",
@@ -1517,7 +1833,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Fitur Protected Management Frames (IEEE 802.11w / PMF) yang wajib pada WPA3 berfungsi melindungi jaringan dari serangan...",
     "options": {
@@ -1530,7 +1845,12 @@
     "explanation": "Pada 802.11 standar, frame manajemen (seperti deauth) tidak dienkripsi sehingga mudah dipalsukan penyerang; 802.11w menambahkan kriptografi integrity protection pada frame manajemen unicast dan broadcast.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_3_04",
@@ -1538,7 +1858,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Pada arsitektur WPA2, Group Temporal Key (GTK) diperbarui secara berkala (rekey interval) oleh Access Point. Tujuan utama pembaharuan kunci kelompok ini adalah...",
     "options": {
@@ -1551,7 +1870,12 @@
     "explanation": "GTK digunakan bersama untuk mendekripsi frame broadcast/multicast; jika GTK tidak diperbarui saat klien terputus, mantan klien tetap dapat menyadap frame siaran di udara.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SECURITY_AUTH_3_05",
@@ -1559,7 +1883,6 @@
     "primary_kc": "WLAN_SECURITY_AUTH",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Mengapa fitur Wi-Fi Protected Setup (WPS) metode PIN 8 digit sangat rentan terhadap serangan Pixie Dust / Reaver?",
     "options": {
@@ -1572,7 +1895,12 @@
     "explanation": "Protokol WPS memiliki kelemahan desain di mana AP memvalidasi 4 digit pertama dan 3 digit terakhir secara terpisah; probabilitas menemukan PIN melonjak drastis dari 1 banding 100 juta menjadi hanya 11.000 percobaan.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-05.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_1_01",
@@ -1580,7 +1908,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Fitur pada Access Point yang membatasi perangkat klien nirkabel agar hanya dapat berkomunikasi ke gateway internet dan dilarang saling berkirim data antarsesama klien disebut...",
     "options": {
@@ -1593,7 +1920,12 @@
     "explanation": "Client Isolation memblokir lalu lintas data peer-to-peer layer 2 antarklien pada satu SSID, melindungi perangkat siswa dari serangan sniffing dan infeksi malware sesama pengguna.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_1_02",
@@ -1601,7 +1933,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Langkah pertama dan paling mendasar yang wajib dilakukan teknisi saat mengonfigurasi Access Point baru untuk mencegah pengambilalihan kontrol oleh pihak luar adalah...",
     "options": {
@@ -1614,7 +1945,12 @@
     "explanation": "Kredensial bawaan pabrik terdokumentasi secara publik di internet; membiarkan kredensial default memungkinkan siapa pun di jaringan nirkabel masuk ke menu konfigurasi AP.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_1_03",
@@ -1622,7 +1958,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Metode pengamanan di mana administrator mendaftarkan alamat perangkat keras fisik komputer yang diizinkan terhubung ke Access Point dinamakan...",
     "options": {
@@ -1635,7 +1970,14 @@
     "explanation": "MAC Filtering membandingkan alamat fisik NIC klien dengan daftar akses (whitelist/blacklist) sebelum mengizinkan asosiasi jaringan.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_1_04",
@@ -1643,7 +1985,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Protokol manajemen antarmuka grafis web (Web UI) yang aman dan terenkripsi untuk mengelola konfigurasi Access Point dari browser adalah...",
     "options": {
@@ -1656,7 +1997,12 @@
     "explanation": "HTTPS menggunakan enkripsi TLS untuk melindungi pengiriman nama pengguna dan kata sandi manajemen agar tidak tersadap dalam teks polos di jaringan lokal.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_1_05",
@@ -1664,7 +2010,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Mengapa metode pengamanan MAC Address Filtering dinilai tidak memadai sebagai satu-satunya lapisan pertahanan jaringan nirkabel?",
     "options": {
@@ -1677,7 +2022,12 @@
     "explanation": "Header 802.11 selalu memuat MAC address secara terbuka di udara; penyerang dengan paket sniffer dapat melihat MAC klien sah lalu memprogram kartu Wi-Fi miliknya untuk meniru MAC tersebut.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_2_01",
@@ -1685,7 +2035,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Mengapa menyembunyikan nama SSID (Hidden SSID / Disable SSID Broadcast) tidak memberikan perlindungan keamanan yang nyata terhadap peretas?",
     "options": {
@@ -1698,7 +2047,12 @@
     "explanation": "Menonaktifkan beacon broadcast hanya menyembunyikan SSID dari daftar Wi-Fi pengguna awam; penyerang yang menjalankan sniffer seperti Kismet/Airodump dapat membaca nama SSID saat pertukaran probe frame terjadi.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_2_02",
@@ -1706,7 +2060,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada router gateway MikroTik lab sekolah, aturan Firewall Filter manakah yang tepat untuk memblokir akses manajemen Winbox (port 8291) dari segmen nirkabel siswa (wlan1)?",
     "options": {
@@ -1719,7 +2072,12 @@
     "explanation": "Trafik yang ditujukan langsung ke router gateway diproses pada rantai 'input'; aturan drop pada antarmuka wlan1 dengan tujuan port 8291 memastikan siswa tidak dapat mengakses panel Winbox.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_2_03",
@@ -1727,7 +2085,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Administrator jaringan menerapkan pembatasan bandwidth (Simple Queue) sebesar 2 Mbps per siswa. Jika kapasitas total internet sekolah adalah 20 Mbps, berapa jumlah siswa maksimal yang dapat streaming bersamaan pada kapasitas puncak tanpa buffering?",
     "options": {
@@ -1740,7 +2097,14 @@
     "explanation": "Perhitungan alokasi proporsional sederhana: Total Bandwidth / Alokasi per Klien = 20 Mbps / 2 Mbps = 10 stasiun aktif simultan pada batas jaminan bandwidth (CIR).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Isi soal lebih dekat ke KC lain; kesesuaian KC perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_2_04",
@@ -1748,7 +2112,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Tindakan pengerasan (hardening) layanan pada Access Point enterprise mencakup penonaktifan service yang tidak aman dan tidak diperlukan. Layanan manakah yang wajib dimatikan?",
     "options": {
@@ -1761,7 +2124,12 @@
     "explanation": "Telnet dan FTP mengirim kredensial tanpa enkripsi, sedangkan UPnP memiliki banyak kerentanan eksekusi perintah jarak jauh; mematikannya mereduksi bidang serangan (attack surface).",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_2_05",
@@ -1769,7 +2137,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika Client Isolation dinonaktifkan pada jaringan Wi-Fi publik sekolah, probabilitas penyebaran worm/malware antar-laptop di ruang lab meningkat karena...",
     "options": {
@@ -1782,7 +2149,12 @@
     "explanation": "Tanpa isolasi klien, setiap host di subnet yang sama memiliki visibilitas layer 2 penuh; malware dapat menyebar otomatis melalui exploit protokol jaringan lokal (seperti port SMB 445).",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_3_01",
@@ -1790,7 +2162,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Untuk memisahkan akses jaringan guru dan siswa pada satu Access Point fisik yang sama, teknik arsitektur jaringan yang paling aman dan efisien adalah...",
     "options": {
@@ -1803,7 +2174,12 @@
     "explanation": "Multi-SSID yang dipetakan ke VLAN terpisah (misal SSID Guru -> VLAN 10, SSID Siswa -> VLAN 20) mengisolasi broadcast domain dan jalur data secara logis pada switch Layer 2/3.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_3_02",
@@ -1811,7 +2187,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada tabel Firewall MikroTik, aturan penolakan paket rusak `/ip firewall filter add chain=input connection-state=invalid action=drop` ditempatkan di urutan paling atas. Dampak positifnya terhadap kinerja router adalah...",
     "options": {
@@ -1824,7 +2199,12 @@
     "explanation": "Korelasi urutan aturan firewall: mengevaluasi koneksi invalid dan menolaknya di awal mencegah pemborosan siklus komputasi prosesor pada paket anomali atau serangan scanning.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_3_03",
@@ -1832,7 +2212,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Serangan Rogue DHCP Server terjadi ketika laptop siswa menjalankan DHCP server liar yang membagikan IP gateway palsu ke siswa lain. Fitur keamanan saklar kabel yang bertugas memitigasi serangan ini adalah...",
     "options": {
@@ -1845,7 +2224,14 @@
     "explanation": "DHCP Snooping memvalidasi pesan DHCP; paket balasan DHCP Offer dari port 'untrusted' (port siswa/AP liar) langsung diblokir oleh switch sehingga klien hanya menerima IP dari server resmi.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_3_04",
@@ -1853,7 +2239,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Administrator menggunakan Per Connection Queue (PCQ) MikroTik dengan parameter pcq-rate=0 (pembagian rata dinamis). Jika bandwidth total 30 Mbps dibagi untuk 15 pengguna aktif, berapakah bandwidth yang didapat masing-masing pengguna?",
     "options": {
@@ -1866,7 +2251,14 @@
     "explanation": "PCQ secara proporsional dan matematis membagi total bandwidth secara adil dan merata ke seluruh sub-antrean aktif: 30 Mbps / 15 = 2 Mbps per stasiun.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Isi soal lebih dekat ke KC lain; kesesuaian KC perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_HOST_HARDENING_3_05",
@@ -1874,7 +2266,6 @@
     "primary_kc": "WLAN_HOST_HARDENING",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Sistem Wireless Intrusion Prevention System (WIPS) memantau pola frame 802.11. Jika terdeteksi lebih dari 50 frame Deauthentication per detik dari BSSID yang tidak dikenal, tindakan otomatis berbasis probabilitas ancaman yang diambil adalah...",
     "options": {
@@ -1887,7 +2278,14 @@
     "explanation": "Lonjakan tajam frame deauth (>50 fps) mengindikasikan serangan DoS aktif (probabilitas tinggi serangan brute/jamming); WIPS merespons dengan memblokir MAC penyerang pada sistem kontrol terpusat.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-06.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_1_01",
@@ -1895,7 +2293,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Satuan standar internasional yang digunakan untuk mengukur kekuatan sinyal radio nirkabel yang diterima antena smartphone (RSSI) adalah...",
     "options": {
@@ -1908,7 +2305,12 @@
     "explanation": "RSSI dinyatakan dalam satuan logaritmik dBm (desibel relatif terhadap 1 miliwatt) untuk merepresentasikan rentang daya radio yang sangat lebar secara praktis.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_1_02",
@@ -1916,7 +2318,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Mengapa nilai kekuatan sinyal Wi-Fi -55 dBm jauh lebih kuat dan lebih stabil dibandingkan nilai sinyal -85 dBm pada penerima ponsel siswa?",
     "options": {
@@ -1929,7 +2330,12 @@
     "explanation": "Dalam skala logaritmik negatif dBm, -55 dBm memiliki daya sekitar 3.16 picowatt, sedangkan -85 dBm hanya sekitar 0.00316 picowatt (daya -55 dBm adalah 1.000 kali lebih besar dibanding -85 dBm).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_1_03",
@@ -1937,7 +2343,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Pola radiasi pancaran gelombang elektromagnetik dari antena jenis omnidirectional pada Access Point ruangan lab memancarkan energi dengan bentuk...",
     "options": {
@@ -1950,7 +2355,12 @@
     "explanation": "Antena omnidirectional menyebarkan sinyal sama kuat ke segala arah horizontal (360 derajat) namun memiliki sudut pancar terbatas pada bidang vertikal.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_1_04",
@@ -1958,7 +2368,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Urutan material partisi penghalang ruangan dari yang menyebabkan nilai redaman (attenuation loss) paling kecil hingga paling besar terhadap sinyal Wi-Fi adalah...",
     "options": {
@@ -1971,7 +2380,14 @@
     "explanation": "Bahan ringan tak berpori seperti kaca dan gypsum hanya meredam 2-4 dB, batu bata meredam 6-10 dB, sedangkan beton bertulang tebal meredam lebih dari 15-20 dB.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_1_05",
@@ -1979,7 +2395,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Seorang siswa berjalan perlahan menjauhi Access Point di lorong sekolah dari jarak 2 meter ke 10 meter. Hubungan korelasional apakah yang teramati pada indikator RSSI di perangkatnya?",
     "options": {
@@ -1992,7 +2407,12 @@
     "explanation": "Korelasi negatif antara jarak dan RSSI terjadi akibat penyebaran energi gelombang elektromagnetik di ruang bebas (Free Space Path Loss).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_2_01",
@@ -2000,7 +2420,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Berdasarkan rumus Free Space Path Loss (FSPL), jika jarak antara laptop siswa dan Access Point digandakan dari 4 meter menjadi 8 meter (2 kali lipat), berapakah perkiraan penurunan daya sinyal yang diterima?",
     "options": {
@@ -2013,7 +2432,12 @@
     "explanation": "Sesuai hukum kuadrat terbalik (inverse-square law): $20 \\log_{10}(2) \\approx 6.02\\text{ dB}$. Menggandakan jarak menyebabkan pelemahan 6 dB atau kerapatan daya turun menjadi 1/4.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_2_02",
@@ -2021,7 +2445,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Mengapa sinyal Wi-Fi pada frekuensi 2.4 GHz mampu menembus dinding ruangan kelas lab lebih baik daripada frekuensi 5 GHz?",
     "options": {
@@ -2034,7 +2457,12 @@
     "explanation": "Panjang gelombang 2.4 GHz (~12.5 cm) dua kali lebih panjang dari 5 GHz (~6 cm). Gelombang berfrekuensi lebih tinggi lebih mudah diserap dan dihamburkan oleh molekul material padat.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_2_03",
@@ -2042,7 +2470,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada instalasi jaringan nirkabel Point-to-Point antargedung sekolah sejauh 200 meter, mengapa pohon rindang di tengah jalur harus dipangkas meskipun garis lurus penglihatan (Line of Sight) masih terlihat jelas?",
     "options": {
@@ -2055,7 +2482,12 @@
     "explanation": "Transmisi gelombang mikro membutuhkan ruang bebas hambatan setidaknya 60% dari radius Zona Fresnel Pertama; obstruksi pada area elipsoid ini memicu redaman difraksi hebat.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_2_04",
@@ -2063,7 +2495,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Sebuah Access Point luar ruangan memiliki daya pancar (Tx Power) 20 dBm dan dihubungkan ke antena pengarah dengan gain 14 dBi melalui kabel pigtail dengan redaman 2 dB. Berapakah nilai Equivalent Isotropically Radiated Power (EIRP)?",
     "options": {
@@ -2076,7 +2507,12 @@
     "explanation": "EIRP = Tx Power (dBm) - Cable Loss (dB) + Antenna Gain (dBi) = 20 - 2 + 14 = 32 dBm (setara dengan sekitar 1.58 Watt daya radiasi efektif isotropis).",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_2_05",
@@ -2084,7 +2520,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Ketika 30 siswa bergerak dan berjalan di dalam ruang laboratorium nirkabel, sinyal RSSI pada smartphone penguji mengalami fluktuasi acak naik-turun sebesar 5-8 dB. Fenomena propagasi apakah yang terjadi?",
     "options": {
@@ -2097,7 +2532,12 @@
     "explanation": "Multipath fading terjadi saat gelombang pantulan tiba di antena penerima dengan beda fase acak; interferensi konstruktif menaikkan sinyal, sedangkan interferensi destruktif menurunkannya.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_3_01",
@@ -2105,7 +2545,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Dalam merancang tautan nirkabel Point-to-Point antarkampus sejauh 1 km pada frekuensi 5.8 GHz, teknisi menghitung Free Space Path Loss (FSPL) sebesar 108 dB. Jika Tx Power = 17 dBm, gain kedua antena masing-masing 23 dBi, dan redaman kabel total 4 dB, berapakah perkiraan daya sinyal terima (Rx Power)?",
     "options": {
@@ -2118,7 +2557,12 @@
     "explanation": "Link Budget = Tx (17) + Gtx (23) + Grx (23) - LossKabel (4) - FSPL (108) = 63 - 112 = -49 dBm. Nilai -49 dBm sangat prima dan menjamin modulasi tertinggi.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.2",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_3_02",
@@ -2126,7 +2570,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Ketika RSSI pada laptop siswa merosot dari -60 dBm menjadi -80 dBm karena siswa berpindah ke pojok ruangan, mengapa kecepatan transfer file riil anjlok drastis bukan hanya sebesar sepertiga melainkan turun dari 150 Mbps menjadi 12 Mbps?",
     "options": {
@@ -2139,7 +2582,12 @@
     "explanation": "Hubungan antara RSSI dan throughput bersifat non-linier bertingkat; penurunan SNR memaksa algoritma Rate Adaptation melompat turun ke skema modulasi yang jauh lebih sederhana (BPSK).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_3_03",
@@ -2147,7 +2595,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Teknisi ingin mengukur secara presisi nilai redaman kaca jendela berlapis film di lab nirkabel. Prosedur kontrol variabel manakah yang wajib diterapkan agar hasil pengukuran valid?",
     "options": {
@@ -2160,7 +2607,12 @@
     "explanation": "Untuk mengisolasi nilai redaman material kaca film, parameter pemancar (Tx, frekuensi), jarak ukur, orientasi antena, dan lingkungan propagasi harus identik sempurna.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_3_04",
@@ -2168,7 +2620,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Data log AP menunjukkan lantai derau (noise floor) naik dari -96 dBm menjadi -78 dBm. Jika daya sinyal RSSI stasiun adalah -72 dBm, berapakah nilai Signal-to-Noise Ratio (SNR) dan bagaimana status kelayakan koneksinya?",
     "options": {
@@ -2181,7 +2632,12 @@
     "explanation": "SNR = Signal - Noise = (-72 dBm) - (-78 dBm) = +6 dB. Syarat minimal koneksi Wi-Fi stabil adalah SNR >= 15-20 dB; nilai 6 dB memicu frame error rate yang sangat tinggi.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_SIGNAL_PROP_3_05",
@@ -2189,7 +2645,6 @@
     "primary_kc": "WLAN_SIGNAL_PROP",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada ruangan laboratorium nirkabel tertutup tanpa jalur Line of Sight (NLOS) langsung ke AP karena terhalang lemari besi, model distribusi probabilitas statistik manakah yang paling akurat menggambarkan fluktuasi sinyal terima?",
     "options": {
@@ -2202,7 +2657,14 @@
     "explanation": "Ketika tidak terdapat komponen gelombang dominan garis pandang langsung (LoS), perpaduan banyak sinyal pantulan acak mengikuti fungsi kerapatan probabilitas Rayleigh.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-07.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_1_01",
@@ -2210,7 +2672,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Proses perpindahan koneksi perangkat klien nirkabel dari satu Access Point ke Access Point lain yang memiliki SSID sama secara mulus saat pengguna berjalan disebut...",
     "options": {
@@ -2223,7 +2684,12 @@
     "explanation": "Roaming memungkinkan stasiun berpindah antar-BSSID dalam satu Extended Service Set (ESS) tanpa memutus sesi komunikasi data.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_1_02",
@@ -2231,7 +2697,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Ambang batas kekuatan sinyal (Roaming Threshold) pada perangkat klien adalah tingkat nilai RSSI di mana klien mulai...",
     "options": {
@@ -2244,7 +2709,12 @@
     "explanation": "Saat sinyal AP saat ini menyentuh batas roaming threshold (misal -70 atau -75 dBm), algoritma background scan diaktifkan untuk mengevaluasi AP alternatif.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_1_03",
@@ -2252,7 +2722,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Agar proses roaming nirkabel antarkelas di lingkungan sekolah dapat berjalan dengan benar, syarat konfigurasi mendasar pada seluruh Access Point adalah...",
     "options": {
@@ -2265,7 +2734,12 @@
     "explanation": "Roaming dalam satu ESS mewajibkan keseragaman SSID dan kredensial keamanan agar perangkat klien dapat berpindah asosiasi tanpa menuntut intervensi input manual pengguna.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.3",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_1_04",
@@ -2273,7 +2747,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Fenomena 'Sticky Client' pada jaringan nirkabel sekolah terjadi ketika perangkat laptop siswa...",
     "options": {
@@ -2286,7 +2759,12 @@
     "explanation": "Sticky Client terjadi karena keputusan roaming ditentukan oleh klien; driver kartu Wi-Fi yang agresivitas roaming-nya rendah menolak melepas AP lama selama sinyal belum benar-benar putus.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_1_05",
@@ -2294,7 +2772,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Dalam arsitektur nirkabel standar IEEE 802.11 tradisional, pihak yang memegang kendali penuh untuk memutuskan kapan harus berpindah (roam) ke AP lain adalah...",
     "options": {
@@ -2307,7 +2784,14 @@
     "explanation": "Keputusan roaming pada 802.11 bersifat client-driven; klien yang mengukur sinyal lokal dan menentukan saat yang tepat untuk mengirim Reassociation Request.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_2_01",
@@ -2315,7 +2799,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Parameter Hysteresis Margin (misal sebesar 5 dB) pada pengaturan roaming klien berfungsi untuk...",
     "options": {
@@ -2328,7 +2811,12 @@
     "explanation": "Tanpa hysteresis, jika AP-1 = -70 dBm dan AP-2 = -69 dBm, sedikit fluktuasi noise sesaat akan memicu perpindahan asosiasi bolak-balik yang memutus aliran data.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_2_02",
@@ -2336,7 +2824,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Standar IEEE 802.11k (Radio Resource Measurement) membantu mempercepat proses roaming dengan cara...",
     "options": {
@@ -2349,7 +2836,12 @@
     "explanation": "802.11k menyederhanakan pencarian kandidat AP; AP mengirimkan daftar kanal yang digunakan oleh AP tetangga terdekat, memangkas waktu pemindaian dari ~400 ms menjadi ~30 ms.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_2_03",
@@ -2357,7 +2849,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Berapakah persentase tumpang tindih sel cakupan sinyal (cell overlap) yang direkomendasikan antardua Access Point bersebelahan agar transisi roaming suara/video berjalan mulus tanpa area mati?",
     "options": {
@@ -2370,7 +2861,12 @@
     "explanation": "Overlap 15-20% pada ambang sinyal berkualitas (-67 dBm) memastikan klien dapat mendeteksi dan menyelesaikan reasosiasi ke AP baru sebelum sinyal AP lama mengalami degradasi ekstrem.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.3",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_2_04",
@@ -2378,7 +2874,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Saat melakukan pemindaian aktif (active scan) mencari AP baru, radio klien mengirim frame Probe Request di kanal lain. Apa dampak proporsional penundaan pemindaian ini terhadap panggilan suara VoIP?",
     "options": {
@@ -2391,7 +2886,12 @@
     "explanation": "Selama kartu nirkabel beralih kanal untuk memindai probe, kartu tidak dapat mengirim/menerima frame di kanal asal; jika berlangsung terlalu lama, buffer suara kosong dan audio terputus.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.1",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_2_05",
@@ -2399,7 +2899,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Standar Fast BSS Transition (IEEE 802.11r) memangkas waktu jeda roaming (handover delay) di jaringan WPA2-Enterprise dari ~800 ms menjadi di bawah 50 ms. Hal ini dicapai melalui...",
     "options": {
@@ -2412,7 +2911,12 @@
     "explanation": "802.11r melakukan pre-authentication key derivation melalui backbone kabel (Over-the-DS) atau melalui udara (Over-the-Air) sebelum perpindahan fisik, mengeliminasi handshake 802.1X ulang.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_3_01",
@@ -2420,7 +2924,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Untuk mengatasi masalah 'Sticky Client' pada jaringan lab sekolah yang padat, konfigurasi manakah pada controller Access Point yang paling tepat diterapkan?",
     "options": {
@@ -2433,7 +2936,12 @@
     "explanation": "Fitur kicking/minimum RSSI mengirim frame disassociation saat sinyal klien jatuh di bawah ambang batas, memaksa klien mengevaluasi ulang lingkungan radio dan terhubung ke AP terdekat.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_3_02",
@@ -2441,7 +2949,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada pengujian transmisi streaming video saat siswa berjalan melewati 4 AP berturut-turut, sistem yang menerapkan 802.11r menghasilkan packet loss 0.2%, sedangkan sistem tanpa 802.11r menghasilkan packet loss 12%. Faktor proporsional apakah yang mendasari disparitas performa ini?",
     "options": {
@@ -2454,7 +2961,12 @@
     "explanation": "Handoff latency yang panjang (800 ms) melampaui kapasitas buffer video streaming, memicu buffer underrun dan pembuangan paket data selama proses 4-way handshake ulang.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_3_03",
@@ -2462,7 +2974,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Kombinasi tiga standar IEEE yang bekerja bersamaan untuk menciptakan pengalaman roaming kelas enterprise paling optimal (Fast Roaming Trio) adalah...",
     "options": {
@@ -2475,7 +2986,14 @@
     "explanation": "Trio 802.11k/v/r menyatukan pemetaan tetangga (11k), pembimbingan asosiasi dari controller (11v), dan pemotongan waktu autentikasi pertukaran kunci (11r).",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.2",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_3_04",
@@ -2483,7 +3001,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Fenomena tautan asimetris (Asymmetric Link) terjadi saat AP memancar dengan daya sangat tinggi (100 mW / 20 dBm) sedangkan smartphone siswa hanya berdaya 15 mW (12 dBm). Apa akibatnya saat proses roaming?",
     "options": {
@@ -2496,7 +3013,12 @@
     "explanation": "Korelasi ketidakseimbangan daya pancar (Tx power mismatch): ponsel mendengar beacon AP dengan kuat sehingga menolak roaming, padahal frame ack dari ponsel tidak sampai ke AP (dead link).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.1",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_ROAMING_PROB_3_05",
@@ -2504,7 +3026,6 @@
     "primary_kc": "WLAN_ROAMING_PROB",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Model rantai Markov digunakan untuk memprediksi probabilitas perpindahan klien dari sel AP-A ke AP-B atau AP-C di persimpangan lorong. Jika probabilitas transisi ke AP-B adalah 0.7 dan ke AP-C adalah 0.3, strategi alokasi sumber daya nirkabel yang paling efisien adalah...",
     "options": {
@@ -2517,7 +3038,14 @@
     "explanation": "Pendekatan prediktif cerdas memanfaatkan matriks probabilitas transisi untuk menyiapkan kunci sesi lebih awal di AP dengan probabilitas kunjungan tertinggi (AP-B).",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-08.3",
+    "bloom_level": "C5",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_1_01",
@@ -2525,7 +3053,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Karakteristik mendasar dari media nirkabel Wi-Fi sebagai media transmisi bersama (shared medium) adalah bersifat...",
     "options": {
@@ -2538,7 +3065,12 @@
     "explanation": "Karena radio Wi-Fi menggunakan satu saluran frekuensi bersama, pemancar lokal akan menenggelamkan sinyal penerima jika memancarkan dan menerima serentak; komunikasi wajib bergantian (half-duplex).",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_1_02",
@@ -2546,7 +3078,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Protokol kendali akses media yang digunakan pada jaringan nirkabel IEEE 802.11 untuk mencegah tabrakan data di udara adalah...",
     "options": {
@@ -2559,7 +3090,12 @@
     "explanation": "Wi-Fi menggunakan CSMA/CA yang berfokus pada pencegahan tabrakan (avoidance) menggunakan slot waktu acak sebelum transmisi dimulai.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_1_03",
@@ -2567,7 +3103,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Mengapa jaringan Wi-Fi tidak dapat menggunakan mekanisme Collision Detection (CSMA/CD) seperti halnya jaringan kabel Ethernet LAN?",
     "options": {
@@ -2580,7 +3115,12 @@
     "explanation": "Perbedaan daya antara sinyal kirim dan terima mencapai jutaan kali lipat; stasiun yang sedang memancar mengalami 'kebutaan sesaat' terhadap sinyal stasiun lain yang bertabrakan di udara.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_1_04",
@@ -2588,7 +3128,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Ketika 36 siswa di satu kelas secara serentak menekan tombol 'Submit' pada aplikasi kuis nirkabel di detik yang sama, apa yang terjadi pada antrean media radio?",
     "options": {
@@ -2601,7 +3140,12 @@
     "explanation": "Korelasi kepadatan akses bersama: lonjakan stasiun yang bersaing memperebutkan media meningkatkan probabilitas dua stasiun memilih slot waktu hening yang sama, menghasilkan tabrakan data.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_1_05",
@@ -2609,7 +3153,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Dua buah laptop siswa berada di dekat AP. Keduanya selesai menunggu waktu jeda DIFS dan secara acak memilih nilai slot backoff yang sama persis (misal slot 3). Peluang terjadinya tabrakan frame pada awal transmisi adalah...",
     "options": {
@@ -2622,7 +3165,12 @@
     "explanation": "Jika dua perangkat mentransmisikan frame pada slot waktu yang sama persis di kanal yang sama, gelombang radio akan saling bertumpuk di antena AP dan merusak paket (100% collision).",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_2_01",
@@ -2630,7 +3178,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Mekanisme Random Backoff pada CSMA/CA bekerja dengan cara mengundi bilangan bulat acak di dalam rentang Jendela Persaingan (Contention Window / CW). Apa yang terjadi pada nilai CW jika terjadi tabrakan data berulang?",
     "options": {
@@ -2643,7 +3190,12 @@
     "explanation": "Binary Exponential Backoff menggandakan rentang undian (misal 15 -> 31 -> 63 -> 127...); rentang yang semakin lebar memperkecil peluang dua stasiun memilih slot yang identik saat media padat.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_2_02",
@@ -2651,7 +3203,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Fenomena 'Hidden Node Problem' pada jaringan nirkabel terjadi ketika...",
     "options": {
@@ -2664,7 +3215,12 @@
     "explanation": "Hidden node menggagalkan fungsi Carrier Sense fisik; Klien A mengira kanal kosong karena tidak mendengar Klien B, padahal Klien B sedang mengirim ke AP, memicu tabrakan di AP penerima.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_2_03",
@@ -2672,7 +3228,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Mekanisme jabat tangan virtual RTS/CTS (Request to Send / Clear to Send) dirancang khusus untuk mengatasi masalah...",
     "options": {
@@ -2685,7 +3240,14 @@
     "explanation": "RTS/CTS mengirimkan frame kendali pendek yang memuat informasi durasi transmisi; frame CTS dari AP didengar oleh seluruh stasiun sekitar (termasuk hidden node), menyuruh mereka menahan transmisi (NAV).",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_2_04",
@@ -2693,7 +3255,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada kondisi kanal nirkabel yang memiliki tingkat interferensi tinggi, mengapa pengiriman frame data berukuran besar (MTU 1500 byte) memiliki probabilitas kegagalan yang lebih tinggi dibanding frame berukuran kecil?",
     "options": {
@@ -2706,7 +3267,12 @@
     "explanation": "Waktu pengiriman berbanding lurus dengan ukuran frame; semakin lama paket mengudara di saluran berisik, semakin besar kemungkinan satu bit data rusak yang menggagalkan seluruh frame (CRC error).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_2_05",
@@ -2714,7 +3280,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Peningkatan metrik 'Retries' (upaya kirim ulang paket) hingga melampaui 30% pada log diagnostik Access Point di laboratorium berkorelasi langsung dengan...",
     "options": {
@@ -2727,7 +3292,12 @@
     "explanation": "Retransmisi menghabiskan slot waktu berharga untuk mengirim ulang paket yang sama berulang kali, merampas airtime dari paket baru dan memperlambat seluruh jaringan.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_3_01",
@@ -2735,7 +3305,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Mengapa administrator jaringan tidak mengaktifkan mekanisme RTS/CTS untuk seluruh paket data melainkan hanya untuk paket yang ukurannya melebihi ambang batas (RTS Threshold)?",
     "options": {
@@ -2748,7 +3317,12 @@
     "explanation": "RTS/CTS menambah 2 frame overhead sebelum data dikirim; jika diterapkan pada paket kecil (misal ACK TCP 40 byte), overhead kontrol justru lebih besar daripada data aktual, menurunkan efisiensi jaringan.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_3_02",
@@ -2756,7 +3330,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Berdasarkan model analitis Bianchi untuk DCF IEEE 802.11, probabilitas terjadinya tabrakan (p) pada media akses bersama berbanding lurus secara non-linier dengan...",
     "options": {
@@ -2769,7 +3342,14 @@
     "explanation": "Model Bianchi membuktikan bahwa probabilitas collision $p = 1 - (1 - \\tau)^{N-1}$ meningkat tajam seiring bertambahnya jumlah stasiun bersaing (N), membatasi throughput maksimal CSMA/CA.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_3_03",
@@ -2777,7 +3357,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Seorang teknisi ingin menguji efektivitas pengaktifan RTS/CTS dalam mengatasi hidden node di ruang lab berbentuk L. Desain eksperimen kontrol variabel yang valid adalah...",
     "options": {
@@ -2790,7 +3369,12 @@
     "explanation": "Untuk mengisolasi dampak mekanisme RTS/CTS, posisi geografis hidden node, pola lalu lintas data pengirim, dan kondisi kanal radio wajib dijaga identik antara kedua sesi pengujian.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_3_04",
@@ -2798,7 +3382,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Masalah 'Exposed Node Problem' pada jaringan nirkabel multi-sel menyebabkan stasiun menunda transmisi secara tidak perlu karena...",
     "options": {
@@ -2811,7 +3394,14 @@
     "explanation": "Exposed node adalah kebalikan dari hidden node: Carrier Sense fisik terlalu sensitif mendengar transmisi yang sebenarnya tidak akan menimbulkan tabrakan di titik penerima yang berbeda, membuang kapasitas kanal.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_WLAN_CHANNEL_COLLISION_3_05",
@@ -2819,7 +3409,6 @@
     "primary_kc": "WLAN_CHANNEL_COLLISION",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada standar IEEE 802.11e / WMM (Wireless Multimedia QoS), paket suara (Voice) diprioritaskan di atas paket data umum (Best Effort) dengan cara...",
     "options": {
@@ -2832,7 +3421,12 @@
     "explanation": "Dengan jeda AIFS yang lebih pendek dan CWmin yang kecil, paket antrean suara secara probabilistik akan selalu memenangkan undian slot backoff dibanding paket data umum, menjamin latensi rendah.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-09.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_1_01",
@@ -2840,7 +3434,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Perintah dasar berbasis Command Prompt / Terminal yang digunakan teknisi jaringan untuk menguji konektivitas ketercapaian layer 3 (IP) ke host tujuan adalah...",
     "options": {
@@ -2853,7 +3446,12 @@
     "explanation": "Perintah 'ping' mengirimkan paket ICMP Echo Request dan mendengarkan paket Echo Reply untuk memverifikasi ketercapaian host ujung-ke-ujung.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_1_02",
@@ -2861,7 +3459,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Dua tipe pesan protokol ICMP utama yang saling berpasangan dalam proses pengujian perintah ping adalah...",
     "options": {
@@ -2874,7 +3471,14 @@
     "explanation": "Pengujian ping standar menggunakan ICMP Type 8 (pesan permintaan gema dari pengirim) dan mengharapkan respon ICMP Type 0 (pesan balasan gema dari penerima).",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_1_03",
@@ -2882,7 +3486,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Nilai Round-Trip Time (RTT) yang dilaporkan dalam satuan milidetik (ms) pada hasil uji ping merepresentasikan...",
     "options": {
@@ -2895,7 +3498,12 @@
     "explanation": "RTT mengukur latensi dua arah: waktu transmisi pergi + waktu pemrosesan di host tujuan + waktu transmisi balik (Total Round-Trip Latency).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_1_04",
@@ -2903,7 +3511,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Parameter Time to Live (TTL) pada header paket IP balasan uji ping berfungsi untuk...",
     "options": {
@@ -2916,7 +3523,12 @@
     "explanation": "Setiap kali paket melewati router (hop), nilai TTL dikurangi 1; jika TTL mencapai 0, router membuang paket dan mengembalikan pesan ICMP Time Exceeded.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_1_05",
@@ -2924,7 +3536,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika hasil pengujian ping 10 kali ke default gateway laboratorium menunjukkan statistik 'Sent = 10, Received = 10, Lost = 0 (0% loss)' dengan RTT rata-rata 2 ms, probabilitas transmisi data aplikasi lokal berjalan lancar adalah...",
     "options": {
@@ -2937,7 +3548,12 @@
     "explanation": "Hasil 0% loss dan latensi rendah 2 ms mengonfirmasi integritas layer 1 (fisik), layer 2 (data link), dan layer 3 (IP) pada segmen LAN lokal.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_2_01",
@@ -2945,7 +3561,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Mengapa nilai RTT ping pada jaringan nirkabel (Wi-Fi) laboratorium seringkali mengalami fluktuasi tajam (jitter dari 3 ms melompat ke 120 ms) dibanding jaringan kabel UTP yang stabil 1 ms?",
     "options": {
@@ -2958,7 +3573,12 @@
     "explanation": "Korelasi variabilitas media nirkabel: antrean contention window acak dan retransmisi paket di udara menimbulkan variasi waktu tunggu paket (jitter) yang tidak ada pada kabel tembaga dedicated.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_2_02",
@@ -2966,7 +3586,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Ketika teknisi melakukan ping ke sebuah alamat IP dan menerima balasan pesan 'TTL Expired in Transit', akar masalah jaringan yang sedang terjadi adalah...",
     "options": {
@@ -2979,7 +3598,12 @@
     "explanation": "Pesan TTL Expired (ICMP Type 11 Code 0) dikirim oleh router ketika nilai TTL paket jatuh ke nol saat dipantulkan bolak-balik dalam siklus loop routing yang salah.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_2_03",
@@ -2987,7 +3611,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Perintah pengujian MTU `ping -f -l 1472 192.168.1.1` pada Windows menggunakan opsi `-f` (Don't Fragment) dan `-l` (Buffer Size). Mengapa angka 1472 byte yang diuji untuk memastikan paket pas dengan MTU standar Ethernet 1500 byte?",
     "options": {
@@ -3000,7 +3623,12 @@
     "explanation": "Perhitungan proporsional ukuran frame: Total Ukuran Paket = Payload ICMP (1472 byte) + Header ICMP (8 byte) + Header IP (20 byte) = 1500 byte (batas MTU maksimum Ethernet tanpa fragmentasi).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.3",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_2_04",
@@ -3008,7 +3636,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Dalam pengujian ping dari Laptop A (192.168.10.5) melewati dua router menuju Server B (10.0.0.1), komponen header IP manakah yang nilainya selalu berubah di setiap lompatan hop router?",
     "options": {
@@ -3021,7 +3648,14 @@
     "explanation": "Router meneruskan paket dengan mempertahankan Source dan Destination IP asli, namun wajib mengurangi nilai TTL sebesar 1 dan menghitung ulang Header Checksum pada setiap hop.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_2_05",
@@ -3029,7 +3663,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Hasil uji ping berkelanjutan sebanyak 100 kali ke server video konferensi menunjukkan 8 paket mengalami timeout (8% packet loss). Dampak apa yang dialami siswa saat melakukan video call?",
     "options": {
@@ -3042,7 +3675,12 @@
     "explanation": "Aplikasi komunikasi real-time (RTP/UDP) tidak melakukan retransmisi paket; packet loss 8% melampaui kemampuan algoritma packet loss concealment (PLC), merusak kejelasan suara dan gambar.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_3_01",
@@ -3050,7 +3688,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Utilitas diagnostik `tracert` (pada Windows) atau `traceroute` (pada Linux) mampu memetakan seluruh hop router di sepanjang jalur perjalanan paket dengan teknik cerdik, yaitu...",
     "options": {
@@ -3063,7 +3700,14 @@
     "explanation": "Dengan menyetel TTL=1, router pertama membalas dengan ICMP Time Exceeded (identitas terungkap); lalu TTL=2 memancing balasan router kedua, dan seterusnya hingga mencapai host tujuan.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.3",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_3_02",
@@ -3071,7 +3715,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Ketika link internet sekolah mengalami saturasi unggahan (upload penuh 100%), latensi ping ke server eksternal melonjak dari 15 ms menjadi 650 ms tanpa ada paket yang drop. Fenomena jaringan apakah yang terjadi?",
     "options": {
@@ -3084,7 +3727,12 @@
     "explanation": "Korelasi antrean: Bufferbloat terjadi saat router menampung terlalu banyak paket di buffer antrean daripada membuangnya; paket tetap terkirim tapi mengalami delay antrean (queuing delay) yang masif.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_3_03",
@@ -3092,7 +3740,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Seorang teknisi ingin membedakan secara presisi berapa porsi latensi transmisi fisik kabel dan berapa porsi latensi proses internal pada pengujian ping antardua lab. Prosedur eksperimen kontrol variabel yang tepat adalah...",
     "options": {
@@ -3105,7 +3752,12 @@
     "explanation": "Untuk mengisolasi waktu tempuh propagasi fisik dari delay pemrosesan router, parameter beban trafik dan beban CPU router harus dikendalikan secara mandiri.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.3",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_3_04",
@@ -3113,7 +3765,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada pengujian ping dengan ukuran payload data kecil (32 byte), berapakah persentase beban tambahan (overhead) header jaringan (Ethernet 14 byte + IP 20 byte + ICMP 8 byte = 42 byte) terhadap total ukuran frame yang ditransmisikan (74 byte)?",
     "options": {
@@ -3126,7 +3777,12 @@
     "explanation": "Perhitungan rasio overhead: Total Frame = Payload (32) + Overhead Header (42) = 74 byte. Persentase overhead = 42 / 74 = 56.7%, membuktikan bahwa transmisi payload kecil sangat tidak efisien dalam pemanfaatan bandwidth.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.3",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_CONNECTIVITY_3_05",
@@ -3134,7 +3790,6 @@
     "primary_kc": "ICMP_CONNECTIVITY",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Sistem deteksi intrusi jaringan (NIDS) memantau lalu lintas ICMP. Jika terdeteksi lebih dari 5.000 paket ICMP Echo Request per detik yang ditujukan ke satu alamat IP server dari berbagai alamat IP acak, kesimpulan ancaman probabilistik yang paling tepat adalah...",
     "options": {
@@ -3147,7 +3802,14 @@
     "explanation": "Frekuensi ping ekstrem (>5.000 pps) melampaui perilaku manusia atau pemantauan sah, dengan probabilitas >99.9% merupakan serangan DoS untuk membanjiri bandwidth dan sumber daya CPU korban.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.1",
+    "indikator_id": "IND-10.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_1_01",
@@ -3155,7 +3817,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Arti dari pesan galat 'Destination Host Unreachable' yang muncul pada hasil pengujian perintah ping adalah...",
     "options": {
@@ -3168,7 +3829,12 @@
     "explanation": "Destination Host Unreachable (ICMP Type 3) menandakan kegagalan pengiriman di lapisan jaringan atau tautan data; pengirim aktif diberi tahu bahwa host tujuan tidak dapat dijangkau.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_1_02",
@@ -3176,7 +3842,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Perangkat jaringan manakah yang umumnya mengirimkan balasan pesan galat ICMP 'Destination Host Unreachable' kembali ke komputer siswa?",
     "options": {
@@ -3189,7 +3854,12 @@
     "explanation": "Jika host di subnet lokal tidak membalas ARP, komputer pengirim sendiri yang memunculkan pesan; jika host di remote subnet tak terjangkau, router gateway yang mengirimkan pesan ICMP Type 3.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_1_03",
@@ -3197,7 +3867,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Komputer A memiliki IP 192.168.1.10/24 dan Komputer B memiliki IP 192.168.1.20/28. Mengapa saat Komputer B melakukan ping ke Komputer A muncul galat 'Destination Host Unreachable' padahal keduanya terhubung ke switch yang sama?",
     "options": {
@@ -3210,7 +3879,12 @@
     "explanation": "Ketidakcocokan subnet mask memecah logika jaringan: Komputer B dengan /27 atau /28 melihat IP A (1.10) berada di luar jaringan lokalnya, sehingga paket dilempar ke gateway; tanpa gateway, muncul DHU.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_1_04",
@@ -3218,7 +3892,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada jaringan LAN lokal yang sama, protokol yang bertugas mencari alamat perangkat keras (MAC Address) dari alamat IP tujuan sebelum paket ping dikirimkan adalah...",
     "options": {
@@ -3231,7 +3904,14 @@
     "explanation": "Pengirim wajib mengisi header frame Ethernet dengan MAC tujuan; protokol ARP menyiarkan ARP Request untuk memetakan IP menjadi MAC; jika ARP gagal, ping gagal dengan DHU.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.1",
+    "bloom_level": "C1",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Isi soal lebih dekat ke KC lain; kesesuaian KC perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_1_05",
@@ -3239,7 +3919,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Jika pengujian koneksi ke server ujian sekolah menghasilkan balasan 'Destination Host Unreachable' secara terus-menerus, probabilitas aplikasi web ujian dapat diakses di browser adalah...",
     "options": {
@@ -3252,7 +3931,12 @@
     "explanation": "Aplikasi web berjalan di atas TCP layer 4 yang membutuhkan ketercapaian IP layer 3; jika pesan DHU muncul, koneksi layer 3 mati total sehingga pertukaran paket TCP mustahil terjadi.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_2_01",
@@ -3260,7 +3944,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Siswa di lab TKJ melakukan ping ke komputer temannya pada IP 192.168.1.50 di subnet yang sama dan muncul pesan 'Reply from 192.168.1.10: Destination host unreachable'. Apa yang sedang terjadi di kabel jaringan komputer tujuan (1.50)?",
     "options": {
@@ -3273,7 +3956,12 @@
     "explanation": "Komputer pengirim (192.168.1.10) membroadcast ARP Request 'Who has 192.168.1.50?'; karena host 1.50 mati/terlepas, tidak ada jawaban ARP, sehingga stack IP 1.10 memunculkan DHU.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_2_02",
@@ -3281,7 +3969,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Ketika melakukan ping ke alamat publik 8.8.8.8, komputer siswa memunculkan pesan 'Reply from 192.168.1.1: Destination net unreachable'. Penyebab paling logis pada router gateway (192.168.1.1) adalah...",
     "options": {
@@ -3294,7 +3981,12 @@
     "explanation": "Jika router menerima paket untuk jaringan luar namun tabel routing-nya tidak memiliki rute spesifik maupun rute default (0.0.0.0/0), router mengembalikan pesan ICMP Type 3 Code 0 (Net Unreachable).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_2_03",
@@ -3302,7 +3994,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Sebuah host memiliki alamat IP 192.168.5.60/26 dan mencoba melakukan ping ke 192.168.5.65/26 tanpa konfigurasi default gateway. Mengapa muncul pesan galat Destination Host Unreachable?",
     "options": {
@@ -3315,7 +4006,12 @@
     "explanation": "Perhitungan matematis subnet /26 (kelipatan 64): Subnet 1: 192.168.5.0 - .63; Subnet 2: 192.168.5.64 - .127. Karena beda subnet, pengirim menolak mengirim ARP lokal dan membutuhkan router.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_2_04",
@@ -3323,7 +4019,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Administrator lab TKJ mengamati tabel ARP pada router MikroTik. Jika status entri IP sebuah komputer siswa menunjukkan keterangan 'incomplete', pesan galat apakah yang akan diterima komputer lain saat mencoba ping ke IP tersebut?",
     "options": {
@@ -3336,7 +4031,12 @@
     "explanation": "Status 'incomplete' pada tabel ARP membuktikan bahwa router telah mengirimkan ARP Request namun tidak pernah menerima balasan MAC address dari host terkait, memicu pesan DHU.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_2_05",
@@ -3344,7 +4044,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Dalam praktikum konfigurasi IP statis oleh 30 siswa baru di lab TKJ, kesalahan manusia (human error) manakah yang secara probabilistik paling sering memicu munculnya pesan Destination Host Unreachable saat mengakses internet?",
     "options": {
@@ -3357,7 +4056,12 @@
     "explanation": "Tanpa gateway yang valid, komputer lokal tidak tahu harus melempar paket ke mana saat tujuan berada di luar subnet lokal, sehingga stack lokal langsung membatalkan transmisi dengan DHU.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_3_01",
@@ -3365,7 +4069,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Pada router MikroTik laboratorium, rute statis ke jaringan server ujian `dst-address=10.10.10.0/24 gateway=ether2` terpasang di tabel routing, namun kabel di port ether2 dalam status 'link down' (tercabut). Kode ICMP spesifik apakah yang dikembalikan router ke klien?",
     "options": {
@@ -3378,7 +4081,12 @@
     "explanation": "Jika rute berstatus inactive karena antarmuka keluar mati (flag 'I' / unreachable pada MikroTik), router membuang paket dan mengembalikan pesan ICMP Type 3 Unreachable ke pengirim.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_3_02",
@@ -3386,7 +4094,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Seorang siswa mendapati bahwa setelah mereset kartu jaringannya, ping ke server lab memunculkan DHU selama 3 detik pertama sebelum akhirnya berubah menjadi 'Reply'. Fenomena transisi apakah yang mendasari korelasi waktu ini?",
     "options": {
@@ -3399,7 +4106,14 @@
     "explanation": "Port switch yang baru aktif memerlukan waktu negosiasi STP (listening & learning ~15-30 detik jika portfast tidak aktif) dan pengiriman kueri ARP awal, menyebabkan paket awal gagal dengan DHU.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_3_03",
@@ -3407,7 +4121,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Di sebuah switch Layer 3 Cisco, teknisi telah membuat antarmuka `interface vlan 10` dan `interface vlan 20`. Klien di VLAN 10 dapat ping ke IP gateway-nya sendiri, namun saat ping ke gateway VLAN 20 muncul pesan 'Destination Host Unreachable'. Perintah konfigurasi global apakah yang lupa diaktifkan?",
     "options": {
@@ -3420,7 +4133,14 @@
     "explanation": "Pada switch L3, fungsi routing IP antar-VLAN (Inter-VLAN routing) dinonaktifkan secara default; tanpa perintah global 'ip routing', switch bertindak murni sebagai switch L2 dan menolak merutekan paket antar-VLAN.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.3",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_3_04",
@@ -3428,7 +4148,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada perancangan pengalamatan VLSM, seorang siswa tidak sengaja memberikan alamat IP 192.168.10.63 dengan subnet mask 255.255.255.224 (/27) ke sebuah komputer server. Mengapa komputer lain di lab gagal menghubunginya dengan galat Destination Host Unreachable?",
     "options": {
@@ -3441,7 +4160,12 @@
     "explanation": "Perhitungan rentang /27 (ukuran blok 32): Subnet 1: .0 s/d .31 (Broadcast .31); Subnet 2: .32 s/d .63 (Network .32, Broadcast .63). Alamat broadcast tidak boleh dipasang pada antarmuka host.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_DHU_3_05",
@@ -3449,7 +4173,6 @@
     "primary_kc": "ICMP_TROUBLE_DHU",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada jaringan skala besar dengan protokol routing dinamis OSPF, pesan galat DHU transient (sementara) dapat muncul selama beberapa ratus milidetik saat terjadi pemutusan kabel utama. Faktor probabilistik jaringan apakah yang memicu fenomena ini?",
     "options": {
@@ -3462,7 +4185,14 @@
     "explanation": "Selama proses flooding LSA dan kalkulasi Shortest Path First (SPF), tabel rute lama telah dihapus namun rute baru belum terpasang; paket yang melintas dalam jendela waktu singkat ini di-drop dengan DHU.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-11.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_1_01",
@@ -3470,7 +4200,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Arti dari pesan galat 'Request Timed Out' (RTO) pada keluaran perintah pengujian ping adalah...",
     "options": {
@@ -3483,7 +4212,12 @@
     "explanation": "RTO terjadi saat timer batas tunggu pengirim (default 1000-4000 ms) habis tanpa menerima respons; berbeda dengan DHU, pada RTO tidak ada perangkat yang mengirimkan pesan penolakan aktif (hening).",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_1_02",
@@ -3491,7 +4225,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Penyebab paling umum mengapa komputer Windows di laboratorium sekolah tidak membalas ping dari komputer lain (selalu RTO) padahal aplikasi file sharing berjalan normal adalah...",
     "options": {
@@ -3504,7 +4237,12 @@
     "explanation": "Konfigurasi standar Windows Firewall menyaring dan membuang (drop silent) paket ICMP yang masuk demi alasan keamanan, meskipun layanan data lain (TCP/SMB) diizinkan lewat.",
     "jonassen_phase": "SYMPTOM_RECOGNITION",
     "jonassen_label": "Fase 1: Pengenalan Gejala (Symptom Recognition)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_1_03",
@@ -3512,7 +4250,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Perbedaan mendasar antara pesan galat 'Destination Host Unreachable' (DHU) dan 'Request Timed Out' (RTO) ditinjau dari interaksi protokol jaringan adalah...",
     "options": {
@@ -3525,7 +4262,14 @@
     "explanation": "DHU adalah respon aktif (ICMP Type 3 error generated by a node); RTO adalah kondisi pasif (timeout expired locally at sender because packet was dropped somewhere in transit).",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.1",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Soal bersifat hafalan/pemahaman; kesesuaian fase Jonassen perlu ditelaah."
+    ]
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_1_04",
@@ -3533,7 +4277,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Seorang siswa membawa smartphone ke ujung lapangan sekolah. Saat sinyal Wi-Fi turun ke level ekstrem di bawah -88 dBm, hasil uji ping mulai menunjukkan pesan RTO berselang-seling. Hubungan korelasional fisis apakah yang terjadi?",
     "options": {
@@ -3546,7 +4289,12 @@
     "explanation": "Ketika sinyal jatuh di bawah batas sensitivitas penerima (misal -85 s/d -90 dBm), radio gagal mendemodulasi frame dan CRC error melonjak tajam, memicu frame dibuang dan timbul RTO.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_1_05",
@@ -3554,7 +4302,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 1,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Ketika sebuah kabel patch cord UTP di lab terinjak kursi roda hingga kawat tembaga nomor 1 (Tx+) kadang tersambung dan kadang terputus, pola hasil ping yang paling mungkin terlihat adalah...",
     "options": {
@@ -3567,7 +4314,12 @@
     "explanation": "Kontak fisik yang goyah (intermittent) menimbulkan degradasi fisik stokastik: saat kawat terhubung paket berhasil (Reply), saat kawat terputus paket hilang di kabel (RTO).",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_2_01",
@@ -3575,7 +4327,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Laptop siswa dapat membuka situs web sekolah (HTTP port 80 / HTTPS port 443) dengan lancar di browser, namun ketika siswa melakukan ping ke alamat IP server web tersebut, hasilnya selalu 'Request Timed Out'. Analisis teknis manakah yang tepat?",
     "options": {
@@ -3588,7 +4339,12 @@
     "explanation": "Banyak server publik mengonfigurasi firewall untuk menolak paket ICMP echo request (stealth mode) demi mereduksi profiling pemindaian peretas, sementara port layanan aplikasi web tetap dibuka normal.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_2_02",
@@ -3596,7 +4352,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Fenomena 'Asymmetric Routing' dapat memicu pesan galat Request Timed Out pada pengujian ping antarlab karena...",
     "options": {
@@ -3609,7 +4364,12 @@
     "explanation": "Rute transmisi di internet bersifat connectionless hop-by-hop; jika rute berangkat dan rute pulang berbeda, stateful firewall di jalur pulang akan membuang paket karena tidak mengenali sesi awalnya.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C2",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_2_03",
@@ -3617,7 +4377,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Grafik pemantauan menunjukkan utilisasi CPU pada router gateway sekolah mencapai 100% akibat serangan virus lokal. Mengapa pengujian ping ke router mulai menghasilkan pesan Request Timed Out berselang-seling?",
     "options": {
@@ -3630,7 +4389,12 @@
     "explanation": "Paket ping ke IP router diproses oleh Control Plane (CPU prosesor utama); saat CPU terbebani 100%, router secara proporsional mengorbankan paket manajemen non-kritis (seperti ICMP) untuk bertahan hidup.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_2_04",
@@ -3638,7 +4402,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Di laboratorium TKJ, setiap kali microwave di ruang guru dinyalakan, uji ping kontinu (`ping -t`) ke Access Point menunjukkan pola: 4 Reply, 6 RTO, 3 Reply, 5 RTO. Hubungan kausalitas apakah yang terbukti?",
     "options": {
@@ -3651,7 +4414,12 @@
     "explanation": "Interferensi elektromagnetik RF berkorelasi langsung dengan lonjakan frame loss; saat magnetron microwave berosilasi memancarkan energi liar, SNR jatuh ke tingkat negatif yang memicu hilangnya paket data.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_2_05",
@@ -3659,7 +4427,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 2,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Dari pengujian ping kontinu sebanyak 50 paket ke server file, tercatat 10 paket berakhir dengan status 'Request Timed Out'. Berapakah persentase kehilangan paket (packet loss rate) dan status kualitas koneksinya?",
     "options": {
@@ -3672,7 +4439,12 @@
     "explanation": "Perhitungan peluang kegagalan empiris: Packet Loss Rate = (Paket Gagal / Total Paket) x 100% = (10 / 50) x 100% = 20%. Kehilangan paket 20% pada jaringan kabel LAN mengindikasikan kerusakan fisik kabel atau tabrakan parah.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.3",
+    "bloom_level": "C3",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_3_01",
@@ -3680,7 +4452,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "COMBINATORIAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada menu IP Firewall Filter MikroTik, terdapat aturan: Rule 0: `chain=input action=drop` (membuang semua paket masuk), dan Rule 1: `chain=input protocol=icmp action=accept`. Mengapa ping ke router selalu menghasilkan Request Timed Out?",
     "options": {
@@ -3693,7 +4464,12 @@
     "explanation": "Prinsip urutan aturan firewall (Rule Ordering): pemrosesan paket berhenti seketika saat aturan pertama yang cocok dieksekusi; menempatkan 'drop all' di atas aturan izin membuat aturan izin di bawahnya tidak pernah dieksekusi.",
     "jonassen_phase": "CORRECTIVE_ACTION_VERIFICATION",
     "jonassen_label": "Fase 5: Tindakan Korektif & Verifikasi (Corrective Action & Verification)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_3_02",
@@ -3701,7 +4477,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CORRELATIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Ketika siswa melakukan ping ke server cabang melalui jalur VPN / PPPoE dengan perintah `ping -l 1472` hasilnya selalu RTO, namun saat diuji dengan `ping -l 1400` hasilnya Reply lancar. Penyebab mendasar fenomena Black Hole Router ini adalah...",
     "options": {
@@ -3714,7 +4489,12 @@
     "explanation": "Overhead terowongan (IPsec/GRE/PPPoE) memangkas MTU efektif (misal menjadi 1400-1450 byte); jika opsi DF-bit aktif dan router perantara memblokir pesan ICMP Type 3 Code 4 (Fragmentation Needed), paket besar dibuang diam-diam (black hole).",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_3_03",
@@ -3722,7 +4502,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "CONTROLLING_VARIABLES",
     "is_calibration": false,
     "prompt_text": "Teknisi jaringan menjalankan perangkat lunak penganalisis paket (Wireshark) pada laptop penguji. Terlihat frame 'Echo Request' keluar dari kartu jaringan, namun tidak pernah ada frame 'Echo Reply' yang masuk. Kesimpulan investigasi kontrol yang valid adalah...",
     "options": {
@@ -3735,7 +4514,12 @@
     "explanation": "Bukti frame keluar memastikan stack pengirim bekerja normal; ketiadaan respon membatasi wilayah investigasi pada media transmisi, konfigurasi rute, dan kebijakan keamanan di host tujuan.",
     "jonassen_phase": "PROBLEM_SPACE_CONSTRUCTION",
     "jonassen_label": "Fase 2: Konstruksi Ruang Masalah (Problem Space Construction)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_3_04",
@@ -3743,7 +4527,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROPORTIONAL_REASONING",
     "is_calibration": false,
     "prompt_text": "Pada tautan internet satelit geostasioner (GEO) di daerah terpencil, jarak orbit 36.000 km menimbulkan waktu tempuh rambat cahaya bolak-balik minimal ~540 ms. Jika utilitas ping sistem operasi disetel dengan timeout default 500 ms (`ping -w 500`), apa yang akan terjadi?",
     "options": {
@@ -3756,7 +4539,12 @@
     "explanation": "Latensi propagasi fisik: $2 \\times (36.000\\text{ km} / 300.000\\text{ km/s}) \\times 2 \\approx 480-600\\text{ ms}$. Jika batas timeout lokal (500 ms) lebih kecil daripada waktu rambat fisis minimal, pengirim menganggap paket timeout sebelum paket balasan tiba.",
     "jonassen_phase": "FAULT_HYPOTHESIS_GENERATION",
     "jonassen_label": "Fase 3: Perumusan Hipotesis Gangguan (Fault Hypothesis Generation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": []
   },
   {
     "id": "ITEM_ICMP_TROUBLE_RTO_3_05",
@@ -3764,7 +4552,6 @@
     "primary_kc": "ICMP_TROUBLE_RTO",
     "secondary_kc": [],
     "difficulty": 3,
-    "tolt_dimension": "PROBABILISTIC_REASONING",
     "is_calibration": false,
     "prompt_text": "Serangan SYN Flood DoS yang membanjiri server web sekolah dengan jutaan paket inisiasi koneksi palsu menyebabkan tabel memori koneksi (Connection Tracking Table / conntrack) penuh. Mengapa pengujian ping ke server tersebut ikut terdampak menghasilkan RTO?",
     "options": {
@@ -3777,6 +4564,13 @@
     "explanation": "Tabel conntrack yang meluap (conntrack table full) menyebabkan kernel sistem operasi membuang seluruh paket baru tanpa pandang bulu di antrean network driver (packet ring buffer overflow), memicu 100% RTO.",
     "jonassen_phase": "HYPOTHESIS_TESTING_EVALUATION",
     "jonassen_label": "Fase 4: Pengujian & Evaluasi Hipotesis (Hypothesis Testing & Evaluation)",
-    "framework_source": "Jonassen & Hung (2006)"
+    "framework_source": "Jonassen & Hung (2006)",
+    "tujuan_pembelajaran": "TP 2.2",
+    "indikator_id": "IND-12.2",
+    "bloom_level": "C4",
+    "label_status": "draf_ai",
+    "catatan_telaah": [
+      "Materi kemungkinan di luar cakupan Fase F SMK; perlu ditelaah pakar."
+    ]
   }
 ]

@@ -57,6 +57,7 @@ class QuizSession(Base):
     session_number = Column(Integer, nullable=False, default=1)
     max_items = Column(Integer, nullable=False, default=20)
     is_active = Column(Boolean, nullable=False, default=True)
+    join_code = Column(String(8), nullable=True)  # class code shown on the teacher screen; students need it to log in
     created_at = Column(DateTime, default=utc_now, nullable=False)
 
     classroom = relationship("ClassRoom", back_populates="sessions")
@@ -92,6 +93,11 @@ class Student(Base):
     anonymous_code = Column(String(32), unique=True, nullable=False, index=True)  # e.g., "std_01"
     class_rombel = Column(String(64), nullable=False, default="XI TKJ 1")
     created_at = Column(DateTime, default=utc_now, nullable=False)
+    # Login card: hashed 4-digit PIN (printed on the student's card) and the one active device token
+    pin_hash = Column(String(160), nullable=True)
+    pin_set_at = Column(DateTime, nullable=True)
+    device_token_hash = Column(String(64), nullable=True, index=True)
+    device_login_at = Column(DateTime, nullable=True)
 
     interactions = relationship("Interaction", back_populates="student", cascade="all")
     mastery_snapshots = relationship("MasterySnapshot", back_populates="student", cascade="all")
@@ -118,7 +124,11 @@ class Item(Base):
     options = Column(JSON, nullable=False)  # {"A": "...", "B": "...", "C": "...", "D": "..."}
     correct_answer = Column(String(8), nullable=False)  # e.g., "A"
     difficulty_nominal = Column(Integer, nullable=False)  # 1, 2, or 3
-    tolt_dimension = Column(String(64), nullable=False)
+    # Kisi-kisi metadata (replaces the former TOLT dimension)
+    indikator_id = Column(String(16), nullable=True, index=True)      # e.g. IND-04.3
+    bloom_level = Column(String(4), nullable=True)                   # C1..C6
+    jonassen_phase = Column(String(48), nullable=True)               # troubleshooting phase
+    label_status = Column(String(32), nullable=True, default="draf_ai")
     is_calibration = Column(Boolean, default=False, nullable=False, index=True)
     is_active = Column(Boolean, default=True, nullable=False)
     explanation = Column(Text, nullable=True)
@@ -187,9 +197,42 @@ class AgentLog(Base):
     id = Column(String(36), primary_key=True, default=generate_uuid)
     trigger_type = Column(String(16), nullable=False)  # 'T1', 'T2', 'T3'
     prompt_hash = Column(String(64), nullable=True)
-    model_id = Column(String(64), nullable=False, default="Qwen2.5-3B-Instruct-Q4_K_M")
+    model_id = Column(String(64), nullable=False, default="unknown")
     raw_output = Column(Text, nullable=True)
     is_accepted = Column(Boolean, nullable=False, default=True)
     rejection_reason = Column(String(255), nullable=True)
     latency_ms = Column(Integer, nullable=False, default=0)
     created_at = Column(DateTime, default=utc_now, nullable=False)
+
+
+class HintEvent(Base):
+    """Server-side record of every hint served to a student for an item.
+
+    The mastery update uses this table (not a client-supplied flag) to decide whether
+    the assistance factor h = 0.5 applies.
+    """
+    __tablename__ = "hint_events"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    student_id = Column(String(36), ForeignKey("students.id"), nullable=False, index=True)
+    item_id = Column(String(64), ForeignKey("items.id"), nullable=False, index=True)
+    session_id = Column(String(36), nullable=True, index=True)
+    hint_level = Column(Integer, nullable=False)
+    source = Column(String(32), nullable=False)  # 'llm_9router' | 'fallback_static'
+    created_at = Column(DateTime, default=utc_now, nullable=False)
+
+
+class AuthEvent(Base):
+    """
+    Append-style log of logins, failed logins, device replacements and PIN changes.
+    Lets the study show that every answer came from an authenticated device.
+    """
+    __tablename__ = "auth_events"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    actor = Column(String(16), nullable=False)          # 'teacher' | 'student'
+    student_id = Column(String(36), ForeignKey("students.id"), nullable=True, index=True)
+    event = Column(String(48), nullable=False)          # e.g. 'login_ok', 'login_fail', 'device_replaced'
+    detail = Column(String(255), nullable=True)
+    ip = Column(String(64), nullable=True)
+    created_at = Column(DateTime, default=utc_now, nullable=False, index=True)

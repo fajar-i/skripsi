@@ -1,4 +1,4 @@
-# NASKAH SOAL & KUESIONER GOOGLE FORM SISWA (VERSI 3 - KONTEKS NIRKABEL & 5 DIMENSI TOLT)
+# NASKAH SOAL & KUESIONER GOOGLE FORM SISWA (VERSI 3 - KONTEKS NIRKABEL & 5 FASE PENALARAN TROUBLESHOOTING JONASSEN 2006)
 *(Salin teks di bawah ini ke formulir Google Forms Anda)*
 
 ---
@@ -89,12 +89,12 @@ Mohon jawab dengan jujur sesuai pengalaman nyata kalian di kelas/lab. Terima kas
 
 ---
 
-## BAGIAN 4: TANTANGAN ANALISIS MASALAH (5 KASUS NALAR TERBUKA TOLT — KONTEKS NIRKABEL)
-*(Petunjuk: Soal-soal ini bukan hafalan tombol atau menu, melainkan analisis jalan pikiran logis kalian. Pilih tindakan yang tepat, lalu tuliskan alasan singkat jalan pikiranmu).*
+## BAGIAN 4: TANTANGAN ANALISIS MASALAH (5 KASUS NALAR TERBUKA — 5 FASE TROUBLESHOOTING JONASSEN 2006)
+*(Petunjuk: Soal-soal ini bukan hafalan tombol atau menu, melainkan analisis jalan pikiran logis kalian dalam mendiagnosis dan memecahkan gangguan jaringan. Pilih tindakan yang tepat, lalu tuliskan alasan singkat jalan pikiranmu).*
 
 ---
 
-### 📌 Kasus 1: Mengontrol & Mengisolasi Variabel Gangguan (*Controlling Variables*)
+### 📌 Kasus 1: Konstruksi Ruang Masalah & Mengontrol Variabel (*Problem Space Construction*)
 > Sebuah laptop di lab TKJ tiba-tiba gagal terhubung ke jaringan Wi-Fi Access Point lab (`Lab-TKJ-AP`), padahal laptop teman di sebelahnya dapat terhubung dengan lancar.
 
 11. **Langkah pemeriksaan pertama manakah yang paling tepat untuk mengisolasi masalah secara mandiri sebelum mengubah setelan Access Point atau merestart perangkat jaringan sekolah?**  
@@ -109,7 +109,7 @@ Mohon jawab dengan jujur sesuai pengalaman nyata kalian di kelas/lab. Terima kas
 
 ---
 
-### 📌 Kasus 2: Efisiensi & Hubungan Proporsional Jarak Sinyal (*Proportional Reasoning*)
+### 📌 Kasus 2: Perumusan Hipotesis Gangguan Kausalitas Sinyal (*Fault Hypothesis Generation*)
 > Sinyal nirkabel (*Wi-Fi*) merambat melalui udara. Sebuah Access Point memancarkan sinyal dengan daya tertentu:
 > - Siswa A berada pada jarak **2 meter** tanpa penghalang (sinyal terbaca sangat kuat: -40 dBm).
 > - Siswa B berada pada jarak **15 meter** dan terhalang dua dinding tembok tebal (sinyal terbaca sangat lemah: -85 dBm).
@@ -125,7 +125,7 @@ Mohon jawab dengan jujur sesuai pengalaman nyata kalian di kelas/lab. Terima kas
 
 ---
 
-### 📌 Kasus 3: Perancangan Topologi Nirkabel (*Combinatorial Reasoning*)
+### 📌 Kasus 3: Tindakan Korektif & Perancangan Topologi (*Corrective Action & Verification*)
 > Anda ditugaskan merancang koneksi nirkabel untuk dua skenario berbeda:
 > - **Skenario 1:** Menghubungkan **hanya 2 laptop** secara langsung untuk saling bertukar file tanpa bantuan perangkat perantara (*Access Point*).
 > - **Skenario 2:** Menghubungkan **30 laptop siswa** secara terpusat agar semuanya bisa mengakses server dan printer bersama.
@@ -142,7 +142,7 @@ Mohon jawab dengan jujur sesuai pengalaman nyata kalian di kelas/lab. Terima kas
 
 ---
 
-### 📌 Kasus 4: Analisis Kemungkinan & Pemilihan Jalur Nirkabel (*Probabilistic Reasoning*)
+### 📌 Kasus 4: Pengujian & Evaluasi Hipotesis Jalur Nirkabel (*Hypothesis Testing & Evaluation*)
 > Di laboratorium terdapat dua pemancar Wi-Fi dengan nama SSID yang sama:
 > - **Access Point Utama:** Terletak di ruang guru (jarak jauh, kualitas sinyal hanya 35%, namun bandwidth internet besar).
 > - **WLAN Extender (Ubiquiti):** Terpasang tepat di dalam lab (jarak sangat dekat, kualitas sinyal 95%, memperluas jangkauan AP utama).
@@ -159,7 +159,7 @@ Mohon jawab dengan jujur sesuai pengalaman nyata kalian di kelas/lab. Terima kas
 
 ---
 
-### 📌 Kasus 5: Analisis Sebab-Akibat Pesan Galat Uji ICMP (*Correlational Reasoning*)
+### 📌 Kasus 5: Pengenalan Gejala & Respons Galat ICMP (*Symptom Recognition*)
 > Dua kelompok siswa sedang menguji konektivitas nirkabel secara *peer-to-peer* menggunakan perintah `ping`:
 > - **Kelompok A:** Saat melakukan ping ke IP laptop pasangannya, muncul pesan: `Destination Host Unreachable`.
 > - **Kelompok B:** Saat melakukan ping ke IP laptop pasangannya, muncul pesan: `Request Timed Out` (RTO), padahal lampu Wi-Fi menyala dan SSID sudah terhubung.

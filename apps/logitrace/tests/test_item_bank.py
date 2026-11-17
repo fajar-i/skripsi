@@ -14,7 +14,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from data.l2_item_bank.schema_validator import (
     validate_adaptive_bank,
-    validate_tolt_parallel_test,
     validate_troubleshooting_parallel_test,
     validate_nedv_controls,
     _safe_load_json
@@ -28,11 +27,6 @@ class TestItemBankIntegrity(unittest.TestCase):
         """180 items must be distributed across 12 KCs (5 easy, 5 med, 5 hard each) with balanced keys."""
         ok, errors = validate_adaptive_bank()
         self.assertTrue(ok, f"Adaptive bank validation failed: {errors}")
-
-    def test_tolt_parallel_forms(self):
-        """Parallel Form A and Form B must each contain 10 polytomously scored items with balanced keys."""
-        ok, errors = validate_tolt_parallel_test()
-        self.assertTrue(ok, f"TOLT parallel test validation failed: {errors}")
 
     def test_troubleshooting_parallel_forms(self):
         """Parallel Cognitive Troubleshooting Form A and Form B must each contain 36 items (30 target + 6 NEDV)."""
@@ -132,3 +126,41 @@ class TestItemBankNegativeEdgeCases(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+def test_no_static_hint_leaks_any_item_answer():
+    """Every static hint must pass the leakage guard for every item of its KC."""
+    import json as _json
+    from backend.app.rag.guardrails import AnswerLeakageGuard
+
+    base = os.path.join(os.path.dirname(__file__), "..", "data")
+    with open(os.path.join(base, "fallback_hints", "static_hints.json"), encoding="utf-8") as f:
+        hints = _json.load(f)
+    with open(os.path.join(base, "l2_item_bank", "items_adaptive_180.json"), encoding="utf-8") as f:
+        items = _json.load(f)
+    guard = AnswerLeakageGuard()
+    leaks = [
+        (it["id"], lvl)
+        for it in items
+        for lvl, text in hints[it["primary_kc"]].items()
+        if not guard.check_leakage(text, it["options"][it["correct_answer"]], list(it["options"].values()))[0]
+    ]
+    assert leaks == []
+
+
+def test_dag_sources_agree():
+    """dag_prerequisites.json (runtime) and kcs.json must describe the same graph."""
+    import json as _json
+
+    base = os.path.join(os.path.dirname(__file__), "..", "data", "l1_knowledge_base")
+    with open(os.path.join(base, "dag_prerequisites.json"), encoding="utf-8") as f:
+        dag = _json.load(f)
+    with open(os.path.join(base, "kcs.json"), encoding="utf-8") as f:
+        kcs = _json.load(f)
+    from_edges = {}
+    for e in dag["edges"]:
+        from_edges.setdefault(e["to"], set()).add(e["from"])
+    for kc in kcs:
+        assert set(kc["prerequisites"]) == from_edges.get(kc["id"], set()), kc["id"]
+        assert kc["is_root"] == (kc["id"] in dag["roots"])
+        assert dag["in_degrees"][kc["id"]] == len(from_edges.get(kc["id"], set()))

@@ -1,7 +1,9 @@
 """
-LogiTrace: Agent T1 — Semantic Item Labeling & Teacher Review Service (US-05).
-Classifies new items into primary KC, secondary KCs, TOLT dimension, difficulty (1-3),
-and assigns a confidence score. Flags items with confidence < 0.60 for Teacher Review Queue.
+LogiTrace: T1 — Rule-based item labeling for teacher review (US-05).
+
+Keyword-matching classifier (no LLM call). Suggests primary KC, secondary KCs,
+Bloom level (C1-C5), nominal difficulty (1-3) and a heuristic confidence score.
+Items with confidence < 0.60 are flagged for mandatory teacher review.
 """
 
 from datetime import datetime, timezone
@@ -16,7 +18,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..db.models import AgentLog
 from ..schemas.labeling import ItemLabelRequest, ItemLabelResult
-from .secure_client import SecureLLMClient
 
 logger = logging.getLogger("labeling_service")
 
@@ -51,21 +52,18 @@ KC_NAMES = {
     "ICMP_TROUBLE_RTO": "Diagnosa Galat Request Timed Out"
 }
 
-# TOLT Dimensions and keyword markers
-TOLT_KEYWORDS = {
-    "Controlling Variables": ["variabel", "kontrol", "tetap", "diubah", "membandingkan", "faktor", "hanya satu"],
-    "Proportional Reasoning": ["perbandingan", "proporsional", "rasio", "dbm", "jarak", "dua kali lipat", "setengah"],
-    "Probabilistic Reasoning": ["probabilitas", "peluang", "kemungkinan", "acak", "fluktuasi", "collision rate"],
-    "Correlational Reasoning": ["korelasi", "hubungan", "semakin", "mempengaruhi", "akibat", "sebab"],
-    "Combinatorial Reasoning": ["kombinasi", "alternatif", "susunan", "konfigurasi yang mungkin", "pasangan"]
-}
-
+# Bloom (revised) level suggestion from operational verbs / question forms in the stem.
+# Checked from the highest level down; the first match wins. A suggestion only.
+BLOOM_MARKERS = [
+    ("C5", ["paling tepat", "paling aman", "paling efektif", "paling optimal", "terbaik", "strategi", "rekomendasi", "evaluasi", "tidak disarankan", "lebih disarankan"]),
+    ("C4", ["akar masalah", "penyebab", "mengapa muncul", "diagnosa", "analisis", "kesimpulan", "fenomena apakah", "prosedur kontrol", "hubungan kausalitas", "membedakan"]),
+    ("C3", ["berapakah", "berapa jumlah", "hitung", "menghitung", "konfigurasi", "prefix", "alamat broadcast", "aturan firewall", "susunan"]),
+    ("C2", ["mengapa", "fungsi", "arti", "berfungsi", "dampak", "tujuan", "perbedaan", "keunggulan"]),
+    ("C1", ["disebut", "dinamakan", "adalah", "manakah", "satuan", "singkatan"]),
+]
 
 class LabelingService:
-    """Agent T1 Semantic Labeling Engine integrated with SecureLLMClient & Lexical Fallback."""
-
-    def __init__(self, llm_client: Optional[SecureLLMClient] = None):
-        self.llm_client = llm_client or SecureLLMClient()
+    """Rule-based keyword labeler (T1). Deterministic; does not call an LLM."""
 
     async def label_item(
         self,
@@ -92,14 +90,11 @@ class LabelingService:
         top_kc, top_score = ranked_kcs[0]
         second_kcs = [kc for kc, s in ranked_kcs[1:3] if s > 0.8]
 
-        # Step 2: Classify TOLT dimension
-        tolt_scores: Dict[str, float] = {}
-        for dim, kw_list in TOLT_KEYWORDS.items():
-            t_score = sum(1.0 for kw in kw_list if kw in full_text)
-            tolt_scores[dim] = t_score
-
-        best_tolt = max(tolt_scores.items(), key=lambda x: x[1])
-        predicted_tolt = best_tolt[0] if best_tolt[1] > 0 else "Correlational Reasoning"
+        # Step 2: Suggest Bloom level from the question stem only
+        stem = req.prompt_text.lower()
+        predicted_bloom = next(
+            (level for level, markers in BLOOM_MARKERS if any(m in stem for m in markers)), "C2"
+        )
 
         # Step 3: Classify nominal difficulty (1, 2, or 3)
         # 1: Identify, state, what is (factual/C1-C2)
@@ -121,13 +116,13 @@ class LabelingService:
             confidence = min(0.95, 0.70 + (top_score * 0.05))
             rationale = (
                 f"Terdeteksi kata kunci kuat untuk materi '{KC_NAMES.get(top_kc, top_kc)}' "
-                f"dengan pola penalaran {predicted_tolt} (Skor kecocokan: {top_score:.1f})."
+                f"dengan saran level kognitif {predicted_bloom} (Skor kecocokan: {top_score:.1f})."
             )
         elif top_score >= 1.5:
             confidence = min(0.75, 0.55 + (top_score * 0.05))
             rationale = (
                 f"Terdeteksi kata kunci moderat untuk materi '{KC_NAMES.get(top_kc, top_kc)}' "
-                f"dengan pola penalaran {predicted_tolt} (Skor kecocokan: {top_score:.1f})."
+                f"dengan saran level kognitif {predicted_bloom} (Skor kecocokan: {top_score:.1f})."
             )
         elif top_score > 0.0:
             confidence = 0.45
@@ -156,7 +151,7 @@ class LabelingService:
                 model_id="semantic_classifier_t1",
                 raw_output=json.dumps({
                     "primary_kc": top_kc,
-                    "tolt": predicted_tolt,
+                    "bloom_level": predicted_bloom,
                     "difficulty": diff,
                     "confidence": confidence
                 }),
@@ -171,7 +166,7 @@ class LabelingService:
             primary_kc_id=top_kc,
             primary_kc_name=KC_NAMES.get(top_kc, top_kc),
             secondary_kc_ids=second_kcs,
-            tolt_dimension=predicted_tolt,
+            bloom_level=predicted_bloom,
             nominal_difficulty=diff,
             confidence=round(confidence, 2),
             needs_teacher_review=needs_review,

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LogiTrace — Latihan Jaringan Adaptif XI TKJ 1</title>
+  <title>LogiTrace</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800;900&display=swap"
+    rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -53,7 +56,9 @@
       --eel: #4B4B4B;
     }
 
-    * { -webkit-tap-highlight-color: transparent; }
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
 
     body {
       background-color: #FFFFFF;
@@ -63,7 +68,10 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    h1, h2, h3, .font-display {
+    h1,
+    h2,
+    h3,
+    .font-display {
       font-family: "Baloo 2", Nunito, system-ui, sans-serif;
     }
 
@@ -80,12 +88,18 @@
       cursor: pointer;
     }
 
+    /* Tambahkan border transparan pada tombol berwarna agar tingginya sama dengan tombol ghost */
     .duo-btn-green {
       background: #58CC02;
       color: #FFFFFF;
+      border: 2px solid transparent;
       box-shadow: 0 4px 0 #46A302;
     }
-    .duo-btn-green:hover { filter: brightness(1.05); }
+
+    .duo-btn-green:hover {
+      filter: brightness(1.05);
+    }
+
     .duo-btn-green:active {
       transform: translateY(4px);
       box-shadow: 0 0 0 #46A302;
@@ -94,24 +108,34 @@
     .duo-btn-blue {
       background: #1CB0F6;
       color: #FFFFFF;
+      border: 2px solid transparent;
       box-shadow: 0 4px 0 #1899D6;
     }
-    .duo-btn-blue:hover { filter: brightness(1.05); }
+
+    .duo-btn-blue:hover {
+      filter: brightness(1.05);
+    }
+
     .duo-btn-blue:active {
       transform: translateY(4px);
       box-shadow: 0 0 0 #1899D6;
     }
 
+    /* Samakan dengan box-shadow agar tinggi fisiknya tidak membengkak 8px */
     .duo-btn-ghost {
       background: #FFFFFF;
       color: #4B4B4B;
       border: 2px solid #E5E5E5;
-      border-bottom-width: 6px;
+      box-shadow: 0 4px 0 #E5E5E5;
     }
-    .duo-btn-ghost:hover { background: #F7F7F7; }
+
+    .duo-btn-ghost:hover {
+      background: #F7F7F7;
+    }
+
     .duo-btn-ghost:active {
       transform: translateY(4px);
-      border-bottom-width: 2px;
+      box-shadow: 0 0 0 #E5E5E5;
     }
 
     .duo-btn-white {
@@ -119,7 +143,11 @@
       color: #58CC02;
       box-shadow: 0 4px 0 #46A302;
     }
-    .duo-btn-white:hover { filter: brightness(0.98); }
+
+    .duo-btn-white:hover {
+      filter: brightness(0.98);
+    }
+
     .duo-btn-white:active {
       transform: translateY(4px);
       box-shadow: 0 0 0 #46A302;
@@ -133,15 +161,21 @@
       transition: transform 0.06s ease, border-bottom-width 0.06s ease, background-color 0.15s ease, border-color 0.15s ease;
       cursor: pointer;
     }
-    .preview-opt:hover { background: #F7F7F7; }
+
+    .preview-opt:hover {
+      background: #F7F7F7;
+    }
+
     .preview-opt:active {
       transform: translateY(2px);
       border-bottom-width: 2px;
     }
+
     .preview-opt.is-correct {
       border-color: #58CC02;
       background: #EAFBD6;
     }
+
     .preview-opt.is-wrong {
       border-color: #FF4B4B;
       background: #FFDFDF;
@@ -152,39 +186,35 @@
     }
   </style>
 </head>
+
 <body class="min-h-screen flex flex-col bg-polar text-eel selection:bg-feather-soft selection:text-eel">
 
   <!-- TOP NAVIGATION -->
   <header class="sticky top-0 z-40 bg-polar/95 backdrop-blur-sm border-b-2 border-swan">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+      <!-- Kiri: Logo & Brand -->
       <a href="/" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-2xl bg-feather shadow-[0_4px_0_#46A302] flex items-center justify-center text-white transition-transform group-active:translate-y-0.5">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="6" cy="7" r="2.5" fill="#fff"/>
-            <circle cx="18" cy="7" r="2.5" fill="#fff"/>
-            <circle cx="12" cy="17" r="2.5" fill="#fff"/>
-            <path d="M8 8.3L10.8 15M16 8.3L13.2 15M8.5 7H15.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="font-display font-extrabold text-xl tracking-tight text-eel leading-none">LogiTrace</span>
-            <span class="hidden sm:inline-block px-2 py-0.5 rounded-full bg-feather-soft text-feather-shade font-num text-[11px] font-semibold uppercase tracking-wide">
-              XI TKJ 1
-            </span>
-          </div>
-          <span class="text-[11px] font-bold text-wolf hidden sm:block leading-tight">Evaluasi Adaptif Station Rotation</span>
+        <img src="/assets/maskot.png" alt="Logo LogiTrace" width="44" height="44" draggable="false"
+          class="w-11 h-11 object-contain transition-transform group-active:translate-y-0.5 shrink-0 select-none">
+          <div class="flex flex-col justify-center">
+          <span class="font-display font-extrabold text-xl tracking-tight text-eel leading-none">LogiTrace</span>
+          <span class="text-[11px] font-bold text-wolf hidden sm:block leading-none mt-1">Evaluasi Formatif dan
+            Adaptif</span>
         </div>
       </a>
 
+      <!-- Kanan: Navigasi -->
       <nav class="flex items-center gap-2 sm:gap-3">
-        <a href="#cara-kerja" class="hidden md:inline-block text-sm font-extrabold text-wolf hover:text-eel px-3 py-2 rounded-xl transition">
+        <a href="#cara-kerja"
+          class="hidden md:inline-flex items-center justify-center border-2 border-transparent text-sm font-extrabold text-wolf hover:text-eel px-3 py-2.5 rounded-xl transition">
           Cara Kerja
         </a>
-        <a href="/teacher/" class="duo-btn duo-btn-ghost text-xs sm:text-sm px-3.5 sm:px-4 py-2.5">
+        <a href="/teacher/"
+          class="duo-btn duo-btn-ghost -mt-1 inline-flex items-center justify-center text-xs sm:text-sm px-3.5 sm:px-4 py-2.5">
           Panel Guru
         </a>
-        <a href="/student/" class="duo-btn duo-btn-green text-xs sm:text-sm px-4 sm:px-5 py-2.5">
+        <a href="/student/"
+          class="duo-btn duo-btn-green -mt-1 inline-flex items-center justify-center text-xs sm:text-sm px-4 sm:px-5 py-2.5">
           Mulai Latihan
         </a>
       </nav>
@@ -194,30 +224,33 @@
   <main class="flex-1">
 
     <!-- HERO SECTION -->
-    <section class="py-10 sm:py-16 border-b-2 border-swan bg-polar">
+    <section class="py-4 sm:py-4 border-b-2 border-swan bg-polar">
       <div class="max-w-5xl mx-auto px-4 sm:px-6">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
 
           <!-- Left Column: Student Pitch -->
           <div class="lg:col-span-6 space-y-6">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-macaw-soft border-2 border-macaw/30 text-macaw-shade text-xs font-extrabold uppercase tracking-wider">
-              <span class="w-2 h-2 rounded-full bg-macaw"></span>
-              <span>SMK Negeri 4 Bandung &bull; Fase F TKJ</span>
+
+            <div>
+              <!-- Maskot: rata di atas heading, tanpa menimpa teks -->
+              <img src="/assets/maskot.png" alt="" aria-hidden="true" draggable="false"
+                class="block mx-auto -mb-2 w-36 sm:w-52 h-auto pointer-events-none select-none">
+              <h1 class="font-display text-4xl sm:text-5xl font-extrabold text-eel leading-[1.12] tracking-tight">
+                Belajar pas di levelmu, <span class="text-feather">selangkah demi selangkah.</span>
+              </h1>
             </div>
 
-            <h1 class="font-display text-4xl sm:text-5xl font-extrabold text-eel leading-[1.12] tracking-tight">
-              Belajar jaringan pas di levelmu, <span class="text-feather">selangkah demi selangkah.</span>
-            </h1>
-
             <p class="text-base sm:text-lg text-wolf font-bold leading-relaxed">
-              Gak perlu bosan dengan soal yang terlalu gampang atau mentok di soal yang bikin pusing. Tingkat kesulitan soal otomatis menyesuaikan pemahamanmu, ditemani petunjuk bertahap saat kamu butuh bantuan.
+              Gak perlu bosan dengan soal yang terlalu gampang atau mentok di soal yang bikin pusing. Tingkat kesulitan
+              soal otomatis menyesuaikan pemahamanmu, ditemani petunjuk bertahap saat kamu butuh bantuan.
             </p>
 
             <div class="flex flex-wrap items-center gap-3 pt-1">
               <a href="/student/" class="duo-btn duo-btn-green text-sm sm:text-[15px] px-6 py-3.5">
                 <span>Masuk Sebagai Siswa</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round"
+                    stroke-linejoin="round" />
                 </svg>
               </a>
               <a href="/teacher/" class="duo-btn duo-btn-ghost text-sm sm:text-[15px] px-5 py-3">
@@ -226,7 +259,7 @@
             </div>
 
             <!-- 3 Compact Benefit Tiles -->
-            <div class="grid grid-cols-3 gap-3 pt-4">
+            <!-- <div class="grid grid-cols-3 gap-3 pt-4">
               <div class="p-3 rounded-2xl bg-snow border-2 border-swan">
                 <span class="font-num font-bold text-base text-feather-shade block leading-tight">12 Materi</span>
                 <span class="text-xs text-wolf font-bold">Soal mengikuti level</span>
@@ -239,7 +272,7 @@
                 <span class="font-num font-bold text-base text-fox block leading-tight">1:1 PC Lab</span>
                 <span class="text-xs text-wolf font-bold">Giliran praktik utuh</span>
               </div>
-            </div>
+            </div> -->
           </div>
 
           <!-- Right Column: Interactive Duolingo-style Mini Lesson Card -->
@@ -252,40 +285,53 @@
                   SOAL 7/20
                 </span>
                 <div class="flex-1 h-4 rounded-full bg-swan overflow-hidden">
-                  <div id="demo-progress" class="h-full bg-feather rounded-full shadow-[inset_0_-3px_0_rgba(0,0,0,0.08)] spring-bar" style="width: 35%"></div>
+                  <div id="demo-progress"
+                    class="h-full bg-feather rounded-full shadow-[inset_0_-3px_0_rgba(0,0,0,0.08)] spring-bar"
+                    style="width: 35%"></div>
                 </div>
-                <span class="text-xs font-extrabold text-fox uppercase tracking-wide">
+                <!-- <span class="text-xs font-extrabold text-fox uppercase tracking-wide">
                   Adaptif
-                </span>
+                </span> -->
               </div>
 
               <!-- Topic Pill & Question -->
               <div class="space-y-2">
                 <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-wolf">
-                  Frekuensi Wi-Fi &bull; Coba klik jawaban di bawah!
+                  Materi Frekuensi Wi-Fi &bull; Coba klik jawaban di bawah!
                 </span>
                 <h2 class="font-display text-xl sm:text-2xl font-extrabold text-eel leading-snug">
-                  Tiga Access Point dipasang berdekatan di pita 2.4 GHz. Kombinasi kanal mana yang bebas tabrakan sinyal?
+                  Tiga Access Point dipasang berdekatan di pita 2.4 GHz. Kombinasi kanal mana yang bebas tabrakan
+                  sinyal?
                 </h2>
               </div>
 
               <!-- Clickable Preview Options -->
               <div id="demo-options" class="space-y-2.5">
-                <button type="button" onclick="selectHeroDemo('A', this)" class="preview-opt w-full p-3.5 flex items-center gap-3 text-left">
-                  <span class="w-8 h-8 rounded-xl border-2 border-swan flex items-center justify-center font-num font-bold text-xs text-wolf flex-shrink-0">A</span>
+                <button type="button" onclick="selectHeroDemo('A', this)"
+                  class="preview-opt w-full p-2 flex items-center gap-3 text-left">
+                  <span
+                    class="w-8 h-8 rounded-xl border-2 border-swan flex items-center justify-center font-num font-bold text-xs text-wolf flex-shrink-0">A</span>
                   <span class="text-sm font-bold text-eel">Kanal 1, 2, dan 3</span>
                 </button>
-                <button type="button" onclick="selectHeroDemo('B', this)" class="preview-opt is-correct w-full p-3.5 flex items-center justify-between gap-3 text-left">
+                <button type="button" onclick="selectHeroDemo('B', this)"
+                  class="preview-opt is-correct w-full p-2 flex items-center justify-between gap-3 text-left">
                   <div class="flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-xl border-2 border-feather bg-feather text-white flex items-center justify-center font-num font-bold text-xs flex-shrink-0">B</span>
+                    <span
+                      class="w-8 h-8 rounded-xl border-2 border-feather bg-feather text-white flex items-center justify-center font-num font-bold text-xs flex-shrink-0">B</span>
                     <span class="text-sm font-extrabold text-eel">Kanal 1, 6, dan 11</span>
                   </div>
-                  <span class="demo-tick w-6 h-6 rounded-full bg-feather text-white flex items-center justify-center flex-shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span
+                    class="demo-tick w-6 h-6 rounded-full bg-feather text-white flex items-center justify-center flex-shrink-0">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                      <path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3.2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg>
                   </span>
                 </button>
-                <button type="button" onclick="selectHeroDemo('C', this)" class="preview-opt w-full p-3.5 flex items-center gap-3 text-left">
-                  <span class="w-8 h-8 rounded-xl border-2 border-swan flex items-center justify-center font-num font-bold text-xs text-wolf flex-shrink-0">C</span>
+                <button type="button" onclick="selectHeroDemo('C', this)"
+                  class="preview-opt w-full p-2 flex items-center gap-3 text-left">
+                  <span
+                    class="w-8 h-8 rounded-xl border-2 border-swan flex items-center justify-center font-num font-bold text-xs text-wolf flex-shrink-0">C</span>
                   <span class="text-sm font-bold text-eel">Kanal 2, 4, dan 6</span>
                 </button>
               </div>
@@ -296,27 +342,35 @@
                   <span id="demo-fb-title" class="font-display font-extrabold text-base text-feather-shade">
                     Mantap! Tepat sekali
                   </span>
-                  <span id="demo-mastery" class="font-num text-xs font-bold px-2.5 py-0.5 rounded-full bg-polar text-feather-shade border border-feather/30">
+                  <span id="demo-mastery"
+                    class="font-num text-xs font-bold px-2.5 py-0.5 rounded-full bg-polar text-feather-shade border border-feather/30">
                     48% &rarr; 63%
                   </span>
                 </div>
                 <p id="demo-fb-body" class="text-xs sm:text-sm font-bold text-eel leading-relaxed">
-                  Kanal 1, 6, dan 11 berselisih minimal 5 kanal sehingga sinyalnya tidak saling tumpang-tindih di pita 2.4 GHz.
+                  Kanal 1, 6, dan 11 berselisih minimal 5 kanal sehingga sinyalnya tidak saling tumpang-tindih di pita
+                  2.4 GHz.
                 </p>
               </div>
 
               <!-- Toggle Hint Preview -->
               <div class="flex items-center justify-between pt-1">
-                <button type="button" onclick="toggleHeroHint()" class="text-xs font-extrabold uppercase tracking-wider text-macaw-shade hover:underline flex items-center gap-1.5">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.7.6 1 1.4 1 2.3h6c0-.9.3-1.7 1-2.3A7 7 0 0 0 12 2Z" stroke="#1899D6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <span>Intip Petunjuk Level 1</span>
+                <button type="button" onclick="toggleHeroHint()"
+                  class="text-xs font-extrabold uppercase tracking-wider text-macaw-shade hover:underline flex items-center gap-1.5">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.7.6 1 1.4 1 2.3h6c0-.9.3-1.7 1-2.3A7 7 0 0 0 12 2Z"
+                      stroke="#ffa72a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="text-fox">Intip Petunjuk Level 1</span>
                 </button>
-                <span class="font-num text-[11px] font-semibold text-wolf">Simulasi Interaktif</span>
               </div>
 
-              <div id="demo-hint-box" class="hidden p-3.5 rounded-2xl bg-macaw-soft border-2 border-macaw/40 text-xs font-bold text-eel leading-relaxed">
-                <span class="text-macaw-shade font-extrabold uppercase tracking-wide block mb-0.5">Petunjuk Sokratik Level 1:</span>
-                Ingat jarak antar kanal di 2.4 GHz — pilih nomor kanal yang berselisih minimal 5 angka agar frekuensinya tetap bersih!
+              <div id="demo-hint-box"
+                class="hidden p-3.5 rounded-2xl bg-macaw-soft border-2 border-macaw/40 text-xs font-bold text-eel leading-relaxed">
+                <span class="text-macaw-shade font-extrabold uppercase tracking-wide block mb-0.5">Petunjuk Sokratik
+                  Level 1:</span>
+                Ingat jarak antar kanal di 2.4 GHz — pilih nomor kanal yang berselisih minimal 5 angka agar frekuensinya
+                tetap bersih!
               </div>
 
             </div>
@@ -330,7 +384,8 @@
     <section id="cara-kerja" class="py-12 sm:py-16 bg-snow border-b-2 border-swan">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
         <div class="max-w-2xl">
-          <span class="inline-block px-3 py-1 rounded-full bg-polar border-2 border-swan font-num text-[11px] font-semibold uppercase tracking-wider text-wolf mb-2">
+          <span
+            class="inline-block px-3 py-1 rounded-full bg-polar border-2 border-swan font-num text-[11px] font-semibold uppercase tracking-wider text-wolf mb-2">
             Kenapa LogiTrace?
           </span>
           <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-eel leading-tight">
@@ -340,26 +395,31 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-polar p-6 sm:p-7 rounded-3xl border-2 border-swan border-b-[6px] space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-feather shadow-[0_4px_0_#46A302] text-white font-num font-bold text-xl flex items-center justify-center">
+            <div
+              class="w-12 h-12 rounded-2xl bg-feather shadow-[0_4px_0_#46A302] text-white font-num font-bold text-xl flex items-center justify-center">
               01
             </div>
             <h3 class="font-display text-xl font-extrabold text-eel">
               Soal Mengikuti Levelmu (Knowledge Tracing)
             </h3>
             <p class="text-sm font-bold text-wolf leading-relaxed">
-              Setiap jawaban langsung memperbarui estimasi penguasaanmu pada 12 topik jaringan. Jika kamu sudah kuat di dasar Wi-Fi, tantangan naik ke studi kasus. Jika masih ragu, kamu diberi latihan penguatan lebih dulu.
+              Setiap jawaban langsung memperbarui estimasi penguasaanmu pada 12 topik jaringan. Jika kamu sudah kuat di
+              dasar Wi-Fi, tantangan naik ke studi kasus. Jika masih ragu, kamu diberi latihan penguatan lebih dulu.
             </p>
           </div>
 
           <div class="bg-polar p-6 sm:p-7 rounded-3xl border-2 border-swan border-b-[6px] space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-macaw shadow-[0_4px_0_#1899D6] text-white font-num font-bold text-xl flex items-center justify-center">
+            <div
+              class="w-12 h-12 rounded-2xl bg-macaw shadow-[0_4px_0_#1899D6] text-white font-num font-bold text-xl flex items-center justify-center">
               02
             </div>
             <h3 class="font-display text-xl font-extrabold text-eel">
               Petunjuk Bertahap Saat Buntu (Bantuan RAG)
             </h3>
             <p class="text-sm font-bold text-wolf leading-relaxed">
-              Lupa aturan subnetting atau penyebab <span class="font-num font-semibold text-eel">Request Timed Out</span>? Buka 3 tingkat petunjuk singkat dari materi TKJ kelasmu. Kamu dipandu menemukan jawabannya sendiri tanpa langsung diberi kunci!
+              Lupa aturan subnetting atau penyebab <span class="font-num font-semibold text-eel">Request Timed
+                Out</span>? Buka 3 tingkat petunjuk singkat dari materi TKJ kelasmu. Kamu dipandu menemukan jawabannya
+              sendiri tanpa langsung diberi kunci!
             </p>
           </div>
         </div>
@@ -378,9 +438,13 @@
               Tiga langkah selama jam praktik.
             </h2>
           </div>
-          <a href="/student/" class="text-sm font-extrabold uppercase tracking-wide text-feather-shade hover:underline inline-flex items-center gap-1.5">
+          <a href="/student/"
+            class="text-sm font-extrabold uppercase tracking-wide text-feather-shade hover:underline inline-flex items-center gap-1.5">
             <span>Langsung ke kuis</span>
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
           </a>
         </div>
 
@@ -396,12 +460,14 @@
           </div>
 
           <div class="bg-snow p-6 rounded-3xl border-2 border-swan space-y-2.5">
-            <span class="inline-block px-3 py-1 rounded-full bg-feather-soft text-feather-shade font-num text-xs font-bold">
+            <span
+              class="inline-block px-3 py-1 rounded-full bg-feather-soft text-feather-shade font-num text-xs font-bold">
               Langkah 2
             </span>
             <h3 class="font-display text-lg font-extrabold text-eel">14 Soal Adaptif + Petunjuk</h3>
             <p class="text-sm font-bold text-wolf leading-relaxed">
-              Lanjutkan lewat smartphone di Zona B. Pakai petunjuk bertahap kapan pun butuh bantuan, atau diskusi dengan guru.
+              Lanjutkan lewat smartphone di Zona B. Pakai petunjuk bertahap kapan pun butuh bantuan, atau diskusi dengan
+              guru.
             </p>
           </div>
 
@@ -411,7 +477,8 @@
             </span>
             <h3 class="font-display text-lg font-extrabold text-eel">Giliran Praktik PC 1:1</h3>
             <p class="text-sm font-bold text-wolf leading-relaxed">
-              Setelah sesi selesai, rotasi ke Zona A untuk praktik konfigurasi jaringan langsung dengan 1 siswa 1 komputer utuh.
+              Setelah sesi selesai, rotasi ke Zona A untuk praktik konfigurasi jaringan langsung dengan 1 siswa 1
+              komputer utuh.
             </p>
           </div>
         </div>
@@ -422,7 +489,8 @@
             Siap menguji kemampuan jaringanmu hari ini?
           </h2>
           <p class="text-base sm:text-lg font-bold text-white/95 max-w-xl mx-auto">
-            Pilih kode siswamu, selesaikan tantangan adaptif XI TKJ 1, dan kuasai 12 konsep jaringan tanpa rasa takut salah.
+            Login, selesaikan tantangan, belajar lewat percobaan dan kuasai berbagai konsep materi tanpa rasa takut
+            salah.
           </p>
           <div class="flex flex-wrap items-center justify-center gap-3 pt-1">
             <a href="/student/" class="duo-btn duo-btn-white text-sm sm:text-base px-7 py-4">
@@ -438,7 +506,7 @@
   <!-- FOOTER -->
   <footer class="border-t-2 border-swan py-6 bg-snow text-xs font-bold text-wolf">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-4">
-      <span>LogiTrace &bull; SMK Negeri 4 Bandung &bull; XI TKJ 1</span>
+      <span>LogiTrace</span>
       <div class="flex items-center gap-5 font-sans text-xs font-extrabold">
         <a href="/student/" class="hover:text-eel transition">Latihan Siswa</a>
         <a href="/teacher/" class="hover:text-eel transition">Panel Guru</a>
@@ -450,9 +518,9 @@
   <script>
     const DEMO_AUDIO = typeof Audio !== 'undefined'
       ? {
-          correct: Object.assign(new Audio('/assets/audio/correct_answer.mp3'), { preload: 'auto', volume: 0.85 }),
-          wrong: Object.assign(new Audio('/assets/audio/wrong_answer.mp3'), { preload: 'auto', volume: 0.85 }),
-        }
+        correct: Object.assign(new Audio('/assets/audio/correct_answer.mp3'), { preload: 'auto', volume: 0.85 }),
+        wrong: Object.assign(new Audio('/assets/audio/wrong_answer.mp3'), { preload: 'auto', volume: 0.85 }),
+      }
       : null;
 
     function isDemoAudioMuted() {
@@ -466,15 +534,15 @@
     function playHeroDemoSound(isCorrect) {
       if (!DEMO_AUDIO || isDemoAudioMuted()) return;
       Object.values(DEMO_AUDIO).forEach(a => {
-        try { a.pause(); a.currentTime = 0; } catch (e) {}
+        try { a.pause(); a.currentTime = 0; } catch (e) { }
       });
       const target = isCorrect ? DEMO_AUDIO.correct : DEMO_AUDIO.wrong;
       if (!target) return;
       try {
         target.currentTime = 0;
         const p = target.play();
-        if (p && typeof p.catch === 'function') p.catch(() => {});
-      } catch (e) {}
+        if (p && typeof p.catch === 'function') p.catch(() => { });
+      } catch (e) { }
     }
 
     function selectHeroDemo(choice, btnEl) {
@@ -524,4 +592,5 @@
     }
   </script>
 </body>
+
 </html>

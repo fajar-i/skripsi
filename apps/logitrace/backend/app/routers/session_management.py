@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import desc, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from ..auth import Principal, new_class_code, require_teacher, require_teacher_or_student
 from ..db.database import get_db
 from ..db.models import ClassRoom, QuizSession, StudentAttempt, Student, MasterySnapshot, KnowledgeComponent
 
@@ -39,7 +40,8 @@ class SessionSummary(BaseModel):
 
 
 @router.get("", response_model=List[SessionSummary])
-async def list_sessions(class_rombel: Optional[str] = None, db: AsyncSession = Depends(get_db)):
+async def list_sessions(class_rombel: Optional[str] = None, db: AsyncSession = Depends(get_db),
+                        _: Principal = Depends(require_teacher_or_student)):
     """Lists all evaluation assignments/sessions with LMS progress metrics."""
     stmt = select(QuizSession).order_by(desc(QuizSession.created_at))
     if class_rombel:
@@ -89,7 +91,8 @@ async def list_sessions(class_rombel: Optional[str] = None, db: AsyncSession = D
 
 
 @router.get("/active")
-async def get_active_session(class_rombel: str = "XI TKJ 1", db: AsyncSession = Depends(get_db)):
+async def get_active_session(class_rombel: str = "XI TKJ 1", db: AsyncSession = Depends(get_db),
+                             _: Principal = Depends(require_teacher_or_student)):
     """Returns currently active evaluation session for classroom."""
     stmt = select(QuizSession).where(
         QuizSession.class_rombel == class_rombel,
@@ -116,7 +119,8 @@ async def get_active_session(class_rombel: str = "XI TKJ 1", db: AsyncSession = 
 
 
 @router.post("", response_model=Dict)
-async def create_new_session(req: CreateSessionRequest, db: AsyncSession = Depends(get_db)):
+async def create_new_session(req: CreateSessionRequest, db: AsyncSession = Depends(get_db),
+                             _: Principal = Depends(require_teacher)):
     """
     Teacher creates a new evaluation assignment/session (like in Google Classroom).
     Automatically enrolls class students with fresh NOT_STARTED attempts.
@@ -132,7 +136,8 @@ async def create_new_session(req: CreateSessionRequest, db: AsyncSession = Depen
         title=req.title,
         session_number=req.session_number,
         max_items=req.max_items,
-        is_active=True
+        is_active=True,
+        join_code=new_class_code(),
     )
     db.add(new_session)
     await db.flush()
@@ -162,7 +167,8 @@ async def create_new_session(req: CreateSessionRequest, db: AsyncSession = Depen
 
 
 @router.post("/{session_id}/activate")
-async def activate_session(session_id: str, db: AsyncSession = Depends(get_db)):
+async def activate_session(session_id: str, db: AsyncSession = Depends(get_db),
+                           _: Principal = Depends(require_teacher)):
     """
     Sets this session as the active assignment for the classroom.
     """
@@ -174,17 +180,20 @@ async def activate_session(session_id: str, db: AsyncSession = Depends(get_db)):
     res = await db.execute(stmt)
     for s in res.scalars().all():
         s.is_active = (s.id == session_id)
+    session.join_code = new_class_code()  # new class code each time a session (re)opens
     await db.commit()
 
     return {
         "status": "success",
         "message": f"Sesi '{session.title}' sekarang aktif sebagai tugas utama kelas.",
-        "active_session_id": session_id
+        "active_session_id": session_id,
+        "class_code": session.join_code
     }
 
 
 @router.post("/{session_id}/reset-all")
-async def reset_session_for_all(session_id: str, db: AsyncSession = Depends(get_db)):
+async def reset_session_for_all(session_id: str, db: AsyncSession = Depends(get_db),
+                                _: Principal = Depends(require_teacher)):
     """
     RESTART FROM SCRATCH (ULANG PROSES DARI AWAL).
     Resets all student attempts in this session to Question 1 (NOT_STARTED).
@@ -229,13 +238,19 @@ async def reset_session_for_all(session_id: str, db: AsyncSession = Depends(get_
 
 
 @router.post("/{session_id}/reset-student/{student_code}")
-async def reset_student_attempt(session_id: str, student_code: str, db: AsyncSession = Depends(get_db)):
+async def reset_student_attempt(session_id: str, student_code: str, db: AsyncSession = Depends(get_db),
+                                principal: Principal = Depends(require_teacher_or_student)):
     """
     Teacher resets an individual student's attempt to restart from Question 1.
+    A logged-in student may restart only their own attempt, and only in the active session.
     """
+    if not principal.is_teacher:
+        principal.assert_is_student(student_code)
     session = await db.get(QuizSession, session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
+    if not principal.is_teacher and not principal.wildcard and not session.is_active:
+        raise HTTPException(status_code=409, detail="SESSION_INACTIVE: Sesi ini sudah tidak aktif.")
 
     std_stmt = select(Student).where(Student.anonymous_code == student_code)
     std_res = await db.execute(std_stmt)
@@ -284,11 +299,14 @@ async def reset_student_attempt(session_id: str, student_code: str, db: AsyncSes
 
 
 @router.get("/{session_id}/student/{student_code}/status")
-async def get_student_session_status(session_id: str, student_code: str, db: AsyncSession = Depends(get_db)):
+async def get_student_session_status(session_id: str, student_code: str, db: AsyncSession = Depends(get_db),
+                                     principal: Principal = Depends(require_teacher_or_student)):
     """
     Google Classroom style card: shows student their current status in this assignment:
     NOT_STARTED, IN_PROGRESS (item X of 20), or COMPLETED.
     """
+    if not principal.is_teacher:
+        principal.assert_is_student(student_code)
     std_stmt = select(Student).where(Student.anonymous_code == student_code)
     std_res = await db.execute(std_stmt)
     student = std_res.scalar_one_or_none()

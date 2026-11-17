@@ -31,7 +31,7 @@
   },
   "WLAN_SIGNAL_PROP": {
     "1": "Perhatikan hubungan antara jarak dari AP, material penghalang fisik (dinding/kaca), dan nilai kekuatan sinyal (RSSI).",
-    "2": "Ingat bahwa semakin negatif nilai dBm (misal -85 dBm vs -50 dBm), kualitas dan kekuatan sinyal semakin lemah.",
+    "2": "Ingat bahwa semakin negatif nilai dBm, kualitas dan kekuatan sinyal yang diterima semakin lemah.",
     "3": "Sinyal di atas -65 dBm dikategorikan baik untuk koneksi stabil, sedangkan di bawah -75 dBm rentan mengalami putus koneksi."
   },
   "WLAN_ROAMING_PROB": {
@@ -45,12 +45,12 @@
     "3": "Gunakan mekanisme RTS/CTS untuk mereduksi tabrakan frame ketika jarak antarklien saling terhalang."
   },
   "ICMP_CONNECTIVITY": {
-    "1": "Perhatikan parameter keluaran perintah ping seperti Round-Trip Time (RTT) dan persentase packet loss.",
+    "1": "Perhatikan parameter keluaran uji konektivitas ICMP seperti Round-Trip Time (RTT) dan persentase packet loss.",
     "2": "Nilai RTT yang tinggi atau fluktuatif menandakan kongesti jaringan atau gangguan redaman pada media nirkabel.",
-    "3": "Uji ping mengonfirmasi ketercapaian layer 3 (IP) dan keandalan transmisi dua arah antara sumber dan tujuan."
+    "3": "Uji echo ICMP mengonfirmasi ketercapaian layer 3 (IP) dan keandalan transmisi dua arah antara sumber dan tujuan."
   },
   "ICMP_TROUBLE_DHU": {
-    "1": "Analisis arti pesan 'Destination Host Unreachable': pengirim tidak dapat menemukan rute ke host target.",
+    "1": "Analisis arti pesan galat yang menyatakan host tujuan tidak dapat dijangkau: pengirim tidak menemukan rute atau alamat fisik menuju host target.",
     "2": "Periksa apakah ada kesalahan tabel routing, konfigurasi subnet yang salah, atau kegagalan resolusi ARP lokal.",
     "3": "Galat DHU terjadi di lapisan jaringan lokal saat gateway atau host asal tidak menerima balasan ARP dari IP tujuan."
   },

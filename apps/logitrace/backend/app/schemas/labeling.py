@@ -16,12 +16,12 @@ class ItemLabelResult(BaseModel):
     primary_kc_id: str
     primary_kc_name: str
     secondary_kc_ids: List[str]
-    tolt_dimension: str
+    bloom_level: str         # suggested C1..C5 (rule-based, needs teacher review)
     nominal_difficulty: int  # 1, 2, or 3
     confidence: float        # 0.0 - 1.0
     needs_teacher_review: bool
     rationale: str
-    source: str              # "rag_llm" or "semantic_classifier"
+    source: str              # "semantic_classifier" (rule-based keyword matcher)
     latency_ms: int
 
 
@@ -30,7 +30,9 @@ class ReviewQueueItem(BaseModel):
     prompt_text: str
     options: Dict[str, str]
     current_primary_kc_id: str
-    current_tolt_dimension: str
+    current_indikator_id: Optional[str] = None
+    current_bloom_level: Optional[str] = None
+    current_jonassen_phase: Optional[str] = None
     current_difficulty: int
     confidence: float
     status: str  # "pending_review", "approved", "modified"
@@ -38,6 +40,8 @@ class ReviewQueueItem(BaseModel):
 
 class LabelApprovalRequest(BaseModel):
     primary_kc_id: str = Field(..., description="ID Knowledge Component utama")
-    tolt_dimension: str = Field(..., description="Dimensi penalaran TOLT")
+    bloom_level: str = Field(..., pattern=r"^C[1-6]$", description="Level kognitif Bloom revisi (C1-C6)")
+    indikator_id: Optional[str] = Field(None, description="ID indikator kompetensi, mis. IND-04.3")
+    jonassen_phase: Optional[str] = Field(None, description="Fase troubleshooting Jonassen & Hung (2006)")
     difficulty_nominal: int = Field(..., ge=1, le=3, description="Tingkat kesulitan nominal (1, 2, atau 3)")
     teacher_notes: Optional[str] = None

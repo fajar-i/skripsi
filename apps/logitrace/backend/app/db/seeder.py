@@ -57,13 +57,22 @@ async def seed_database(session: AsyncSession) -> Dict[str, int]:
                     options=item_dict["options"],
                     correct_answer=item_dict["correct_answer"],
                     difficulty_nominal=item_dict["difficulty"],
-                    tolt_dimension=item_dict["tolt_dimension"],
+                    indikator_id=item_dict.get("indikator_id"),
+                    bloom_level=item_dict.get("bloom_level"),
+                    jonassen_phase=item_dict.get("jonassen_phase"),
+                    label_status=item_dict.get("label_status", "draf_ai"),
                     is_calibration=item_dict.get("is_calibration", False),
                     is_active=True,
                     explanation=item_dict.get("explanation", "")
                 )
                 session.add(item_obj)
                 counts["items"] += 1
+            elif existing.bloom_level is None:
+                # Backfill kisi-kisi metadata on databases created before the schema change
+                existing.indikator_id = item_dict.get("indikator_id")
+                existing.bloom_level = item_dict.get("bloom_level")
+                existing.jonassen_phase = item_dict.get("jonassen_phase")
+                existing.label_status = item_dict.get("label_status", "draf_ai")
         await session.flush()
 
     # 3. Seed 34 Anonymous Students (std_01 to std_34)

@@ -20,7 +20,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .db.database import init_db, get_db, AsyncSessionLocal
 from .db.models import Interaction, Student
 from .db.seeder import seed_database
-from .routers import student_quiz, teacher_ambient, session_management
+from .auth import Principal, describe_teacher_password_source, require_teacher
+from .routers import auth_routes, student_quiz, teacher_ambient, session_management
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("logitrace_app")
@@ -34,6 +35,7 @@ async def lifespan(app: FastAPI):
     async with AsyncSessionLocal() as session:
         counts = await seed_database(session)
         logger.info(f"Database seed status: {counts}")
+    logger.info(f"Teacher password source: {describe_teacher_password_source()}")
     yield
     # Shutdown
     logger.info("Shutting down LogiTrace application...")
@@ -56,8 +58,10 @@ app.add_middleware(
 )
 
 # Include Routers
+app.include_router(auth_routes.router)
 app.include_router(student_quiz.router)
 app.include_router(teacher_ambient.router)
+app.include_router(teacher_ambient.ws_router)
 app.include_router(session_management.router)
 
 # Mount Frontend & Documentation Static Directories
@@ -102,7 +106,7 @@ async def health_check():
 
 
 @app.get("/api/export/audit-logs")
-async def export_audit_logs(db: AsyncSession = Depends(get_db)):
+async def export_audit_logs(db: AsyncSession = Depends(get_db), _: Principal = Depends(require_teacher)):
     """
     US-07: Integritas Audit Trail & Ekspor Data Analisis Dosis-Respons.
     Exports anonymous append-only interaction logs for scientific evaluation (E1 - E6).

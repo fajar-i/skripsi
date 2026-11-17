@@ -10,6 +10,7 @@ from sqlalchemy import desc, func, select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from ..auth import is_teacher_request, require_teacher
 from ..db.database import get_db, AsyncSessionLocal
 from ..db.models import Student, KnowledgeComponent, Interaction, MasterySnapshot, QuizSession, StudentAttempt, Item, AgentLog
 from ..schemas.ambient import TeacherAmbientState, TopStuckStudent, HeatmapCell
@@ -18,7 +19,10 @@ from ..schemas.labeling import ItemLabelRequest, ItemLabelResult, ReviewQueueIte
 from ..rag.summary_service import summary_service
 from ..rag.labeling_service import labeling_service
 
-router = APIRouter(prefix="/api/teacher", tags=["Teacher Ambient Dashboard"])
+router = APIRouter(prefix="/api/teacher", tags=["Teacher Ambient Dashboard"],
+                   dependencies=[Depends(require_teacher)])
+# WebSocket lives on its own router: it authenticates from the cookie inside the handler.
+ws_router = APIRouter(prefix="/api/teacher", tags=["Teacher Ambient Dashboard"])
 
 
 class ConnectionManager:
@@ -215,9 +219,12 @@ async def get_teacher_ambient(session_id: Optional[str] = None, db: AsyncSession
     return await compute_ambient_state(db, session_id=session_id)
 
 
-@router.websocket("/ws/ambient")
+@ws_router.websocket("/ws/ambient")
 async def websocket_teacher_ambient(websocket: WebSocket):
     """WebSocket stream for real-time ambient telemetry in Zone B."""
+    if not is_teacher_request(websocket):
+        await websocket.close(code=1008)  # policy violation: teacher login required
+        return
     await ws_manager.connect(websocket)
     try:
         async with AsyncSessionLocal() as session:
@@ -255,7 +262,7 @@ async def label_new_item(
 ):
     """
     US-05: Agent T1 — Automatic Semantic Item Labeling.
-    Categorizes item prompt into KC, TOLT, difficulty, and confidence score.
+    Suggests KC, Bloom level, difficulty and a confidence score for a new item.
     """
     return await labeling_service.label_item(req=req, db=db)
 
@@ -265,27 +272,42 @@ async def get_item_review_queue(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    US-05: Teacher Review Queue for items requiring verification or calibration.
+    US-05: Teacher Review Queue.
+
+    Items are re-labelled by the rule-based T1 classifier. An item enters the queue when
+    the classifier confidence is < 0.60 or its suggested KC disagrees with the stored KC.
+    Lowest confidence first, max 20.
     """
-    stmt = select(Item).order_by(desc(Item.created_at)).limit(10)
+    stmt = select(Item).where(Item.is_active == True)
     res = await db.execute(stmt)
     items = res.scalars().all()
 
-    queue: List[ReviewQueueItem] = []
+    flagged = []
     for item in items:
-        # Check if item has confidence or compute confidence estimate
-        is_calib = item.is_calibration
-        queue.append(ReviewQueueItem(
+        label = await labeling_service.label_item(
+            ItemLabelRequest(prompt_text=item.prompt_text, options=item.options, explanation=item.explanation)
+        )
+        disagrees = label.primary_kc_id != item.primary_kc_id
+        if label.needs_teacher_review or disagrees:
+            status = "pending_review" if label.needs_teacher_review else "kc_mismatch"
+            flagged.append((label.confidence, item, status))
+
+    flagged.sort(key=lambda x: x[0])
+    return [
+        ReviewQueueItem(
             item_id=item.id,
             prompt_text=item.prompt_text,
             options=item.options,
             current_primary_kc_id=item.primary_kc_id,
-            current_tolt_dimension=item.tolt_dimension,
+            current_indikator_id=item.indikator_id,
+            current_bloom_level=item.bloom_level,
+            current_jonassen_phase=item.jonassen_phase,
             current_difficulty=item.difficulty_nominal,
-            confidence=0.92 if not is_calib else 0.85,
-            status="approved" if not is_calib else "calibrated"
-        ))
-    return queue
+            confidence=conf,
+            status=status,
+        )
+        for conf, item, status in flagged[:20]
+    ]
 
 
 @router.post("/items/{item_id}/approve-label")
@@ -307,7 +329,12 @@ async def approve_item_label(
         raise HTTPException(status_code=400, detail=f"Knowledge Component '{req.primary_kc_id}' tidak valid atau tidak terdaftar.")
 
     item.primary_kc_id = req.primary_kc_id
-    item.tolt_dimension = req.tolt_dimension
+    item.bloom_level = req.bloom_level
+    if req.indikator_id is not None:
+        item.indikator_id = req.indikator_id
+    if req.jonassen_phase is not None:
+        item.jonassen_phase = req.jonassen_phase
+    item.label_status = "ditinjau_guru"
     item.difficulty_nominal = req.difficulty_nominal
 
     # Log teacher approval in AgentLog
@@ -315,7 +342,7 @@ async def approve_item_label(
         trigger_type="T1_REVIEW",
         prompt_hash=None,
         model_id="teacher_human_in_the_loop",
-        raw_output=f"Approved item {item_id}: KC={req.primary_kc_id}, TOLT={req.tolt_dimension}, Diff={req.difficulty_nominal}. Notes: {req.teacher_notes or '-'}",
+        raw_output=f"Approved item {item_id}: KC={req.primary_kc_id}, Bloom={req.bloom_level}, Indikator={item.indikator_id}, Fase={item.jonassen_phase}, Diff={req.difficulty_nominal}. Notes: {req.teacher_notes or '-'}",
         is_accepted=True,
         latency_ms=0
     )
@@ -327,6 +354,9 @@ async def approve_item_label(
         "message": f"Label untuk butir '{item_id}' berhasil diverifikasi dan diperbarui.",
         "item_id": item_id,
         "primary_kc_id": item.primary_kc_id,
-        "tolt_dimension": item.tolt_dimension,
+        "bloom_level": item.bloom_level,
+        "indikator_id": item.indikator_id,
+        "jonassen_phase": item.jonassen_phase,
+        "label_status": item.label_status,
         "difficulty_nominal": item.difficulty_nominal
     }

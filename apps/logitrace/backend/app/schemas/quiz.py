@@ -28,6 +28,7 @@ class SubmitAnswerRequest(BaseModel):
     choice: str = Field(..., min_length=1, max_length=1, examples=["A"])
     session_id: Optional[str] = None
     response_time_ms: int = Field(default=0, ge=0)
+    # Deprecated: ignored by the server. Hint usage is read from the server-side hint log.
     used_hint: bool = Field(default=False)
     hint_level: int = Field(default=0, ge=0, le=3)
 
@@ -50,11 +51,12 @@ class HintRequest(BaseModel):
     student_code: str = Field(..., examples=["std_01"])
     item_id: str = Field(..., examples=["ITEM_WLAN_STANDARDS_1_01"])
     requested_level: int = Field(default=1, ge=1, le=3)
+    session_id: Optional[str] = None
 
 
 class HintResponse(BaseModel):
     item_id: str
     hint_level: int
     hint_text: str
-    source: str  # "rag_llm" or "fallback_static"
+    source: str  # "llm_9router" or "fallback_static"
     word_count: int

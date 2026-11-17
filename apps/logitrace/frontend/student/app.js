@@ -105,7 +105,20 @@ function toggleSound() {
   updateSoundToggleButton();
 }
 
-let currentStudentCode = localStorage.getItem("logitrace_student_code") || "";
+// Who is logged in comes from the server (HttpOnly cookie), not from localStorage.
+let currentStudentCode = "";
+
+// Any 401 from the API means this device is no longer logged in (expired, replaced, or logged out by the teacher).
+const _rawFetch = window.fetch.bind(window);
+window.fetch = async (input, init) => {
+  const res = await _rawFetch(input, init);
+  const url = typeof input === "string" ? input : input.url;
+  if (res.status === 401 && url.includes("/api/") && !url.includes("/api/auth/student/")) {
+    const data = await res.clone().json().catch(() => ({}));
+    forceLoggedOut(data.detail);
+  }
+  return res;
+};
 let activeSessionId = localStorage.getItem("logitrace_active_session_id") || "session_01";
 let currentItem = null;
 let selectedChoice = null;
@@ -159,13 +172,14 @@ function savePersistedSessionStats() {
 
 function initStudentDropdown() {
   const select = document.getElementById("student-select");
-  select.innerHTML = '<option value="">-- Pilih Kode (std_01–34) --</option>';
+  select.innerHTML = '<option value="">-- Pilih kode --</option>';
+  const fromCard = new URLSearchParams(window.location.search).get("kode") || localStorage.getItem("logitrace_student_code") || "";
   for (let i = 1; i <= 34; i++) {
     const code = `std_${i.toString().padStart(2, "0")}`;
     const opt = document.createElement("option");
     opt.value = code;
     opt.textContent = `${code} (XI TKJ 1)`;
-    if (code === currentStudentCode) opt.selected = true;
+    if (code === fromCard) opt.selected = true;
     select.appendChild(opt);
   }
 }
@@ -199,31 +213,77 @@ function updateStudentBadge() {
     <span class="px-3 py-1 rounded-xl bg-snow border-2 border-swan text-xs font-num font-bold text-eel">
       ${escapeHtml(currentStudentCode)}
     </span>
-    <button type="button" onclick="logoutStudent()" class="text-xs font-extrabold text-wolf hover:text-eel px-3 py-1.5 rounded-xl border-2 border-swan bg-polar hover:bg-snow transition" title="Ganti Siswa">
-      Ganti
+    <button type="button" onclick="logoutStudent()" class="text-xs font-extrabold text-wolf hover:text-eel px-3 py-1.5 rounded-xl border-2 border-swan bg-polar hover:bg-snow transition" title="Keluar dari perangkat ini">
+      Keluar
     </button>
   `;
 }
 
-function loginStudent() {
-  const val = document.getElementById("student-select").value;
+function showLoginError(msg) {
   const errBox = document.getElementById("login-error");
-  if (!val) {
-    errBox.classList.remove("hidden");
+  errBox.textContent = msg;
+  errBox.classList.remove("hidden");
+}
+
+async function loginStudent(e) {
+  if (e) e.preventDefault();
+  const code = document.getElementById("student-select").value;
+  const pin = document.getElementById("login-pin").value.trim();
+  const classCode = document.getElementById("login-class-code").value.trim().toUpperCase();
+  if (!code || !/^\d{4}$/.test(pin) || classCode.length < 4) {
+    showLoginError("Lengkapi kode siswa, PIN 4 angka, dan kode kelas.");
     return;
   }
-  errBox.classList.add("hidden");
-  currentStudentCode = val;
-  localStorage.setItem("logitrace_student_code", currentStudentCode);
+  const btn = document.getElementById("btn-login");
+  btn.disabled = true;
+  try {
+    const resp = await fetch(`${API_BASE}/api/auth/student/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ student_code: code, pin, class_code: classCode })
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) {
+      showLoginError(typeof data.detail === "string" ? data.detail : "Gagal masuk. Periksa isianmu.");
+      return;
+    }
+    document.getElementById("login-error").classList.add("hidden");
+    document.getElementById("login-pin").value = "";
+    enterAsStudent(data.student_code);
+  } catch (err) {
+    showLoginError("Tidak bisa terhubung ke server LogiTrace.");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function enterAsStudent(code) {
+  currentStudentCode = code;
+  localStorage.setItem("logitrace_student_code", code); // only to prefill the login form next time
   updateStudentBadge();
   loadClassroomSessions();
 }
 
-function logoutStudent() {
+const LOGOUT_MESSAGES = {
+  DEVICE_REPLACED: "Akunmu baru saja dibuka di perangkat lain, jadi perangkat ini dikeluarkan. Lapor guru bila itu bukan kamu.",
+  STUDENT_AUTH_REQUIRED: "Silakan masuk lagi dengan kartumu."
+};
+
+function forceLoggedOut(reason) {
+  if (!currentStudentCode && !document.getElementById("screen-login").classList.contains("hidden")) return;
   stopAllFeedbackAudio();
   currentStudentCode = "";
-  localStorage.removeItem("logitrace_student_code");
   updateStudentBadge();
+  showScreen("screen-login");
+  showLoginError(LOGOUT_MESSAGES[reason] || LOGOUT_MESSAGES.STUDENT_AUTH_REQUIRED);
+}
+
+async function logoutStudent() {
+  stopAllFeedbackAudio();
+  try { await fetch(`${API_BASE}/api/auth/student/logout`, { method: "POST" }); } catch (e) { /* offline */ }
+  currentStudentCode = "";
+  updateStudentBadge();
+  document.getElementById("login-error").classList.add("hidden");
   showScreen("screen-login");
 }
 
@@ -268,9 +328,18 @@ async function loadClassroomSessions() {
   try {
     const resp = await fetch(`${API_BASE}/api/sessions?class_rombel=XI%20TKJ%201`);
     if (!resp.ok) throw new Error("Gagal mengambil sesi");
-    const sessions = await resp.json();
+    // Active session first; inactive ones stay listed only so students can review finished results
+    const sessions = (await resp.json()).sort((a, b) =>
+      (b.is_active - a.is_active) || String(b.created_at).localeCompare(String(a.created_at)));
 
     container.innerHTML = "";
+    if (sessionClosedNotice) {
+      const note = document.createElement("div");
+      note.className = "p-4 text-sm font-bold text-eel bg-bee-soft rounded-3xl border-2 border-bee/60";
+      note.textContent = sessionClosedNotice;
+      container.appendChild(note);
+      sessionClosedNotice = "";
+    }
     if (!sessions.length) {
       container.innerHTML = `<div class="p-6 text-center text-sm font-bold text-wolf bg-snow rounded-3xl border-2 border-swan">Belum ada sesi latihan aktif untuk XI TKJ 1.</div>`;
       return;
@@ -292,7 +361,18 @@ async function loadClassroomSessions() {
       let actionBtn = "";
       const maxItems = statusData.max_items || sess.max_items || 20;
 
-      if (statusData.status === "COMPLETED") {
+      if (!sess.is_active) {
+        card.className += " opacity-80";
+        if (statusData.status === "COMPLETED") {
+          statusBadge = `<span class="px-3 py-1 rounded-full text-[11px] font-num font-bold bg-feather-soft text-feather-shade border border-feather/30">Selesai</span>`;
+          actionBtn = `
+            <button type="button" data-action="start" class="w-full duo-btn duo-btn-ghost text-xs py-3 px-4">Lihat Hasil</button>
+          `;
+        } else {
+          statusBadge = `<span class="px-3 py-1 rounded-full text-[11px] font-num font-bold bg-snow text-wolf border-2 border-swan">Ditutup</span>`;
+          actionBtn = `<p class="text-xs font-bold text-wolf">Sesi ini sudah ditutup guru dan tidak bisa dikerjakan lagi.</p>`;
+        }
+      } else if (statusData.status === "COMPLETED") {
         const masteryLabel = statusData.final_mastery !== null && statusData.final_mastery !== undefined
           ? `Selesai &bull; m=${Number(statusData.final_mastery).toFixed(2)}`
           : "Selesai";
@@ -357,6 +437,15 @@ async function loadClassroomSessions() {
     console.error(err);
     container.innerHTML = `<div class="p-5 text-center text-sm font-extrabold text-cardinal-shade bg-cardinal-soft rounded-3xl border-2 border-cardinal/40">Gagal memuat daftar sesi. Periksa koneksi ke server LogiTrace.</div>`;
   }
+}
+
+// Server answers 409 when the session was deactivated by the teacher (e.g. mid-quiz)
+let sessionClosedNotice = "";
+
+function handleSessionClosed() {
+  sessionClosedNotice = "Sesi yang kamu buka sudah ditutup guru. Silakan kerjakan sesi yang sedang aktif.";
+  localStorage.removeItem("logitrace_active_session_id");
+  loadClassroomSessions();
 }
 
 async function startSessionQuiz(sessionId) {
@@ -425,6 +514,10 @@ async function fetchNextQuestion() {
     const url = `${API_BASE}/api/quiz/${currentStudentCode}/next?session_id=${encodeURIComponent(activeSessionId)}`;
     const resp = await fetch(url);
     if (!resp.ok) {
+      if (resp.status === 409) {
+        handleSessionClosed();
+        return;
+      }
       if (resp.status === 404) {
         logoutStudent();
         return;
@@ -548,7 +641,8 @@ async function loadHint(level) {
       body: JSON.stringify({
         student_code: currentStudentCode,
         item_id: currentItem.item_id,
-        requested_level: level
+        requested_level: level,
+        session_id: currentItem.session_id || null
       })
     });
 
@@ -600,6 +694,10 @@ document.getElementById("btn-submit").onclick = async () => {
       body: JSON.stringify(payload)
     });
 
+    if (resp.status === 409) {
+      handleSessionClosed();
+      return;
+    }
     if (!resp.ok) throw new Error("Gagal mengirim jawaban");
     const result = await resp.json();
     isAnswerLocked = true;
@@ -757,12 +855,26 @@ async function showSummary() {
     : "Tuntas";
 }
 
-document.getElementById("btn-login").onclick = loginStudent;
+document.getElementById("login-form").addEventListener("submit", loginStudent);
+document.getElementById("login-class-code").addEventListener("input", (e) => {
+  e.target.value = e.target.value.toUpperCase();
+});
 updateSoundToggleButton();
 initStudentDropdown();
-if (currentStudentCode) {
-  updateStudentBadge();
-  loadClassroomSessions();
-} else {
-  showScreen("screen-login");
-}
+
+(async function bootStudent() {
+  try {
+    const resp = await _rawFetch(`${API_BASE}/api/auth/student/me`);
+    if (resp.ok) {
+      const me = await resp.json();
+      enterAsStudent(me.student_code);
+      return;
+    }
+    const data = await resp.json().catch(() => ({}));
+    showScreen("screen-login");
+    if (data.detail === "DEVICE_REPLACED") showLoginError(LOGOUT_MESSAGES.DEVICE_REPLACED);
+  } catch (e) {
+    showScreen("screen-login");
+    showLoginError("Tidak bisa terhubung ke server LogiTrace.");
+  }
+})();

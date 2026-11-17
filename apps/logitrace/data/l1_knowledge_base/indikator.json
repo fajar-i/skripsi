@@ -1,0 +1,234 @@
+{
+  "status": "draf_ai — belum divalidasi pakar",
+  "capaian_pembelajaran": "Elemen Teknologi Jaringan Kabel dan Nirkabel, CP Fase F Konsentrasi Keahlian TKJ (Keputusan Kepala BSKAP No. 033/H/KR/2022)",
+  "tujuan_pembelajaran": {
+    "TP 2.1": "Menerapkan instalasi jaringan kabel dan nirkabel.",
+    "TP 2.2": "Menerapkan perawatan dan perbaikan jaringan kabel dan nirkabel."
+  },
+  "level_kognitif": {
+    "C1": "Mengingat",
+    "C2": "Memahami",
+    "C3": "Menerapkan",
+    "C4": "Menganalisis",
+    "C5": "Mengevaluasi",
+    "C6": "Mencipta"
+  },
+  "indikator": [
+    {
+      "id": "IND-01.1",
+      "kc_id": "WLAN_STANDARDS",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Mengidentifikasi standar IEEE 802.11 (b/g/n/ac/ax) beserta pita frekuensi dan kecepatan teoretisnya."
+    },
+    {
+      "id": "IND-01.2",
+      "kc_id": "WLAN_STANDARDS",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Membandingkan karakteristik pita 2,4 GHz dan 5 GHz terhadap jangkauan dan kecepatan."
+    },
+    {
+      "id": "IND-01.3",
+      "kc_id": "WLAN_STANDARDS",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Menjelaskan fitur peningkatan kinerja WLAN (MIMO, OFDMA, BSS Coloring, TWT, MCS, channel bonding)."
+    },
+    {
+      "id": "IND-02.1",
+      "kc_id": "WLAN_TOPOLOGY_BSS",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Mengidentifikasi mode topologi WLAN (Ad-Hoc/IBSS, BSS, ESS) dan komponennya (SSID, BSSID, DS)."
+    },
+    {
+      "id": "IND-02.2",
+      "kc_id": "WLAN_TOPOLOGY_BSS",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Menjelaskan cara kerja komponen topologi WLAN (beacon, distribution system, ESS)."
+    },
+    {
+      "id": "IND-02.3",
+      "kc_id": "WLAN_TOPOLOGY_BSS",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Menentukan topologi WLAN yang sesuai kebutuhan dan menganalisis masalah topologi."
+    },
+    {
+      "id": "IND-03.1",
+      "kc_id": "IP_PEER_CONFIG",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Menerapkan pengalamatan IPv4 dan subnet mask pada perangkat klien."
+    },
+    {
+      "id": "IND-03.2",
+      "kc_id": "IP_PEER_CONFIG",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Menghitung parameter subnet (jumlah host, alamat broadcast, rentang alamat) sesuai kebutuhan jaringan."
+    },
+    {
+      "id": "IND-03.3",
+      "kc_id": "IP_PEER_CONFIG",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Menganalisis masalah konfigurasi IP (gateway, APIPA, konflik IP, ARP, DHCP)."
+    },
+    {
+      "id": "IND-04.1",
+      "kc_id": "WLAN_FREQ_CHANNEL",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Mengidentifikasi kanal non-overlapping dan karakteristik lebar kanal pada pita 2,4/5 GHz."
+    },
+    {
+      "id": "IND-04.2",
+      "kc_id": "WLAN_FREQ_CHANNEL",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Menganalisis jenis dan sumber interferensi kanal (co-channel, adjacent channel, non-802.11)."
+    },
+    {
+      "id": "IND-04.3",
+      "kc_id": "WLAN_FREQ_CHANNEL",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Merancang alokasi kanal untuk meminimalkan interferensi antar-AP."
+    },
+    {
+      "id": "IND-05.1",
+      "kc_id": "WLAN_SECURITY_AUTH",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menjelaskan mekanisme dan kelemahan protokol keamanan WLAN (WEP, WPA2, WPA3)."
+    },
+    {
+      "id": "IND-05.2",
+      "kc_id": "WLAN_SECURITY_AUTH",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menghitung kekuatan kata sandi terhadap serangan brute force."
+    },
+    {
+      "id": "IND-05.3",
+      "kc_id": "WLAN_SECURITY_AUTH",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menentukan konfigurasi autentikasi yang tepat untuk mencegah serangan pada WLAN."
+    },
+    {
+      "id": "IND-06.1",
+      "kc_id": "WLAN_HOST_HARDENING",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Mengidentifikasi teknik pengamanan dasar AP dan klien (client isolation, MAC filtering, kredensial default, HTTPS)."
+    },
+    {
+      "id": "IND-06.2",
+      "kc_id": "WLAN_HOST_HARDENING",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menerapkan aturan firewall dan pembatasan akses pada router/AP."
+    },
+    {
+      "id": "IND-06.3",
+      "kc_id": "WLAN_HOST_HARDENING",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Mengevaluasi efektivitas teknik pengamanan dan segmentasi jaringan nirkabel."
+    },
+    {
+      "id": "IND-07.1",
+      "kc_id": "WLAN_SIGNAL_PROP",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menginterpretasikan nilai kekuatan sinyal (RSSI dalam dBm) dan pola pancaran antena."
+    },
+    {
+      "id": "IND-07.2",
+      "kc_id": "WLAN_SIGNAL_PROP",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menghitung redaman dan anggaran daya sinyal (FSPL, EIRP, SNR)."
+    },
+    {
+      "id": "IND-07.3",
+      "kc_id": "WLAN_SIGNAL_PROP",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menganalisis penyebab degradasi sinyal (material penghalang, zona Fresnel, multipath, adaptasi MCS)."
+    },
+    {
+      "id": "IND-08.1",
+      "kc_id": "WLAN_ROAMING_PROB",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menjelaskan konsep roaming, ambang roaming, dan sticky client."
+    },
+    {
+      "id": "IND-08.2",
+      "kc_id": "WLAN_ROAMING_PROB",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menjelaskan mekanisme percepatan roaming (histeresis, IEEE 802.11k/v/r)."
+    },
+    {
+      "id": "IND-08.3",
+      "kc_id": "WLAN_ROAMING_PROB",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menentukan konfigurasi roaming untuk mengatasi masalah perpindahan klien."
+    },
+    {
+      "id": "IND-09.1",
+      "kc_id": "WLAN_CHANNEL_COLLISION",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menjelaskan sifat media nirkabel bersama dan mekanisme CSMA/CA."
+    },
+    {
+      "id": "IND-09.2",
+      "kc_id": "WLAN_CHANNEL_COLLISION",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menganalisis penyebab dan dampak tabrakan frame (hidden/exposed node, kepadatan kanal)."
+    },
+    {
+      "id": "IND-09.3",
+      "kc_id": "WLAN_CHANNEL_COLLISION",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menentukan mekanisme mitigasi tabrakan (RTS/CTS, prioritas QoS/WMM)."
+    },
+    {
+      "id": "IND-10.1",
+      "kc_id": "ICMP_CONNECTIVITY",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Menggunakan perintah ping dan menginterpretasikan keluarannya (RTT, TTL, packet loss)."
+    },
+    {
+      "id": "IND-10.2",
+      "kc_id": "ICMP_CONNECTIVITY",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Menganalisis penyebab anomali hasil uji konektivitas (jitter, TTL expired, bufferbloat)."
+    },
+    {
+      "id": "IND-10.3",
+      "kc_id": "ICMP_CONNECTIVITY",
+      "tujuan_pembelajaran": "TP 2.1",
+      "rumusan": "Menerapkan utilitas diagnostik (tracert, ping dengan opsi ukuran/DF) untuk pengujian konektivitas."
+    },
+    {
+      "id": "IND-11.1",
+      "kc_id": "ICMP_TROUBLE_DHU",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menjelaskan arti dan sumber pesan galat Destination Host Unreachable."
+    },
+    {
+      "id": "IND-11.2",
+      "kc_id": "ICMP_TROUBLE_DHU",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Mendiagnosis penyebab Destination Host Unreachable dari konfigurasi IP, subnet, gateway, ARP, atau routing."
+    },
+    {
+      "id": "IND-11.3",
+      "kc_id": "ICMP_TROUBLE_DHU",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menentukan tindakan perbaikan untuk mengatasi Destination Host Unreachable."
+    },
+    {
+      "id": "IND-12.1",
+      "kc_id": "ICMP_TROUBLE_RTO",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menjelaskan arti pesan Request Timed Out dan membedakannya dari Destination Host Unreachable."
+    },
+    {
+      "id": "IND-12.2",
+      "kc_id": "ICMP_TROUBLE_RTO",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Mendiagnosis penyebab Request Timed Out (firewall, sinyal lemah, kabel, routing asimetris, MTU)."
+    },
+    {
+      "id": "IND-12.3",
+      "kc_id": "ICMP_TROUBLE_RTO",
+      "tujuan_pembelajaran": "TP 2.2",
+      "rumusan": "Menentukan tindakan perbaikan dan verifikasi untuk mengatasi Request Timed Out."
+    }
+  ]
+}
