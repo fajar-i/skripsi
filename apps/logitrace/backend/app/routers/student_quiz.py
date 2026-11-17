@@ -5,6 +5,7 @@ Handles question delivery, answer submission with L3 updates, and Socratic hints
 
 import json
 import os
+from datetime import timezone
 from typing import Dict, List, Optional, Set
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import desc, func, select
@@ -21,9 +22,10 @@ from ..db.models import (
     AgentLog,
     QuizSession,
     StudentAttempt,
+    HintEvent,
     utc_now
 )
-from ..engine.cognitive import calculate_predicted_p, update_mastery
+from ..engine.cognitive import calculate_predicted_p, update_mastery, apply_temporal_decay
 from ..engine.zpd_selector import ZPDSelector, ItemCandidate
 from ..engine.calibration import CalibrationManager, CalibrationItem
 from ..rag.hint_service import hint_service
@@ -55,6 +57,37 @@ if not all_kc_ids and os.path.exists(KCS_PATH):
 
 zpd_selector = ZPDSelector(dag_edges)
 calibration_manager = CalibrationManager(all_kc_ids)
+
+
+def _days_since(ts) -> float:
+    """Elapsed days since a stored timestamp (SQLite returns naive datetimes = UTC)."""
+    if ts is None:
+        return 0.0
+    if ts.tzinfo is None:
+        ts = ts.replace(tzinfo=timezone.utc)
+    return max(0.0, (utc_now() - ts).total_seconds() / 86400.0)
+
+
+def _read_mastery(snapshot) -> float:
+    """On-read Ebbinghaus decay: m(t) = m(t_last) * exp(-dt / tau)."""
+    if snapshot is None:
+        return 0.25
+    return apply_temporal_decay(snapshot.current_mastery, _days_since(snapshot.last_updated_at))
+
+
+async def _resolve_session(db: AsyncSession, student: Student, session_id: Optional[str]):
+    target_session = None
+    if session_id:
+        target_session = await db.get(QuizSession, session_id)
+    if not target_session:
+        sess_stmt = (
+            select(QuizSession)
+            .where(QuizSession.class_rombel == student.class_rombel, QuizSession.is_active == True)
+            .order_by(desc(QuizSession.created_at))
+        )
+        sess_res = await db.execute(sess_stmt)
+        target_session = sess_res.scalars().first()
+    return target_session
 
 
 @router.get("/{student_code}/next", response_model=ItemPresentation)
@@ -162,7 +195,7 @@ async def get_next_question(
         snap_stmt = select(MasterySnapshot).where(MasterySnapshot.student_id == student.id)
         snap_res = await db.execute(snap_stmt)
         snapshots = snap_res.scalars().all()
-        student_mastery = {s.kc_id: s.current_mastery for s in snapshots}
+        student_mastery = {s.kc_id: _read_mastery(s) for s in snapshots}
 
         # Last KC answered
         last_int_stmt = (
@@ -300,19 +333,28 @@ async def submit_answer(req: SubmitAnswerRequest, db: AsyncSession = Depends(get
     )
     snap_res = await db.execute(snap_stmt)
     snapshot = snap_res.scalar_one_or_none()
-    current_m = snapshot.current_mastery if snapshot else 0.25
+    current_m = _read_mastery(snapshot)
 
     # 4. Check correctness
     is_correct = (req.choice.strip().upper() == item.correct_answer.strip().upper())
     result_binary = 1 if is_correct else 0
 
     # 5. Deterministic L3 Calculations (< 1 ms)
+    # Hint usage is taken from the server-side hint log, not from the client flag.
+    hint_stmt = select(func.max(HintEvent.hint_level)).where(
+        HintEvent.student_id == student.id,
+        HintEvent.item_id == item.id,
+        HintEvent.session_id == (target_session.id if target_session else None),
+    )
+    max_hint_level = (await db.execute(hint_stmt)).scalar() or 0
+    used_hint = max_hint_level > 0
+
     p_hat = calculate_predicted_p(current_m, item.difficulty_nominal)
     new_m = update_mastery(
         current_m=current_m,
         response_result=result_binary,
         difficulty=item.difficulty_nominal,
-        used_hint=req.used_hint
+        used_hint=used_hint
     )
     m_delta = new_m - current_m
 
@@ -332,7 +374,7 @@ async def submit_answer(req: SubmitAnswerRequest, db: AsyncSession = Depends(get
         mastery_before=round(current_m, 4),
         mastery_after=round(new_m, 4),
         response_time_ms=req.response_time_ms,
-        hint_level_used=req.hint_level if req.used_hint else 0,
+        hint_level_used=max_hint_level,
         is_calibration=is_calibration
     )
     db.add(interaction)
@@ -416,12 +458,19 @@ async def submit_answer(req: SubmitAnswerRequest, db: AsyncSession = Depends(get
 @router.post("/hint", response_model=HintResponse)
 async def request_socratic_hint(req: HintRequest, db: AsyncSession = Depends(get_db)):
     """
-    Generates or retrieves Socratic scaffolding hint (Agent T2).
-    Strictly verifies zero answer leakage with instant fallback (< 50 ms).
+    Socratic hint (Agent T2) via 9router with a hard 3.0 s deadline and static fallback.
+    Every served hint is recorded in hint_events so the mastery update can apply h = 0.5.
     """
+    stmt = select(Student).where(Student.anonymous_code == req.student_code)
+    student = (await db.execute(stmt)).scalar_one_or_none()
+    if not student:
+        raise HTTPException(status_code=404, detail=f"Student '{req.student_code}' not found")
+
     item = await db.get(Item, req.item_id)
     if not item:
         raise HTTPException(status_code=404, detail=f"Item '{req.item_id}' not found")
+
+    target_session = await _resolve_session(db, student, req.session_id)
 
     kc = await db.get(KnowledgeComponent, item.primary_kc_id)
     kc_name = kc.name if kc else item.primary_kc_id
@@ -429,7 +478,7 @@ async def request_socratic_hint(req: HintRequest, db: AsyncSession = Depends(get
 
     correct_answer_text = item.options.get(item.correct_answer, item.correct_answer)
 
-    hint_text, source, latency_ms, is_safe = await hint_service.generate_socratic_hint(
+    hint_text, source, latency_ms, fallback_reason = await hint_service.generate_socratic_hint(
         kc_id=item.primary_kc_id,
         kc_name=kc_name,
         level=req.requested_level,
@@ -439,16 +488,22 @@ async def request_socratic_hint(req: HintRequest, db: AsyncSession = Depends(get
         kc_description=kc_desc
     )
 
-    # Audit log
-    agent_log = AgentLog(
+    db.add(HintEvent(
+        student_id=student.id,
+        item_id=item.id,
+        session_id=target_session.id if target_session else None,
+        hint_level=req.requested_level,
+        source=source,
+    ))
+    db.add(AgentLog(
         trigger_type="T2",
         prompt_hash=None,
-        model_id=hint_service.client.model_name if source == "rag_llm" else "static_bank",
+        model_id=hint_service.client.model_name if source == "llm_9router" else "static_bank",
         raw_output=hint_text,
-        is_accepted=is_safe,
+        is_accepted=(source == "llm_9router"),
+        rejection_reason=(fallback_reason or "")[:255] or None,
         latency_ms=latency_ms
-    )
-    db.add(agent_log)
+    ))
     await db.commit()
 
     return HintResponse(

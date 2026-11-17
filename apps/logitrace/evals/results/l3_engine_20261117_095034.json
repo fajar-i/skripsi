@@ -1,0 +1,43 @@
+{
+  "benchmark": "l3_engine",
+  "timestamp_utc": "2026-11-17T02:50:34.407854+00:00",
+  "iterations": 10000,
+  "warmup": 200,
+  "seed": 42,
+  "item_bank_size": 180,
+  "host": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+    "python": "3.13.14",
+    "cpu_count_logical": 8
+  },
+  "results": {
+    "math": {
+      "n": 10000,
+      "mean_ms": 0.00305,
+      "sd_ms": 0.0014,
+      "p50_ms": 0.0026,
+      "p95_ms": 0.0042,
+      "p99_ms": 0.0049,
+      "max_ms": 0.0913
+    },
+    "zpd_select": {
+      "n": 10000,
+      "mean_ms": 0.17805,
+      "sd_ms": 0.05942,
+      "p50_ms": 0.1669,
+      "p95_ms": 0.2607,
+      "p99_ms": 0.4036,
+      "max_ms": 2.115
+    },
+    "fallback": {
+      "n": 10000,
+      "mean_ms": 0.26689,
+      "sd_ms": 0.30965,
+      "p50_ms": 0.1101,
+      "p95_ms": 0.8022,
+      "p99_ms": 1.1736,
+      "max_ms": 7.8926
+    }
+  }
+}

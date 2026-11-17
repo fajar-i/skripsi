@@ -548,7 +548,8 @@ async function loadHint(level) {
       body: JSON.stringify({
         student_code: currentStudentCode,
         item_id: currentItem.item_id,
-        requested_level: level
+        requested_level: level,
+        session_id: currentItem.session_id || null
       })
     });
 

@@ -41,6 +41,6 @@ class SessionSummaryResponse(BaseModel):
     bottlenecks: List[KCMasteryMetric]
     narrative_summary: str
     peer_tutoring_recommendations: List[PeerTutoringMatch]
-    source: str  # "rag_llm" or "deterministic_fallback"
+    source: str  # "llm_9router" or "deterministic_fallback"
     latency_ms: int
     timestamp: str

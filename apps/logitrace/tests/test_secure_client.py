@@ -1,60 +1,73 @@
 """
-Unit tests for SecureLLMClient & PIIScrubber in LogiTrace RAG-KT.
-Validates:
-1. Zero-PII scrubbing (NISN, phone, student IDs, emails)
-2. Secret key masking
-3. Prompt length capping
-4. Safe fallback on missing keys or network failure
-5. Output HTML escaping (anti-XSS)
+Unit tests for SecureLLMClient (9router-only) and PIIScrubber.
 """
 
+import asyncio
 import os
 import sys
+
 import pytest
 
-# Ensure parent directory (apps) is in sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from logitrace.backend.app.rag.secure_client import PIIScrubber, SecureLLMClient, mask_secret
-from logitrace.backend.app.rag.hint_service import HintService
+from backend.app.rag import secure_client as sc  # noqa: E402
+from backend.app.rag.secure_client import PIIScrubber, SecureLLMClient, mask_secret  # noqa: E402
+from backend.app.rag.hint_service import HintService, GENERIC_HINT  # noqa: E402
 
 
 def test_pii_scrubber_redaction():
     dirty_text = (
-        "Siswa S07 (kode std_07) bernama Budi (NISN 0061234567, no hp 081234567890, email budi@smk4.sch.id) "
-        "di SMK Negeri 4 Bandung sedang bingung pada soal WLAN frekuensi 2.4 GHz."
+        "Siswa S07 (kode std_07) bernama Budi Santoso (NISN 0061234567, no hp 081234567890, "
+        "email budi@smk4.sch.id) di SMK Negeri 4 Bandung sedang bingung pada soal WLAN frekuensi 2.4 GHz."
     )
     clean_text, had_pii = PIIScrubber.scrub(dirty_text)
 
     assert had_pii is True
-    assert "0061234567" not in clean_text
-    assert "[REDACTED_NISN]" in clean_text
-    assert "081234567890" not in clean_text
-    assert "[REDACTED_PHONE]" in clean_text
-    assert "budi@smk4.sch.id" not in clean_text
-    assert "[REDACTED_EMAIL]" in clean_text
-    assert "SMK Negeri 4 Bandung" not in clean_text
-    assert "[REDACTED_SCHOOL]" in clean_text
-    assert "S07" not in clean_text
-    assert "std_07" not in clean_text
+    for leaked in ("0061234567", "081234567890", "budi@smk4.sch.id", "SMK Negeri 4 Bandung",
+                   "S07", "std_07", "Budi", "Santoso"):
+        assert leaked not in clean_text, leaked
+    assert "2.4 GHz" in clean_text
 
 
-def test_pii_scrubber_clean_text():
-    clean_text = "Sebuah access point mengalami tabrakan frame pada kanal 6 di frekuensi 2.4 GHz."
-    res, had_pii = PIIScrubber.scrub(clean_text)
+@pytest.mark.parametrize("text,leaked", [
+    ("NISN: 0061 2345 67", "0061 2345 67"),
+    ("NIK 3273-0112-3456-0001", "3273-0112-3456-0001"),
+    ("hp +62 812-3456-7890", "812-3456-7890"),
+    ("SMKN 4 Bandung", "SMKN 4 Bandung"),
+    ("SMK Negeri 4 Kota Bandung", "Bandung"),
+    ("Nama saya Siti Aminah", "Siti"),
+])
+def test_pii_scrubber_format_variants(text, leaked):
+    clean, had_pii = PIIScrubber.scrub(text)
+    assert had_pii is True
+    assert leaked not in clean
+
+
+@pytest.mark.parametrize("text", [
+    "Sebuah access point mengalami tabrakan frame pada kanal 6 di frekuensi 2.4 GHz.",
+    "Throughput 1300000000 bps pada 802.11ac dengan subnet 192.168.100.0/24.",
+    "Ping dengan ukuran paket 1472 byte dan TTL 64 menghasilkan RTT 12 ms.",
+])
+def test_pii_scrubber_leaves_technical_text_untouched(text):
+    res, had_pii = PIIScrubber.scrub(text)
     assert had_pii is False
-    assert res == clean_text
+    assert res == text
+
+
+def test_prompt_length_cap():
+    res, _ = PIIScrubber.scrub("a" * 5000)
+    assert len(res) == sc.MAX_PROMPT_CHARS
 
 
 def test_secret_key_masking():
     assert mask_secret(None) == "<EMPTY>"
     assert mask_secret("") == "<EMPTY>"
     assert mask_secret("short") == "****"
-    assert mask_secret("sk-deepseek-1234567890abcdef") == "sk-d****cdef"
+    assert mask_secret("sk-deepseek-1234567890abcdef") == "****cdef"
 
 
 def test_output_sanitization():
-    client = SecureLLMClient(provider="ollama")
+    client = SecureLLMClient()
     dirty_output = '```json\n{"petunjuk": "<script>alert(1)</script> Perhatikan pita frekuensi."}\n```'
     clean = client.sanitize_output(dirty_output)
     assert "<script>" not in clean
@@ -62,31 +75,81 @@ def test_output_sanitization():
     assert "```" not in clean
 
 
-def test_9router_provider_configuration(monkeypatch):
-    monkeypatch.setenv("LOGITRACE_LLM_PROVIDER", "9router")
+def test_9router_is_the_only_provider(monkeypatch):
     monkeypatch.setenv("NINEROUTER_API_KEY", "sk-test-9router-key-12345678")
     monkeypatch.setenv("NINEROUTER_MODEL", "ag/gemini-3.8-flash")
-
+    monkeypatch.setenv("NINEROUTER_API_URL", "http://localhost:20128/v1/chat/completions")
     client = SecureLLMClient()
     assert client.provider == "9router"
     assert client.endpoint_url == "http://localhost:20128/v1/chat/completions"
     assert client.model_name == "ag/gemini-3.8-flash"
-    assert client.api_key == "sk-test-9router-key-12345678"
+    assert not hasattr(sc, "PROVIDERS")  # no Ollama / DeepSeek / Groq table any more
 
 
 @pytest.mark.asyncio
-async def test_hint_service_fallback_on_offline():
-    # When provider has no valid key or is offline, it must return static fallback < 50ms safely
-    service = HintService(provider="deepseek")  # DeepSeek without key
-    hint, source, lat_ms, is_safe = await service.generate_socratic_hint(
-        kc_id="KC01",
+async def test_missing_key_returns_error_without_network(monkeypatch):
+    monkeypatch.setenv("NINEROUTER_API_KEY", "")
+    text, lat, err = await SecureLLMClient().call_chat("sys", "user")
+    assert text is None
+    assert "NINEROUTER_API_KEY" in err
+
+
+@pytest.mark.asyncio
+async def test_total_deadline_is_enforced(monkeypatch):
+    """A provider that never answers must be cut at the SLA, not at a per-phase timeout."""
+    monkeypatch.setenv("NINEROUTER_API_KEY", "sk-test-9router-key-12345678")
+    client = SecureLLMClient()
+
+    async def slow_post(*args, **kwargs):
+        await asyncio.sleep(10)
+
+    monkeypatch.setattr(client, "_post", slow_post)
+    text, lat_ms, err = await client.call_chat("sys", "user", timeout_seconds=0.3)
+    assert text is None
+    assert "Timeout" in err
+    assert lat_ms < 600
+
+
+@pytest.mark.asyncio
+async def test_hint_service_fallback_on_missing_key():
+    service = HintService()  # conftest blanks the key -> offline
+    hint, source, lat_ms, reason = await service.generate_socratic_hint(
+        kc_id="WLAN_STANDARDS",
         kc_name="WLAN Standards",
         level=1,
         prompt_text="Siswa S01 kesulitan membedakan 802.11n vs 802.11ax.",
         correct_answer_text="802.11ax",
-        options={"A": "802.11b", "B": "802.11ax"}
+        options={"A": "802.11b", "B": "802.11ax"},
     )
     assert source == "fallback_static"
-    assert is_safe is True
+    assert "NINEROUTER_API_KEY" in reason
     assert len(hint) > 10
     assert lat_ms < 100
+
+
+@pytest.mark.asyncio
+async def test_hint_service_rejects_leaky_llm_output(monkeypatch):
+    service = HintService()
+
+    async def fake_call_api(**kwargs):
+        return "Pilih kanal 11 karena tidak tumpang tindih.", 120, None
+
+    monkeypatch.setattr(service.client, "call_api", fake_call_api)
+    hint, source, _, reason = await service.generate_socratic_hint(
+        kc_id="WLAN_FREQ_CHANNEL", kc_name="Kanal", level=1, prompt_text="Kanal mana?",
+        correct_answer_text="Kanal 11", options={"A": "Kanal 3", "B": "Kanal 11"},
+    )
+    assert source == "fallback_static"
+    assert reason.startswith("Leakage guard")
+    assert "kanal 11" not in hint.lower()
+
+
+def test_static_fallback_is_guarded_per_item():
+    """A static hint that names this item's answer must be replaced by the generic hint."""
+    service = HintService()
+    service.static_hints = {"ICMP_CONNECTIVITY": {"1": "Perhatikan keluaran perintah ping dan nilai RTT."}}
+    hint = service.get_static_fallback_hint(
+        "ICMP_CONNECTIVITY", 1, correct_answer_text="ping",
+        options={"A": "ping", "B": "tracert", "C": "ipconfig", "D": "netstat"},
+    )
+    assert hint == GENERIC_HINT

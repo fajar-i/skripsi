@@ -1,6 +1,9 @@
 """
 LogiTrace: Answer Leakage Checker & Scaffolding Guardrails.
-Guarantees 100% Zero Answer Leakage (KPI-2) and graceful fallback activation.
+
+Rule-based (regex + literal match) check. It catches explicit disclosure phrases and
+verbatim mentions of the answer key or option texts. It does NOT detect paraphrased
+or semantic leakage.
 """
 
 import re
@@ -21,51 +24,52 @@ FORBIDDEN_PHRASES = [
 ]
 
 MAX_HINT_WORDS = 60
+MIN_ANSWER_CHARS = 3   # answer key texts shorter than this are too generic to match
+MIN_OPTION_CHARS = 4   # option texts shorter than this are skipped
+
+
+def _contains_phrase(haystack: str, phrase: str) -> bool:
+    """Case-insensitive whole-phrase match (phrase boundaries, not substrings of words)."""
+    escaped = re.escape(phrase.strip().lower())
+    return re.search(rf"(?<![\w]){escaped}(?![\w])", haystack) is not None
 
 
 class AnswerLeakageGuard:
     def __init__(self, custom_forbidden: Optional[List[str]] = None):
         patterns = FORBIDDEN_PHRASES + (custom_forbidden or [])
-        self.forbidden_regexes = [
-            re.compile(p, re.IGNORECASE) for p in patterns
-        ]
+        self.forbidden_regexes = [re.compile(p, re.IGNORECASE) for p in patterns]
 
     def check_leakage(
         self,
         hint_text: str,
         correct_answer: str,
-        options: Optional[List[str]] = None
+        options: Optional[List[str]] = None,
     ) -> Tuple[bool, str]:
         """
-        Validates hint text against leakage criteria.
-        Returns:
-            (is_safe: bool, reason: str)
-            is_safe == True means PASS (no leakage, under 60 words).
-            is_safe == False means REJECT (triggers fallback to static hint).
+        Returns (is_safe, reason). is_safe == False means the hint must not be shown.
+        Checks, in order: empty text, > 60 words, disclosure phrases,
+        verbatim answer key (>= 3 chars), verbatim option text (>= 4 chars).
         """
         if not hint_text or not hint_text.strip():
             return False, "Empty hint text"
 
-        # 1. Word count check (<= 60 words)
         words = hint_text.strip().split()
         if len(words) > MAX_HINT_WORDS:
             return False, f"Word count exceeded: {len(words)} > {MAX_HINT_WORDS}"
 
         normalized_hint = hint_text.lower()
 
-        # 2. Check forbidden disclosure phrases
         for regex in self.forbidden_regexes:
             if regex.search(normalized_hint):
                 return False, f"Forbidden disclosure phrasing detected: {regex.pattern}"
 
-        # 3. Check direct literal inclusion of correct answer (if substantive)
-        clean_answer = correct_answer.strip().lower()
-        # Only check exact match if answer is distinctive (> 2 characters)
-        if len(clean_answer) > 2:
-            # Word boundary regex check for the answer token
-            escaped_answer = re.escape(clean_answer)
-            answer_pattern = re.compile(rf"(?:\b|\s|^){escaped_answer}(?:\b|\s|$)", re.IGNORECASE)
-            if answer_pattern.search(normalized_hint):
-                return False, f"Direct correct answer string detected in hint text: '{correct_answer}'"
+        clean_answer = (correct_answer or "").strip()
+        if len(clean_answer) >= MIN_ANSWER_CHARS and _contains_phrase(normalized_hint, clean_answer):
+            return False, f"Direct correct answer string detected in hint text: '{correct_answer}'"
+
+        for opt in options or []:
+            opt_clean = (opt or "").strip()
+            if len(opt_clean) >= MIN_OPTION_CHARS and _contains_phrase(normalized_hint, opt_clean):
+                return False, f"Option text detected in hint text: '{opt_clean[:60]}'"
 
         return True, "Passed"

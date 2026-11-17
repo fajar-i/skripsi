@@ -48,3 +48,20 @@ def test_word_count_exceeded_rejected(guard):
     is_safe, reason = guard.check_leakage(long_hint, correct_answer="802.11b")
     assert is_safe is False
     assert "Word count exceeded" in reason
+
+
+def test_option_text_leakage_rejected(guard):
+    """Verbatim option texts (>= 4 chars) must be rejected, as described in the paper."""
+    hint = "Bandingkan dengan IEEE 802.11a yang bekerja di pita lain."
+    is_safe, reason = guard.check_leakage(
+        hint, correct_answer="IEEE 802.11g",
+        options=["IEEE 802.11g", "IEEE 802.11a", "IEEE 802.11ac", "IEEE 802.11ax"],
+    )
+    assert is_safe is False
+    assert "Option text" in reason
+
+
+def test_answer_must_match_whole_phrase(guard):
+    """'ping' inside 'mapping' is not a leak; standalone 'ping' is."""
+    assert guard.check_leakage("Perhatikan mapping alamat pada tabel ARP.", correct_answer="ping")[0] is True
+    assert guard.check_leakage("Gunakan ping untuk menguji.", correct_answer="ping")[0] is False

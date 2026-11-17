@@ -265,27 +265,40 @@ async def get_item_review_queue(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    US-05: Teacher Review Queue for items requiring verification or calibration.
+    US-05: Teacher Review Queue.
+
+    Items are re-labelled by the rule-based T1 classifier. An item enters the queue when
+    the classifier confidence is < 0.60 or its suggested KC disagrees with the stored KC.
+    Lowest confidence first, max 20.
     """
-    stmt = select(Item).order_by(desc(Item.created_at)).limit(10)
+    stmt = select(Item).where(Item.is_active == True)
     res = await db.execute(stmt)
     items = res.scalars().all()
 
-    queue: List[ReviewQueueItem] = []
+    flagged = []
     for item in items:
-        # Check if item has confidence or compute confidence estimate
-        is_calib = item.is_calibration
-        queue.append(ReviewQueueItem(
+        label = await labeling_service.label_item(
+            ItemLabelRequest(prompt_text=item.prompt_text, options=item.options, explanation=item.explanation)
+        )
+        disagrees = label.primary_kc_id != item.primary_kc_id
+        if label.needs_teacher_review or disagrees:
+            status = "pending_review" if label.needs_teacher_review else "kc_mismatch"
+            flagged.append((label.confidence, item, status))
+
+    flagged.sort(key=lambda x: x[0])
+    return [
+        ReviewQueueItem(
             item_id=item.id,
             prompt_text=item.prompt_text,
             options=item.options,
             current_primary_kc_id=item.primary_kc_id,
             current_tolt_dimension=item.tolt_dimension,
             current_difficulty=item.difficulty_nominal,
-            confidence=0.92 if not is_calib else 0.85,
-            status="approved" if not is_calib else "calibrated"
-        ))
-    return queue
+            confidence=conf,
+            status=status,
+        )
+        for conf, item, status in flagged[:20]
+    ]
 
 
 @router.post("/items/{item_id}/approve-label")

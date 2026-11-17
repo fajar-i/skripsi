@@ -1,7 +1,7 @@
 """
 LogiTrace: Agent T3 — Session Narrative Summary & Peer-Tutoring Recommendation Service (US-06).
 Adheres to Station Rotation syntax (minute 80 closing reflection) and Kurikulum Merdeka Fase F TKJ.
-Includes 3.0s Ollama timeout and deterministic instant fallback (< 10 ms).
+Narrative via 9router (5.0 s hard deadline) with a data-driven deterministic fallback.
 """
 
 from datetime import datetime, timezone
@@ -30,6 +30,10 @@ from ..schemas.summary import (
 from .secure_client import SecureLLMClient
 
 logger = logging.getLogger("summary_service")
+
+TUTOR_MIN_M = 0.70          # same threshold as "mastered" in the paper (Section 2.2)
+MENTEE_MAX_M = 0.45
+MAX_MENTEES_PER_TUTOR = 2
 
 
 class SummaryService:
@@ -74,59 +78,50 @@ class SummaryService:
         comp_count = sum(1 for a in attempts if a.status == "COMPLETED")
         in_prog_count = sum(1 for a in attempts if a.status == "IN_PROGRESS")
         not_start_count = len(students) - (comp_count + in_prog_count)
+        active_student_ids = {
+            a.student_id for a in attempts
+            if a.status in ("IN_PROGRESS", "COMPLETED") and a.answered_item_ids
+        }
 
         # 4. Fetch KCs
         kc_stmt = select(KnowledgeComponent)
         kc_res = await db.execute(kc_stmt)
         kcs = {kc.id: kc.name for kc in kc_res.scalars().all()}
 
-        # 5. Fetch Snapshots for targeted class students
-        snap_stmt = select(MasterySnapshot).where(MasterySnapshot.student_id.in_(student_dict.keys()))
+        # 5. Directly measured mastery only (confidence == 'high'), for students who
+        #    actually answered items in this session. Prior values (0.25) and values
+        #    inherited from DAG parents are NOT evidence and are excluded.
+        snap_stmt = select(MasterySnapshot).where(
+            MasterySnapshot.student_id.in_(active_student_ids),
+            MasterySnapshot.confidence == "high",
+        )
         snap_res = await db.execute(snap_stmt)
         snapshots = snap_res.scalars().all()
 
-        # Group snapshots by student and by KC
-        student_kc_mastery: Dict[str, Dict[str, float]] = {}  # student_code -> {kc_id -> mastery}
-        kc_student_mastery: Dict[str, List[Tuple[str, float]]] = {k: [] for k in kcs.keys()}  # kc_id -> [(student_code, mastery)]
-
+        kc_student_mastery: Dict[str, List[Tuple[str, float]]] = {k: [] for k in kcs.keys()}
         for s in snapshots:
             std_code = student_dict.get(s.student_id)
             if std_code and s.kc_id in kcs:
-                if std_code not in student_kc_mastery:
-                    student_kc_mastery[std_code] = {}
-                student_kc_mastery[std_code][s.kc_id] = s.current_mastery
                 kc_student_mastery[s.kc_id].append((std_code, s.current_mastery))
 
-        # Default fallback for missing student snapshots
-        for std in students:
-            code = std.anonymous_code
-            if code not in student_kc_mastery:
-                student_kc_mastery[code] = {}
-            for kc_id in kcs.keys():
-                if kc_id not in student_kc_mastery[code]:
-                    student_kc_mastery[code][kc_id] = 0.25
-                    kc_student_mastery[kc_id].append((code, 0.25))
-
-        # 6. Aggregate KC Metrics
+        # 6. Aggregate KC metrics (only KCs with at least one measured student)
         kc_metrics: List[KCMasteryMetric] = []
         for kc_id, name in kcs.items():
             scores = [m for _, m in kc_student_mastery[kc_id]]
-            avg_m = sum(scores) / len(scores) if scores else 0.25
-            struggling = sum(1 for s in scores if s < 0.40)
-            mastered = sum(1 for s in scores if s >= 0.70)
+            if not scores:
+                continue
             kc_metrics.append(KCMasteryMetric(
                 kc_id=kc_id,
                 kc_name=name,
-                avg_mastery=round(avg_m, 3),
+                avg_mastery=round(sum(scores) / len(scores), 3),
                 student_count=len(scores),
-                struggling_count=struggling,
-                mastered_count=mastered
+                struggling_count=sum(1 for v in scores if v <= MENTEE_MAX_M),
+                mastered_count=sum(1 for v in scores if v >= TUTOR_MIN_M),
             ))
 
-        # Sort KCs by average mastery
         sorted_kcs = sorted(kc_metrics, key=lambda x: x.avg_mastery, reverse=True)
         strengths = sorted_kcs[:3]
-        bottlenecks = sorted(sorted_kcs[-3:], key=lambda x: x.avg_mastery)
+        bottlenecks = sorted(sorted_kcs[-3:], key=lambda x: x.avg_mastery) if sorted_kcs else []
 
         # 7. Interaction statistics for session
         int_stmt = select(Interaction).where(Interaction.session_id == sess_id)
@@ -137,55 +132,67 @@ class SummaryService:
         accuracy_rate = round(correct_resp / total_resp, 3) if total_resp > 0 else 0.0
         avg_resp_time = int(sum(i.response_time_ms for i in interactions) / total_resp) if total_resp > 0 else 0
 
-        # Class average mastery
-        all_masteries = [m.avg_mastery for m in kc_metrics]
-        class_avg_m = round(sum(all_masteries) / len(all_masteries), 3) if all_masteries else 0.25
+        all_measured = [m for pairs in kc_student_mastery.values() for _, m in pairs]
+        class_avg_m = round(sum(all_measured) / len(all_measured), 3) if all_measured else 0.0
 
-        # 8. Peer-Tutoring Recommendations (Pairing high-mastery students with struggling peers)
+        # 8. Peer-tutoring: greedy one-to-two assignment per bottleneck KC.
+        #    Each student is used at most once as tutor and at most once as mentee per session.
         peer_tutoring: List[PeerTutoringMatch] = []
+        used_tutors: set = set()
+        used_mentees: set = set()
         for bn in bottlenecks:
             pairs = kc_student_mastery[bn.kc_id]
-            # Tutors: m >= 0.65 (or highest available)
-            potential_tutors = sorted([p for p in pairs if p[1] >= 0.65], key=lambda x: x[1], reverse=True)
-            # Mentees: m <= 0.45 (or lowest available)
-            potential_mentees = sorted([p for p in pairs if p[1] <= 0.45], key=lambda x: x[1])
+            tutors = sorted(
+                [p for p in pairs if p[1] >= TUTOR_MIN_M and p[0] not in used_tutors and p[0] not in used_mentees],
+                key=lambda x: x[1], reverse=True,
+            )
+            mentees = sorted(
+                [p for p in pairs if p[1] <= MENTEE_MAX_M and p[0] not in used_mentees and p[0] not in used_tutors],
+                key=lambda x: x[1],
+            )
+            if not mentees:
+                continue
 
-            # Exclude self-pairing: tutor cannot be their own mentee
-            if potential_tutors and potential_mentees:
-                best_tutor = potential_tutors[0]
-                target_mentees = [m for m in potential_mentees if m[0] != best_tutor[0]][:2]
-                if target_mentees:
-                    mentee_codes = [m[0] for m in target_mentees]
-                    mentee_avg = sum(m[1] for m in target_mentees) / len(target_mentees)
-
-                    guidance = (
-                        f"Fasilitasi tutor {best_tutor[0]} mendiskusikan konsep inti {bn.kc_name} "
-                        f"bersama {', '.join(mentee_codes)} menggunakan contoh konkret tanpa membocorkan soal kuis."
-                    )
-
-                    peer_tutoring.append(PeerTutoringMatch(
-                        kc_id=bn.kc_id,
-                        kc_name=bn.kc_name,
-                        tutor_student_code=best_tutor[0],
-                        tutor_mastery=round(best_tutor[1], 2),
-                        mentee_student_codes=mentee_codes,
-                        mentee_avg_mastery=round(mentee_avg, 2),
-                        action_guidance=guidance
-                    ))
-            elif potential_mentees and not potential_tutors:
-                # If no student reached mastery threshold 0.65, recommend direct teacher scaffolding in Zone B
-                target_mentees = potential_mentees[:2]
-                mentee_codes = [m[0] for m in target_mentees]
-                mentee_avg = sum(m[1] for m in target_mentees) / len(target_mentees)
-
+            if not tutors:
+                group = mentees[:MAX_MENTEES_PER_TUTOR]
+                for code, _ in group:
+                    used_mentees.add(code)
+                codes = [c for c, _ in group]
                 peer_tutoring.append(PeerTutoringMatch(
                     kc_id=bn.kc_id,
                     kc_name=bn.kc_name,
                     tutor_student_code="Guru Pendamping (Zona B)",
                     tutor_mastery=1.0,
-                    mentee_student_codes=mentee_codes,
-                    mentee_avg_mastery=round(mentee_avg, 2),
-                    action_guidance=f"Lakukan bimbingan terarah (scaffolding) langsung oleh guru pada konsep {bn.kc_name} di meja Zona B untuk {', '.join(mentee_codes)}."
+                    mentee_student_codes=codes,
+                    mentee_avg_mastery=round(sum(m for _, m in group) / len(group), 2),
+                    action_guidance=(
+                        f"Belum ada siswa dengan m >= {TUTOR_MIN_M:.2f} pada {bn.kc_name}. "
+                        f"Lakukan bimbingan langsung oleh guru untuk {', '.join(codes)}."
+                    ),
+                ))
+                continue
+
+            mentee_queue = list(mentees)
+            for tutor_code, tutor_m in tutors:
+                if not mentee_queue:
+                    break
+                group = mentee_queue[:MAX_MENTEES_PER_TUTOR]
+                mentee_queue = mentee_queue[MAX_MENTEES_PER_TUTOR:]
+                used_tutors.add(tutor_code)
+                for code, _ in group:
+                    used_mentees.add(code)
+                codes = [c for c, _ in group]
+                peer_tutoring.append(PeerTutoringMatch(
+                    kc_id=bn.kc_id,
+                    kc_name=bn.kc_name,
+                    tutor_student_code=tutor_code,
+                    tutor_mastery=round(tutor_m, 2),
+                    mentee_student_codes=codes,
+                    mentee_avg_mastery=round(sum(m for _, m in group) / len(group), 2),
+                    action_guidance=(
+                        f"Fasilitasi tutor {tutor_code} mendiskusikan konsep inti {bn.kc_name} "
+                        f"bersama {', '.join(codes)} menggunakan contoh konkret tanpa membocorkan soal kuis."
+                    ),
                 ))
 
         # 9. Narrative Synthesis via LLM (with 3.0s timeout & deterministic fallback)
@@ -207,7 +214,7 @@ class SummaryService:
         agent_log = AgentLog(
             trigger_type="T3",
             prompt_hash=None,
-            model_id=self.llm_client.model_name if source == "rag_llm" else "deterministic_t3_engine",
+            model_id=self.llm_client.model_name if source == "llm_9router" else "deterministic_t3_engine",
             raw_output=narrative,
             is_accepted=True,
             latency_ms=latency_ms
@@ -248,7 +255,7 @@ class SummaryService:
         bottlenecks: List[KCMasteryMetric],
         peer_tutoring: List[PeerTutoringMatch]
     ) -> Tuple[str, str]:
-        """Attempts LLM inference via SecureLLMClient (9router/DeepSeek/Ollama), falls back to deterministic text."""
+        """Attempts LLM inference via 9router, falls back to a deterministic, data-driven text."""
         str_names = ", ".join([s.kc_name for s in strengths])
         btn_names = ", ".join([b.kc_name for b in bottlenecks])
 
@@ -267,6 +274,14 @@ class SummaryService:
             "Tuliskan 3 paragraf refleksi penutup:"
         )
 
+        # No measured data: do not ask the LLM to narrate nothing.
+        if not strengths:
+            return (
+                f"Pada sesi '{sess_title}' di kelas {class_rombel}, belum ada respons siswa yang tercatat "
+                f"({comp_count} dari {total_students} siswa menyelesaikan penugasan). "
+                "Ringkasan capaian belum dapat disusun."
+            ), "deterministic_fallback"
+
         try:
             out, lat_ms, err = await self.llm_client.call_chat(
                 system_prompt=system_prompt,
@@ -276,25 +291,31 @@ class SummaryService:
             )
             if out and len(out) > 80:
                 clean_out = self.llm_client.sanitize_output(out)
-                return clean_out, "rag_llm"
+                return clean_out, "llm_9router"
             if err:
                 logger.info(f"LLM T3 failed or timed out ({err}). Using deterministic fallback.")
         except Exception as e:
             logger.info(f"LLM T3 exception ({e}). Using deterministic fallback.")
 
-        # Deterministic instant fallback (< 10 ms)
-        fallback_text = (
-            f"Pada sesi evaluasi '{sess_title}' di kelas {class_rombel}, sebanyak {comp_count} dari {total_students} "
-            f"peserta didik telah menuntaskan penugasan adaptif dengan rerata penguasaan kognitif kelas m̄ = {class_avg_m:.3f} "
-            f"dan tingkat akurasi respons sebesar {accuracy_rate * 100:.1f}%. Secara umum, kelas menunjukkan pemahaman yang "
-            f"sangat kokoh pada materi fondasional ({str_names}), di mana mayoritas siswa berhasil mencapai zona kemahiran mandiri.\n\n"
-            f"Kendati demikian, sistem mendeteksi hambatan kognitif yang terkonsentrasi pada materi {btn_names}. "
-            f"Analisis galat menunjukkan adanya miskonsepsi dalam mengidentifikasi parameter operasional dan analisis sebab-akibat "
-            f"jaringan. Kondisi ini memerlukan perhatian khusus pada intervensi penutup sebelum rotasi lab berikutnya.\n\n"
-            f"Untuk penutup pembelajaran (menit ke-80), disarankan guru memberikan penguatan konsep kunci selama 8–10 menit "
-            f"terhadap titik-titik kritis tersebut. Selanjutnya, terapkan formasi kelompok diskusi sebaya (peer-tutoring) "
-            f"berdasarkan rekomendasi sistem guna mempercepat pemerataan kompetensi pada rotasi berikutnya."
+        # Deterministic fallback: states only what the data shows.
+
+        p1 = (
+            f"Pada sesi '{sess_title}' di kelas {class_rombel}, {comp_count} dari {total_students} peserta didik "
+            f"menyelesaikan penugasan adaptif. Rerata penguasaan pada KC yang terukur adalah m = {class_avg_m:.2f} "
+            f"dan akurasi respons {accuracy_rate * 100:.1f}%."
         )
+        p2 = (
+            f"Rerata penguasaan tertinggi tercatat pada {str_names}; "
+            f"terendah pada {btn_names}. "
+            "Nilai ini dihitung hanya dari KC yang benar-benar dikerjakan siswa pada sesi ini."
+        )
+        n_pairs = sum(1 for p in peer_tutoring if not p.tutor_student_code.startswith("Guru"))
+        n_teacher = len(peer_tutoring) - n_pairs
+        p3 = (
+            f"Sistem menyusun {n_pairs} kelompok tutor sebaya dan {n_teacher} kelompok bimbingan guru "
+            "untuk KC dengan rerata terendah. Gunakan rekomendasi ini sebagai bahan pertimbangan guru."
+        )
+        fallback_text = f"{p1}\n\n{p2}\n\n{p3}"
 
         return fallback_text, "deterministic_fallback"
 

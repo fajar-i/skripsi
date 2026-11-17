@@ -74,7 +74,7 @@ function renderSessionSummary(data) {
   document.getElementById("summary-content").classList.remove("hidden");
 
   const pill = document.getElementById("summary-source-pill");
-  if (data.source === "rag_llm") {
+  if (data.source === "llm_9router") {
     pill.className = "px-2.5 py-0.5 rounded-full text-[11px] font-num font-bold bg-macaw-soft text-macaw-shade border border-macaw/30";
     pill.textContent = "Ringkasan AI";
   } else {

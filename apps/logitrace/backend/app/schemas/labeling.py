@@ -21,7 +21,7 @@ class ItemLabelResult(BaseModel):
     confidence: float        # 0.0 - 1.0
     needs_teacher_review: bool
     rationale: str
-    source: str              # "rag_llm" or "semantic_classifier"
+    source: str              # "semantic_classifier" (rule-based keyword matcher)
     latency_ms: int
 
 

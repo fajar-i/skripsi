@@ -187,9 +187,26 @@ class AgentLog(Base):
     id = Column(String(36), primary_key=True, default=generate_uuid)
     trigger_type = Column(String(16), nullable=False)  # 'T1', 'T2', 'T3'
     prompt_hash = Column(String(64), nullable=True)
-    model_id = Column(String(64), nullable=False, default="Qwen2.5-3B-Instruct-Q4_K_M")
+    model_id = Column(String(64), nullable=False, default="unknown")
     raw_output = Column(Text, nullable=True)
     is_accepted = Column(Boolean, nullable=False, default=True)
     rejection_reason = Column(String(255), nullable=True)
     latency_ms = Column(Integer, nullable=False, default=0)
+    created_at = Column(DateTime, default=utc_now, nullable=False)
+
+
+class HintEvent(Base):
+    """Server-side record of every hint served to a student for an item.
+
+    The mastery update uses this table (not a client-supplied flag) to decide whether
+    the assistance factor h = 0.5 applies.
+    """
+    __tablename__ = "hint_events"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    student_id = Column(String(36), ForeignKey("students.id"), nullable=False, index=True)
+    item_id = Column(String(64), ForeignKey("items.id"), nullable=False, index=True)
+    session_id = Column(String(36), nullable=True, index=True)
+    hint_level = Column(Integer, nullable=False)
+    source = Column(String(32), nullable=False)  # 'llm_9router' | 'fallback_static'
     created_at = Column(DateTime, default=utc_now, nullable=False)

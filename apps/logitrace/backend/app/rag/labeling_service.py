@@ -1,7 +1,9 @@
 """
-LogiTrace: Agent T1 — Semantic Item Labeling & Teacher Review Service (US-05).
-Classifies new items into primary KC, secondary KCs, TOLT dimension, difficulty (1-3),
-and assigns a confidence score. Flags items with confidence < 0.60 for Teacher Review Queue.
+LogiTrace: T1 — Rule-based item labeling for teacher review (US-05).
+
+Keyword-matching classifier (no LLM call). Suggests primary KC, secondary KCs,
+TOLT dimension, nominal difficulty (1-3) and a heuristic confidence score.
+Items with confidence < 0.60 are flagged for mandatory teacher review.
 """
 
 from datetime import datetime, timezone
@@ -16,7 +18,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..db.models import AgentLog
 from ..schemas.labeling import ItemLabelRequest, ItemLabelResult
-from .secure_client import SecureLLMClient
 
 logger = logging.getLogger("labeling_service")
 
@@ -62,10 +63,7 @@ TOLT_KEYWORDS = {
 
 
 class LabelingService:
-    """Agent T1 Semantic Labeling Engine integrated with SecureLLMClient & Lexical Fallback."""
-
-    def __init__(self, llm_client: Optional[SecureLLMClient] = None):
-        self.llm_client = llm_client or SecureLLMClient()
+    """Rule-based keyword labeler (T1). Deterministic; does not call an LLM."""
 
     async def label_item(
         self,

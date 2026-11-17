@@ -1,0 +1,14 @@
+# Secrets — never commit real API keys (use .env.example as the template)
+.env
+.env.*
+!.env.example
+
+# Local databases (may contain student interaction data)
+*.db
+*.db-journal
+
+# Python caches
+__pycache__/
+.pytest_cache/
+
+# Benchmark raw outputs are committed deliberately under evals/results/
