@@ -142,6 +142,7 @@ async function loadSessions() {
     if (!res.ok) throw new Error("Gagal mengambil data sesi");
     sessionsList = await res.json();
 
+    if (typeof loadClassCode === "function") loadClassCode();
     if (sessionsList.length === 0) return;
 
     if (!currentSessionId) {
@@ -275,6 +276,7 @@ function connectWebSocket() {
         clearInterval(pingTimer);
         pingTimer = null;
       }
+      if (typeof teacherAuthed !== "undefined" && !teacherAuthed) return; // logged out: stay quiet
       setConnectionStatus(false, "Mode Polling");
       startPollingFallback();
       setTimeout(connectWebSocket, 3000);
@@ -596,8 +598,4 @@ function renderHeatmap(heatmapCells) {
 }
 
 // Initialization after DOM + modals.js are loaded
-document.addEventListener("DOMContentLoaded", () => {
-  loadSessions();
-  connectWebSocket();
-  refreshAmbientState();
-});
+// Startup lives in auth.js (bootTeacher): the dashboard loads only after the teacher logs in.

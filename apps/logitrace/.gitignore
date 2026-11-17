@@ -12,3 +12,7 @@ __pycache__/
 .pytest_cache/
 
 # Benchmark raw outputs are committed deliberately under evals/results/
+
+# Auth secrets generated on first run
+.secret_key
+teacher_password.txt

@@ -10,6 +10,7 @@ from sqlalchemy import desc, func, select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from ..auth import is_teacher_request, require_teacher
 from ..db.database import get_db, AsyncSessionLocal
 from ..db.models import Student, KnowledgeComponent, Interaction, MasterySnapshot, QuizSession, StudentAttempt, Item, AgentLog
 from ..schemas.ambient import TeacherAmbientState, TopStuckStudent, HeatmapCell
@@ -18,7 +19,10 @@ from ..schemas.labeling import ItemLabelRequest, ItemLabelResult, ReviewQueueIte
 from ..rag.summary_service import summary_service
 from ..rag.labeling_service import labeling_service
 
-router = APIRouter(prefix="/api/teacher", tags=["Teacher Ambient Dashboard"])
+router = APIRouter(prefix="/api/teacher", tags=["Teacher Ambient Dashboard"],
+                   dependencies=[Depends(require_teacher)])
+# WebSocket lives on its own router: it authenticates from the cookie inside the handler.
+ws_router = APIRouter(prefix="/api/teacher", tags=["Teacher Ambient Dashboard"])
 
 
 class ConnectionManager:
@@ -215,9 +219,12 @@ async def get_teacher_ambient(session_id: Optional[str] = None, db: AsyncSession
     return await compute_ambient_state(db, session_id=session_id)
 
 
-@router.websocket("/ws/ambient")
+@ws_router.websocket("/ws/ambient")
 async def websocket_teacher_ambient(websocket: WebSocket):
     """WebSocket stream for real-time ambient telemetry in Zone B."""
+    if not is_teacher_request(websocket):
+        await websocket.close(code=1008)  # policy violation: teacher login required
+        return
     await ws_manager.connect(websocket)
     try:
         async with AsyncSessionLocal() as session:

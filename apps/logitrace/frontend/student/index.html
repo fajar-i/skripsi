@@ -285,31 +285,44 @@
           </div>
           <div>
             <h2 class="font-display text-2xl font-extrabold text-eel leading-tight">Ayo Mulai Latihan!</h2>
-            <p class="text-sm text-wolf font-bold mt-0.5">Pilih kode siswamu untuk membuka sesi adaptif.</p>
+            <p class="text-sm text-wolf font-bold mt-0.5">Pakai kartu masukmu dan kode kelas di layar guru.</p>
           </div>
         </div>
 
         <div id="login-error" class="hidden p-3.5 rounded-2xl bg-cardinal-soft border-2 border-cardinal/40 text-xs font-extrabold text-cardinal-shade">
-          Pilih kode siswamu terlebih dahulu ya.
+          Lengkapi kode siswa, PIN, dan kode kelas.
         </div>
 
-        <div class="space-y-4">
+        <form id="login-form" class="space-y-4" autocomplete="off">
           <div>
             <label for="student-select" class="block text-xs font-extrabold uppercase tracking-wider text-wolf mb-2">
-              Kode Siswa (XI TKJ 1)
+              Kode siswa (lihat kartu)
             </label>
             <select id="student-select" class="w-full bg-snow border-2 border-swan rounded-2xl px-3.5 py-3.5 text-sm font-num font-semibold text-eel focus:border-macaw focus:bg-polar focus:outline-none tap-target cursor-pointer">
-              <option value="">-- Pilih Kode (std_01–34) --</option>
+              <option value="">-- Pilih kode --</option>
             </select>
           </div>
 
-          <button id="btn-login" type="button" class="w-full duo-btn duo-btn-green py-3.5 px-5 tap-target">
-            <span>Buka Tugas Saya</span>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label for="login-pin" class="block text-xs font-extrabold uppercase tracking-wider text-wolf mb-2">PIN</label>
+              <input id="login-pin" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="••••"
+                class="w-full bg-snow border-2 border-swan rounded-2xl px-3.5 py-3.5 text-lg font-num font-bold tracking-[0.4em] text-eel text-center focus:border-macaw focus:bg-polar focus:outline-none tap-target">
+            </div>
+            <div>
+              <label for="login-class-code" class="block text-xs font-extrabold uppercase tracking-wider text-wolf mb-2">Kode kelas</label>
+              <input id="login-class-code" type="text" maxlength="8" autocapitalize="characters" placeholder="ABCD"
+                class="w-full bg-snow border-2 border-swan rounded-2xl px-3.5 py-3.5 text-lg font-num font-bold tracking-[0.3em] uppercase text-eel text-center focus:border-macaw focus:bg-polar focus:outline-none tap-target">
+            </div>
+          </div>
+
+          <button id="btn-login" type="submit" class="w-full duo-btn duo-btn-green py-3.5 px-5 tap-target">
+            <span>Masuk</span>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
-        </div>
+        </form>
       </div>
     </section>
 
@@ -579,6 +592,6 @@
     LogiTrace &bull; SMK Negeri 4 Bandung &bull; XI TKJ 1
   </footer>
 
-  <script src="/student/app.js?v=2"></script>
+  <script src="/student/app.js?v=3"></script>
 </body>
 </html>

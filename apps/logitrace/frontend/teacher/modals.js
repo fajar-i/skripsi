@@ -17,6 +17,7 @@ function switchModalTab(tab) {
   const tabs = {
     list: { content: "tab-content-list", btn: "tab-btn-list" },
     reset: { content: "tab-content-reset", btn: "tab-btn-reset" },
+    cards: { content: "tab-content-cards", btn: "tab-btn-cards" },
     labeler: { content: "tab-content-labeler", btn: "tab-btn-labeler" }
   };
   if (tab === "create") { tab = "list"; toggleCreateForm(true); }
@@ -31,6 +32,7 @@ function switchModalTab(tab) {
   if (tab === "list") renderSessionCardsInModal();
   if (tab === "reset") prepareResetTab();
   if (tab === "labeler") loadReviewQueue();
+  if (tab === "cards") loadCardsTab();
 }
 
 // Agent T3 Summary Modal Handlers

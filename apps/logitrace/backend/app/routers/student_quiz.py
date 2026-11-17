@@ -12,6 +12,7 @@ from sqlalchemy import desc, func, select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from ..auth import Principal, require_student
 from ..db.database import get_db
 from ..db.models import (
     Student,
@@ -123,12 +124,15 @@ async def _resolve_session(
 async def get_next_question(
     student_code: str,
     session_id: Optional[str] = None,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    principal: Principal = Depends(require_student),
 ):
     """
     Fetches the next appropriate item for the student in the active session/assignment.
     Supports resuming in-progress evaluations or restarting cleanly per session.
     """
+    principal.assert_is_student(student_code)
+
     # 1. Look up student
     stmt = select(Student).where(Student.anonymous_code == student_code)
     res = await db.execute(stmt)
@@ -282,7 +286,9 @@ async def get_next_question(
 
 
 @router.post("/submit", response_model=SubmitAnswerResponse)
-async def submit_answer(req: SubmitAnswerRequest, db: AsyncSession = Depends(get_db)):
+async def submit_answer(req: SubmitAnswerRequest, db: AsyncSession = Depends(get_db),
+                        principal: Principal = Depends(require_student)):
+    principal.assert_is_student(req.student_code)
     """
     Evaluates response, deterministically updates cognitive mastery (< 1 ms),
     and records an append-only interaction audit row.
@@ -464,7 +470,9 @@ async def submit_answer(req: SubmitAnswerRequest, db: AsyncSession = Depends(get
 
 
 @router.post("/hint", response_model=HintResponse)
-async def request_socratic_hint(req: HintRequest, db: AsyncSession = Depends(get_db)):
+async def request_socratic_hint(req: HintRequest, db: AsyncSession = Depends(get_db),
+                                principal: Principal = Depends(require_student)):
+    principal.assert_is_student(req.student_code)
     """
     Socratic hint (Agent T2) via 9router with a hard 3.0 s deadline and static fallback.
     Every served hint is recorded in hint_events so the mastery update can apply h = 0.5.

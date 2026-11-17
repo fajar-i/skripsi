@@ -56,6 +56,11 @@ _ADDED_COLUMNS = [
     ("items", "bloom_level", "VARCHAR(4)"),
     ("items", "jonassen_phase", "VARCHAR(48)"),
     ("items", "label_status", "VARCHAR(32)"),
+    ("students", "pin_hash", "VARCHAR(160)"),
+    ("students", "pin_set_at", "DATETIME"),
+    ("students", "device_token_hash", "VARCHAR(64)"),
+    ("students", "device_login_at", "DATETIME"),
+    ("quiz_sessions", "join_code", "VARCHAR(8)"),
 ]
 
 

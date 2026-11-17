@@ -27,6 +27,18 @@ async def setup_test_db():
         await seed_database(session)
 
 
+@pytest.fixture(autouse=True)
+def bypass_auth():
+    """These tests cover domain logic; login itself is covered in test_auth.py."""
+    from backend.app.auth import Principal, require_student, require_teacher, require_teacher_or_student
+    wildcard = Principal(is_teacher=True, wildcard=True)
+    app.dependency_overrides[require_teacher] = lambda: wildcard
+    app.dependency_overrides[require_student] = lambda: Principal(wildcard=True)
+    app.dependency_overrides[require_teacher_or_student] = lambda: wildcard
+    yield
+    app.dependency_overrides.clear()
+
+
 @pytest.mark.asyncio
 async def test_health_endpoint():
     transport = ASGITransport(app=app)

@@ -215,6 +215,9 @@
           <button type="button" onclick="refreshAmbientState()" class="icon-btn" title="Segarkan data" aria-label="Segarkan data">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 4v6h-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
+          <button type="button" onclick="teacherLogout()" class="icon-btn" title="Keluar dari dasbor guru" aria-label="Keluar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l-5-5 5-5M5 12h11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -228,6 +231,10 @@
         <div class="flex items-center gap-2">
           <span id="banner-active-tag" class="px-2.5 py-0.5 rounded-full text-[11px] font-num font-bold uppercase bg-feather-soft text-feather-shade border border-feather/30">Sesi aktif</span>
           <span id="banner-session-code" class="text-xs font-num font-semibold text-wolf">Sesi 1</span>
+          <button type="button" id="class-code-chip" onclick="openClassCodeView()" class="hidden ml-1 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-macaw-soft border-2 border-macaw/30 text-xs font-extrabold text-macaw-shade hover:border-macaw transition" title="Tampilkan besar untuk proyektor">
+            Kode kelas <span id="class-code-value" class="font-num text-sm tracking-[0.2em] text-eel">----</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
 
         <div class="flex items-center gap-2">
@@ -369,6 +376,7 @@
       <div class="flex border-b-2 border-swan text-sm font-extrabold text-wolf px-4 mt-3 gap-1" role="tablist">
         <button id="tab-btn-list" type="button" role="tab" onclick="switchModalTab('list')" class="tab-btn">Sesi</button>
         <button id="tab-btn-reset" type="button" role="tab" onclick="switchModalTab('reset')" class="tab-btn">Ulangi pengerjaan</button>
+        <button id="tab-btn-cards" type="button" role="tab" onclick="switchModalTab('cards')" class="tab-btn">Kartu siswa</button>
         <button id="tab-btn-labeler" type="button" role="tab" onclick="switchModalTab('labeler')" class="tab-btn">Cek soal <span id="review-count-badge" class="hidden ml-1 px-1.5 rounded-full bg-fox text-white text-[10px] align-middle"></span></button>
       </div>
 
@@ -440,6 +448,26 @@
             </p>
             <button type="button" onclick="promptResetAllCurrentSession()" class="duo-btn duo-btn-red py-2.5 px-4 text-xs">Ulangi seluruh kelas</button>
           </section>
+        </div>
+
+        <!-- TAB: KARTU SISWA -->
+        <div id="tab-content-cards" class="hidden space-y-4">
+          <div class="p-4 rounded-2xl bg-snow border-2 border-swan space-y-1.5 text-xs font-bold text-eel leading-relaxed">
+            <p>Siswa masuk dengan <b>kode siswa + PIN</b> dari kartunya, ditambah <b>kode kelas</b> yang tampil di dasbor Anda.</p>
+            <p class="text-wolf">PIN hanya muncul saat kartu dicetak; sistem menyimpan versi terenkripsi. Kartu hilang? Buat PIN baru untuk siswa itu saja.</p>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <p id="cards-summary" class="text-xs font-bold text-wolf">Memuat...</p>
+            <button type="button" onclick="promptPrintAllCards()" class="duo-btn duo-btn-green px-4 py-2 text-xs">Cetak kartu semua siswa</button>
+          </div>
+          <div class="rounded-2xl border-2 border-swan overflow-hidden">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-snow text-[11px] font-extrabold uppercase text-wolf">
+                <tr><th class="p-2.5">Siswa</th><th class="p-2.5">Kartu</th><th class="p-2.5">Perangkat</th><th class="p-2.5 text-right"><span class="sr-only">Aksi</span></th></tr>
+              </thead>
+              <tbody id="cards-student-rows" class="divide-y divide-swan font-bold text-eel"></tbody>
+            </table>
+          </div>
         </div>
 
         <!-- TAB: CEK SOAL -->
@@ -609,6 +637,34 @@
     </div>
   </div>
 
+  <!-- TEACHER LOGIN (shown until the teacher cookie is valid) -->
+  <div id="teacher-login" class="hidden fixed inset-0 z-[70] bg-snow flex items-center justify-center p-4">
+    <form onsubmit="submitTeacherLogin(event)" class="bg-polar rounded-3xl border-2 border-swan border-b-[6px] w-full max-w-sm p-6 space-y-4">
+      <div class="flex items-center gap-3">
+        <img src="/assets/maskot.png" alt="" width="44" height="44" class="w-11 h-11 object-contain">
+        <div>
+          <h2 class="font-display font-extrabold text-xl text-eel leading-tight">Dasbor Guru</h2>
+          <p class="text-xs font-bold text-wolf">Masuk untuk memantau kelas.</p>
+        </div>
+      </div>
+      <div>
+        <label for="teacher-password" class="block text-xs font-extrabold text-wolf mb-1">Kata sandi guru</label>
+        <input id="teacher-password" type="password" autocomplete="current-password" required class="w-full bg-snow border-2 border-swan rounded-2xl px-3.5 py-3 text-sm font-bold text-eel focus:border-macaw focus:bg-polar focus:outline-none">
+      </div>
+      <p id="teacher-login-error" class="hidden text-xs font-extrabold text-cardinal-shade"></p>
+      <button type="submit" id="btn-teacher-login" class="w-full duo-btn duo-btn-green py-3 px-4 text-xs">Masuk</button>
+      <p class="text-[11px] font-bold text-wolf leading-relaxed">Kata sandi diatur di file <code>.env</code> (LOGITRACE_TEACHER_PASSWORD), atau lihat <code>teacher_password.txt</code> di folder aplikasi.</p>
+    </form>
+  </div>
+
+  <!-- CLASS CODE, PROJECTOR VIEW -->
+  <div id="class-code-view" class="hidden fixed inset-0 z-[65] bg-polar flex flex-col items-center justify-center gap-6 p-6 text-center" onclick="closeClassCodeView()">
+    <p class="font-display text-2xl sm:text-3xl font-extrabold text-wolf">Kode kelas</p>
+    <p id="class-code-big" class="font-num font-bold text-eel tracking-[0.25em] leading-none" style="font-size:min(28vw,220px)">----</p>
+    <p class="text-lg sm:text-xl font-bold text-eel">Buka <span id="class-code-url" class="text-macaw-shade font-extrabold">/student/</span>, lalu masukkan kode siswa, PIN, dan kode ini.</p>
+    <p class="text-sm font-bold text-wolf">Klik di mana saja untuk menutup.</p>
+  </div>
+
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div>
 
@@ -617,7 +673,8 @@
     LogiTrace &bull; Dasbor Guru &bull; SMK Negeri 4 Bandung
   </footer>
 
-  <script src="/teacher/app.js?v=7"></script>
-  <script src="/teacher/modals.js?v=7"></script>
+  <script src="/teacher/auth.js?v=9"></script>
+  <script src="/teacher/app.js?v=9"></script>
+  <script src="/teacher/modals.js?v=9"></script>
 </body>
 </html>
