@@ -2,7 +2,7 @@
 *(Dokumen Pegangan Pribadi Peneliti — Tidak Perlu Diberikan ke Guru/Siswa)*
 
 > **Fungsi Dokumen Ini:**  
-> Berisi data empiris kunjungan sekolah mitra, rekaman hasil wawancara mendalam dengan guru kejuruan TKJ, panduan observasi lab, tabel rekapitulasi data Google Form siswa (konteks materi Jaringan Nirkabel/WLAN & 5 dimensi TOLT), serta draf paragraf Bab I yang siap disalin ke naskah skripsi.
+> Berisi data empiris kunjungan sekolah mitra, rekaman hasil wawancara mendalam dengan guru kejuruan TKJ, panduan observasi lab, tabel rekapitulasi data Google Form siswa (konteks materi Jaringan Nirkabel/WLAN & 5 fase penalaran troubleshooting Jonassen 2006), serta draf paragraf Bab I yang siap disalin ke naskah skripsi.
 
 ---
 
@@ -36,7 +36,8 @@
    * Jumlah PC yang berfungsi normal/menyala: ________ Unit
    * Jumlah PC yang rusak/mati: ________ Unit
 2. **Kalkulasi Rasio Komputer terhadap Siswa:**
-   $$\text{Rasio PC} = \frac{\text{Jumlah Siswa Hadir (39)}}{\text{Jumlah PC Berfungsi}} = \frac{39}{\dots\dots\dots} \approx 1\text{ PC untuk }\dots\dots\dots\text{ Siswa}$$
+   $$\text{Rasio PC} = \frac{\text{Jumlah Siswa Hadir}}{\text{Jumlah PC Berfungsi}} = \frac{\dots\dots}{\dots\dots} \approx 1\text{ PC untuk }\dots\dots\text{ Siswa}$$
+   * Jumlah siswa hadir hari ini: ________ dari ________ terdaftar *(logbook mencatat 39; proposal/sistem memakai 34 — pastikan angka yang benar)*
    * [x] **1 PC : 2 Siswa (Berpasangan)** *(Terkonfirmasi awal dari wawancara guru)*
    * [ ] **1 PC : 1 Siswa (Mandiri)**
    * [ ] **1 PC : 3+ Siswa (Berkelompok)**
@@ -97,50 +98,67 @@
 ---
 
 ## BAGIAN 3: REKAPITULASI DATA HASIL GOOGLE FORM SISWA
-*(Diisi setelah survei disebarkan ke 39 siswa kelas XI TKJ 1 pada pertengahan November 2026)*
+*(Diisi setelah survei disebarkan ke siswa kelas XI TKJ 1. Instrumen: `instrumen_studi_pendahuluan_v4_gform.md`; nomor soal di bawah mengacu ke v4.)*
 
-* **Jumlah Total Responden Sasaran ($N$):** 39 Siswa (Kelas XI TKJ 1 SMKN 4 Bandung)
+* **Jumlah Responden yang Bersedia ($N$):** ______ dari ______ siswa terdaftar (Kelas XI TKJ 1 SMKN 4 Bandung)
 
 ### A. Data Fasilitas & Kebiasaan Belajar Siswa
 | No | Indikator Kuantitatif Temuan | Frekuensi ($f$) | Persentase (%) | Makna Bukti untuk Bab I Skripsi |
 |:---:|:---|:---:|:---:|---|
-| 1 | Siswa Berbagi PC di Lab (1 PC : 2 Siswa) | ...... | ...... % | Memvalidasi temuan wawancara guru tentang rasio lab 1:2. |
-| 2 | Siswa Mengaku Pasif / Teman yang Mendominasi | ...... | ...... % | Bukti empiris fenomena *dominant-passive pair*. |
-| 3 | Siswa Memiliki Smartphone Pribadi | ...... | ...... % | Memvalidasi kelayakan strategi *Device-Purpose Split*. |
-| 4 | Siswa Bingung / Mencontek Teman saat Eror | ...... | ...... % | Bukti kebiasaan berpikir prosedural kaku (*procedural rigidity*). |
-| 5 | Siswa Merasa Kuis Selama Ini Seragam | ...... | ...... % | Bukti evaluasi formatif harian masih bersifat statis. |
+| 1 | No. 4 — Siswa berbagi PC (1 PC : 2 siswa atau lebih) | ...... | ...... % | Memvalidasi temuan wawancara guru tentang rasio lab. |
+| 2 | No. 5 — Siswa lebih banyak melihat/mencatat (teman mendominasi) | ...... | ...... % | Indikasi fenomena *dominant-passive pair*. |
+| 3 | No. 6 — Siswa membawa smartphone hampir setiap hari | ...... | ...... % | Kelayakan asesmen lewat ponsel di Zona B. |
+| 4 | No. 9 — Pertama kali saat eror: bertanya teman / mengubah setelan acak | ...... | ...... % | Pola menghadapi kebuntuan. |
+| 5 | No. 10a — Setuju/Sangat setuju "semua siswa mengerjakan soal yang sama" | ...... | ...... % | Gambaran keseragaman kuis formatif. |
+| 6 | No. 10b — Tidak setuju/Sangat tidak setuju "tahu bagian konsep yang masih salah" | ...... | ...... % | Kebutuhan umpan balik diagnostik. |
+| 7 | No. 10c — Tidak setuju/Sangat tidak setuju "tersedia petunjuk saat kesulitan" | ...... | ...... % | Kebutuhan *scaffolding*. |
+| 8 | No. 11 — Menunggu bantuan guru > 5 menit atau tidak sempat dibantu | ...... | ...... % | Beban bantuan guru saat praktikum. |
 
 ### B. Pemetaan Spektrum Kesulitan Materi Kejuruan TKJ
 | Pilihan Aspek Pembelajaran Jaringan | Frekuensi ($f$) | Persentase (%) | Ranking |
 |:---|:---:|:---:|:---:|
-| **Logika Perhitungan & Bilangan Jaringan** *(Biner, Alokasi IP, Subnetting)* | ...... | ...... % | ...... |
-| **Prinsip Konfigurasi & Topologi Nirkabel** *(Ad-Hoc vs AP, SSID, Extender)* | ...... | ...... % | ...... |
-| **Pelacakan Gangguan (*Troubleshooting*) & Uji ICMP** *(Ping, Analisis Eror)* | ...... | ...... % | ...... |
-| **Media & Perangkat Fisik Jaringan** *(Penyambungan Kabel, Alat Ukur)* | ...... | ...... % | ...... |
-| **Sistem Operasi & Konfigurasi Dasar CLI** *(Instalasi OS, Perintah Dasar)* | ...... | ...... % | ...... |
+| **Pengalamatan IP & Subnetting** *(IP, gateway, subnet mask)* | ...... | ...... % | ...... |
+| **Konfigurasi & Topologi Nirkabel** *(Ad-Hoc vs Infrastruktur, AP, extender)* | ...... | ...... % | ...... |
+| **Pengujian Koneksi & Troubleshooting (ICMP)** *(ping, analisis pesan eror)* | ...... | ...... % | ...... |
+| **Keamanan Nirkabel (Host & Device Hardening)** *(WPA2/WPA3, kata sandi, pembatasan akses)* | ...... | ...... % | ...... |
+| **Media & Perangkat Keras Jaringan** *(pemasangan fisik, antena, alat ukur)* | ...... | ...... % | ...... |
+*(Sesuai pilihan No. 8 v4; responden boleh memilih maksimal 2, sehingga total persentase bisa > 100%.)*
 
-### C. Performa Riil 5 Dimensi TOLT (Tobin & Capie, 1981) — Konteks Nirkabel
-| Kasus Soal | Dimensi TOLT yang Diukur | Jumlah Siswa Gagal ($f$) | Persentase Kegagalan (%) | Makna Bukti Kognitif |
-|:---:|:---|:---:|:---|:---|
-| **Kasus 1** | **Controlling Variables**<br>*(Isolasi Masalah Adapter Wi-Fi Lokal vs AP)* | ...... | ...... % | Siswa berspekulasi tanpa menguji variabel internal terlebih dahulu. |
-| **Kasus 2** | **Proportional Reasoning**<br>*(Proporsi Jarak/Sinyal RSSI terhadap Kualitas Link)* | ...... | ...... % | Siswa gagal menalar hubungan matematis non-linear sinyal nirkabel. |
-| **Kasus 3** | **Combinatorial Reasoning**<br>*(Kombinasi Topologi Ad-Hoc vs Infrastruktur)* | ...... | ...... % | Siswa keliru membedakan kombinasi arsitektur jaringan nirkabel. |
-| **Kasus 4** | **Probabilistic Reasoning**<br>*(Probabilitas Pemilihan SSID: AP Utama vs Extender)* | ...... | ...... % | Siswa mengabaikan probabilitas interferensi dan mekanisme roaming. |
-| **Kasus 5** | **Correlational Reasoning**<br>*(Korelasi Gejala Galat ICMP pada Link Nirkabel)* | ...... | ...... % | Siswa menyamaratakan penyebab galat `RTO` dan `Host Unreachable`. |
+### C. Hasil 5 Kasus Troubleshooting (Jonassen & Hung, 2006) — Konteks Nirkabel
+*Kategori dari kombinasi pilihan × skor alasan (0–2, dinilai 2 penilai): **Paham** = benar & alasan 2; **Menebak/hafal** = benar & alasan 0–1; **Keliru menerapkan** = salah & alasan 1–2; **Miskonsepsi** = salah & alasan 0.*
+
+| Kasus (No.) | Fase | Paham | Menebak/hafal | Keliru menerapkan | Miskonsepsi | Pengecoh terbanyak |
+|:---:|:---|:-:|:-:|:-:|:-:|:-:|
+| 1 (12–13) | Konstruksi ruang masalah — mengisolasi masalah ke laptop sendiri | ...% | ...% | ...% | ...% | ... |
+| 2 (14–15) | Perumusan hipotesis — jarak/redaman → kualitas link | ...% | ...% | ...% | ...% | ... |
+| 3 (16–17) | Tindakan korektif & verifikasi — Ad-Hoc → Infrastruktur + uji ping | ...% | ...% | ...% | ...% | ... |
+| 4 (18–19) | Pengujian hipotesis — memeriksa AP yang sedang dipakai | ...% | ...% | ...% | ...% | ... |
+| 5 (20–21) | Pengenalan gejala — membedakan DHU dan RTO | ...% | ...% | ...% | ...% | ... |
+
+*Catatan: satu kasus per fase hanya memberi gambaran awal; jangan menyimpulkan kemampuan per fase tiap siswa dari data ini.*
+
+---:|:---|:---:|:---|:---|
+| **Kasus 1** | **Problem Space Construction**<br>*(Isolasi Masalah Adapter Wi-Fi Lokal vs AP)* | ...... | ...... % | Siswa berspekulasi tanpa menguji variabel internal terlebih dahulu. |
+| **Kasus 2** | **Fault Hypothesis Generation**<br>*(Kausalitas Redaman Jarak/Sinyal RSSI terhadap Kualitas Link)* | ...... | ...... % | Siswa gagal menalar hubungan kausalitas non-linear sinyal nirkabel. |
+| **Kasus 3** | **Corrective Action & Verification**<br>*(Perancangan Topologi Ad-Hoc vs Infrastruktur)* | ...... | ...... % | Siswa keliru membedakan kombinasi arsitektur jaringan nirkabel. |
+| **Kasus 4** | **Hypothesis Testing & Evaluation**<br>*(Evaluasi Probabilitas Roaming & Ambang Sinyal)* | ...... | ...... % | Siswa mengabaikan probabilitas interferensi dan mekanisme roaming. |
+| **Kasus 5** | **Symptom Recognition**<br>*(Identifikasi Gejala Galat ICMP pada Link Nirkabel)* | ...... | ...... % | Siswa menyamaratakan penyebab galat `RTO` dan `Host Unreachable`. |
 
 ---
 
 ## 📝 TEMPLATE PARAGRAF LATAR BELAKANG BAB I (TINGGAL SALIN HASIL AKHIR)
 
-Setelah data Google Form siswa masuk di pertengahan November, narasi berikut langsung diintegrasikan ke Bab I skripsi Anda:
+> ⚠️ **Draf lama — tulis ulang setelah data masuk.** Paragraf di bawah sudah memuat kesimpulan (mis. "defisit kemampuan berpikir logis yang nyata") sebelum ada data, dan masih menyebut DKT/RAG. Biarkan kesimpulan mengikuti angka yang benar-benar diperoleh, dan sesuaikan nama pendekatan dengan rancangan terbaru (mesin penguasaan berbasis aturan + petunjuk bertahap terkurasi).
+
+Draf narasi lama (rujukan struktur saja):
 
 > *"Berdasarkan studi pendahuluan yang dilaksanakan pada tanggal 12 Oktober 2026 hingga pertengahan November 2026 di SMKN 4 Bandung pada kelas XI Konsentrasi Keahlian TKJ 1 dengan melibatkan 39 orang siswa dan guru mata pelajaran kejuruan (Bapak Yofi Fikri Islami Anshary, S.Pd.), ditemukan sejumlah permasalahan empiris mendasar dalam pembelajaran dan evaluasi:*
 > 
 > *Pertama, dari aspek sarana prasarana, hasil wawancara dan observasi laboratorium mengonfirmasi bahwa ketersediaan unit komputer berada pada rasio 1 unit PC digunakan bersama oleh 2 orang siswa yang dibagikan secara acak. Keterbatasan ini memicu fenomena pasangan dominan-pasif, di mana sebanyak `[... %]` siswa mengaku lebih banyak menjadi pengamat pasif saat praktikum berlangsung karena perangkat didominasi oleh rekan sebangku. Kondisi ini menyulitkan guru dalam melakukan evaluasi kognitif individual yang objektif karena penilaian praktikum kerap bercampur dengan hasil kerja kelompok.*
 > 
-> *Kedua, dari aspek kognitif, tes diagnostik berbasis kerangka kerja Test of Logical Thinking (TOLT Tobin & Capie, 1981) pada materi jaringan nirkabel dan pengujian koneksi menunjukkan defisit penalaran logis formal yang nyata pada kelima dimensinya. Sebanyak `[... %]` siswa gagal pada dimensi controlling variables dalam mengisolasi variabel gangguan nirkabel, `[... %]` siswa gagal pada dimensi proportional reasoning dalam menalar proporsi jarak dan stabilitas sinyal, `[... %]` siswa gagal pada dimensi combinatorial reasoning dalam menganalisis topologi ad-hoc vs infrastruktur, `[... %]` siswa gagal pada dimensi probabilistic reasoning dalam memperhitungkan interferensi roaming jalur data, serta `[... %]` siswa gagal pada dimensi correlational reasoning dalam mengidentifikasi korelasi kode pesan galat ICMP. Guru mengonfirmasi bahwa kelas XI TKJ 1 merupakan kelas dengan tingkat remedial tertinggi pada evaluasi formatif sementara, yang mengindikasikan kuatnya distorsi pembelajaran mekanistik di mana siswa cenderung sekadar mengikuti petunjuk tanpa menguasai alur penalaran logika di balik konfigurasi.*
+> *Kedua, dari aspek kognitif, tes diagnostik berbasis kerangka kerja penalaran pemecahan masalah teknis (Cognitive Troubleshooting Jonassen & Hung, 2006) pada materi jaringan nirkabel dan pengujian koneksi menunjukkan defisit kemampuan berpikir logis yang nyata pada kelima fase kognitifnya. Sebanyak `[... %]` siswa gagal pada fase problem space construction dalam mengisolasi variabel gangguan nirkabel, `[... %]` siswa gagal pada fase fault hypothesis generation dalam menalar kausalitas redaman jarak dan stabilitas sinyal, `[... %]` siswa gagal pada fase corrective action & verification dalam merancang topologi ad-hoc vs infrastruktur, `[... %]` siswa gagal pada fase hypothesis testing & evaluation dalam memperhitungkan ambang batas roaming jalur data, serta `[... %]` siswa gagal pada fase symptom recognition dalam mengidentifikasi gejala pesan galat ICMP. Guru mengonfirmasi bahwa kelas XI TKJ 1 merupakan kelas dengan tingkat remedial tertinggi pada evaluasi formatif sementara, yang mengindikasikan kuatnya distorsi pembelajaran mekanistik di mana siswa cenderung sekadar mengikuti petunjuk tanpa menguasai alur penalaran logika di balik konfigurasi.*
 > 
-> *Ketiga, hasil wawancara mengonfirmasi bahwa sistem evaluasi formatif harian yang berjalan selama ini masih bersifat seragam (*disamakan semua*) dan konvensional. Meskipun guru telah berupaya memberikan bantuan bertahap (*scaffolding*), perlakuan khusus baru dapat diberikan secara manual saat sesi remedial di akhir materi karena keterbatasan alokasi waktu mengajar. Kondisi ini menegaskan urgensi pengembangan media evaluasi formatif adaptif berbasis Deep Knowledge Tracing (DKT) yang diintegrasikan ke dalam model pembelajaran Station Rotation dengan strategi Device-Purpose Split guna memecahkan kendala rasio komputer lab sekaligus melatih kemandirian berpikir logis siswa secara terpersonalisasi..."*
+> *Ketiga, hasil wawancara mengonfirmasi bahwa sistem evaluasi formatif harian yang berjalan selama ini masih bersifat seragam (*disamakan semua*) dan konvensional. Meskipun guru telah berupaya memberikan bantuan bertahap (*scaffolding*), perlakuan khusus baru dapat diberikan secara manual saat sesi remedial di akhir materi karena keterbatasan alokasi waktu mengajar. Kondisi ini menegaskan urgensi pengembangan media web evaluasi formatif adaptif (LogiTrace) berbasis Knowledge Tracing dan Retrieval-Augmented Generation (RAG) yang diintegrasikan ke dalam model pembelajaran Station Rotation dengan strategi Device-Purpose Split guna memecahkan kendala rasio komputer lab sekaligus melatih kemandirian berpikir logis siswa secara terpersonalisasi..."*
 
 ---
 *Dokumen ini merupakan catatan resmi kegiatan studi pendahuluan peneliti di SMKN 4 Bandung.*

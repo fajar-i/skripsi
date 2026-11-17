@@ -1,6 +1,6 @@
 LOGBOOK & PANDUAN OBSERVASI MANDIRI PENELITI
 (Dokumen Pegangan Pribadi Peneliti — Tidak Perlu Diberikan ke Guru/Siswa)
-Fungsi Dokumen Ini: Berisi panduan pengamatan mandiri di lab, 4 pertanyaan obrolan santai dengan guru, tabel rekapitulasi data hasil Google Form siswa (mencakup 5 spektrum kejuruan TJKT & 5 dimensi TOLT), serta draf paragraf Bab I yang siap disalin. Cukup bawa dokumen ini di catatan HP/laptop atau dicetak untuk Anda isi sendiri saat berada di sekolah.
+Fungsi Dokumen Ini: Berisi panduan pengamatan mandiri di lab, 4 pertanyaan obrolan santai dengan guru, tabel rekapitulasi data hasil Google Form siswa (mencakup 5 spektrum kejuruan TJKT & 5 fase penalaran troubleshooting Jonassen 2006), serta draf paragraf Bab I yang siap disalin. Cukup bawa dokumen ini di catatan HP/laptop atau dicetak untuk Anda isi sendiri saat berada di sekolah.
 DATA IDENTITAS KUNJUNGAN SEKOLAH
 Nama Sekolah / SMK Mitra		:  SMKN 4 Bandung
 Alamat / Lokasi Sekolah                  :	Jl. Kliningan No. 6, Turangga, Kecamatan Lengkong, Kota Bandung, Jawa Barat 40264
@@ -84,26 +84,25 @@ Prinsip Alur Pengiriman Data & Perutean (Gateway, Rute)	…	… %	…
 Pelacakan Gangguan (Troubleshooting) Jaringan	…	… %	…
 Media & Perangkat Fisik Jaringan (Kabel UTP/FO, Alat Ukur)	…	… %	…
 Sistem Operasi & Konfigurasi Dasar Perangkat (CLI, OS)	…	… %	…
-#C. Performa Riil 5 Dimensi TOLT (Tobin & Capie, 1981)
-Kasus Soal	Dimensi TOLT yang Diukur	Jumlah Siswa Gagal	Persentase Kegagalan (%)	Makna Bukti Kognitif
-Kasus 1	Controlling Variables
-(Isolasi Masalah Internal vs Eksternal)	…	… %	Siswa berspekulasi tanpa mengontrol variabel secara sekuensial.
-Kasus 2	Proportional Reasoning
-(Efisiensi Prefix Subnet vs Jumlah Host)	…	… %	Siswa tidak memahami perbandingan rasio kapasitas host.
-Kasus 3	Combinatorial Reasoning
-(Urutan Partisi Ruang Non-Overlapping)	…	… %	Siswa gagal menyusun kombinasi alokasi yang sistematis.
-Kasus 4	Probabilistic Reasoning
-(Probabilitas Keputusan Rute Router)	…	… %	Siswa berasumsi subjektif, bukan berbasis aturan probabilitas mesin.
-Kasus 5	Correlational Reasoning
-(Korelasi Sebab-Akibat Pesan Galat ICMP)	…	… %	Siswa menyamaratakan semua jenis galat jaringan.
+#C. Performa Riil 5 Fase Kognitif Troubleshooting Jonassen (2006) — Konteks Nirkabel
+Kasus Soal	Fase Kognitif Jonassen yang Diukur	Jumlah Siswa Gagal	Persentase Kegagalan (%)	Makna Bukti Kognitif
+Kasus 1	Problem Space Construction
+(Isolasi Masalah Adapter Wi-Fi Lokal vs AP)	…	… %	Siswa berspekulasi tanpa menguji variabel internal terlebih dahulu.
+Kasus 2	Fault Hypothesis Generation
+(Kausalitas Redaman Jarak/Sinyal RSSI terhadap Kualitas Link)	…	… %	Siswa gagal menalar hubungan kausalitas non-linear sinyal nirkabel.
+Kasus 3	Corrective Action & Verification
+(Perancangan Topologi Ad-Hoc vs Infrastruktur)	…	… %	Siswa keliru membedakan kombinasi arsitektur jaringan nirkabel.
+Kasus 4	Hypothesis Testing & Evaluation
+(Evaluasi Probabilitas Roaming & Ambang Sinyal)	…	… %	Siswa mengabaikan probabilitas interferensi dan mekanisme roaming.
+Kasus 5	Symptom Recognition
+(Identifikasi Gejala Galat ICMP pada Link Nirkabel)	…	… %	Siswa menyamaratakan penyebab galat RTO dan Host Unreachable.
 ________________________________________
 #📝 TEMPLATE PARAGRAF LATAR BELAKANG BAB I (TINGGAL SALIN DATA INI)
 Setelah tabel di atas terisi, Anda tinggal menyalin teks ini ke Latar Belakang Masalah (Bab I) proposal skripsi Anda:
-"Berdasarkan studi pendahuluan yang dilaksanakan pada tanggal [Isi Tanggal] di [Isi Nama SMK] pada siswa kelas XI Konsentrasi Keahlian TKJ dengan melibatkan [N] siswa dan guru mata pelajaran kejuruan, ditemukan sejumlah permasalahan empiris mendasar dalam pembelajaran dan evaluasi:
-Pertama, dari aspek sarana prasarana, hasil observasi menunjukkan rasio ketersediaan komputer laboratorium adalah 1 unit PC digunakan bersama oleh [2] orang siswa. Keterbatasan ini memicu fenomena pasangan dominan-pasif, di mana data angket mengungkap sebanyak [... %] siswa mengaku lebih banyak menjadi pengamat pasif saat praktikum berlangsung karena perangkat didominasi oleh rekan sebangku.
-Kedua, pemetaan kesulitan materi kejuruan menunjukkan bahwa aspek yang paling membingungkan bagi siswa berada pada ranah logika abstrak, yakni [Sebutkan aspek nomor 1, misal: Logika Perhitungan Bilangan Jaringan (... %)] dan [Sebutkan aspek nomor 2, misal: Prinsip Alur Perutean Data (... %)], jauh melampaui kesulitan pada aspek media fisik maupun alat ukur.
-Ketiga, dari aspek kognitif, tes diagnostik berbasis kerangka kerja Test of Logical Thinking (TOLT Tobin & Capie, 1981) menunjukkan defisit penalaran logis formal yang nyata pada kelima dimensinya. Sebanyak [... %] siswa gagal pada dimensi controlling variables dalam mengisolasi variabel gangguan, [... %] siswa gagal pada dimensi proportional reasoning dalam memperhitungkan efisiensi alokasi subnet, [... %] siswa gagal pada dimensi combinatorial reasoning dalam menyusun partisi ruang non-overlapping, [... %] siswa gagal pada dimensi probabilistic reasoning dalam menganalisis pemilihan jalur data, serta [... %] siswa gagal pada dimensi correlational reasoning dalam mengidentifikasi korelasi pesan galat troubleshooting.
-Keempat, hasil wawancara dengan guru kejuruan mengonfirmasi bahwa evaluasi formatif harian selama ini masih bersifat seragam dan konvensional, sehingga pendidik mengalami keterbatasan waktu untuk memetakan lintasan pemahaman dan mendiagnosis miskonsepsi masing-masing siswa secara individual…"
+"Berdasarkan studi pendahuluan yang dilaksanakan pada tanggal 12 Oktober 2026 hingga pertengahan November 2026 di SMKN 4 Bandung pada kelas XI Konsentrasi Keahlian TKJ 1 dengan melibatkan 39 orang siswa dan guru mata pelajaran kejuruan (Bapak Yofi Fikri Islami Anshary, S.Pd.), ditemukan sejumlah permasalahan empiris mendasar dalam pembelajaran dan evaluasi:
+Pertama, dari aspek sarana prasarana, hasil wawancara dan observasi laboratorium mengonfirmasi bahwa ketersediaan unit komputer berada pada rasio 1 unit PC digunakan bersama oleh 2 orang siswa yang dibagikan secara acak. Keterbatasan ini memicu fenomena pasangan dominan-pasif, di mana data angket mengungkap sebanyak [... %] siswa mengaku lebih banyak menjadi pengamat pasif saat praktikum berlangsung karena perangkat didominasi oleh rekan sebangku. Kondisi ini menyulitkan guru dalam melakukan evaluasi kognitif individual yang objektif karena penilaian praktikum kerap bercampur dengan hasil kerja kelompok.
+Kedua, dari aspek kognitif, tes diagnostik berbasis kerangka kerja penalaran pemecahan masalah teknis (Cognitive Troubleshooting Jonassen & Hung, 2006) pada materi jaringan nirkabel dan pengujian koneksi menunjukkan defisit kemampuan berpikir logis yang nyata pada kelima fase kognitifnya. Sebanyak [... %] siswa gagal pada fase problem space construction dalam mengisolasi variabel gangguan nirkabel, [... %] siswa gagal pada fase fault hypothesis generation dalam menalar kausalitas redaman jarak dan stabilitas sinyal, [... %] siswa gagal pada fase corrective action & verification dalam merancang topologi ad-hoc vs infrastruktur, [... %] siswa gagal pada fase hypothesis testing & evaluation dalam memperhitungkan ambang batas roaming jalur data, serta [... %] siswa gagal pada fase symptom recognition dalam mengidentifikasi gejala pesan galat ICMP. Guru mengonfirmasi bahwa kelas XI TKJ 1 merupakan kelas dengan tingkat remedial tertinggi pada evaluasi formatif sementara, yang mengindikasikan kuatnya distorsi pembelajaran mekanistik di mana siswa cenderung sekadar mengikuti petunjuk tanpa menguasai alur penalaran logika di balik konfigurasi.
+Ketiga, hasil wawancara dengan guru kejuruan mengonfirmasi bahwa evaluasi formatif harian selama ini masih bersifat seragam ("disamain semua") dan konvensional. Meskipun guru telah berupaya memberikan bantuan bertahap (scaffolding), perlakuan khusus baru dapat diberikan secara manual saat sesi remedial di akhir materi karena keterbatasan alokasi waktu mengajar. Kondisi ini menegaskan urgensi pengembangan media web evaluasi formatif adaptif (LogiTrace) berbasis Knowledge Tracing dan Retrieval-Augmented Generation (RAG) yang diintegrasikan ke dalam model pembelajaran Station Rotation dengan strategi Device-Purpose Split guna memecahkan kendala rasio komputer lab sekaligus melatih kemandirian berpikir logis siswa secara terpersonalisasi…"
 ________________________________________
 Dokumen ini menjadi bukti otentik kegiatan studi pendahuluan peneliti.
  
