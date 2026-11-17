@@ -118,7 +118,11 @@ class Item(Base):
     options = Column(JSON, nullable=False)  # {"A": "...", "B": "...", "C": "...", "D": "..."}
     correct_answer = Column(String(8), nullable=False)  # e.g., "A"
     difficulty_nominal = Column(Integer, nullable=False)  # 1, 2, or 3
-    tolt_dimension = Column(String(64), nullable=False)
+    # Kisi-kisi metadata (replaces the former TOLT dimension)
+    indikator_id = Column(String(16), nullable=True, index=True)      # e.g. IND-04.3
+    bloom_level = Column(String(4), nullable=True)                   # C1..C6
+    jonassen_phase = Column(String(48), nullable=True)               # troubleshooting phase
+    label_status = Column(String(32), nullable=True, default="draf_ai")
     is_calibration = Column(Boolean, default=False, nullable=False, index=True)
     is_active = Column(Boolean, default=True, nullable=False)
     explanation = Column(Text, nullable=True)

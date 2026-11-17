@@ -17,10 +17,12 @@ import html
 import logging
 import os
 import re
+import ssl
 import time
 from typing import Optional, Tuple
 
 from dotenv import load_dotenv
+import certifi
 import httpx
 
 load_dotenv()
@@ -98,8 +100,19 @@ def mask_secret(secret: Optional[str]) -> str:
     return f"****{secret[-4:]}"
 
 
+# Requests abandoned at the deadline keep running in the background until httpx cleans up.
+# Holding a reference prevents them from being garbage-collected mid-flight.
+_ORPHANED: set = set()
+
+
+def _reap_orphan(task: "asyncio.Future") -> None:
+    _ORPHANED.discard(task)
+    if not task.cancelled():
+        task.exception()  # mark retrieved; abandoned requests' errors are irrelevant
+
+
 DEFAULT_9ROUTER_URL = "http://localhost:20128/v1/chat/completions"
-DEFAULT_9ROUTER_MODEL = "ag/gemini-3.8-flash"
+DEFAULT_9ROUTER_MODEL = "ag/gemini-3.8-flash-low"
 
 
 class SecureLLMClient:
@@ -111,15 +124,36 @@ class SecureLLMClient:
         self.endpoint_url = os.getenv("NINEROUTER_API_URL", DEFAULT_9ROUTER_URL)
         self.model_name = os.getenv("NINEROUTER_MODEL", DEFAULT_9ROUTER_MODEL)
         self.api_key = os.getenv("NINEROUTER_API_KEY", "")
+        self._client: Optional[httpx.AsyncClient] = None
+        self._client_loop = None
+        # Build the SSL context once, at startup, so no request pays for it.
+        self._ssl_context = ssl.create_default_context(cafile=certifi.where())
 
         logger.info(
             f"Initialized SecureLLMClient [Provider: 9ROUTER, Endpoint: {self.endpoint_url}, "
             f"Model: {self.model_name}, Key: {mask_secret(self.api_key)}]"
         )
 
+    def _http(self) -> httpx.AsyncClient:
+        """One shared HTTP client per event loop.
+
+        Creating an httpx.AsyncClient loads an SSL context synchronously (~0.5 s on the
+        4-core test laptop) and blocks the whole event loop. Creating one per request made
+        17 concurrent hint requests wait ~10 s. The client is created once and reused.
+        """
+        loop = asyncio.get_running_loop()
+        if self._client is None or self._client_loop is not loop or self._client.is_closed:
+            self._client = httpx.AsyncClient(
+                verify=self._ssl_context,
+                limits=httpx.Limits(max_connections=64, max_keepalive_connections=32),
+            )
+            self._client_loop = loop
+        return self._client
+
     async def _post(self, payload: dict, headers: dict, timeout_seconds: float) -> httpx.Response:
-        async with httpx.AsyncClient(timeout=timeout_seconds) as client:
-            return await client.post(self.endpoint_url, json=payload, headers=headers)
+        return await self._http().post(
+            self.endpoint_url, json=payload, headers=headers, timeout=timeout_seconds
+        )
 
     async def call_chat(
         self,
@@ -156,12 +190,21 @@ class SecureLLMClient:
         }
 
         start_t = time.perf_counter()
+        # Hard end-to-end deadline. asyncio.wait_for() is NOT used: on cancel it waits for
+        # httpx to close the connection, which on Windows/under load can take as long as the
+        # provider takes to answer (measured up to 10 s for a 0.5 s deadline). Instead the
+        # request runs as a detached task; on deadline we cancel it and return immediately.
+        task = asyncio.ensure_future(self._post(payload, headers, timeout_seconds))
+        done, _ = await asyncio.wait({task}, timeout=timeout_seconds)
+        if not done:
+            task.cancel()
+            _ORPHANED.add(task)
+            task.add_done_callback(_reap_orphan)
+            lat_ms = int((time.perf_counter() - start_t) * 1000)
+            return None, lat_ms, f"Timeout exceeded ({timeout_seconds}s SLA)"
         try:
-            # wait_for enforces the SLA end-to-end (connect + send + wait + read).
-            res = await asyncio.wait_for(
-                self._post(payload, headers, timeout_seconds), timeout=timeout_seconds
-            )
-        except (asyncio.TimeoutError, httpx.TimeoutException):
+            res = task.result()
+        except httpx.TimeoutException:
             lat_ms = int((time.perf_counter() - start_t) * 1000)
             return None, lat_ms, f"Timeout exceeded ({timeout_seconds}s SLA)"
         except Exception as e:

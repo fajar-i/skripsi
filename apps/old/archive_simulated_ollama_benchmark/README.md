@@ -8,5 +8,5 @@ The latency, CPU and RAM numbers in these files do **not** come from a language 
 They were used for Tables 4–5 of the 12 Nov draft article and must be removed from it.
 
 LogiTrace no longer has an Ollama mode. The replacement benchmark is
-`logitrace/evals/benchmark_concurrency_9router.py`, which fails if 9router is unreachable
+`logitrace/evals/benchmark_concurrency_9router.py` (path dari folder `apps/`), which fails if 9router is unreachable
 instead of simulating.

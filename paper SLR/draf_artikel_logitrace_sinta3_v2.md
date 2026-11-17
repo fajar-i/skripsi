@@ -64,7 +64,7 @@ Penelitian mengikuti enam aktivitas DSR Peffers et al. (2007), dengan kriteria e
 
 LogiTrace terdiri atas tiga lapis (Gambar 1):
 1. **L1 — Basis pengetahuan:** 12 KC, graf prasyarat (DAG), dan deskripsi KC.
-2. **L2 — Bank butir:** 180 butir pilihan ganda empat opsi (15 butir per KC; 60 butir per tingkat kesulitan) beserta pembahasan, disimpan dalam berkas JSON dan basis data relasional.
+2. **L2 — Bank butir:** 180 butir pilihan ganda empat opsi (15 butir per KC; 60 butir per tingkat kesulitan) beserta pembahasan dan label kisi-kisi (§2.3), disimpan dalam berkas JSON dan basis data relasional.
 3. **L3 — Layanan runtime:** mesin penguasaan dan seleksi butir (deterministik), layanan petunjuk Sokratik (T2), layanan ringkasan sesi dan rekomendasi tutor sebaya (T3), serta dasbor guru berbasis WebSocket. Pelabel butir berbasis aturan (T1) membantu guru meninjau label KC dan kesulitan butir baru.
 
 ```text
@@ -72,7 +72,7 @@ LogiTrace terdiri atas tiga lapis (Gambar 1):
 │   12 Knowledge Components  ·  Graf prasyarat (13 sisi)  ·  Deskripsi KC             │
 └──────────────────────────────────────────┬──────────────────────────────────────────┘
 ┌─────────────────────────────── L2: BANK BUTIR ──────────────────────────────────────┐
-│   180 butir pilihan ganda 4 opsi  ·  label KC, kesulitan d ∈ {1,2,3}, TOLT          │
+│   180 butir PG 4 opsi · KC, indikator, level C1–C6, fase Jonassen, kesulitan d     │
 │   T1: pelabel berbasis aturan → antrean tinjauan guru                               │
 └──────────────────────────────────────────┬──────────────────────────────────────────┘
 ┌─────────────────────────────── L3: LAYANAN RUNTIME ─────────────────────────────────┐
@@ -121,7 +121,27 @@ Relasi prasyarat disusun penulis sebagai DAG dengan satu akar (KC-01) dan 13 sis
 | KC-04 | KC-09 | | KC-10 | KC-12 |
 | | | | KC-06 | KC-12 |
 
-Setiap butir juga diberi label salah satu dari lima dimensi *Test of Logical Thinking* (Tobin & Capie, 1981) oleh penulis. Label ini merupakan metadata untuk analisis lanjutan, belum divalidasi, dan **tidak dipakai** oleh mesin seleksi.
+**Kisi-kisi bank butir.** Setiap butir dipetakan ke empat label: (1) KC; (2) satu dari 36 indikator kompetensi (tiga per KC) yang diturunkan dari TP 2.1 *Menerapkan instalasi jaringan kabel dan nirkabel* dan TP 2.2 *Menerapkan perawatan dan perbaikan jaringan kabel dan nirkabel*; (3) level kognitif Taksonomi Bloom revisi C1–C6 (Anderson & Krathwohl, 2001); dan (4) satu dari lima fase penalaran *troubleshooting* Jonassen & Hung (2006): pengenalan gejala, konstruksi ruang masalah, perumusan hipotesis gangguan, pengujian dan evaluasi hipotesis, serta tindakan korektif dan verifikasi. Level C6 tidak dipakai karena butir pilihan ganda tidak menuntut siswa menghasilkan produk baru. Sebaran draf level kognitif adalah C1 = 31, C2 = 56, C3 = 27, C4 = 55, C5 = 11 (Tabel 2b). Label indikator dan level kognitif disusun dengan bantuan AI dan **berstatus draf**; penetapannya dilakukan melalui telaah pakar (§4). Label ini dipakai untuk pelaporan dan analisis butir, **bukan** oleh mesin seleksi.
+
+*Tabel 2b. Sebaran draf level kognitif per KC (jumlah butir).*
+
+| KC | C1 | C2 | C3 | C4 | C5 |
+|:---|:-:|:-:|:-:|:-:|:-:|
+| KC-01 | 4 | 5 | 2 | 2 | 2 |
+| KC-02 | 6 | 3 | 1 | 3 | 2 |
+| KC-03 | 1 | 4 | 7 | 2 | 1 |
+| KC-04 | 2 | 7 | 2 | 3 | 1 |
+| KC-05 | 2 | 6 | 4 | 2 | 1 |
+| KC-06 | 4 | 2 | 3 | 4 | 2 |
+| KC-07 | 2 | 5 | 3 | 5 | 0 |
+| KC-08 | 4 | 5 | 1 | 3 | 2 |
+| KC-09 | 2 | 9 | 0 | 4 | 0 |
+| KC-10 | 2 | 5 | 2 | 6 | 0 |
+| KC-11 | 2 | 2 | 1 | 10 | 0 |
+| KC-12 | 0 | 3 | 1 | 11 | 0 |
+| **Total** | **31** | **56** | **27** | **55** | **11** |
+
+Telaah awal menandai 12 butir yang materinya kemungkinan melampaui cakupan Fase F (mis. model analitis Bianchi, distribusi Rayleigh, konvergensi OSPF), 6 butir yang isinya lebih dekat ke KC lain, dan 19 butir hafalan yang label fase Jonassen-nya perlu ditinjau ulang.
 
 ### 2.4 Mesin Penguasaan dan Seleksi Butir (L3)
 
@@ -142,7 +162,7 @@ dengan syarat $0{,}60 \le \hat{p}(q) \le 0{,}85$. Dua aturan cadangan berlaku: (
 
 ### 2.5 Layanan Petunjuk Sokratik (T2), Ringkasan Sesi (T3), dan Perlindungan Data
 
-**Penyedia LLM.** Semua panggilan LLM melalui satu *endpoint* OpenAI-compatible, yaitu *proxy* lokal 9router (`localhost:20128`), dengan model `ag/gemini-3.8-flash` ⟦penulis: jelaskan apa 9router, siapa penyedia hulu model ini, lokasi pemrosesan data, dan ketentuan layanannya⟧. Tidak ada mode inferensi lokal; tanpa koneksi atau kunci API, semua petunjuk berasal dari bank statis. Parameter: `temperature = 0`, `max_tokens = 120` (T2) dan 280 (T3).
+**Penyedia LLM.** Semua panggilan LLM melalui satu *endpoint* OpenAI-compatible, yaitu *proxy* lokal 9router (`localhost:20128`), dengan model `ag/gemini-3.8-flash-low` (varian dengan *reasoning* tingkat rendah) ⟦penulis: jelaskan apa 9router, siapa penyedia hulu model ini, lokasi pemrosesan data, dan ketentuan layanannya⟧. Tidak ada mode inferensi lokal; tanpa koneksi atau kunci API, semua petunjuk berasal dari bank statis. Parameter: `temperature = 0`, `max_tokens = 120` (T2) dan 280 (T3).
 
 **T2 — Petunjuk Sokratik tiga tingkat.** Saat siswa meminta bantuan, *prompt* dibentuk dari nama KC, deskripsi KC, tingkat bantuan (1: mengarahkan perhatian; 2: langkah antara; 3: kerangka berpikir), dan teks soal. Opsi jawaban, kunci, jawaban siswa, dan identitas siswa tidak dikirim. Alurnya (Gambar 2):
 1. Redaksi PII pada *prompt* dan pemotongan ke 1.000 karakter.
@@ -263,15 +283,15 @@ Catatan interpretasi: *fallback* menjamin siswa **menerima** petunjuk, bukan bah
 
 LogiTrace menunjukkan bahwa asesmen formatif adaptif berbasis aturan dengan petunjuk Sokratik LLM dapat dijalankan pada laptop kelas dengan biaya komputasi mesin adaptif kurang dari 1 ms per operasi. Batas waktu total dan *fallback* statis membuat setiap permintaan petunjuk mendapat respons ⟦sesuaikan dengan Tabel 5⟧. Kebocoran harfiah kunci dan opsi jawaban dicegah oleh rancangan *prompt* dan pemeriksaan keluaran.
 
-**Keterbatasan.** Evaluasi bersifat teknis dan memakai data peragaan sintetis. Belum ada validasi pakar untuk KC, DAG, label TOLT, dan 180 butir; butir disusun penulis dengan bantuan skrip templat. Parameter $\alpha_0, \gamma_0, \beta, \theta, \tau$ dan ambang 0,60/0,70/0,45 adalah keputusan desain. Penggolongan respons biner tidak menangkap pola miskonsepsi. Redaksi PII berbasis pola tidak menangkap semua nama. Teks soal dikirim ke penyedia LLM di luar sekolah melalui 9router ⟦status pemrosesan data lintas yurisdiksi⟧. Prototipe belum memiliki autentikasi guru dan siswa.
+**Keterbatasan.** Evaluasi bersifat teknis dan memakai data peragaan sintetis. Belum ada validasi pakar untuk KC, DAG, indikator, level kognitif, fase Jonassen, dan 180 butir; butir disusun penulis dengan bantuan skrip templat, dan belum diuji coba empiris (tingkat kesukaran, daya pembeda, efektivitas pengecoh, reliabilitas KR-20 per KC). Parameter $\alpha_0, \gamma_0, \beta, \theta, \tau$ dan ambang 0,60/0,70/0,45 adalah keputusan desain. Penggolongan respons biner tidak menangkap pola miskonsepsi. Redaksi PII berbasis pola tidak menangkap semua nama. Teks soal dikirim ke penyedia LLM di luar sekolah melalui 9router ⟦status pemrosesan data lintas yurisdiksi⟧. Prototipe belum memiliki autentikasi guru dan siswa.
 
-**Agenda.** (1) Studi simulasi dengan siswa sintetis yang penguasaan sebenarnya diketahui untuk membandingkan LogiTrace dengan BKT dan Elo, dilaporkan terbuka sebagai simulasi. (2) Validasi isi butir dan DAG oleh 2–3 pakar (CVI/kappa). (3) Penilaian buta mutu petunjuk LLM vs statis oleh guru dengan rubrik. (4) Uji coba lapangan *Station Rotation* di SMK mitra dengan izin sekolah, persetujuan orang tua/wali, dan pengukuran kebergunaan (SUS) serta dampak belajar. (5) Petunjuk yang memanfaatkan opsi yang dipilih siswa, atau petunjuk pra-bangkit yang ditinjau guru, sebagai pembanding.
+**Agenda.** (1) Studi simulasi dengan siswa sintetis yang penguasaan sebenarnya diketahui untuk membandingkan LogiTrace dengan BKT dan Elo, dilaporkan terbuka sebagai simulasi. (2) Telaah kualitatif butir (materi, konstruksi, bahasa) dan validasi isi oleh pakar (Aiken's V; Cohen's κ untuk label KC, indikator, level kognitif, dan fase), dilanjutkan uji coba empiris untuk menetapkan tingkat kesulitan $d$ dari indeks kesukaran, menyaring butir berdaya pembeda rendah, dan menghitung reliabilitas per KC. (3) Penilaian buta mutu petunjuk LLM vs statis oleh guru dengan rubrik. (4) Uji coba lapangan *Station Rotation* di SMK mitra dengan izin sekolah, persetujuan orang tua/wali, dan pengukuran kebergunaan (SUS) serta dampak belajar. (5) Petunjuk yang memanfaatkan opsi yang dipilih siswa, atau petunjuk pra-bangkit yang ditinjau guru, sebagai pembanding.
 
 ---
 
 ## Pernyataan
 
-**Ketersediaan data dan kode.** Kode sumber, data L1/L2, skrip evaluasi, dan data mentah hasil uji (`evals/results/`) tersedia di ⟦URL repositori — pastikan publik dan memuat versi ini; sertakan *commit hash*⟧. Folder `evals/simulated/` berisi skrip rancangan analisis yang membangkitkan data acak; keluarannya bukan hasil penelitian.
+**Ketersediaan data dan kode.** Kode sumber, data L1/L2, skrip evaluasi, dan data mentah hasil uji (`evals/results/`) tersedia di ⟦URL repositori — pastikan publik dan memuat versi ini; sertakan *commit hash*⟧. Folder `old/evals_simulated/` berisi skrip rancangan analisis yang membangkitkan data acak; keluarannya bukan hasil penelitian.
 
 **Etika.** Tahap ini tidak melibatkan subjek manusia. Seluruh data siswa pada tangkapan layar dan dasbor adalah data peragaan sintetis. Uji lapangan akan dilaksanakan setelah izin sekolah dan persetujuan orang tua/wali diperoleh.
 
@@ -289,9 +309,13 @@ LogiTrace menunjukkan bahwa asesmen formatif adaptif berbasis aturan dengan petu
 
 Abdelrahman, G., Wang, Q., & Nunes, B. (2023). Knowledge tracing: A survey. *ACM Computing Surveys*, *55*(11), Article 224. https://doi.org/10.1145/3569576
 
+Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). *A taxonomy for learning, teaching, and assessing: A revision of Bloom's taxonomy of educational objectives*. Longman.
+
 Corbett, A. T., & Anderson, J. R. (1995). Knowledge tracing: Modeling the acquisition of procedural knowledge. *User Modeling and User-Adapted Interaction*, *4*(4), 253–278. https://doi.org/10.1007/BF01099821
 
 Hevner, A. R., March, S. T., Park, J., & Ram, S. (2004). Design science in information systems research. *MIS Quarterly*, *28*(1), 75–105. https://doi.org/10.2307/25148625
+
+Jonassen, D. H., & Hung, W. (2006). Learning to troubleshoot: A new theory-based design architecture. *Educational Psychology Review*, *18*(1), 77–114. ⟦periksa DOI⟧
 
 Jung, H., Yoo, J., Yoon, Y., & Jang, Y. (2025). CLST: Cold-start mitigation in knowledge tracing by aligning a generative language model as a students' knowledge tracer. *Journal of Educational Data Mining*, *17*(2), 86–117. ⟦periksa DOI jurnal; versi lama memakai DOI arXiv⟧
 
@@ -307,12 +331,10 @@ Republik Indonesia. (2022). *Undang-Undang Nomor 27 Tahun 2022 tentang Pelindung
 
 Shen, S., Liu, Q., Huang, Z., Zheng, Y., Yin, M., Wang, M., & Chen, E. (2024). A survey of knowledge tracing: Models, variants, and applications. *IEEE Transactions on Learning Technologies*, *17*, 1898–1919. https://doi.org/10.1109/TLT.2024.3383325
 
-Tobin, K. G., & Capie, W. (1981). The development and validation of a group test of logical thinking. *Educational and Psychological Measurement*, *41*(2), 413–423. https://doi.org/10.1177/001316448104100220
-
 Wang, Y., Anand, C. S., & Tan, C. W. (2026). Guiding, not solving: Agentic scaffolding for LLM programming tutors. *CEUR Workshop Proceedings*, *4248*. https://ceur-ws.org/Vol-4248/
 
 Zhao, H., Wu, Y., Lu, Z., Yu, X., Miao, W., & Chen, L. (2026). SageJavon: A scalable AI tutor for personalized programming learning. *Information Processing & Management*, *63*(5), Article 104605. https://doi.org/10.1016/j.ipm.2025.104605
 
 ---
 
-*Rujukan yang dihapus dari versi lama:* Komalasari et al. (2023) dan Nurbaeti et al. (2024) karena DOI tidak terdaftar; Wing (2006), Jadhav et al. (2023), Xia et al. (2026), dan Tato & Nkambou (2022) karena tidak mendukung klaim yang dirujuk; Huang et al. (2024) karena tidak lagi dirujuk.
+*Rujukan yang dihapus dari versi lama:* Tobin & Capie (1981) karena TOLT tidak lagi dipakai sebagai indikator; Komalasari et al. (2023) dan Nurbaeti et al. (2024) karena DOI tidak terdaftar; Wing (2006), Jadhav et al. (2023), Xia et al. (2026), dan Tato & Nkambou (2022) karena tidak mendukung klaim yang dirujuk; Huang et al. (2024) karena tidak lagi dirujuk.

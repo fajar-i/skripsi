@@ -255,7 +255,7 @@ async def label_new_item(
 ):
     """
     US-05: Agent T1 — Automatic Semantic Item Labeling.
-    Categorizes item prompt into KC, TOLT, difficulty, and confidence score.
+    Suggests KC, Bloom level, difficulty and a confidence score for a new item.
     """
     return await labeling_service.label_item(req=req, db=db)
 
@@ -292,7 +292,9 @@ async def get_item_review_queue(
             prompt_text=item.prompt_text,
             options=item.options,
             current_primary_kc_id=item.primary_kc_id,
-            current_tolt_dimension=item.tolt_dimension,
+            current_indikator_id=item.indikator_id,
+            current_bloom_level=item.bloom_level,
+            current_jonassen_phase=item.jonassen_phase,
             current_difficulty=item.difficulty_nominal,
             confidence=conf,
             status=status,
@@ -320,7 +322,12 @@ async def approve_item_label(
         raise HTTPException(status_code=400, detail=f"Knowledge Component '{req.primary_kc_id}' tidak valid atau tidak terdaftar.")
 
     item.primary_kc_id = req.primary_kc_id
-    item.tolt_dimension = req.tolt_dimension
+    item.bloom_level = req.bloom_level
+    if req.indikator_id is not None:
+        item.indikator_id = req.indikator_id
+    if req.jonassen_phase is not None:
+        item.jonassen_phase = req.jonassen_phase
+    item.label_status = "ditinjau_guru"
     item.difficulty_nominal = req.difficulty_nominal
 
     # Log teacher approval in AgentLog
@@ -328,7 +335,7 @@ async def approve_item_label(
         trigger_type="T1_REVIEW",
         prompt_hash=None,
         model_id="teacher_human_in_the_loop",
-        raw_output=f"Approved item {item_id}: KC={req.primary_kc_id}, TOLT={req.tolt_dimension}, Diff={req.difficulty_nominal}. Notes: {req.teacher_notes or '-'}",
+        raw_output=f"Approved item {item_id}: KC={req.primary_kc_id}, Bloom={req.bloom_level}, Indikator={item.indikator_id}, Fase={item.jonassen_phase}, Diff={req.difficulty_nominal}. Notes: {req.teacher_notes or '-'}",
         is_accepted=True,
         latency_ms=0
     )
@@ -340,6 +347,9 @@ async def approve_item_label(
         "message": f"Label untuk butir '{item_id}' berhasil diverifikasi dan diperbarui.",
         "item_id": item_id,
         "primary_kc_id": item.primary_kc_id,
-        "tolt_dimension": item.tolt_dimension,
+        "bloom_level": item.bloom_level,
+        "indikator_id": item.indikator_id,
+        "jonassen_phase": item.jonassen_phase,
+        "label_status": item.label_status,
         "difficulty_nominal": item.difficulty_nominal
     }

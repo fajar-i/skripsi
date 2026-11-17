@@ -86,7 +86,7 @@ NINEROUTER_MODEL=ag/gemini-3.8-flash
 # LOGITRACE_LLM_MODEL=qwen2.5:3b
 
 # Basis Data Transaksional Append-Only
-LOGITRACE_DB_URL=sqlite+aiosqlite:///./logitrace_dev.db
+LOGITRACE_DB_URL=sqlite+aiosqlite:///./logitrace.db
 ENVIRONMENT=production
 ```
 

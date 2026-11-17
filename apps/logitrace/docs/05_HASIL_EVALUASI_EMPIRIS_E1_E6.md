@@ -20,6 +20,6 @@
 - Uji kebergunaan (SUS) dengan guru dan siswa.
 - Dampak belajar (pre-test/post-test, N-Gain).
 
-Skrip rancangan analisis untuk butir-butir di atas ada di `evals/simulated/`. Skrip itu
+Skrip rancangan analisis untuk butir-butir di atas ada di `old/evals_simulated/`. Skrip itu
 membangkitkan data acak untuk menguji jalannya kode analisis saja. **Jangan mengutip
 keluarannya sebagai hasil.**

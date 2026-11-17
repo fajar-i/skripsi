@@ -311,8 +311,8 @@ function renderLabelResult(data) {
         <span class="text-[10px] text-wolf block font-num font-semibold">${escapeHtml(data.primary_kc_id)}</span>
       </div>
       <div>
-        <span class="text-wolf text-[10px] font-bold block">Dimensi TOLT:</span>
-        <span class="font-extrabold text-macaw-shade">${escapeHtml(data.tolt_dimension)}</span>
+        <span class="text-wolf text-[10px] font-bold block">Saran Level Kognitif (Bloom):</span>
+        <span class="font-extrabold text-macaw-shade">${escapeHtml(data.bloom_level)}</span>
         <span class="text-[10px] text-wolf block font-num">Kesulitan Nominal: Level ${data.nominal_difficulty}</span>
       </div>
     </div>
@@ -347,14 +347,14 @@ async function loadReviewQueue() {
       textDiv.className = "flex-1 min-w-0";
       textDiv.innerHTML = `
         <span class="font-extrabold text-eel block truncate">${escapeHtml(item.prompt_text)}</span>
-        <span class="text-[10px] font-num font-semibold text-wolf">${escapeHtml(item.item_id)} &bull; ${escapeHtml(item.current_primary_kc_id)} &bull; ${escapeHtml(item.current_tolt_dimension)} &bull; Diff: ${item.current_difficulty}</span>
+        <span class="text-[10px] font-num font-semibold text-wolf">${escapeHtml(item.item_id)} &bull; ${escapeHtml(item.current_primary_kc_id)} &bull; ${escapeHtml(item.current_bloom_level || '-')} &bull; ${escapeHtml(item.current_indikator_id || '-')} &bull; Diff: ${item.current_difficulty}</span>
       `;
 
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "duo-btn duo-btn-green px-3 py-1.5 text-[11px] whitespace-nowrap";
       btn.textContent = "Verifikasi";
-      btn.onclick = () => approveReviewItem(item.item_id, item.current_primary_kc_id, item.current_tolt_dimension, item.current_difficulty);
+      btn.onclick = () => approveReviewItem(item.item_id, item.current_primary_kc_id, item.current_bloom_level || 'C2', item.current_difficulty);
 
       div.appendChild(textDiv);
       div.appendChild(btn);
@@ -365,11 +365,11 @@ async function loadReviewQueue() {
   }
 }
 
-async function approveReviewItem(itemId, kcId, tolt, diff) {
+async function approveReviewItem(itemId, kcId, bloom, diff) {
   try {
     const payload = {
       primary_kc_id: kcId,
-      tolt_dimension: tolt,
+      bloom_level: bloom,
       difficulty_nominal: diff,
       teacher_notes: "Disetujui melalui Antrean Tinjauan Guru"
     };

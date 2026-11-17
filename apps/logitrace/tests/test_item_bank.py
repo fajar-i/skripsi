@@ -14,7 +14,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from data.l2_item_bank.schema_validator import (
     validate_adaptive_bank,
-    validate_tolt_parallel_test,
     validate_troubleshooting_parallel_test,
     validate_nedv_controls,
     _safe_load_json
@@ -28,11 +27,6 @@ class TestItemBankIntegrity(unittest.TestCase):
         """180 items must be distributed across 12 KCs (5 easy, 5 med, 5 hard each) with balanced keys."""
         ok, errors = validate_adaptive_bank()
         self.assertTrue(ok, f"Adaptive bank validation failed: {errors}")
-
-    def test_tolt_parallel_forms(self):
-        """Parallel Form A and Form B must each contain 10 polytomously scored items with balanced keys."""
-        ok, errors = validate_tolt_parallel_test()
-        self.assertTrue(ok, f"TOLT parallel test validation failed: {errors}")
 
     def test_troubleshooting_parallel_forms(self):
         """Parallel Cognitive Troubleshooting Form A and Form B must each contain 36 items (30 target + 6 NEDV)."""

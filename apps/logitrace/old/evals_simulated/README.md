@@ -11,5 +11,5 @@ These scripts are kept only as analysis templates. Use them to check that the an
 code runs, then replace the generators with real data collected from experts, teachers
 or students under an approved protocol.
 
-Reproducible technical benchmarks live one level up:
-`evals/benchmark_l3_engine.py` and `evals/benchmark_concurrency_9router.py`.
+Reproducible technical benchmarks: `evals/benchmark_l3_engine.py` and
+`evals/benchmark_concurrency_9router.py` (in the project, not in old/).

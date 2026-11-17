@@ -1,6 +1,6 @@
 """
 LogiTrace: Database Connection & Async Session Manager.
-Supports SQLite (development/testing) and PostgreSQL + pgvector (production).
+SQLite by default; any SQLAlchemy async URL via LOGITRACE_DB_URL / DATABASE_URL.
 """
 
 import os
@@ -17,7 +17,7 @@ from sqlalchemy.orm import declarative_base
 DATABASE_URL = (
     os.getenv("LOGITRACE_DB_URL")
     or os.getenv("DATABASE_URL")
-    or f"sqlite+aiosqlite:///{os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'logitrace_dev.db'))}"
+    or f"sqlite+aiosqlite:///{os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'logitrace.db'))}"
 )
 
 # SQLite foreign key enforcement
@@ -50,7 +50,29 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
             await session.close()
 
 
+# Columns added after the first schema version: (table, column, SQL type).
+_ADDED_COLUMNS = [
+    ("items", "indikator_id", "VARCHAR(16)"),
+    ("items", "bloom_level", "VARCHAR(4)"),
+    ("items", "jonassen_phase", "VARCHAR(48)"),
+    ("items", "label_status", "VARCHAR(32)"),
+]
+
+
+def _migrate_sqlite(sync_conn) -> None:
+    """Lightweight additive migration for existing SQLite dev databases."""
+    from sqlalchemy import inspect, text
+
+    insp = inspect(sync_conn)
+    tables = set(insp.get_table_names())
+    for table, column, sql_type in _ADDED_COLUMNS:
+        if table in tables and column not in {c["name"] for c in insp.get_columns(table)}:
+            sync_conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {sql_type}"))
+
+
 async def init_db() -> None:
-    """Initializes tables in database."""
+    """Initializes tables in database and applies additive column migrations."""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        if "sqlite" in DATABASE_URL:
+            await conn.run_sync(_migrate_sqlite)

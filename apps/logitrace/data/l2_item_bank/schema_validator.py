@@ -16,23 +16,18 @@ logger = logging.getLogger("schema_validator")
 
 BASE_DIR = os.path.dirname(__file__)
 ITEMS_PATH = os.path.join(BASE_DIR, "items_adaptive_180.json")
-TOLT_PATH = os.path.join(BASE_DIR, "tolt_test_parallel.json")
 TROUBLESHOOTING_PATH = os.path.join(BASE_DIR, "troubleshooting_test_parallel.json")
 NEDV_PATH = os.path.join(BASE_DIR, "nedv_control_items.json")
+INDIKATOR_PATH = os.path.join(BASE_DIR, "..", "l1_knowledge_base", "indikator.json")
+
+EXPECTED_BLOOM_LEVELS = {"C1", "C2", "C3", "C4", "C5", "C6"}
+EXPECTED_LABEL_STATUS = {"draf_ai", "ditinjau_guru", "divalidasi_pakar"}
 
 EXPECTED_KCS = {
     "WLAN_STANDARDS", "WLAN_TOPOLOGY_BSS", "IP_PEER_CONFIG",
     "WLAN_FREQ_CHANNEL", "WLAN_SECURITY_AUTH", "WLAN_HOST_HARDENING",
     "WLAN_SIGNAL_PROP", "WLAN_ROAMING_PROB", "WLAN_CHANNEL_COLLISION",
     "ICMP_CONNECTIVITY", "ICMP_TROUBLE_DHU", "ICMP_TROUBLE_RTO"
-}
-
-EXPECTED_TOLT_DIMS = {
-    "CONTROLLING_VARIABLES",
-    "PROPORTIONAL_REASONING",
-    "COMBINATORIAL_REASONING",
-    "PROBABILISTIC_REASONING",
-    "CORRELATIONAL_REASONING"
 }
 
 EXPECTED_JONASSEN_PHASES = {
@@ -86,6 +81,13 @@ def validate_adaptive_bank(file_path: str = ITEMS_PATH) -> Tuple[bool, List[str]
     calibration_diffs = {1: 0, 2: 0, 3: 0}
     answer_keys: List[str] = []
 
+    indikator_kc = {}
+    ok_ind, ind_doc, _ = _safe_load_json(INDIKATOR_PATH)
+    if ok_ind:
+        indikator_kc = {ind["id"]: ind["kc_id"] for ind in ind_doc.get("indikator", [])}
+    else:
+        errors.append(f"Cannot load indikator file: {INDIKATOR_PATH}")
+
     for idx, item in enumerate(items):
         item_id = item.get("id", f"idx_{idx}")
 
@@ -96,7 +98,9 @@ def validate_adaptive_bank(file_path: str = ITEMS_PATH) -> Tuple[bool, List[str]
 
         kc = item.get("primary_kc")
         diff = item.get("difficulty")
-        tolt = item.get("tolt_dimension")
+        bloom = item.get("bloom_level")
+        indikator = item.get("indikator_id")
+        phase = item.get("jonassen_phase")
         opts = item.get("options", {})
         ans = item.get("correct_answer")
 
@@ -105,8 +109,18 @@ def validate_adaptive_bank(file_path: str = ITEMS_PATH) -> Tuple[bool, List[str]
             errors.append(f"{item_id}: Unknown or missing KC '{kc}'")
         if diff not in (1, 2, 3):
             errors.append(f"{item_id}: Invalid difficulty '{diff}'")
-        if tolt not in EXPECTED_TOLT_DIMS:
-            errors.append(f"{item_id}: Invalid TOLT dimension '{tolt}'")
+        if "tolt_dimension" in item:
+            errors.append(f"{item_id}: Obsolete field 'tolt_dimension' (TOLT is no longer an item indicator)")
+        if bloom not in EXPECTED_BLOOM_LEVELS:
+            errors.append(f"{item_id}: Invalid or missing bloom_level '{bloom}'")
+        if phase not in EXPECTED_JONASSEN_PHASES:
+            errors.append(f"{item_id}: Invalid or missing jonassen_phase '{phase}'")
+        if indikator not in indikator_kc:
+            errors.append(f"{item_id}: Unknown or missing indikator_id '{indikator}'")
+        elif indikator_kc[indikator] != kc:
+            errors.append(f"{item_id}: indikator_id '{indikator}' belongs to KC '{indikator_kc[indikator]}', not '{kc}'")
+        if item.get("label_status") not in EXPECTED_LABEL_STATUS:
+            errors.append(f"{item_id}: Invalid label_status '{item.get('label_status')}'")
         if not item.get("prompt_text") or not str(item.get("prompt_text")).strip():
             errors.append(f"{item_id}: Empty prompt text")
         if not isinstance(opts, dict) or len(opts) < 4:
@@ -150,84 +164,6 @@ def validate_adaptive_bank(file_path: str = ITEMS_PATH) -> Tuple[bool, List[str]
                 errors.append(
                     f"Option '{opt}' key ratio skewed: {ratio:.1%} ({key_counts[opt]}/{total_answers}), expected ~25%"
                 )
-
-    return len(errors) == 0, errors
-
-
-def validate_tolt_parallel_test(file_path: str = TOLT_PATH) -> Tuple[bool, List[str]]:
-    """
-    Validates parallel TOLT instruments (Form A and Form B):
-    - Exactly 10 items in Form A and 10 items in Form B
-    - Unique item IDs
-    - 2 items per TOLT dimension (all 5 dimensions represented)
-    - Non-empty prompt, options == 4, correct_option in options
-    - Reasoning options >= 3, correct_reasoning in reasoning_options
-    - Balanced answer key distribution across forms
-    """
-    errors: List[str] = []
-    success, data, err_msg = _safe_load_json(file_path)
-    if not success:
-        return False, [err_msg]
-
-    if not isinstance(data, dict):
-        return False, ["TOLT file root must be a JSON object with 'form_a' and 'form_b'"]
-
-    seen_ids: Set[str] = set()
-
-    for form_name in ("form_a", "form_b"):
-        items = data.get(form_name, [])
-        if not isinstance(items, list) or len(items) != 10:
-            errors.append(f"{form_name}: Expected 10 items, got {len(items) if isinstance(items, list) else 0}")
-            continue
-
-        dim_counts = {dim: 0 for dim in EXPECTED_TOLT_DIMS}
-        form_keys: List[str] = []
-
-        for item in items:
-            item_id = item.get("id", "UNKNOWN")
-            if item_id in seen_ids:
-                errors.append(f"Duplicate TOLT item ID: '{item_id}'")
-            seen_ids.add(item_id)
-
-            dim = item.get("dimension")
-            if dim in dim_counts:
-                dim_counts[dim] += 1
-            else:
-                errors.append(f"{item_id}: Unknown dimension '{dim}'")
-
-            prompt = item.get("prompt")
-            if not prompt or not str(prompt).strip():
-                errors.append(f"{item_id}: Empty prompt text")
-
-            opts = item.get("options", {})
-            if not isinstance(opts, dict) or len(opts) != 4:
-                errors.append(f"{item_id}: Expected exactly 4 options (A, B, C, D), got {len(opts)}")
-
-            ans = item.get("correct_option")
-            if ans not in opts:
-                errors.append(f"{item_id}: correct_option '{ans}' not found in options")
-            else:
-                form_keys.append(ans)
-
-            # Polytomous reasoning options check
-            r_opts = item.get("reasoning_options", {})
-            if not isinstance(r_opts, dict) or len(r_opts) < 3:
-                errors.append(f"{item_id}: Expected at least 3 reasoning options for polytomous scoring")
-
-            r_ans = item.get("correct_reasoning")
-            if r_ans not in r_opts:
-                errors.append(f"{item_id}: correct_reasoning '{r_ans}' not found in reasoning_options")
-
-        # Each dimension must have exactly 2 items
-        for dim, cnt in dim_counts.items():
-            if cnt != 2:
-                errors.append(f"{form_name} dimension {dim} expected 2 items, got {cnt}")
-
-        # Form answer key balance: no single option should exceed 50%
-        key_counts = collections.Counter(form_keys)
-        for opt, cnt in key_counts.items():
-            if cnt > 5:
-                errors.append(f"{form_name}: Option '{opt}' overrepresented ({cnt}/10)")
 
     return len(errors) == 0, errors
 
@@ -395,12 +331,6 @@ def run_full_validation() -> bool:
         for e in err1[:5]:
             logger.error(f"  Adaptive Bank: {e}")
 
-    logger.info("Validating Parallel TOLT Tests (A & B)...")
-    ok2, err2 = validate_tolt_parallel_test()
-    if not ok2:
-        for e in err2[:5]:
-            logger.error(f"  TOLT: {e}")
-
     logger.info("Validating Parallel Troubleshooting Tests Jonassen 2006 (36 Items A & B)...")
     ok_tb, err_tb = validate_troubleshooting_parallel_test()
     if not ok_tb:
@@ -413,7 +343,7 @@ def run_full_validation() -> bool:
         for e in err3[:5]:
             logger.error(f"  NEDV: {e}")
 
-    all_ok = ok1 and ok2 and ok_tb and ok3
+    all_ok = ok1 and ok_tb and ok3
     if all_ok:
         logger.info("All L2 item bank integrity checks PASSED successfully.")
     else:

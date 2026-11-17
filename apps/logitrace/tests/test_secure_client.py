@@ -153,3 +153,37 @@ def test_static_fallback_is_guarded_per_item():
         options={"A": "ping", "B": "tracert", "C": "ipconfig", "D": "netstat"},
     )
     assert hint == GENERIC_HINT
+
+
+@pytest.mark.asyncio
+async def test_deadline_holds_under_17_concurrent_requests(monkeypatch):
+    """Regression: per-request AsyncClient creation (~0.5 s sync SSL load) once made
+    17 concurrent hints wait ~10 s despite a 3 s deadline. Every call must return near the deadline."""
+    import time
+
+    async def handler(reader, writer):
+        try:
+            await reader.read(65536)
+            await asyncio.sleep(5)  # provider never answers in time
+        except Exception:
+            pass
+        finally:
+            writer.close()
+
+    server = await asyncio.start_server(handler, "127.0.0.1", 0)
+    port = server.sockets[0].getsockname()[1]
+    monkeypatch.setenv("NINEROUTER_API_URL", f"http://127.0.0.1:{port}/v1/chat/completions")
+    monkeypatch.setenv("NINEROUTER_API_KEY", "sk-test-9router-key-12345678")
+    client = SecureLLMClient()
+
+    async def one():
+        t0 = time.perf_counter()
+        _, _, err = await client.call_chat("s", "u", timeout_seconds=0.4)
+        return time.perf_counter() - t0, err
+
+    try:
+        results = await asyncio.gather(*[one() for _ in range(17)])
+    finally:
+        server.close()
+    assert all("Timeout" in err for _, err in results)
+    assert max(w for w, _ in results) < 0.7

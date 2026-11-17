@@ -351,7 +351,7 @@ async def test_agent_t1_semantic_labeling_and_review():
         assert label_data["primary_kc_id"] == "WLAN_SECURITY_AUTH"
         assert 0.0 <= label_data["confidence"] <= 1.0
         assert label_data["nominal_difficulty"] in (1, 2, 3)
-        assert label_data["tolt_dimension"] is not None
+        assert label_data["bloom_level"] in ("C1", "C2", "C3", "C4", "C5")
 
         # 2. Check Teacher Review Queue
         res_queue = await client.get("/api/teacher/items/review-queue")
@@ -363,7 +363,9 @@ async def test_agent_t1_semantic_labeling_and_review():
         # 3. Approve / edit label for item in review queue
         approve_payload = {
             "primary_kc_id": "WLAN_STANDARDS",
-            "tolt_dimension": "Proportional Reasoning",
+            "bloom_level": "C2",
+            "indikator_id": "IND-01.1",
+            "jonassen_phase": "SYMPTOM_RECOGNITION",
             "difficulty_nominal": 2,
             "teacher_notes": "Ditinjau oleh Guru TKJ: Terkonfirmasi sesuai materi 802.11"
         }
@@ -373,11 +375,14 @@ async def test_agent_t1_semantic_labeling_and_review():
         assert app_data["status"] == "success"
         assert app_data["primary_kc_id"] == "WLAN_STANDARDS"
         assert app_data["difficulty_nominal"] == 2
+        assert app_data["bloom_level"] == "C2"
+        assert app_data["indikator_id"] == "IND-01.1"
+        assert app_data["label_status"] == "ditinjau_guru"
 
         # 4. Validation error on out-of-range difficulty_nominal (> 3)
         bad_diff_payload = {
             "primary_kc_id": "WLAN_STANDARDS",
-            "tolt_dimension": "Proportional Reasoning",
+            "bloom_level": "C2",
             "difficulty_nominal": 999
         }
         res_bad_diff = await client.post(f"/api/teacher/items/{first_item['item_id']}/approve-label", json=bad_diff_payload)
@@ -386,7 +391,7 @@ async def test_agent_t1_semantic_labeling_and_review():
         # 5. Validation error on non-existent primary_kc_id
         bad_kc_payload = {
             "primary_kc_id": "NON_EXISTENT_KC",
-            "tolt_dimension": "Proportional Reasoning",
+            "bloom_level": "C2",
             "difficulty_nominal": 2
         }
         res_bad_kc = await client.post(f"/api/teacher/items/{first_item['item_id']}/approve-label", json=bad_kc_payload)
