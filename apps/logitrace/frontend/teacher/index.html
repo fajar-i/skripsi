@@ -144,517 +144,448 @@
     .spring-bar {
       transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+
+    /* Quiet secondary icon buttons */
+    .icon-btn {
+      width: 36px; height: 36px; border-radius: 12px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: #737373; border: 2px solid transparent; transition: all .12s ease;
+    }
+    .icon-btn:hover { background: #F7F7F7; border-color: #E5E5E5; color: #4B4B4B; }
+
+    .kpi {
+      min-width: 132px; padding: 10px 14px; border-radius: 18px;
+      background: #F7F7F7; border: 2px solid #E5E5E5;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .kpi-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: #737373; }
+    .kpi-value { font-family: Fredoka, Nunito, sans-serif; font-size: 26px; line-height: 1.1; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    .step-head { display: flex; align-items: flex-start; gap: 12px; }
+    .step-num {
+      flex-shrink: 0; width: 28px; height: 28px; border-radius: 999px;
+      background: #DFF4FF; color: #1899D6; font-family: Fredoka, sans-serif; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center; font-size: 14px; margin-top: 2px;
+    }
+    .step-title { font-family: "Baloo 2", Nunito, sans-serif; font-size: 20px; font-weight: 800; color: #4B4B4B; line-height: 1.2; }
+    .step-sub { font-size: 12px; font-weight: 700; color: #737373; margin-top: 2px; }
+
+    .legend-sw { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+    .cell-untested {
+      background: #F7F7F7;
+      border: 1.5px dashed #CFCFCF;
+    }
+    details > summary::-webkit-details-marker { display: none; }
+
+    .tab-btn {
+      padding: 10px 14px; border-bottom: 4px solid transparent; margin-bottom: -2px;
+      transition: color .12s ease, border-color .12s ease;
+    }
+    .tab-btn:hover { color: #4B4B4B; }
+    .tab-btn[aria-selected="true"] { color: #1899D6; border-bottom-color: #1CB0F6; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-snow text-eel font-sans selection:bg-feather-soft selection:text-eel">
 
-  <!-- TOP HEADER -->
+  <!-- TOP HEADER: identity left; one session entry point right (switch + manage live in the same dialog) -->
   <header class="bg-polar border-b-2 border-swan sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
 
-      <!-- Brand & School Identity -->
-      <a href="/" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-2xl bg-feather shadow-[0_4px_0_#46A302] flex items-center justify-center text-white flex-shrink-0">
-          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="6" cy="7" r="2.5" fill="#fff"/>
-            <circle cx="18" cy="7" r="2.5" fill="#fff"/>
-            <circle cx="12" cy="17" r="2.5" fill="#fff"/>
-            <path d="M8 8.3L10.8 15M16 8.3L13.2 15M8.5 7H15.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
-          </svg>
-        </div>
+      <a href="/" class="flex items-center gap-3">
+        <img src="/assets/maskot.png" alt="Logo LogiTrace" width="40" height="40" draggable="false"
+          class="w-10 h-10 object-contain flex-shrink-0 select-none">
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="font-display font-extrabold text-lg leading-none text-eel">LogiTrace</h1>
-            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-num font-bold bg-macaw-soft text-macaw-shade border border-macaw/30">
-              Dasbor Guru
-            </span>
-          </div>
-          <p class="text-xs text-wolf font-num font-semibold mt-0.5">XI TKJ 1 &bull; 34 Siswa</p>
+          <h1 class="font-display font-extrabold text-lg leading-none text-eel">LogiTrace <span class="text-wolf font-sans text-sm font-bold">· Guru</span></h1>
+          <p class="text-xs text-wolf font-num font-semibold mt-0.5 flex items-center gap-1.5">
+            <span id="ws-indicator" class="w-2 h-2 rounded-full bg-feather inline-block" aria-hidden="true"></span>
+            <span id="class-subtitle">XI TKJ 1</span>
+            <span class="sr-only" id="ws-status-text">Tersambung</span>
+          </p>
         </div>
       </a>
 
-      <!-- Controls, Timer & Actions -->
-      <div class="flex flex-wrap items-center gap-2">
-
-        <!-- 35-min Timer Widget -->
-        <div class="hidden lg:flex items-center gap-2 bg-snow px-3 py-2 rounded-2xl border-2 border-swan text-xs font-num">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="13" r="8" stroke="#58CC02" stroke-width="2.4"/>
-            <path d="M12 9v4l2.5 1.5M9.5 3h5" stroke="#58CC02" stroke-width="2.4" stroke-linecap="round"/>
-          </svg>
-          <span id="rotation-timer" class="font-bold text-eel min-w-[44px] text-center tabular-nums">35:00</span>
-          <button type="button" onclick="toggleRotationTimer()" id="btn-timer-toggle" class="px-1.5 py-0.5 rounded-lg bg-polar border border-swan text-eel hover:border-feather transition" title="Mulai / Jeda">
-            &#9654;
-          </button>
-          <button type="button" onclick="resetRotationTimer()" class="px-1.5 py-0.5 rounded-lg bg-polar border border-swan text-wolf hover:text-cardinal transition" title="Reset 35 Menit">
-            &#8634;
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="openManageModal()" class="duo-btn duo-btn-green px-4 py-2 text-xs" title="Pindah sesi, buat sesi baru, ulangi pengerjaan, cek soal">
+          Kelola Sesi
+        </button>
+        <div class="flex items-center gap-1">
+          <a href="/api/export/audit-logs" download="logitrace_audit_interactions.json" class="icon-btn" title="Unduh riwayat jawaban (audit)" aria-label="Unduh riwayat jawaban">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <button type="button" onclick="refreshAmbientState()" class="icon-btn" title="Segarkan data" aria-label="Segarkan data">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 4v6h-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
-
-        <!-- Session Selector Dropdown -->
-        <div class="flex items-center gap-2 bg-snow px-3 py-2 rounded-2xl border-2 border-swan text-xs">
-          <label for="teacher-session-select" class="text-wolf text-[11px] font-extrabold uppercase hidden md:inline">Sesi:</label>
-          <select id="teacher-session-select" aria-label="Pilih Sesi Evaluasi" onchange="onSessionDropdownChange(this.value)" class="bg-transparent text-eel font-extrabold focus:outline-none cursor-pointer max-w-[180px] sm:max-w-[230px] truncate text-xs font-sans">
-            <option value="">Memuat sesi...</option>
-          </select>
-        </div>
-
-        <!-- Ringkasan Kelas Button -->
-        <button type="button" onclick="openSummaryModal()" class="duo-btn duo-btn-green px-3.5 py-2 text-xs">
-          <span class="hidden sm:inline">Ringkasan Kelas</span>
-          <span class="sm:hidden">Ringkasan</span>
-        </button>
-
-        <!-- Kelola Button -->
-        <button type="button" onclick="openManageModal()" class="duo-btn duo-btn-ghost px-3.5 py-1.5 text-xs">
-          <span>Kelola</span>
-        </button>
-
-        <!-- Status Pill -->
-        <div id="ws-status-pill" class="hidden sm:flex items-center gap-2 bg-snow px-3 py-2 rounded-2xl border-2 border-swan text-xs font-num font-semibold">
-          <span id="ws-indicator" class="w-2.5 h-2.5 rounded-full bg-feather"></span>
-          <span id="ws-status-text" class="text-eel text-[11px]">Aktif</span>
-        </div>
-
-        <!-- Audit Export -->
-        <a href="/api/export/audit-logs" download="logitrace_audit_interactions.json" class="bg-polar hover:bg-snow text-eel px-3 py-2 rounded-2xl text-xs font-sans font-extrabold border-2 border-swan transition flex items-center gap-1.5" title="Unduh Riwayat Jawaban">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="#1899D6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span class="hidden xl:inline">Audit</span>
-        </a>
-
-        <!-- Manual Refresh -->
-        <button type="button" onclick="refreshAmbientState()" class="bg-polar hover:bg-snow text-eel p-2 px-2.5 rounded-2xl text-xs font-extrabold border-2 border-swan transition" title="Segarkan">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M21 12a9 9 0 1 1-2.64-6.36M21 4v6h-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
       </div>
-
     </div>
   </header>
 
-  <!-- MAIN DASHBOARD CONTENT -->
-  <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 flex-1 space-y-5">
+  <main class="max-w-6xl w-full mx-auto p-4 sm:p-6 flex-1 space-y-6">
 
-    <!-- ACTIVE SESSION BANNER -->
-    <section class="bg-polar rounded-3xl p-5 border-2 border-swan border-b-[5px]">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div class="flex items-center gap-2 mb-1">
-            <span id="banner-active-tag" class="px-2.5 py-0.5 rounded-full text-[11px] font-num font-bold uppercase bg-feather-soft text-feather-shade border border-feather/30">
-              SESI AKTIF
-            </span>
-            <span id="banner-session-code" class="text-xs font-num font-semibold text-wolf">Sesi 1</span>
-          </div>
-          <h2 id="banner-session-title" class="font-display text-xl sm:text-2xl font-extrabold text-eel leading-snug">
-            Memuat sesi...
-          </h2>
+    <!-- 0. SESSION HEADER: which session, its tools (timer, summary), then how the class is doing -->
+    <section class="bg-polar rounded-3xl p-5 sm:p-6 border-2 border-swan border-b-[5px]">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span id="banner-active-tag" class="px-2.5 py-0.5 rounded-full text-[11px] font-num font-bold uppercase bg-feather-soft text-feather-shade border border-feather/30">Sesi aktif</span>
+          <span id="banner-session-code" class="text-xs font-num font-semibold text-wolf">Sesi 1</span>
         </div>
 
-        <!-- Progress Distribution Badges & Quick Reset Button -->
-        <div class="flex flex-wrap items-center gap-2">
-          <div class="px-3 py-1.5 rounded-xl bg-feather-soft border border-feather/30 flex items-center gap-2 text-xs font-num font-bold tabular-nums text-feather-shade">
-            <span class="w-2.5 h-2.5 rounded-full bg-feather"></span>
-            <span><span id="badge-completed">0</span> Selesai</span>
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 bg-snow px-2.5 py-1.5 rounded-2xl border-2 border-swan text-xs font-num" title="Timer rotasi 35 menit">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="13" r="8" stroke="#58CC02" stroke-width="2.4"/>
+              <path d="M12 9v4l2.5 1.5M9.5 3h5" stroke="#58CC02" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+            <span id="rotation-timer" class="font-bold text-eel min-w-[40px] text-center tabular-nums">35:00</span>
+            <button type="button" onclick="toggleRotationTimer()" id="btn-timer-toggle" class="w-6 h-6 rounded-lg bg-polar border border-swan text-eel hover:border-feather transition text-[10px]" title="Mulai / Jeda" aria-label="Mulai atau jeda timer">&#9654;</button>
+            <button type="button" onclick="resetRotationTimer()" class="w-6 h-6 rounded-lg bg-polar border border-swan text-wolf hover:text-cardinal transition text-[11px]" title="Reset 35 menit" aria-label="Reset timer">&#8634;</button>
           </div>
-          <div class="px-3 py-1.5 rounded-xl bg-bee-soft border border-bee-shade/30 flex items-center gap-2 text-xs font-num font-bold tabular-nums text-eel">
-            <span class="w-2.5 h-2.5 rounded-full bg-bee"></span>
-            <span><span id="badge-in-progress">0</span> Mengerjakan</span>
-          </div>
-          <div class="px-3 py-1.5 rounded-xl bg-snow border-2 border-swan flex items-center gap-2 text-xs font-num font-bold tabular-nums text-wolf">
-            <span class="w-2.5 h-2.5 rounded-full bg-hare"></span>
-            <span><span id="badge-not-started">34</span> Belum</span>
-          </div>
-
-          <button type="button" onclick="promptResetAllCurrentSession()" class="bg-cardinal-soft hover:bg-cardinal text-cardinal-shade hover:text-white border-2 border-cardinal/40 px-3.5 py-1.5 rounded-xl text-xs font-sans font-extrabold transition">
-            Reset Kelas
+          <button type="button" onclick="openSummaryModal()" class="duo-btn duo-btn-blue px-4 py-2 text-xs">
+            Ringkasan Kelas
           </button>
         </div>
       </div>
 
-      <!-- Segmented Progress Bar -->
-      <div class="w-full bg-swan h-3 rounded-full mt-4 overflow-hidden flex">
-        <div id="progbar-completed" class="bg-feather h-full spring-bar" style="width: 0%"></div>
-        <div id="progbar-in-progress" class="bg-bee h-full spring-bar" style="width: 0%"></div>
-        <div id="progbar-not-started" class="bg-swan h-full spring-bar" style="width: 100%"></div>
+      <div class="flex flex-wrap items-start justify-between gap-5 mt-3">
+        <div class="min-w-0 flex-1">
+          <h2 id="banner-session-title" class="font-display text-xl sm:text-2xl font-extrabold text-eel leading-snug">Memuat sesi...</h2>
+          <p id="status-headline" class="text-sm font-bold text-wolf mt-1">Menunggu data kelas...</p>
+        </div>
+
+        <div class="flex gap-3">
+          <div class="kpi">
+            <span class="kpi-label">Perlu dibantu</span>
+            <span id="stat-stuck-count" class="kpi-value text-eel">0</span>
+          </div>
+          <div class="kpi">
+            <span class="kpi-label">Penguasaan kelas</span>
+            <span id="stat-avg-mastery" class="kpi-value text-wolf">—</span>
+            <span id="stat-avg-mastery-sub" class="text-[11px] font-bold text-wolf">belum ada jawaban</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <div class="w-full bg-swan h-3 rounded-full overflow-hidden flex" role="img" aria-label="Progres pengerjaan kelas">
+          <div id="progbar-completed" class="bg-feather h-full spring-bar" style="width: 0%"></div>
+          <div id="progbar-in-progress" class="bg-bee h-full spring-bar" style="width: 0%"></div>
+          <div id="progbar-not-started" class="bg-swan h-full spring-bar" style="width: 100%"></div>
+        </div>
+        <div class="flex flex-wrap gap-x-5 gap-y-1 mt-2 text-xs font-num font-bold tabular-nums">
+          <span class="flex items-center gap-1.5 text-feather-shade"><span class="w-2.5 h-2.5 rounded-full bg-feather"></span><span id="badge-completed">0</span> selesai</span>
+          <span class="flex items-center gap-1.5 text-eel"><span class="w-2.5 h-2.5 rounded-full bg-bee"></span><span id="badge-in-progress">0</span> mengerjakan</span>
+          <span class="flex items-center gap-1.5 text-wolf"><span class="w-2.5 h-2.5 rounded-full bg-hare"></span><span id="badge-not-started">0</span> belum mulai</span>
+        </div>
       </div>
     </section>
 
-    <!-- KPI SUMMARY CARDS -->
-    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-
-      <div class="bg-polar rounded-3xl p-5 border-2 border-swan border-b-[5px] flex items-center justify-between">
+    <!-- 1. BANTU SEKARANG -->
+    <section class="space-y-3" aria-labelledby="h-step1">
+      <div class="step-head">
+        <span class="step-num">1</span>
         <div>
-          <p class="text-xs font-sans font-extrabold uppercase tracking-wider text-wolf">Total Siswa</p>
-          <h3 id="stat-active-students" class="font-num text-3xl font-bold tabular-nums text-eel mt-1">34</h3>
-        </div>
-        <div class="w-12 h-12 rounded-2xl bg-macaw-soft text-macaw-shade flex items-center justify-center">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#1899D6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <h2 id="h-step1" class="step-title">Bantu sekarang</h2>
+          <p class="step-sub">Siswa yang salah beruntun pada topik yang sama. Datangi sesuai urutan.</p>
         </div>
       </div>
-
-      <div class="bg-polar rounded-3xl p-5 border-2 border-swan border-b-[5px] flex items-center justify-between">
-        <div>
-          <p class="text-xs font-sans font-extrabold uppercase tracking-wider text-wolf">Rata-rata Penguasaan</p>
-          <h3 id="stat-avg-mastery" class="font-num text-3xl font-bold tabular-nums text-feather-shade mt-1">0.250</h3>
-        </div>
-        <div class="w-12 h-12 rounded-2xl bg-feather-soft text-feather-shade flex items-center justify-center">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 20h16M7 16v-5M12 16V7M17 16v-9" stroke="#46A302" stroke-width="2.6" stroke-linecap="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="bg-polar rounded-3xl p-5 border-2 border-swan border-b-[5px] flex items-center justify-between">
-        <div>
-          <p class="text-xs font-sans font-extrabold uppercase tracking-wider text-wolf">Perlu Bantuan</p>
-          <h3 id="stat-stuck-count" class="font-num text-3xl font-bold tabular-nums text-fox mt-1">0</h3>
-        </div>
-        <div id="stat-stuck-icon" class="w-12 h-12 rounded-2xl bg-fox-soft text-fox flex items-center justify-center">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="#FF9600" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
+      <div id="top-stuck-container" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
     </section>
 
-    <!-- SECTION: TOP-3 STUCK STUDENTS -->
-    <section class="space-y-3">
-      <div class="flex flex-wrap items-center justify-between gap-2">
-        <h2 class="font-display text-xl font-extrabold text-eel">Siswa Perlu Bimbingan (Prioritas 1–3)</h2>
-        <span class="text-xs font-sans font-bold text-wolf">Berdasarkan kesalahan beruntun pada topik yang sama</span>
+    <!-- 2. TOPIK YANG BELUM DIKUASAI KELAS -->
+    <section class="space-y-3" aria-labelledby="h-step2">
+      <div class="step-head">
+        <span class="step-num">2</span>
+        <div>
+          <h2 id="h-step2" class="step-title">Topik yang perlu dibahas ulang</h2>
+          <p class="step-sub">Rata-rata kelas per topik, dari yang paling lemah. Hanya dihitung dari soal yang sudah dijawab.</p>
+        </div>
       </div>
-
-      <div id="top-stuck-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Rendered via JS -->
+      <div class="bg-polar rounded-3xl border-2 border-swan border-b-[5px] p-5">
+        <div id="kc-summary-list" class="space-y-2.5"></div>
+        <button type="button" id="kc-toggle-btn" onclick="toggleAllKc()" class="hidden mt-3 text-xs font-extrabold text-macaw-shade hover:underline">Tampilkan semua 12 topik</button>
       </div>
     </section>
 
-    <!-- SECTION: 34 x 12 CLASS MASTERY HEATMAP -->
-    <section class="bg-polar rounded-3xl border-2 border-swan border-b-[5px] p-5 space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <h2 class="font-display text-xl font-extrabold text-eel">Peta Penguasaan Materi (34 Siswa &times; 12 Topik)</h2>
+    <!-- 3. DETAIL PER SISWA (progressive disclosure) -->
+    <section aria-labelledby="h-step3">
+      <details id="heatmap-details" class="group bg-polar rounded-3xl border-2 border-swan border-b-[5px]">
+        <summary class="list-none cursor-pointer p-5 flex items-center justify-between gap-3">
+          <div class="step-head">
+            <span class="step-num">3</span>
+            <div>
+              <h2 id="h-step3" class="step-title">Detail per siswa</h2>
+              <p class="step-sub" id="heatmap-subtitle">Peta penguasaan tiap siswa × 12 topik. Buka bila perlu menelusuri siswa tertentu.</p>
+            </div>
+          </div>
+          <span class="text-wolf text-lg transition group-open:rotate-180" aria-hidden="true">&#9662;</span>
+        </summary>
 
-        <!-- Legend -->
-        <div class="flex flex-wrap items-center gap-3 text-xs font-num font-semibold">
-          <div class="flex items-center gap-1.5">
-            <span class="w-3.5 h-3.5 rounded bg-cardinal inline-block"></span>
-            <span class="text-eel">&lt;0.35</span>
+        <div class="px-5 pb-5 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-3 text-xs font-bold text-eel">
+              <span class="flex items-center gap-1.5"><span class="legend-sw bg-cardinal"></span>Belum paham</span>
+              <span class="flex items-center gap-1.5"><span class="legend-sw bg-bee"></span>Berkembang</span>
+              <span class="flex items-center gap-1.5"><span class="legend-sw bg-mask"></span>Cakap</span>
+              <span class="flex items-center gap-1.5"><span class="legend-sw bg-feather"></span>Mahir</span>
+              <span class="flex items-center gap-1.5 text-wolf"><span class="legend-sw cell-untested"></span>Belum dijawab</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs font-bold text-wolf">
+              <label class="flex items-center gap-1.5">Urutkan
+                <select id="heatmap-sort" onchange="rerenderHeatmap()" class="bg-snow border-2 border-swan rounded-xl px-2 py-1 text-eel font-extrabold focus:outline-none">
+                  <option value="need">Paling perlu bantuan</option>
+                  <option value="code">Kode siswa</option>
+                </select>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" id="heatmap-show-num" onchange="rerenderHeatmap()" class="accent-[#1CB0F6]"> Tampilkan angka
+              </label>
+            </div>
           </div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-3.5 h-3.5 rounded bg-bee inline-block"></span>
-            <span class="text-eel">0.35–0.54</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-3.5 h-3.5 rounded bg-mask inline-block"></span>
-            <span class="text-eel">0.55–0.74</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-3.5 h-3.5 rounded bg-feather inline-block"></span>
-            <span class="text-eel">&ge;0.75</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-3.5 h-3.5 rounded bg-swan striped-low-conf inline-block"></span>
-            <span class="text-wolf font-sans font-bold">Belum Diuji Langsung</span>
+
+          <div class="overflow-x-auto rounded-2xl border-2 border-swan">
+            <table class="w-full min-w-[860px] table-fixed text-center border-collapse">
+              <thead id="heatmap-head"></thead>
+              <tbody id="heatmap-body" class="divide-y divide-swan text-xs font-num tabular-nums"></tbody>
+            </table>
           </div>
         </div>
-      </div>
-
-      <!-- Matrix Heatmap Table Wrapper -->
-      <div class="overflow-x-auto rounded-2xl border-2 border-swan">
-        <table class="w-full text-center border-collapse">
-          <thead>
-            <tr class="border-b-2 border-swan text-[11px] font-num font-bold text-wolf bg-snow">
-              <th class="p-2.5 text-left sticky left-0 bg-snow z-10 w-28 border-r-2 border-swan text-eel font-sans font-extrabold">Siswa</th>
-              <th class="p-2.5" title="WLAN_STANDARDS: Standar 802.11 b/g/n/ac/ax">KC-01</th>
-              <th class="p-2.5" title="WLAN_TOPOLOGY_BSS: Ad-Hoc vs Infrastructure">KC-02</th>
-              <th class="p-2.5" title="IP_PEER_CONFIG: Pengalamatan IPv4 & Subnetting">KC-03</th>
-              <th class="p-2.5" title="WLAN_FREQ_CHANNEL: Alokasi Kanal Non-Overlapping">KC-04</th>
-              <th class="p-2.5" title="WLAN_SECURITY_AUTH: WPA2-PSK / WPA3-SAE">KC-05</th>
-              <th class="p-2.5" title="WLAN_HOST_HARDENING: MAC Filter & Firewall">KC-06</th>
-              <th class="p-2.5" title="WLAN_SIGNAL_PROP: Redaman & RSSI dBm">KC-07</th>
-              <th class="p-2.5" title="WLAN_ROAMING_PROB: Roaming & Hysteresis">KC-08</th>
-              <th class="p-2.5" title="WLAN_CHANNEL_COLLISION: Collision & Kepadatan">KC-09</th>
-              <th class="p-2.5" title="ICMP_CONNECTIVITY: Ping & RTT">KC-10</th>
-              <th class="p-2.5" title="ICMP_TROUBLE_DHU: Destination Host Unreachable">KC-11</th>
-              <th class="p-2.5" title="ICMP_TROUBLE_RTO: Request Timed Out">KC-12</th>
-              <th class="p-2.5 border-l-2 border-swan bg-polar font-sans font-extrabold text-eel">Rerata m</th>
-              <th class="p-2.5 border-l-2 border-swan bg-snow text-[10px] font-sans font-extrabold text-wolf">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="heatmap-body" class="divide-y divide-swan text-xs font-num tabular-nums">
-            <!-- Rows rendered dynamically via JS -->
-          </tbody>
-        </table>
-      </div>
+      </details>
     </section>
 
   </main>
 
-  <!-- MODAL: KELOLA TUGAS & RESET -->
+  <!-- MODAL: KELOLA (tabs ordered by frequency of use; destructive actions last) -->
   <div id="modal-manage" role="dialog" aria-modal="true" aria-labelledby="modal-manage-title" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
     <div class="bg-polar rounded-3xl border-2 border-swan border-b-[6px] w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
 
-      <!-- Modal Header -->
-      <div class="px-6 py-4 bg-snow text-eel flex items-center justify-between border-b-2 border-swan">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-feather shadow-[0_3px_0_#46A302] text-white flex items-center justify-center font-bold">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
-          </div>
-          <div>
-            <h3 id="modal-manage-title" class="font-display font-extrabold text-lg text-eel leading-none">Kelola Sesi &amp; Reset</h3>
-            <p class="text-xs text-wolf font-num font-semibold mt-1">XI TKJ 1 &bull; 34 Siswa</p>
+      <div class="px-6 pt-4 flex items-start justify-between gap-3">
+        <div>
+          <h3 id="modal-manage-title" class="font-display font-extrabold text-xl text-eel leading-tight">Kelola</h3>
+          <p class="text-xs text-wolf font-bold mt-0.5">Atur sesi kuis, ulangi pengerjaan siswa, dan periksa label soal.</p>
+        </div>
+        <button type="button" onclick="closeManageModal()" aria-label="Tutup kelola" class="w-9 h-9 flex-shrink-0 rounded-xl border-2 border-swan text-wolf hover:text-eel flex items-center justify-center transition">&#10005;</button>
+      </div>
+
+      <div class="flex border-b-2 border-swan text-sm font-extrabold text-wolf px-4 mt-3 gap-1" role="tablist">
+        <button id="tab-btn-list" type="button" role="tab" onclick="switchModalTab('list')" class="tab-btn">Sesi</button>
+        <button id="tab-btn-reset" type="button" role="tab" onclick="switchModalTab('reset')" class="tab-btn">Ulangi pengerjaan</button>
+        <button id="tab-btn-labeler" type="button" role="tab" onclick="switchModalTab('labeler')" class="tab-btn">Cek soal <span id="review-count-badge" class="hidden ml-1 px-1.5 rounded-full bg-fox text-white text-[10px] align-middle"></span></button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex-1 bg-polar">
+
+        <!-- TAB: SESI -->
+        <div id="tab-content-list" class="space-y-4">
+          <p class="text-xs font-bold text-wolf leading-relaxed">
+            <b class="text-feather-shade">Sesi aktif</b> adalah kuis yang sedang dikerjakan siswa. Hanya satu sesi yang aktif.
+            Anda tetap bisa <b class="text-eel">melihat</b> hasil sesi lain di dasbor tanpa mengubah apa yang dikerjakan siswa.
+          </p>
+
+          <div id="modal-session-cards" class="space-y-2.5"></div>
+
+          <!-- Create session (collapsed until needed) -->
+          <div id="create-session-wrap">
+            <button type="button" id="btn-show-create" onclick="toggleCreateForm(true)" class="w-full py-3 rounded-2xl border-2 border-dashed border-hare text-sm font-extrabold text-macaw-shade hover:bg-macaw-soft/40 transition">
+              + Buat sesi baru
+            </button>
+            <form id="form-create-session" onsubmit="handleCreateSession(event)" class="hidden p-4 rounded-2xl bg-snow border-2 border-swan space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="font-display font-extrabold text-base text-eel">Sesi baru</h4>
+                <button type="button" onclick="toggleCreateForm(false)" class="text-xs font-extrabold text-wolf hover:text-eel">Batal</button>
+              </div>
+              <div>
+                <label for="create-title" class="block text-xs font-extrabold text-wolf mb-1">Judul sesi</label>
+                <input type="text" id="create-title" required placeholder="Contoh: Perawatan Jaringan Nirkabel" class="w-full bg-polar border-2 border-swan rounded-2xl px-3.5 py-2.5 text-sm font-bold text-eel focus:border-macaw focus:outline-none">
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label for="create-session-num" class="block text-xs font-extrabold text-wolf mb-1">Pertemuan ke-</label>
+                  <input type="number" id="create-session-num" min="1" max="10" value="1" required class="w-full bg-polar border-2 border-swan rounded-2xl px-3.5 py-2.5 text-sm font-num font-bold text-eel focus:border-macaw focus:outline-none">
+                </div>
+                <div>
+                  <label for="create-max-items" class="block text-xs font-extrabold text-wolf mb-1">Jumlah soal per siswa</label>
+                  <input type="number" id="create-max-items" min="6" max="50" value="20" required class="w-full bg-polar border-2 border-swan rounded-2xl px-3.5 py-2.5 text-sm font-num font-bold text-eel focus:border-macaw focus:outline-none">
+                </div>
+              </div>
+              <p class="text-xs font-bold text-fox bg-fox-soft rounded-xl px-3 py-2">
+                Sesi baru langsung menjadi <b>sesi aktif</b>: siswa akan mengerjakan sesi ini, bukan sesi sebelumnya.
+              </p>
+              <button type="submit" class="w-full duo-btn duo-btn-green py-3 px-4 text-xs">Buat &amp; aktifkan</button>
+            </form>
           </div>
         </div>
-        <button type="button" onclick="closeManageModal()" aria-label="Tutup dialog kelola sesi" class="w-9 h-9 rounded-xl bg-polar border-2 border-swan text-wolf hover:text-eel flex items-center justify-center transition">
-          &#10005;
-        </button>
-      </div>
 
-      <!-- Modal Tabs -->
-      <div class="flex flex-wrap border-b-2 border-swan bg-polar text-xs font-sans font-extrabold text-wolf px-4 pt-2 gap-1">
-        <button id="tab-btn-reset" type="button" onclick="switchModalTab('reset')" class="py-2.5 px-4 border-b-4 border-feather text-feather-shade transition">
-          Reset Siswa
-        </button>
-        <button id="tab-btn-create" type="button" onclick="switchModalTab('create')" class="py-2.5 px-4 border-b-4 border-transparent hover:text-eel transition">
-          Sesi Baru
-        </button>
-        <button id="tab-btn-list" type="button" onclick="switchModalTab('list')" class="py-2.5 px-4 border-b-4 border-transparent hover:text-eel transition">
-          Daftar Sesi
-        </button>
-        <button id="tab-btn-labeler" type="button" onclick="switchModalTab('labeler')" class="py-2.5 px-4 border-b-4 border-transparent hover:text-eel transition">
-          Cek Topik Soal
-        </button>
-      </div>
-
-      <!-- Modal Content Area -->
-      <div class="p-6 overflow-y-auto flex-1 space-y-5 bg-polar">
-
-        <!-- TAB 1: RESET -->
-        <div id="tab-content-reset" class="space-y-4">
-          <div class="bg-snow rounded-2xl p-4 border-2 border-swan space-y-3">
-            <div>
-              <h4 class="font-display font-extrabold text-base text-eel">Reset Seluruh Kelas (34 Siswa)</h4>
-              <p class="text-xs font-bold text-wolf mt-0.5">
-                Mengembalikan seluruh siswa ke Soal 1. Riwayat interaksi sebelumnya tetap aman di log audit append-only.
-              </p>
-            </div>
-            <button type="button" onclick="promptResetAllCurrentSession()" class="w-full duo-btn duo-btn-red py-3 px-4 text-xs">
-              Mulai Ulang Seluruh Siswa ke Soal 1
-            </button>
+        <!-- TAB: ULANGI PENGERJAAN -->
+        <div id="tab-content-reset" class="hidden space-y-5">
+          <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-snow border-2 border-swan text-xs font-bold text-wolf">
+            Berlaku untuk sesi: <span id="reset-session-name" class="text-eel font-extrabold truncate">—</span>
           </div>
 
-          <div class="bg-snow rounded-2xl p-4 border-2 border-swan space-y-3">
-            <div>
-              <h4 class="font-display font-extrabold text-base text-eel">Reset Satu Siswa</h4>
-              <p class="text-xs font-bold text-wolf mt-0.5">
-                Pilih siswa yang diizinkan mengulang dari Soal 1:
-              </p>
-            </div>
+          <section class="space-y-2">
+            <h4 class="font-display font-extrabold text-base text-eel">Satu siswa</h4>
+            <p class="text-xs font-bold text-wolf">Untuk siswa yang salah perangkat, terputus, atau diizinkan mencoba ulang dari Soal 1.</p>
             <div class="flex gap-2">
-              <select id="modal-select-student" aria-label="Pilih kode siswa untuk di-reset" class="flex-1 bg-polar border-2 border-swan rounded-2xl px-3 py-2.5 text-xs font-num font-semibold text-eel focus:border-macaw focus:outline-none">
-                <option value="">-- Pilih Kode Siswa (std_01–34) --</option>
+              <select id="modal-select-student" aria-label="Pilih siswa" class="flex-1 bg-polar border-2 border-swan rounded-2xl px-3 py-2.5 text-sm font-num font-bold text-eel focus:border-macaw focus:outline-none">
+                <option value="">Pilih siswa...</option>
               </select>
-              <button type="button" onclick="resetSelectedStudent()" class="duo-btn duo-btn-green px-5 py-2.5 text-xs">
-                Reset
-              </button>
+              <button type="button" onclick="resetSelectedStudent()" class="duo-btn duo-btn-ghost px-5 py-2 text-xs">Ulangi</button>
             </div>
-          </div>
+          </section>
+
+          <section class="p-4 rounded-2xl border-2 border-cardinal/40 bg-cardinal-soft/30 space-y-2">
+            <h4 class="font-display font-extrabold text-base text-cardinal-shade">Seluruh kelas</h4>
+            <p class="text-xs font-bold text-eel leading-relaxed">
+              Semua siswa kembali ke Soal 1 dan progres di dasbor kosong lagi.
+              Riwayat jawaban lama tetap tersimpan untuk audit.
+            </p>
+            <button type="button" onclick="promptResetAllCurrentSession()" class="duo-btn duo-btn-red py-2.5 px-4 text-xs">Ulangi seluruh kelas</button>
+          </section>
         </div>
 
-        <!-- TAB 2: BUAT SESI BARU -->
-        <div id="tab-content-create" class="hidden space-y-4">
-          <form id="form-create-session" onsubmit="handleCreateSession(event)" class="space-y-4">
-            <div>
-              <label for="create-title" class="block text-xs font-sans font-extrabold uppercase text-wolf mb-1.5">Judul Sesi</label>
-              <input type="text" id="create-title" required placeholder="Contoh: Sesi 2: Perawatan Jaringan Nirkabel" class="w-full bg-snow border-2 border-swan rounded-2xl px-3.5 py-2.5 text-sm font-bold text-eel focus:border-macaw focus:bg-polar focus:outline-none">
+        <!-- TAB: CEK SOAL -->
+        <div id="tab-content-labeler" class="hidden space-y-5">
+          <details class="group rounded-2xl border-2 border-swan">
+            <summary class="list-none cursor-pointer px-4 py-3 flex items-center justify-between text-sm font-extrabold text-eel">
+              Uji soal baru: topik apa yang terdeteksi?
+              <span class="text-wolf transition group-open:rotate-180" aria-hidden="true">&#9662;</span>
+            </summary>
+            <div class="px-4 pb-4 space-y-3">
+              <form id="form-test-label" onsubmit="handleTestItemLabel(event)" class="space-y-3">
+                <div>
+                  <label for="label-test-prompt" class="block text-xs font-extrabold text-wolf mb-1">Teks soal</label>
+                  <textarea id="label-test-prompt" rows="3" required minlength="10" placeholder="Tempel teks soal di sini..." class="w-full bg-polar border-2 border-swan rounded-2xl px-3.5 py-2.5 text-sm font-bold text-eel focus:border-macaw focus:outline-none"></textarea>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <input type="text" id="label-opt-a" aria-label="Pilihan A" placeholder="Pilihan A" class="bg-polar border-2 border-swan rounded-xl px-3 py-2 text-sm text-eel font-bold focus:border-macaw focus:outline-none">
+                  <input type="text" id="label-opt-b" aria-label="Pilihan B" placeholder="Pilihan B" class="bg-polar border-2 border-swan rounded-xl px-3 py-2 text-sm text-eel font-bold focus:border-macaw focus:outline-none">
+                  <input type="text" id="label-opt-c" aria-label="Pilihan C" placeholder="Pilihan C" class="bg-polar border-2 border-swan rounded-xl px-3 py-2 text-sm text-eel font-bold focus:border-macaw focus:outline-none">
+                  <input type="text" id="label-opt-d" aria-label="Pilihan D" placeholder="Pilihan D" class="bg-polar border-2 border-swan rounded-xl px-3 py-2 text-sm text-eel font-bold focus:border-macaw focus:outline-none">
+                </div>
+                <button type="submit" id="btn-submit-label" class="w-full duo-btn duo-btn-blue py-3 px-4 text-xs">Deteksi topik</button>
+              </form>
+              <div id="label-result-card" class="hidden p-4 bg-snow rounded-2xl border-2 border-swan space-y-3"></div>
             </div>
+          </details>
 
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label for="create-session-num" class="block text-xs font-sans font-extrabold uppercase text-wolf mb-1.5">Nomor Sesi</label>
-                <input type="number" id="create-session-num" min="1" max="10" value="2" required class="w-full bg-snow border-2 border-swan rounded-2xl px-3.5 py-2.5 text-sm font-num font-bold text-eel focus:border-macaw focus:bg-polar focus:outline-none">
-              </div>
-              <div>
-                <label for="create-max-items" class="block text-xs font-sans font-extrabold uppercase text-wolf mb-1.5">Jumlah Soal</label>
-                <input type="number" id="create-max-items" min="6" max="50" value="20" required class="w-full bg-snow border-2 border-swan rounded-2xl px-3.5 py-2.5 text-sm font-num font-bold text-eel focus:border-macaw focus:bg-polar focus:outline-none">
-              </div>
+
+          <section class="space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <h4 class="font-display font-extrabold text-base text-eel">Soal yang perlu Anda periksa</h4>
+              <button type="button" onclick="loadReviewQueue()" class="text-xs font-extrabold text-macaw-shade hover:underline">Muat ulang</button>
             </div>
+            <p class="text-xs font-bold text-wolf">Sistem ragu soal ini masuk topik yang tepat. Pastikan topiknya benar, lalu setujui.</p>
+            <div id="review-queue-container" class="space-y-2.5"></div>
+          </section>
 
-            <div>
-              <label for="create-rombel" class="block text-xs font-sans font-extrabold uppercase text-wolf mb-1.5">Kelas</label>
-              <input type="text" id="create-rombel" value="XI TKJ 1" readonly class="w-full bg-snow border-2 border-swan rounded-2xl px-3.5 py-2.5 text-sm text-wolf font-num font-semibold">
-            </div>
-
-            <button type="submit" class="w-full duo-btn duo-btn-green py-3 px-4 text-xs">
-              Simpan &amp; Aktifkan Sesi
-            </button>
-          </form>
-        </div>
-
-        <!-- TAB 3: DAFTAR SESI -->
-        <div id="tab-content-list" class="hidden space-y-3">
-          <div id="modal-session-cards" class="space-y-3">
-            <!-- Rendered via JS -->
-          </div>
-        </div>
-
-        <!-- TAB 4: CEK TOPIK SOAL -->
-        <div id="tab-content-labeler" class="hidden space-y-4">
-          <form id="form-test-label" onsubmit="handleTestItemLabel(event)" class="bg-snow p-4 rounded-2xl border-2 border-swan space-y-3">
-            <div>
-              <label for="label-test-prompt" class="block text-xs font-sans font-extrabold uppercase text-wolf mb-1.5">Teks Soal</label>
-              <textarea id="label-test-prompt" rows="3" required placeholder="Masukkan teks soal jaringan..." class="w-full bg-polar border-2 border-swan rounded-2xl px-3.5 py-2.5 text-xs font-bold text-eel focus:border-macaw focus:outline-none"></textarea>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <input type="text" id="label-opt-a" aria-label="Pilihan A" placeholder="Pilihan A" class="bg-polar border-2 border-swan rounded-xl px-3 py-2 text-xs text-eel font-sans font-bold focus:border-macaw focus:outline-none" value="Menggunakan kanal 1, 6, dan 11">
-              <input type="text" id="label-opt-b" aria-label="Pilihan B" placeholder="Pilihan B" class="bg-polar border-2 border-swan rounded-xl px-3 py-2 text-xs text-eel font-sans font-bold focus:border-macaw focus:outline-none" value="Menggunakan kanal 2, 3, dan 4 berurutan">
-              <input type="text" id="label-opt-c" aria-label="Pilihan C" placeholder="Pilihan C" class="bg-polar border-2 border-swan rounded-xl px-3 py-2 text-xs text-eel font-sans font-bold focus:border-macaw focus:outline-none" value="Memperlebar kanal menjadi 80 MHz">
-              <input type="text" id="label-opt-d" aria-label="Pilihan D" placeholder="Pilihan D" class="bg-polar border-2 border-swan rounded-xl px-3 py-2 text-xs text-eel font-sans font-bold focus:border-macaw focus:outline-none" value="Mengaktifkan mode ad-hoc">
-            </div>
-
-            <button type="submit" id="btn-submit-label" class="w-full duo-btn duo-btn-blue py-3 px-4 text-xs">
-              Klasifikasikan Soal
-            </button>
-          </form>
-
-          <div id="label-result-card" class="hidden p-4 bg-snow rounded-2xl border-2 border-swan space-y-3 font-sans text-xs">
-            <!-- Rendered via JS -->
-          </div>
-
-          <div class="border-t-2 border-swan pt-3 space-y-2">
-            <div class="flex items-center justify-between">
-              <h5 class="text-xs font-sans font-extrabold text-eel uppercase">Antrean Tinjauan Soal</h5>
-              <button type="button" onclick="loadReviewQueue()" class="text-xs font-extrabold text-macaw-shade hover:underline font-sans">
-                Segarkan
-              </button>
-            </div>
-            <div id="review-queue-container" class="space-y-2 max-h-48 overflow-y-auto">
-              <!-- Rendered via JS -->
-            </div>
-          </div>
         </div>
 
       </div>
-
-      <!-- Modal Footer -->
-      <div class="px-6 py-3.5 bg-snow border-t-2 border-swan flex justify-end">
-        <button type="button" onclick="closeManageModal()" class="duo-btn duo-btn-ghost px-5 py-2 text-xs">
-          Tutup
-        </button>
-      </div>
-
     </div>
   </div>
 
-  <!-- MODAL: RINGKASAN KELAS & TUTOR SEBAYA -->
+  <!-- MODAL: RINGKASAN KELAS (read order: kondisi -> topik -> kelompok belajar -> catatan lengkap) -->
   <div id="modal-summary" role="dialog" aria-modal="true" aria-labelledby="modal-summary-title" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
-    <div class="bg-polar rounded-3xl border-2 border-swan border-b-[6px] w-full max-w-4xl overflow-hidden flex flex-col max-h-[92vh]">
+    <div class="bg-polar rounded-3xl border-2 border-swan border-b-[6px] w-full max-w-3xl overflow-hidden flex flex-col max-h-[92vh]">
 
-      <!-- Modal Header -->
-      <div class="px-6 py-4 bg-snow text-eel flex items-center justify-between border-b-2 border-swan">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-feather shadow-[0_3px_0_#46A302] text-white flex items-center justify-center font-bold">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/><path d="M14 2v6h6M8 13h8M8 17h6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <div class="px-6 py-4 flex items-start justify-between gap-3 border-b-2 border-swan">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <h3 id="modal-summary-title" class="font-display font-extrabold text-xl text-eel leading-tight">Ringkasan Kelas</h3>
           </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 id="modal-summary-title" class="font-display font-extrabold text-lg text-eel leading-none">Ringkasan Kelas &amp; Tutor Sebaya</h3>
-              <span id="summary-source-pill" class="px-2.5 py-0.5 rounded-full text-[11px] font-num font-bold bg-feather-soft text-feather-shade border border-feather/30">
-                Ringkasan
-              </span>
-            </div>
-            <p class="text-xs text-wolf font-num font-semibold mt-1">Evaluasi Akhir Sesi &bull; XI TKJ 1</p>
-          </div>
+          <p id="sum-session-line" class="text-xs text-wolf font-bold mt-0.5 truncate">Memuat sesi...</p>
         </div>
-        <button type="button" onclick="closeSummaryModal()" aria-label="Tutup dialog ringkasan kelas" class="w-9 h-9 rounded-xl bg-polar border-2 border-swan text-wolf hover:text-eel flex items-center justify-center transition">
-          &#10005;
-        </button>
+        <button type="button" onclick="closeSummaryModal()" aria-label="Tutup ringkasan" class="w-9 h-9 flex-shrink-0 rounded-xl border-2 border-swan text-wolf hover:text-eel flex items-center justify-center transition">&#10005;</button>
       </div>
 
-      <!-- Modal Body -->
-      <div class="p-6 overflow-y-auto flex-1 space-y-5 bg-polar">
+      <div class="p-6 overflow-y-auto flex-1 bg-polar">
 
         <div id="summary-loading" class="py-12 flex flex-col items-center justify-center gap-3">
           <div class="w-9 h-9 border-4 border-swan border-t-feather rounded-full animate-spin"></div>
-          <p class="text-xs font-sans font-bold text-wolf">Menyusun ringkasan kelas...</p>
+          <p class="text-xs font-bold text-wolf">Menyusun ringkasan kelas...</p>
         </div>
 
-        <div id="summary-content" class="hidden space-y-5">
+        <div id="summary-content" class="hidden space-y-7">
 
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-snow p-4 rounded-2xl border-2 border-swan">
-            <div>
-              <span class="text-[11px] font-sans font-extrabold text-wolf uppercase block">Rerata Penguasaan</span>
-              <span id="sum-avg-mastery" class="font-num text-2xl font-bold tabular-nums text-feather-shade">0.000</span>
+          <!-- A. Kondisi kelas -->
+          <section class="space-y-3">
+            <div id="sum-coverage-warning" class="hidden flex items-start gap-2.5 p-3 rounded-2xl bg-bee-soft border-2 border-bee/60 text-sm font-bold text-eel"></div>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="kpi">
+                <span class="kpi-label">Selesai</span>
+                <span id="sum-completion" class="kpi-value text-eel">0/0</span>
+                <span id="sum-completion-sub" class="text-[11px] font-bold text-wolf">siswa</span>
+              </div>
+              <div class="kpi">
+                <span class="kpi-label">Jawaban benar</span>
+                <span id="sum-accuracy" class="kpi-value text-macaw-shade">0%</span>
+                <span id="sum-total-resp" class="text-[11px] font-bold text-wolf">dari 0 soal</span>
+              </div>
+              <div class="kpi">
+                <span class="kpi-label">Penguasaan</span>
+                <span id="sum-avg-mastery" class="kpi-value text-eel">0%</span>
+                <span id="sum-avg-level" class="text-[11px] font-bold text-wolf">—</span>
+              </div>
             </div>
-            <div>
-              <span class="text-[11px] font-sans font-extrabold text-wolf uppercase block">Jawaban Benar</span>
-              <span id="sum-accuracy" class="font-num text-2xl font-bold tabular-nums text-macaw-shade">0.0%</span>
-            </div>
-            <div>
-              <span class="text-[11px] font-sans font-extrabold text-wolf uppercase block">Siswa Selesai</span>
-              <span id="sum-completion" class="font-num text-2xl font-bold tabular-nums text-eel">0 / 34</span>
-            </div>
-            <div>
-              <span class="text-[11px] font-sans font-extrabold text-wolf uppercase block">Soal Terjawab</span>
-              <span id="sum-total-resp" class="font-num text-2xl font-bold tabular-nums text-fox">0 butir</span>
-            </div>
-          </div>
+          </section>
 
-          <div class="bg-snow p-4 rounded-2xl border-2 border-swan space-y-2">
-            <div class="flex items-center justify-between">
-              <h4 class="text-xs font-sans font-extrabold text-feather-shade uppercase">Catatan Hasil Belajar Kelas</h4>
-              <span id="sum-latency-pill" class="text-[11px] font-num font-semibold tabular-nums text-wolf">0 ms</span>
+          <!-- B. Topik -->
+          <section class="space-y-3">
+            <div class="step-head">
+              <span class="step-num">1</span>
+              <div>
+                <h4 class="step-title text-lg">Apa yang perlu diulang?</h4>
+                <p class="step-sub">Topik dengan rata-rata di bawah 55% layak dibahas lagi di awal pertemuan berikutnya.</p>
+              </div>
             </div>
-            <div id="sum-narrative-text" class="text-sm font-bold text-eel leading-relaxed space-y-3 whitespace-pre-line">
-              <!-- Rendered via JS -->
+            <div id="sum-bottlenecks-list" class="space-y-2"></div>
+            <div class="pt-1">
+              <p class="text-[11px] font-extrabold uppercase text-wolf mb-1.5">Sudah dikuasai kelas</p>
+              <div id="sum-strengths-list" class="flex flex-wrap gap-2"></div>
             </div>
-          </div>
+          </section>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="p-4 rounded-2xl bg-feather-soft/60 border-2 border-feather/30 space-y-2.5">
-              <h5 class="text-xs font-sans font-extrabold uppercase text-feather-shade">Topik Paling Dikuasai</h5>
-              <div id="sum-strengths-list" class="space-y-2"></div>
+          <!-- C. Kelompok belajar -->
+          <section class="space-y-3">
+            <div class="step-head">
+              <span class="step-num">2</span>
+              <div>
+                <h4 class="step-title text-lg">Kelompok belajar pertemuan berikutnya</h4>
+                <p class="step-sub">Siswa yang sudah paham mengajari 1–2 teman yang belum, pada topik yang sama.</p>
+              </div>
             </div>
 
-            <div class="p-4 rounded-2xl bg-cardinal-soft/60 border-2 border-cardinal/30 space-y-2.5">
-              <h5 class="text-xs font-sans font-extrabold uppercase text-cardinal-shade">Topik Perlu Penguatan</h5>
-              <div id="sum-bottlenecks-list" class="space-y-2"></div>
-            </div>
-          </div>
+            <details class="group rounded-2xl bg-snow border-2 border-swan">
+              <summary class="list-none cursor-pointer px-4 py-2.5 text-xs font-extrabold text-macaw-shade flex items-center gap-1.5">
+                <span class="transition group-open:rotate-90">&#9656;</span> Bagaimana kelompok ini disusun?
+              </summary>
+              <ul class="px-4 pb-3 text-xs font-bold text-eel space-y-1.5 list-disc pl-8">
+                <li><b>Teman pengajar</b> = siswa dengan penguasaan topik <b>&ge; 70%</b>.</li>
+                <li><b>Yang dibantu</b> = siswa dengan penguasaan topik <b>&le; 45%</b>, maksimal 2 orang per pengajar.</li>
+                <li>Hanya untuk topik terlemah; tiap siswa masuk ke satu kelompok saja.</li>
+                <li>Bila belum ada siswa yang paham suatu topik, kelompok itu <b>dibimbing langsung oleh Anda</b>.</li>
+                <li>Ini saran sistem. Silakan ubah sesuai pengenalan Anda terhadap siswa.</li>
+              </ul>
+            </details>
 
-          <div class="space-y-2.5">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <h4 class="text-xs font-sans font-extrabold text-eel uppercase">Pasangan Belajar (Tutor Sebaya)</h4>
-              <span class="text-xs font-sans font-bold text-wolf">Siswa mahir membantu rekan yang kesulitan</span>
-            </div>
-            <div id="sum-peer-tutoring-cards" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-          </div>
+            <div id="sum-peer-tutoring-cards" class="space-y-3"></div>
+          </section>
+
+          <!-- D. Catatan lengkap -->
+          <details class="group rounded-2xl border-2 border-swan">
+            <summary class="list-none cursor-pointer px-4 py-3 flex items-center justify-between text-sm font-extrabold text-eel">
+              Catatan lengkap (untuk laporan / jurnal mengajar)
+              <span class="text-wolf transition group-open:rotate-180" aria-hidden="true">&#9662;</span>
+            </summary>
+            <div id="sum-narrative-text" class="px-4 pb-4 text-sm font-bold text-eel leading-relaxed space-y-3"></div>
+          </details>
 
         </div>
-
       </div>
 
-      <!-- Modal Footer -->
-      <div class="px-6 py-3.5 bg-snow border-t-2 border-swan flex flex-wrap items-center justify-between gap-2">
-        <span class="text-xs font-sans font-bold text-wolf">Ringkasan Evaluasi Sesi</span>
-        <div class="flex items-center gap-2">
-          <button type="button" onclick="copySummaryText()" class="duo-btn duo-btn-ghost px-3.5 py-2 text-xs">
-            Salin Teks
-          </button>
-          <button type="button" onclick="downloadSummaryFile()" class="duo-btn duo-btn-blue px-3.5 py-2 text-xs">
-            Unduh (.txt)
-          </button>
-          <button type="button" onclick="closeSummaryModal()" class="duo-btn duo-btn-green px-4 py-2 text-xs">
-            Tutup
-          </button>
-        </div>
+      <div class="px-6 py-3.5 bg-snow border-t-2 border-swan flex flex-wrap items-center justify-end gap-2">
+        <button type="button" onclick="copySummaryText()" class="duo-btn duo-btn-ghost px-3.5 py-2 text-xs">Salin teks</button>
+        <button type="button" onclick="downloadSummaryFile()" class="duo-btn duo-btn-ghost px-3.5 py-2 text-xs">Unduh .txt</button>
+        <button type="button" onclick="closeSummaryModal()" class="duo-btn duo-btn-green px-5 py-2 text-xs">Tutup</button>
       </div>
 
     </div>
@@ -686,7 +617,7 @@
     LogiTrace &bull; Dasbor Guru &bull; SMK Negeri 4 Bandung
   </footer>
 
-  <script src="/teacher/app.js"></script>
-  <script src="/teacher/modals.js"></script>
+  <script src="/teacher/app.js?v=7"></script>
+  <script src="/teacher/modals.js?v=7"></script>
 </body>
 </html>

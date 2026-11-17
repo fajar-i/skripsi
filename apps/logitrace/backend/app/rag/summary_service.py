@@ -35,6 +35,35 @@ TUTOR_MIN_M = 0.70          # same threshold as "mastered" in the paper (Section
 MENTEE_MAX_M = 0.45
 MAX_MENTEES_PER_TUTOR = 2
 
+# Teacher-facing wording. Thresholds match the dashboard legend (frontend/teacher/app.js LEVELS).
+WEAK_TOPIC_MAX = 0.55     # topics below this are worth re-teaching
+STRONG_TOPIC_MIN = 0.75   # topics at/above this count as mastered by the class
+
+
+def _pct(m: float) -> str:
+    return f"{round(m * 100)}%"
+
+
+def _level(m: float) -> str:
+    if m < 0.35:
+        return "belum paham"
+    if m < 0.55:
+        return "berkembang"
+    if m < 0.75:
+        return "cakap"
+    return "mahir"
+
+
+def _join_id(items: List[str]) -> str:
+    """Indonesian list join: 'A', 'A dan B', 'A, B, dan C'."""
+    if not items:
+        return ""
+    if len(items) == 1:
+        return items[0]
+    if len(items) == 2:
+        return f"{items[0]} dan {items[1]}"
+    return f"{', '.join(items[:-1])}, dan {items[-1]}"
+
 
 class SummaryService:
     """Agent T3 Pedagogical Summary & Peer-Tutoring Orchestrator."""
@@ -166,8 +195,8 @@ class SummaryService:
                     mentee_student_codes=codes,
                     mentee_avg_mastery=round(sum(m for _, m in group) / len(group), 2),
                     action_guidance=(
-                        f"Belum ada siswa dengan m >= {TUTOR_MIN_M:.2f} pada {bn.kc_name}. "
-                        f"Lakukan bimbingan langsung oleh guru untuk {', '.join(codes)}."
+                        f"Belum ada siswa yang menguasai {bn.kc_name}, jadi belum bisa dipasangkan "
+                        f"dengan teman. Dampingi langsung {_join_id(codes)}."
                     ),
                 ))
                 continue
@@ -190,8 +219,8 @@ class SummaryService:
                     mentee_student_codes=codes,
                     mentee_avg_mastery=round(sum(m for _, m in group) / len(group), 2),
                     action_guidance=(
-                        f"Fasilitasi tutor {tutor_code} mendiskusikan konsep inti {bn.kc_name} "
-                        f"bersama {', '.join(codes)} menggunakan contoh konkret tanpa membocorkan soal kuis."
+                        f"Minta {tutor_code} menjelaskan ulang {bn.kc_name} kepada {_join_id(codes)} "
+                        "dengan contoh nyata, tanpa memberi kunci jawaban kuis."
                     ),
                 ))
 
@@ -201,8 +230,10 @@ class SummaryService:
             class_rombel=class_rombel,
             class_avg_m=class_avg_m,
             comp_count=comp_count,
+            in_prog_count=in_prog_count,
             total_students=len(students),
             accuracy_rate=accuracy_rate,
+            total_responses=total_resp,
             strengths=strengths,
             bottlenecks=bottlenecks,
             peer_tutoring=peer_tutoring
@@ -249,44 +280,75 @@ class SummaryService:
         class_rombel: str,
         class_avg_m: float,
         comp_count: int,
+        in_prog_count: int,
         total_students: int,
         accuracy_rate: float,
+        total_responses: int,
         strengths: List[KCMasteryMetric],
         bottlenecks: List[KCMasteryMetric],
         peer_tutoring: List[PeerTutoringMatch]
     ) -> Tuple[str, str]:
-        """Attempts LLM inference via 9router, falls back to a deterministic, data-driven text."""
-        str_names = ", ".join([s.kc_name for s in strengths])
-        btn_names = ", ".join([b.kc_name for b in bottlenecks])
+        """Teacher-facing session notes (plain Indonesian, percentages, no research notation).
 
-        system_prompt = (
-            "Kamu adalah Asisten Pedagogis LogiTrace untuk Guru SMK TKJ dalam model Station Rotation. "
-            "Susunlah ringkasan naratif refleksi penutup sesi pembelajaran (menit ke-80) yang profesional, "
-            "tepat sasaran, dan solutif. Format harus tepat 3 paragraf tanpa markdown list berlebih."
-        )
-
-        user_prompt = (
-            f"Sesi: {sess_title} ({class_rombel})\n"
-            f"Statistik: Rata-rata Penguasaan m={class_avg_m:.2f}, Akurasi={accuracy_rate * 100:.1f}%, "
-            f"Selesai={comp_count}/{total_students} siswa.\n"
-            f"Konsep Kuat: {str_names}\n"
-            f"Konsep Butuh Penguatan: {btn_names}\n"
-            "Tuliskan 3 paragraf refleksi penutup:"
-        )
+        Tries 9router first, falls back to a deterministic text that states only what the data shows.
+        """
+        started = comp_count + in_prog_count
+        low_coverage = total_students > 0 and started / total_students < 0.5
 
         # No measured data: do not ask the LLM to narrate nothing.
         if not strengths:
             return (
-                f"Pada sesi '{sess_title}' di kelas {class_rombel}, belum ada respons siswa yang tercatat "
-                f"({comp_count} dari {total_students} siswa menyelesaikan penugasan). "
-                "Ringkasan capaian belum dapat disusun."
+                f"Sesi '{sess_title}' di kelas {class_rombel} belum memiliki jawaban siswa "
+                f"({comp_count} dari {total_students} siswa selesai). "
+                "Ringkasan akan tersedia setelah siswa mulai menjawab soal."
             ), "deterministic_fallback"
+
+        strong = [s for s in strengths if s.avg_mastery >= STRONG_TOPIC_MIN]
+        weak = [b for b in bottlenecks if b.avg_mastery < WEAK_TOPIC_MAX]
+        peer_groups = [p for p in peer_tutoring if not p.tutor_student_code.startswith("Guru")]
+        teacher_groups = [p for p in peer_tutoring if p.tutor_student_code.startswith("Guru")]
+
+        strong_txt = _join_id([f"{s.kc_name} ({_pct(s.avg_mastery)})" for s in strong]) or "belum ada"
+        weak_txt = _join_id([
+            f"{b.kc_name} ({_pct(b.avg_mastery)}, {b.struggling_count} dari {b.student_count} siswa belum paham)"
+            for b in weak
+        ]) or "tidak ada"
+        group_lines = [
+            f"- {p.tutor_student_code} mengajari {_join_id(p.mentee_student_codes)} topik {p.kc_name}"
+            for p in peer_groups
+        ] + [
+            f"- guru mendampingi langsung {_join_id(p.mentee_student_codes)} pada topik {p.kc_name}"
+            for p in teacher_groups
+        ]
+
+        system_prompt = (
+            "Kamu membantu guru SMK TKJ menulis catatan penutup sesi untuk jurnal mengajar. "
+            "Tulis dalam bahasa Indonesia yang sederhana dan langsung, seperti guru berbicara kepada rekan guru. "
+            "Aturan: tepat 3 paragraf pendek (maksimal 3 kalimat per paragraf), tanpa judul, tanpa poin-poin, "
+            "tanpa markdown. Tulis penguasaan sebagai persen. Jangan memakai istilah 'm', 'KC', 'knowledge component', "
+            "'BKT', atau angka desimal. Jangan menambah data yang tidak diberikan. "
+            "Paragraf 1: kondisi kelas. Paragraf 2: topik yang sudah dikuasai dan yang perlu diulang. "
+            "Paragraf 3: langkah konkret untuk pertemuan berikutnya, termasuk kelompok belajar bila ada."
+        )
+
+        user_prompt = (
+            f"Sesi: {sess_title} ({class_rombel})\n"
+            f"Siswa selesai: {comp_count} dari {total_students}; masih mengerjakan: {in_prog_count}\n"
+            f"Jawaban benar: {_pct(accuracy_rate)} dari {total_responses} soal\n"
+            f"Penguasaan rata-rata: {_pct(class_avg_m)} ({_level(class_avg_m)})\n"
+            f"Topik sudah dikuasai: {strong_txt}\n"
+            f"Topik perlu diulang: {weak_txt}\n"
+            "Kelompok belajar:\n" + ("\n".join(group_lines) if group_lines else "- tidak diperlukan") + "\n"
+            + (f"Catatan: baru {started} dari {total_students} siswa mengerjakan, sebutkan bahwa "
+               "ringkasan ini belum mewakili seluruh kelas.\n" if low_coverage else "")
+            + "Tulis catatannya:"
+        )
 
         try:
             out, lat_ms, err = await self.llm_client.call_chat(
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
-                max_tokens=280,
+                max_tokens=320,
                 timeout_seconds=5.0
             )
             if out and len(out) > 80:
@@ -298,26 +360,46 @@ class SummaryService:
             logger.info(f"LLM T3 exception ({e}). Using deterministic fallback.")
 
         # Deterministic fallback: states only what the data shows.
-
         p1 = (
-            f"Pada sesi '{sess_title}' di kelas {class_rombel}, {comp_count} dari {total_students} peserta didik "
-            f"menyelesaikan penugasan adaptif. Rerata penguasaan pada KC yang terukur adalah m = {class_avg_m:.2f} "
-            f"dan akurasi respons {accuracy_rate * 100:.1f}%."
+            f"Pada sesi '{sess_title}' di kelas {class_rombel}, {comp_count} dari {total_students} siswa "
+            f"sudah selesai mengerjakan"
+            + (f" dan {in_prog_count} masih mengerjakan" if in_prog_count else "")
+            + f". Jawaban benar mencapai {_pct(accuracy_rate)} dari {total_responses} soal, "
+            f"dengan penguasaan rata-rata {_pct(class_avg_m)} ({_level(class_avg_m)})."
         )
-        p2 = (
-            f"Rerata penguasaan tertinggi tercatat pada {str_names}; "
-            f"terendah pada {btn_names}. "
-            "Nilai ini dihitung hanya dari KC yang benar-benar dikerjakan siswa pada sesi ini."
-        )
-        n_pairs = sum(1 for p in peer_tutoring if not p.tutor_student_code.startswith("Guru"))
-        n_teacher = len(peer_tutoring) - n_pairs
-        p3 = (
-            f"Sistem menyusun {n_pairs} kelompok tutor sebaya dan {n_teacher} kelompok bimbingan guru "
-            "untuk KC dengan rerata terendah. Gunakan rekomendasi ini sebagai bahan pertimbangan guru."
-        )
-        fallback_text = f"{p1}\n\n{p2}\n\n{p3}"
+        if low_coverage:
+            p1 += (
+                f" Karena baru {started} siswa yang mengerjakan, ringkasan ini belum mewakili seluruh kelas."
+            )
 
-        return fallback_text, "deterministic_fallback"
+        p2_parts = []
+        if strong:
+            p2_parts.append(f"Topik yang sudah dikuasai: {strong_txt}.")
+        if weak:
+            p2_parts.append(f"Topik yang perlu diulang: {weak_txt}.")
+        else:
+            p2_parts.append("Tidak ada topik yang lemah pada sesi ini.")
+        p2_parts.append("Persentase hanya dihitung dari topik yang benar-benar dijawab siswa.")
+        p2 = " ".join(p2_parts)
+
+        if not weak:
+            p3 = "Untuk pertemuan berikutnya, kelas dapat langsung melanjutkan ke materi baru."
+        else:
+            p3 = f"Untuk pertemuan berikutnya, awali dengan membahas ulang {_join_id([b.kc_name for b in weak])}."
+            if peer_groups:
+                p3 += (
+                    f" Bentuk {len(peer_groups)} kelompok belajar, yaitu siswa yang sudah paham "
+                    "mengajari 1-2 teman yang belum."
+                )
+            if teacher_groups:
+                mentees = [c for p in teacher_groups for c in p.mentee_student_codes]
+                p3 += (
+                    f" Dampingi langsung {_join_id(mentees)}, karena belum ada teman sekelas "
+                    "yang menguasai topiknya."
+                )
+            p3 += " Rekomendasi ini dapat Anda sesuaikan dengan kondisi kelas."
+
+        return f"{p1}\n\n{p2}\n\n{p3}", "deterministic_fallback"
 
 
 summary_service = SummaryService()

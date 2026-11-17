@@ -75,19 +75,48 @@ def _read_mastery(snapshot) -> float:
     return apply_temporal_decay(snapshot.current_mastery, _days_since(snapshot.last_updated_at))
 
 
-async def _resolve_session(db: AsyncSession, student: Student, session_id: Optional[str]):
-    target_session = None
+SESSION_INACTIVE_DETAIL = "SESSION_INACTIVE: Sesi ini sudah tidak aktif. Kerjakan sesi yang sedang aktif."
+
+
+async def _resolve_session(
+    db: AsyncSession,
+    student: Student,
+    session_id: Optional[str],
+    allow_completed_review: bool = False,
+):
+    """Resolve the session a student may work in.
+
+    Only the class's active session accepts answers. An explicitly requested session that is
+    inactive is rejected with 409, except (when allow_completed_review) for a student who already
+    COMPLETED it and only wants to see the result screen.
+    """
     if session_id:
         target_session = await db.get(QuizSession, session_id)
-    if not target_session:
-        sess_stmt = (
-            select(QuizSession)
-            .where(QuizSession.class_rombel == student.class_rombel, QuizSession.is_active == True)
-            .order_by(desc(QuizSession.created_at))
-        )
-        sess_res = await db.execute(sess_stmt)
-        target_session = sess_res.scalars().first()
-    return target_session
+        if not target_session:
+            raise HTTPException(status_code=404, detail=f"Session '{session_id}' not found")
+        if target_session.class_rombel != student.class_rombel:
+            raise HTTPException(status_code=403, detail="Sesi ini bukan untuk kelasmu.")
+        if not target_session.is_active:
+            if allow_completed_review:
+                att_res = await db.execute(
+                    select(StudentAttempt).where(
+                        StudentAttempt.student_id == student.id,
+                        StudentAttempt.session_id == target_session.id,
+                    )
+                )
+                att = att_res.scalars().first()
+                if att and att.status == "COMPLETED":
+                    return target_session
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=SESSION_INACTIVE_DETAIL)
+        return target_session
+
+    sess_stmt = (
+        select(QuizSession)
+        .where(QuizSession.class_rombel == student.class_rombel, QuizSession.is_active == True)
+        .order_by(desc(QuizSession.created_at))
+    )
+    sess_res = await db.execute(sess_stmt)
+    return sess_res.scalars().first()
 
 
 @router.get("/{student_code}/next", response_model=ItemPresentation)
@@ -107,19 +136,8 @@ async def get_next_question(
     if not student:
         raise HTTPException(status_code=404, detail=f"Student '{student_code}' not found")
 
-    # 2. Resolve active QuizSession
-    target_session = None
-    if session_id:
-        target_session = await db.get(QuizSession, session_id)
-    if not target_session:
-        # Get active session for student's class
-        sess_stmt = (
-            select(QuizSession)
-            .where(QuizSession.class_rombel == student.class_rombel, QuizSession.is_active == True)
-            .order_by(desc(QuizSession.created_at))
-        )
-        sess_res = await db.execute(sess_stmt)
-        target_session = sess_res.scalar_one_or_none()
+    # 2. Resolve the active QuizSession (inactive sessions: result screen only, if completed)
+    target_session = await _resolve_session(db, student, session_id, allow_completed_review=True)
 
     # 3. Resolve or create StudentAttempt for this session
     answered_item_ids = set()
@@ -280,18 +298,8 @@ async def submit_answer(req: SubmitAnswerRequest, db: AsyncSession = Depends(get
     if not item:
         raise HTTPException(status_code=404, detail=f"Item '{req.item_id}' not found")
 
-    # 2. Resolve active QuizSession and StudentAttempt
-    target_session = None
-    if req.session_id:
-        target_session = await db.get(QuizSession, req.session_id)
-    if not target_session:
-        sess_stmt = (
-            select(QuizSession)
-            .where(QuizSession.class_rombel == student.class_rombel, QuizSession.is_active == True)
-            .order_by(desc(QuizSession.created_at))
-        )
-        sess_res = await db.execute(sess_stmt)
-        target_session = sess_res.scalar_one_or_none()
+    # 2. Resolve active QuizSession and StudentAttempt (answers into inactive sessions are rejected)
+    target_session = await _resolve_session(db, student, req.session_id)
 
     attempt = None
     max_items = target_session.max_items if target_session else 20

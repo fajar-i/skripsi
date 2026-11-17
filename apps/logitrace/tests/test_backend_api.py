@@ -322,7 +322,7 @@ async def test_agent_t3_summary_without_data_says_so():
         data = (await client.get("/api/teacher/session-summary", params={"session_id": session_id})).json()
         assert data["strengths"] == []
         assert data["peer_tutoring_recommendations"] == []
-        assert "belum ada respons" in data["narrative_summary"]
+        assert "belum memiliki jawaban siswa" in data["narrative_summary"]
 
 
 @pytest.mark.asyncio
@@ -443,3 +443,57 @@ async def test_hint_usage_is_tracked_server_side():
         assert res["is_correct"] is True
         expected = update_mastery(res["mastery_before"], 1, difficulty, used_hint=True)
         assert res["mastery_after"] == pytest.approx(round(expected, 4), abs=1e-4)
+
+
+@pytest.mark.asyncio
+async def test_inactive_session_rejects_student_work():
+    """Students may only work in their class's active session; inactive ones are review-only."""
+    from backend.app.db.models import Item, QuizSession, StudentAttempt
+
+    tag = uuid.uuid4().hex[:6]
+    rombel = f"GUARD_{tag}"
+    async with AsyncSessionLocal() as session:
+        student = Student(anonymous_code=f"tstd_g{tag}", class_rombel=rombel)
+        other = Student(anonymous_code=f"tstd_o{tag}", class_rombel=f"OTHER_{tag}")
+        active = QuizSession(class_rombel=rombel, title=f"Aktif {tag}", is_active=True)
+        closed = QuizSession(class_rombel=rombel, title=f"Tutup {tag}", is_active=False)
+        done = QuizSession(class_rombel=rombel, title=f"Selesai {tag}", is_active=False)
+        session.add_all([student, other, active, closed, done])
+        await session.flush()
+        session.add(StudentAttempt(student_id=student.id, session_id=done.id, status="COMPLETED",
+                                   current_sequence=20, answered_item_ids=[]))
+        item_id = (await session.execute(select(Item.id).limit(1))).scalar_one()
+        await session.commit()
+        ids = (active.id, closed.id, done.id)
+
+    active_id, closed_id, done_id = ids
+    code = f"tstd_g{tag}"
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        res = await client.get(f"/api/quiz/{code}/next", params={"session_id": closed_id})
+        assert res.status_code == 409
+        assert "SESSION_INACTIVE" in res.json()["detail"]
+
+        res = await client.post("/api/quiz/submit", json={
+            "student_code": code, "item_id": item_id, "choice": "A",
+            "session_id": closed_id, "response_time_ms": 1000,
+        })
+        assert res.status_code == 409
+
+        res = await client.post("/api/quiz/hint", json={
+            "student_code": code, "item_id": item_id, "session_id": closed_id, "requested_level": 1,
+        })
+        assert res.status_code == 409
+
+        # A finished inactive session may still be opened to see the result screen
+        res = await client.get(f"/api/quiz/{code}/next", params={"session_id": done_id})
+        assert res.status_code == 200
+        assert res.json()["is_completed"] is True
+
+        # Another class's session is refused
+        res = await client.get(f"/api/quiz/tstd_o{tag}/next", params={"session_id": active_id})
+        assert res.status_code == 403
+
+        # The active session works
+        res = await client.get(f"/api/quiz/{code}/next", params={"session_id": active_id})
+        assert res.status_code == 200

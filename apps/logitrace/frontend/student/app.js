@@ -268,9 +268,18 @@ async function loadClassroomSessions() {
   try {
     const resp = await fetch(`${API_BASE}/api/sessions?class_rombel=XI%20TKJ%201`);
     if (!resp.ok) throw new Error("Gagal mengambil sesi");
-    const sessions = await resp.json();
+    // Active session first; inactive ones stay listed only so students can review finished results
+    const sessions = (await resp.json()).sort((a, b) =>
+      (b.is_active - a.is_active) || String(b.created_at).localeCompare(String(a.created_at)));
 
     container.innerHTML = "";
+    if (sessionClosedNotice) {
+      const note = document.createElement("div");
+      note.className = "p-4 text-sm font-bold text-eel bg-bee-soft rounded-3xl border-2 border-bee/60";
+      note.textContent = sessionClosedNotice;
+      container.appendChild(note);
+      sessionClosedNotice = "";
+    }
     if (!sessions.length) {
       container.innerHTML = `<div class="p-6 text-center text-sm font-bold text-wolf bg-snow rounded-3xl border-2 border-swan">Belum ada sesi latihan aktif untuk XI TKJ 1.</div>`;
       return;
@@ -292,7 +301,18 @@ async function loadClassroomSessions() {
       let actionBtn = "";
       const maxItems = statusData.max_items || sess.max_items || 20;
 
-      if (statusData.status === "COMPLETED") {
+      if (!sess.is_active) {
+        card.className += " opacity-80";
+        if (statusData.status === "COMPLETED") {
+          statusBadge = `<span class="px-3 py-1 rounded-full text-[11px] font-num font-bold bg-feather-soft text-feather-shade border border-feather/30">Selesai</span>`;
+          actionBtn = `
+            <button type="button" data-action="start" class="w-full duo-btn duo-btn-ghost text-xs py-3 px-4">Lihat Hasil</button>
+          `;
+        } else {
+          statusBadge = `<span class="px-3 py-1 rounded-full text-[11px] font-num font-bold bg-snow text-wolf border-2 border-swan">Ditutup</span>`;
+          actionBtn = `<p class="text-xs font-bold text-wolf">Sesi ini sudah ditutup guru dan tidak bisa dikerjakan lagi.</p>`;
+        }
+      } else if (statusData.status === "COMPLETED") {
         const masteryLabel = statusData.final_mastery !== null && statusData.final_mastery !== undefined
           ? `Selesai &bull; m=${Number(statusData.final_mastery).toFixed(2)}`
           : "Selesai";
@@ -357,6 +377,15 @@ async function loadClassroomSessions() {
     console.error(err);
     container.innerHTML = `<div class="p-5 text-center text-sm font-extrabold text-cardinal-shade bg-cardinal-soft rounded-3xl border-2 border-cardinal/40">Gagal memuat daftar sesi. Periksa koneksi ke server LogiTrace.</div>`;
   }
+}
+
+// Server answers 409 when the session was deactivated by the teacher (e.g. mid-quiz)
+let sessionClosedNotice = "";
+
+function handleSessionClosed() {
+  sessionClosedNotice = "Sesi yang kamu buka sudah ditutup guru. Silakan kerjakan sesi yang sedang aktif.";
+  localStorage.removeItem("logitrace_active_session_id");
+  loadClassroomSessions();
 }
 
 async function startSessionQuiz(sessionId) {
@@ -425,6 +454,10 @@ async function fetchNextQuestion() {
     const url = `${API_BASE}/api/quiz/${currentStudentCode}/next?session_id=${encodeURIComponent(activeSessionId)}`;
     const resp = await fetch(url);
     if (!resp.ok) {
+      if (resp.status === 409) {
+        handleSessionClosed();
+        return;
+      }
       if (resp.status === 404) {
         logoutStudent();
         return;
@@ -601,6 +634,10 @@ document.getElementById("btn-submit").onclick = async () => {
       body: JSON.stringify(payload)
     });
 
+    if (resp.status === 409) {
+      handleSessionClosed();
+      return;
+    }
     if (!resp.ok) throw new Error("Gagal mengirim jawaban");
     const result = await resp.json();
     isAnswerLocked = true;
